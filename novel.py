@@ -1,8 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
-from fpdf import FPDF
+from docx import Document
+from docx.shared import Inches
 
-pdf = FPDF()
+document = Document()
+sections = document.sections
+head = 0
+count = 1
 page = requests.get('https://www.wuxiaworld.com/novel/martial-god-asura')
 
 #Create a BeautySoup object
@@ -27,8 +31,23 @@ for chapter in chapter_links:
         story_text = story_list.find_all('p')
         for story in story_text:
             chapter_list.append(story.get_text().replace('\xa0', ' ').replace('Previous Chapter', ''))
-    print(chapter_list)
+    for paragraph in chapter_list:
+        if paragraph != '':
+            if head == 0:
+                document.add_paragraph(paragraph, style='TOCHeading')
+                head = 1
+            else:
+                document.add_paragraph(paragraph)
+    document.add_page_break()
+    head = 0
     chapter_list = []
+    print('Chapter ' + str(count) + 'down!')
+    if(count == 3):
+        break
+    count+=1
+    
+
+document.save('MGAtest.docx')
     
 
 
