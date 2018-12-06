@@ -34,7 +34,7 @@ for chapter in chapter_links:
     for paragraph in chapter_list:
         if paragraph != '':
             if head == 0:
-                document.add_paragraph(paragraph, style='TOCHeading')
+                document.add_paragraph(paragraph)
                 head = 1
             else:
                 document.add_paragraph(paragraph)
