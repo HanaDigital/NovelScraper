@@ -5,14 +5,15 @@ from HanaDocument import HanaDocument
 class WuxiaScraper(object):
 
     def __init__(self, link, volume=0):
+        self.link = link
+        
         self.HD = HanaDocument()
         self.head = 0
-        self.novelName = ''
+        self.novelName = self.link.split('/')[3]
         self.chapterNum_start = 1
         self.chapterNum_end = 0
         self.volumeNum = 0
 
-        self.link = link
         self.volume = volume
         if(self.volume != 0):
             self.volume_limit = 1
@@ -33,8 +34,6 @@ class WuxiaScraper(object):
         for x in partsX:
             if x != '' and x != 'novel':
                 metaData.append(x)
-        self.novelName = metaData[0].split('-')
-        self.novelName = self.novelName[0].capitalize() + ' ' + self.novelName[1].capitalize() + ' ' + self.novelName[2].capitalize()
         self.chapterNum_start = int(metaData[1].split('-')[2])
         
         metaData = []
@@ -109,4 +108,5 @@ class WuxiaScraper(object):
                 break
                 print('OK')
 
-#Novel = WuxiaScraper('https://www.wuxiaworld.com/novel/martial-god-asura')
+Novel = WuxiaScraper('https://www.wuxiaworld.com/novel/overgeared')
+Novel.start()
