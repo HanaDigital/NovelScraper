@@ -20,18 +20,19 @@ class WuxiaScraper(object):
         ###########
         self.chapterNum_start = 1
         self.chapterNum_end = 0
-        self.volumeNum = 0
+        self.chapterCurrent = 1
 
         self.volume = volume
         if(self.volume != 0):
             self.volume_limit = 1
+            self.volumeNum = int(self.volume)
         else:
             self.volume_limit = 0
         self.volume_links = []
 
         page = requests.get(link)
         self.soup = BeautifulSoup(page.text, 'html.parser')
-
+        
     def start(self):
         self.getChapterLinks()
         
@@ -42,7 +43,12 @@ class WuxiaScraper(object):
         for x in partsX:
             if x != '' and x != 'novel':
                 metaData.append(x)
-        self.chapterNum_start = int(metaData[1].split('-')[2])
+        chapter_start = metaData[1].split('-')
+        for chapter in chapter_start:
+            if chapter.isdigit():
+                self.chapterNum_start = int(chapter)
+                break
+        self.chapterCurrent = self.chapterNum_start
         
         metaData = []
 
@@ -50,15 +56,21 @@ class WuxiaScraper(object):
         for y in partsY:
             if y != '' and y != 'novel':
                 metaData.append(y)
-        self.chapterNum_end = int(metaData[1].split('-')[2])
+        chapter_end = metaData[1].split('-')
+        for chapter in chapter_end:
+            if chapter.isdigit():
+                self.chapterNum_end = int(chapter)
+                break
                 
     def getChapterLinks(self):
-        vol = self.volume
         volume_list = self.soup.find_all(class_="panel-body")
 
+        if volume_list == []:
+            msg('WuxiaWorld servers are blocking you, change your IP and try again')
+        
         for v in volume_list:
             chapter_links = []
-
+            
             self.HD.stylesConfig('Heading 1', 36)
             self.HD.stylesConfig('Normal', 32)
             
@@ -66,10 +78,11 @@ class WuxiaScraper(object):
                 continue
             
             #TODO add book cover feature
+            
             self.HD.sectionConfig(0.5)
             
-            if vol - 1 != 0 and self.volume_limit == 1:
-                vol-=1
+            if self.volumeNum != 1 and self.volume_limit == 1:
+                self.volumeNum-=1
                 continue
             
             chapter_html_links = v.find_all(class_="chapter-item")
@@ -78,18 +91,24 @@ class WuxiaScraper(object):
             
             self.volume_links.append(chapter_links)
 
+            self.getMetaData(chapter_links[0], chapter_links[-1])
+            
             self.getChapter()
 
-            self.getMetaData(chapter_links[0], chapter_links[-1])
             self.volume_links = []
             if(self.volume_limit == 1):
                 self.HD.saveBook(self.novelName, self.volume, self.chapterNum_start, self.chapterNum_end)
+                print('+'*20)
+                print('Volume: ' + str(self.volume) + ' compiled!') 
+                print('+'*20)
                 break
             
             self.volume+=1
             self.HD.saveBook(self.novelName, self.volume, self.chapterNum_start, self.chapterNum_end)
+            print('+'*20)
+            print('Volume: ' + str(self.volume) + ' compiled!') 
+            print('+'*20)
             self.HD = HanaDocument()
-            print('OK')
             
     
     def getChapter(self):
@@ -112,8 +131,8 @@ class WuxiaScraper(object):
                             self.HD.addPara(paragraph)
                 self.HD.addSection()
                 self.head = 0
-                break
-                print('OK')
+                print('Chapter: ' + str(self.chapterCurrent) + ' compiled!')
+                self.chapterCurrent+=1
 
 ###############################
 #TKINTER
@@ -137,11 +156,9 @@ def compiler():
     try:
         Novel = WuxiaScraper(link, volume)
         Novel.start()
-        #bCompile.config(state='disabled')
         msg('+'*20)
-        #msg('This can take ALOT of time so be patient')
-        #msg('DONOT close the app until you see files created in your directory')
-        #msg('+'*20)
+        msg('ALL DONE!')
+        msg('+'*20)
     except:
         msg('+'*20)
         msg('Error Occured!')
