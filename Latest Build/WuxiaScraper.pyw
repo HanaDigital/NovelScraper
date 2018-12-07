@@ -10,7 +10,14 @@ class WuxiaScraper(object):
         
         self.HD = HanaDocument()
         self.head = 0
-        self.novelName = self.link.split('/')[3]
+        #Novel Name
+        self.novelName = ''
+        tempName = self.link.split('/')[4]
+        tempName = tempName.split('-')
+        for name in tempName:
+            self.novelName = self.novelName + name.capitalize() + ' '
+        self.novelName = self.novelName[:-1]
+        ###########
         self.chapterNum_start = 1
         self.chapterNum_end = 0
         self.volumeNum = 0
@@ -74,7 +81,6 @@ class WuxiaScraper(object):
             self.getChapter()
 
             self.getMetaData(chapter_links[0], chapter_links[-1])
-
             self.volume_links = []
             if(self.volume_limit == 1):
                 self.HD.saveBook(self.novelName, self.volume, self.chapterNum_start, self.chapterNum_end)

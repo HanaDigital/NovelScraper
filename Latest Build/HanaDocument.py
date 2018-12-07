@@ -1,3 +1,4 @@
+import os
 from docx import Document
 from docx.shared import Inches
 from docx.shared import Cm
@@ -35,5 +36,8 @@ class HanaDocument(object):
         font.size = Pt(pt)
 
     def saveBook(self, name, volume, start, end):
-        self.document.save(name + ' ' + str(volume) + ' ' + str(start) + '-' + str(end) + '.docx')
+        if not os.path.exists(name):
+            os.mkdir(name)
+            
+        self.document.save(name + '/' + name + ' ' + str(volume) + ' ' + str(start) + '-' + str(end) + '.docx')
         
