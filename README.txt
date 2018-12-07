@@ -20,7 +20,8 @@ Paste the link of the novel you want [eg:"https://www.wuxiaworld.com/novel/marti
 Make sure the link starts with https://www.wuxiaworld.com/novel/
 If you want to download all the volumes then leave the volume box empty.
 If you want a specific volume, then put the volume number you want.
-You can install [calibre] from the "rsc/" folder on the github to convert those .docx files into epubs very easily.
+Click compile to let it rip! [The files will be compiled in a way that makes them easily convertable to .epub files]
+You can install [calibre] from "https://calibre-ebook.com/download" to easily convert them to .epub files.
 
 /*TO-DO*/
 Add a way to add the cover page. [Its ez to do, but I'm lazy...]
