@@ -1,7 +1,8 @@
 /*
  *	Author: dr_nyt
  *	Description: This is a python based app to automatically compile and download novels from "https://www.wuxiaworld.com".
- *				 It takes the link to a specific novel [eg:"https://www.wuxiaworld.com/novel/martial-god-asura"] and converts them to .docx files for every volume separatley.
+ *				       It takes the link to a specific novel [eg:"https://www.wuxiaworld.com/novel/martial-god-asura"] and converts 
+ *               them to .docx files for every volume separatley.
  *	Version: 0.3
  */
 
