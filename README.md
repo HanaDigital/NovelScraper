@@ -6,9 +6,8 @@
                  them to .docx files for every volume separatley.
 
 ### Pre-Requistes
-USE PYTHON 3
-Make sure you have pip installed.
-Install the following modules using pip:
+You will need Python 3.
+Make sure you have pip installed and then install the following modules using pip:
 - requests
 - beautifulsoup4
 - python-docx
