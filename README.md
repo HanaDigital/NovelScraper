@@ -2,15 +2,16 @@
  *	Author: dr_nyt
  *	Version: 0.3
  *	Description: This is a python based app to automatically compile and download novels from "https://www.wuxiaworld.com".
- 				         It takes the link to a specific novel [eg:"https://www.wuxiaworld.com/novel/martial-god-asura"] and converts
-                 them to .docx files for every volume separatley.
+ 				           It takes the link to a specific novel [eg:"https://www.wuxiaworld.com/novel/martial-god-asura"] and converts
+                them to .docx files for every volume separatley.
 
 ### Pre-Requistes
-You will need Python 3.
-Make sure you have pip installed and then install the following modules using pip:
-- requests
-- beautifulsoup4
-- python-docx
+- You will need Python 3.
+- Make sure you have pip installed.
+- Install the following modules using pip:
+  - requests
+  - beautifulsoup4
+  - python-docx
 
 ### Usage
 1. Use the files in "Latest Build/" folder for the stable version.
@@ -23,8 +24,8 @@ Make sure you have pip installed and then install the following modules using pi
 5. You can install [calibre] from "https://calibre-ebook.com/download" to easily convert them to .epub files.
 
 ### TO-DO
-Add a way to add the cover page. [Its ez to do, but I'm lazy...]
-Automate the calibre [.docx to .epub], using calibre modules
+- Add a way to add the cover page. [Its ez to do, but I'm lazy...]
+- Automate the calibre [.docx to .epub], using calibre modules
 
 ### Notes
 This is just a programme I made for fun and would love for your input,
