@@ -6,7 +6,7 @@
  *	Version: 0.3
  */
 
-/*Pre-Requisites*/
+#### Pre-Requistes
 USE PYTHON 3
 Make sure you have pip installed.
 Install the following modules using pip:
