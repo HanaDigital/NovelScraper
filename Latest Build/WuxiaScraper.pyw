@@ -28,6 +28,7 @@ class WuxiaScraper(object):
             self.volumeNum = int(self.volume)
         else:
             self.volume_limit = 0
+            self.volumeNum = 0
         self.volume_links = []
 
         page = requests.get(link)
@@ -64,9 +65,9 @@ class WuxiaScraper(object):
                 
     def getChapterLinks(self):
         volume_list = self.soup.find_all(class_="panel-body")
-
+        
         if volume_list == []:
-            msg('WuxiaWorld servers are blocking you, change your IP and try again')
+            print('WuxiaWorld servers are blocking you, change your IP and try again')
         
         for v in volume_list:
             chapter_links = []
@@ -76,7 +77,6 @@ class WuxiaScraper(object):
             
             if v.find(class_="col-sm-6") == None:
                 continue
-            
             #TODO add book cover feature
             
             self.HD.sectionConfig(0.5)
@@ -155,6 +155,7 @@ def compiler():
 
     try:
         Novel = WuxiaScraper(link, volume)
+        msg('starting...')
         Novel.start()
         msg('+'*20)
         msg('ALL DONE!')
