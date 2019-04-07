@@ -119,16 +119,15 @@ class WuxiaScraper(object):
                 soup = BeautifulSoup(page.text, 'html.parser')
                 story_view = soup.find_all(class_='p-15')
                 for story_list in story_view:
+                    if self.head == 0:
+                            self.HD.addHead(story_list.find('h4').get_text())
+                            self.head = 1
                     story_text = story_list.find_all('p')
                     for story in story_text:
                         chapter_list.append(story.get_text().replace('\xa0', ' ').replace('Previous Chapter', ''))
                 for paragraph in chapter_list:
                     if paragraph != '':
-                        if self.head == 0:
-                            self.HD.addHead(paragraph)
-                            self.head = 1
-                        else:
-                            self.HD.addPara(paragraph)
+                        self.HD.addPara(paragraph)
                 self.HD.addSection()
                 self.head = 0
                 print('Chapter: ' + str(self.chapterCurrent) + ' compiled!')
