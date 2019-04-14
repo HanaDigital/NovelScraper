@@ -6,37 +6,38 @@ from tkinter import *
 class WuxiaScraper(object):
 
     def __init__(self, link, volume=0):
-        self.link = link
+        self.link = link    #Holds the link to the novel.
         
         self.HD = HanaDocument()
-        self.head = 0
-        #Novel Name
+        self.head = 0   #Indicator to check if the current chapter has a title.
+        #Get Novel Name
         self.novelName = ''
-        tempName = self.link.split('/')[4]
-        tempName = tempName.split('-')
+        tempName = self.link.split('/')[4]  #Split the link of the website into a list separated by "/" and get the 4th index [eg: http://wuxiaworld/novel/my-novel-name/].
+        tempName = tempName.split('-')  #Split that into another list separated by "-" [eg: my-novel-name].
         for name in tempName:
-            self.novelName = self.novelName + name.capitalize() + ' '
-        self.novelName = self.novelName[:-1]
+            self.novelName = self.novelName + name.capitalize() + ' '   #Capatalize each word of the novel name and add a space in between [eg: My Novel Name].
+        self.novelName = self.novelName[:-1]    #IDK why I did this but there must be a reason... I'm sure of it!!!
         ###########
-        self.chapterNum_start = 1
-        self.chapterNum_end = 0
-        self.chapterCurrent = 1
+        self.chapterNum_start = 1   #The number of the starting chapter is initialized.
+        self.chapterNum_end = 0     #This number of the last chapter is initialized.
+        self.chapterCurrent = 1     #This is stores the number of the current chapter being compiled.
 
-        self.volume = volume
-        if(self.volume != 0):
-            self.volume_limit = 1
-            self.volumeNum = int(self.volume)
-        else:
-            self.volume_limit = 0
-            self.volumeNum = 0
-        self.volume_links = []
+        self.volume = volume    #Holds the volume number specified, if no volume number is specified then default is 0.
+        if(self.volume != 0):   #If the volume is not 0 then only the volume number specified will be downloaded.
+            self.volume_limit = 1   #Sets the volume limit so only one volume will be allowed to download.
+            self.volumeNum = int(self.volume)   #This variable is only used when only one volume needs to downloaded
+        else:   #If the volume number is specified as 0 then all the volumes will be downloaded.
+            self.volume_limit = 0   #Removes the volume limit to allow all volumes to be downloaded.
+            self.volumeNum = 0  #This is set to 0 because all volumes will be downloaded now.
+        self.volume_links = []  #Empty list to store links to the chapters of each volume, one volume at a time.
 
-        page = requests.get(link)
-        self.soup = BeautifulSoup(page.text, 'html.parser')
+        page = requests.get(link)   #Connects to the website.
+        self.soup = BeautifulSoup(page.text, 'html.parser')     #Gets the html from the website and converts it to readable text.
         
     def start(self):
         self.getChapterLinks()
-        
+
+    #I forgot what exactly this method does but it is something related to setting pointers to the starting and ending chapters of each volume in a novel.
     def getMetaData(self, link_start, link_end):
         metaData = []
         
@@ -62,7 +63,8 @@ class WuxiaScraper(object):
             if chapter.isdigit():
                 self.chapterNum_end = int(chapter)
                 break
-                
+
+    #This method loops between volumes and calls the getChapter method for each volume's chapters to be compiled and then saves them to a .doc file.   
     def getChapterLinks(self):
         volume_list = self.soup.find_all(class_="panel-body")
         
@@ -77,6 +79,7 @@ class WuxiaScraper(object):
             
             if v.find(class_="col-sm-6") == None:
                 continue
+            
             #TODO add book cover feature
             
             self.HD.sectionConfig(0.5)
@@ -110,7 +113,7 @@ class WuxiaScraper(object):
             print('+'*20)
             self.HD = HanaDocument()
             
-    
+    #This method loops through every chapter of a volume and compiles them properly, adding in headers and separator between each chapter.
     def getChapter(self):
         for v in self.volume_links:
             for chapters in v:
@@ -135,7 +138,7 @@ class WuxiaScraper(object):
 
 ###############################
 #TKINTER
-
+#BEYOND THIS POINT IS CHAOS AND DESTRUCTION, DONT EVEN BOTHER...
 def msg(text):
     output.config(state='normal')
     output.insert(END, text + '\n')
