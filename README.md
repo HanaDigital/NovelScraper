@@ -9,9 +9,9 @@
 - Install python 3 [https://www.python.org/downloads/]
 - Make sure you check the 'install pip' option when installing python 3.
 - Open CMD and install the following modules using pip by typing:
-  - pip install requests
-  - pip install beautifulsoup4
-  - pip install python-docx
+  - python -m pip install requests
+  - python -m pip install beautifulsoup4
+  - python -m pip install python-docx
 - Feel free to ping me, if you need help :)
 
 ### Usage
