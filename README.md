@@ -1,6 +1,6 @@
 ### About
  *	Author: dr_nyt
- *	Version: 0.3
+ *	Version: 0.4
 
 ### Features
 - Download any Wuxia Novel and get them in .docx or .epub formats.
@@ -17,6 +17,7 @@
    - Make sure the link starts with https://www.wuxiaworld.com/novel/
    - If you want to download all the volumes then leave the volume box empty.
    - If you want a specific volume, then put the volume number you want.
+   - You can optionally add a cover page for every volume by putting an image in the rsc/ folder and then typing the name of the cover image in the cover box. Eg: mga.jpg
 4. Click compile to let it rip! [The files will be compiled in a way that makes them easily convertable to .epub files]
 5. You can install [calibre] from "https://calibre-ebook.com/download" to easily convert them to .epub files.
 
