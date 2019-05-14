@@ -122,6 +122,7 @@ class WuxiaScraper(object):
             
     #This method loops through every chapter of a volume and compiles them properly, adding in headers and separator between each chapter.
     def getChapter(self):
+        firstLine = 0
         for v in self.volume_links:
             for chapters in v:
                 chapter_list = []
@@ -134,19 +135,26 @@ class WuxiaScraper(object):
                             self.HD.addHead(chapterHead)
                             self.head = 1
                     story_text = story_list.find_all('p')
+
                     for story in story_text:
                         chapter_list.append(story.get_text().replace('\xa0', ' ').replace('Previous Chapter', ''))
+                        if firstLine == 0:
+                            if story.get_text().replace(' ', '').replace('-', '').replace('<', '').replace('>', '') == chapterHead.replace(' ', '').replace('-', '').replace('<', '').replace('>', ''):
+                                chapter_list[0] = ''
+                            firstLine = 1
+
                 for paragraph in chapter_list:
-                    if paragraph != '' and paragraph != chapterHead:
+                    if paragraph != '':
                         self.HD.addPara(paragraph)
                 self.HD.addPara(" ")
                 self.HD.addPara("Powered by dr_nyt")
-                self.HD.addPara("You can compile more novels using the app: https://github.com/dr-nyt/WuxiaWorld-Novel-Downloader")
+                self.HD.addPara("If any errors occur, open an issue here: github.com/dr-nyt/WuxiaWorld-Novel-Downloader/issues")
+                self.HD.addPara("You can download more novels using the app here: github.com/dr-nyt/WuxiaWorld-Novel-Downloader")
                 self.HD.addSection()
                 self.head = 0
+                firstLine = 0
                 msg('Chapter: ' + str(self.chapterCurrent) + ' compiled!')
                 self.chapterCurrent+=1
-                break
 
 ###############################
 #TKINTER
