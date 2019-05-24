@@ -11,7 +11,7 @@
 - Feel free to ping me, if you need help :)
 
 ### Usage
-1. Use the files in "Latest Build/" folder for the stable version.
+1. Download and use the files in "Latest Build/" folder for the stable version.
 2. Launch "run.py".
    - This file will automatically install the required dependencies and run the app.
 3. Paste the link of the novel you want [eg: https://www.wuxiaworld.com/novel/martial-god-asura]
