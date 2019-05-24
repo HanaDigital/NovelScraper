@@ -100,15 +100,17 @@ class WuxiaScraper(object):
             if v.find(class_="col-sm-6") == None:
                 continue
             
-            if self.cover != '':
-                self.HD.addCover(self.cover)
-                self.HD.addSection()
-            
             self.HD.sectionConfig(0.5)
             
+            #Skip over volumes if a specific volume is defined
             if self.volumeNum != 1 and self.volume_limit == 1:
                 self.volumeNum-=1
                 continue
+
+            #Add Coverpage if not already added
+            if self.cover != '':
+                self.HD.addCover(self.cover)
+                self.HD.addSection()
             
             chapter_html_links = v.find_all(class_="chapter-item")
             for chapter_http in chapter_html_links:
@@ -142,7 +144,7 @@ class WuxiaScraper(object):
             for chapters in v:
                 chapter_list = []
                 page = requests.get('https://www.wuxiaworld.com' + chapters)
-                soup = BeautifulSoup(page.text, 'html.parser')
+                soup = BeautifulSoup(page.text, 'lxml')
                 story_view = soup.find_all(class_='p-15')
                 for story_list in story_view:
                     if self.head == 0:
