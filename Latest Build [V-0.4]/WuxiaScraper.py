@@ -43,16 +43,24 @@ class WuxiaScraper(object):
     #I forgot what exactly this method does but it is something related to setting pointers to the starting and ending chapters of each volume in a novel.
     def getMetaData(self, link_start, link_end):
         metaData = []
+        index = -1
         
         partsX = link_start.split('/')
         for x in partsX:
             if x != '' and x != 'novel':
                 metaData.append(x)
         chapter_start = metaData[1].split('-')
-        for chapter in chapter_start:
-            if chapter.isdigit():
-                self.chapterNum_start = int(chapter)
+        while index >= -len(chapter_start):
+            if chapter_start[index].isdigit():
+                self.chapterNum_start = int(chapter_start[index])
+                index = -1
                 break
+            else:
+                index = index - 1
+        # for chapter in chapter_start:
+        #     if chapter.isdigit():
+        #         self.chapterNum_start = int(chapter)
+        #         break
         self.chapterCurrent = self.chapterNum_start
         
         metaData = []
@@ -62,10 +70,17 @@ class WuxiaScraper(object):
             if y != '' and y != 'novel':
                 metaData.append(y)
         chapter_end = metaData[1].split('-')
-        for chapter in chapter_end:
-            if chapter.isdigit():
-                self.chapterNum_end = int(chapter)
+        while index >= -len(chapter_end):
+            if chapter_end[index].isdigit():
+                self.chapterNum_end = int(chapter_end[index])
+                index = -1
                 break
+            else:
+                index = index - 1
+        # for chapter in chapter_end:
+        #     if chapter.isdigit():
+        #         self.chapterNum_end = int(chapter)
+        #         break
 
     #This method loops between volumes and calls the getChapter method for each volume's chapters to be compiled and then saves them to a .doc file.   
     def getChapterLinks(self):
