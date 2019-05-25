@@ -153,20 +153,11 @@ class WuxiaScraper(object):
                         self.head = 1
                     except:
                         self.HD.addHead("Chapter " + self.chapterCurrent)
-                story_text = story_view.find_all('p')
 
+                story_view = soup.find(class_='fr-view')
+                story_text = []
+                story_text.append(story_view.find_all('div'))
                 if len(story_text) != 0:
-                    for story in story_text:
-                        chapter_list.append(story.get_text().replace('\xa0', ' ').replace('Previous Chapter', ''))
-                        if firstLine == 0 and self.head != 0:
-                            self.HD.addPara("YEET!")
-                            if chapterHead.replace(' ', '').replace('-', '').replace('<', '').replace('>', '') in story.get_text().replace(' ', '').replace('-', '').replace('<', '').replace('>', ''):
-                                chapter_list[0] = ''
-                            firstLine = 1
-                else:
-                    story_view = soup.find(class_='fr-view')
-                    story_text = []
-                    story_text.append(story_view.find_all('div'))
                     for story in story_text:
                         for story2 in story:
                             chapter_list.append(story2.get_text().replace('\xa0', ' ').replace('Previous Chapter', ''))
@@ -174,6 +165,16 @@ class WuxiaScraper(object):
                                 if chapterHead.replace(' ', '').replace('-', '').replace('<', '').replace('>', '') in story2.get_text().replace(' ', '').replace('-', '').replace('<', '').replace('>', ''):
                                     chapter_list[0] = ''
                                 firstLine = 1
+
+                story_view = soup.find(class_='p-15')
+                story_text = story_view.find_all('p')
+                if len(story_text) != 0:
+                    for story in story_text:
+                        chapter_list.append(story.get_text().replace('\xa0', ' ').replace('Previous Chapter', ''))
+                        if firstLine == 0 and self.head != 0:
+                            if chapterHead.replace(' ', '').replace('-', '').replace('<', '').replace('>', '') in story.get_text().replace(' ', '').replace('-', '').replace('<', '').replace('>', ''):
+                                chapter_list[0] = ''
+                            firstLine = 1
 
                 for paragraph in chapter_list:
                     if paragraph != '':
