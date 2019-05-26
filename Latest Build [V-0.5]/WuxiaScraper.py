@@ -4,6 +4,10 @@ from bs4 import BeautifulSoup
 from HanaDocument import HanaDocument
 from tkinter import *
 import threading
+import webbrowser
+from functools import partial
+
+version = "0.5"
 
 class WuxiaScraper(object):
 
@@ -192,6 +196,40 @@ class WuxiaScraper(object):
 ###############################
 #TKINTER
 #BEYOND THIS POINT IS CHAOS AND DESTRUCTION, DONT EVEN BOTHER...
+versionCheck = 0
+
+def updateMsg():
+    popup = Tk()
+    popup.wm_title("Update")
+    popup.configure(background = "black")
+    label = Label(popup, text="New Update Available here: ", bg="black", fg="white", font="none 15")
+    link = Label(popup, text="Github/WuxiaNovelDownloader", bg="black", fg="lightblue", font="none 12")
+    B1 = Button(popup, text="Okay", command=popup.destroy)
+    label.pack(padx=10)
+    link.pack(padx=10)
+    link.bind("<Button-1>", callback)
+    link.bind("<Enter>", partial(color_config, link, "white"))
+    link.bind("<Leave>", partial(color_config, link, "lightblue"))
+    B1.pack()
+    popup.call('wm', 'attributes', '.', '-topmost', '1')
+    popup.mainloop()
+
+def color_config(widget, color, event):
+    widget.configure(foreground=color)
+
+def callback(event):
+    webbrowser.open_new(r"https://github.com/dr-nyt/WuxiaWorld-Novel-Downloader")
+
+def versionControl():
+    version = "0.5"
+    url = 'https://pastebin.com/7HUqzRGT'
+    page = requests.get(url)
+    soup = BeautifulSoup(page.text, 'lxml')
+    checkVersion = soup.find(class_='de1')
+    if version not in checkVersion:
+        updateMsg()
+        
+
 def msg(text):
     output.config(state='normal')
     output.insert(END, text + '\n')
@@ -282,5 +320,9 @@ msg('LOG:')
 scroll = Scrollbar(window, width=10, command=output.yview)
 output.config(yscrollcommand=scroll.set)
 scroll.grid(row=4, column=1, sticky=E)
+
+if versionCheck == 0:
+    versionControl()
+    versionCheck = 1
 
 window.mainloop()
