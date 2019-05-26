@@ -1,164 +1,211 @@
 import os
+import shutil
 import requests
 from bs4 import BeautifulSoup
-from HanaDocument import HanaDocument
 from tkinter import *
 import threading
+import webbrowser
+from functools import partial
+from EpubEngine import EpubEngine
 
 class WuxiaScraper(object):
 
     def __init__(self, link, cover, volume=0):
-        self.link = link    #Holds the link to the novel.
+        self.link = link
         self.cover = cover
+        self.volume = volume
 
-        self.HD = HanaDocument()
-        self.head = 0   #Indicator to check if the current chapter has a title.
-        #Get Novel Name
+        #Get the name of the novel from the website or the link
         self.novelName = ''
-        tempName = self.link.split('/')[4]  #Split the link of the website into a list separated by "/" and get the 4th index [eg: http://wuxiaworld/novel/my-novel-name/].
-        tempName = tempName.split('-')  #Split that into another list separated by "-" [eg: my-novel-name].
-        for name in tempName:
-            self.novelName = self.novelName + name.capitalize() + ' '   #Capatalize each word of the novel name and add a space in between [eg: My Novel Name].
-        self.novelName = self.novelName[:-1]    #IDK why I did this but there must be a reason... I'm sure of it!!!
-        ###########
-        self.chapterNum_start = 1   #The number of the starting chapter is initialized.
-        self.chapterNum_end = 0     #This number of the last chapter is initialized.
-        self.chapterCurrent = 1     #This is stores the number of the current chapter being compiled.
+        page = requests.get(self.link)
+        soup = BeautifulSoup(page.text, 'lxml')
+        page = soup.find(class_='p-15')
+        try:
+            self.novelName = story_view.find('h4').get_text()
+        except:
+            tempName = self.link.split('/')[4]
+            tempName = tempName.split('-')
+            for name in tempName:
+                self.novelName = self.novelName + name.capitalize() + ' '   
+            self.novelName = self.novelName[:-1]
 
-        self.volume = volume    #Holds the volume number specified, if no volume number is specified then default is 0.
-        if(self.volume != 0):   #If the volume is not 0 then only the volume number specified will be downloaded.
-            self.volume_limit = 1   #Sets the volume limit so only one volume will be allowed to download.
-            self.volumeNum = int(self.volume)   #This variable is only used when only one volume needs to downloaded
-        else:   #If the volume number is specified as 0 then all the volumes will be downloaded.
-            self.volume_limit = 0   #Removes the volume limit to allow all volumes to be downloaded.
-            self.volumeNum = 0  #This is set to 0 because all volumes will be downloaded now.
-        self.volume_links = []  #Empty list to store links to the chapters of each volume, one volume at a time.
+        if(self.volume != 0):
+            self.volume_limit = 1
+            self.volumeNum = int(self.volume)
+        else:
+            self.volume_limit = 0
+            self.volumeNum = 0
 
-        page = requests.get(link)   #Connects to the website.
-        self.soup = BeautifulSoup(page.text, 'html.parser')     #Gets the html from the website and converts it to readable text.
-        
+        #To stop compiling
+        self._break = 0
+
     def start(self):
         self.getChapterLinks()
 
-    #I forgot what exactly this method does but it is something related to setting pointers to the starting and ending chapters of each volume in a novel.
+    def getChapterLinks(self):
+        page = requests.get(self.link)
+        soup = BeautifulSoup(page.text, 'html.parser')
+        volume_list = soup.find_all(class_="panel-body")
+
+        if volume_list == []:
+            msg('Either the link is invalid or your IP is timed out.')
+            msg('In case of an IP timeout, it usually fixes itself after some time.')
+            msg('If this issue persists, open an issue here:')
+            msg('github.com/dr-nyt/WuxiaWorld-Novel-Downloader/issues')
+
+        #Loop through each volume
+        for v in volume_list:
+            self.chapter_links = []
+
+            if self._break == 1:
+                break
+
+            #Find the section on the page where all the chapter links are
+            if v.find(class_="col-sm-6") == None:
+                continue
+
+            #Skip over volumes if a specific volume is defined
+            if self.volumeNum != 1 and self.volume_limit == 1:
+                self.volumeNum-=1
+                continue
+
+            #Get all the chapter links for this volume
+            chapter_html_links = v.find_all(class_="chapter-item")
+            for chapter_http in chapter_html_links:
+                self.chapter_links.append(chapter_http.find('a').get('href'))
+
+            #Store all the chapter links
+
+            #Get the numbers of the first and last chapter from this function
+            self.getMetaData(self.chapter_links[0], self.chapter_links[-1])
+
+            self.makeVolume()
+
+
     def getMetaData(self, link_start, link_end):
         metaData = []
+        index = -1
         
+        #Get the chapter number of the first chapter in the volume
         partsX = link_start.split('/')
         for x in partsX:
             if x != '' and x != 'novel':
                 metaData.append(x)
         chapter_start = metaData[1].split('-')
-        for chapter in chapter_start:
-            if chapter.isdigit():
-                self.chapterNum_start = int(chapter)
+        while index >= -len(chapter_start):
+            if chapter_start[index].isdigit():
+                self.chapterNum_start = int(chapter_start[index])
+                index = -1
                 break
+            else:
+                index = index - 1
+
+        #Set the current starting chapter
         self.chapterCurrent = self.chapterNum_start
         
         metaData = []
 
+        #Get the chapter number of the last chapter in the volume
         partsY = link_end.split('/')
         for y in partsY:
             if y != '' and y != 'novel':
                 metaData.append(y)
         chapter_end = metaData[1].split('-')
-        for chapter in chapter_end:
-            if chapter.isdigit():
-                self.chapterNum_end = int(chapter)
+        while index >= -len(chapter_end):
+            if chapter_end[index].isdigit():
+                self.chapterNum_end = int(chapter_end[index])
+                index = -1
                 break
+            else:
+                index = index - 1
 
-    #This method loops between volumes and calls the getChapter method for each volume's chapters to be compiled and then saves them to a .doc file.   
-    def getChapterLinks(self):
-        volume_list = self.soup.find_all(class_="panel-body")
+
+    def makeVolume(self, author="Unknown"):
+        book = EpubEngine(author, self.novelName)
+
+        if self.cover != '':
+            book.addCover(self.cover)
+
+        head = 0
+        for link in self.chapter_links:
+            page = requests.get('https://www.wuxiaworld.com' + link)
+            soup = BeautifulSoup(page.text, 'lxml')
+            story_view = soup.find(class_='p-15')
+            if head == 0:
+                try:
+                    chapterHead = story_view.find('h4').get_text()
+                    chapter = soup.find(class_='fr-view')
+                    book.addChapter(chapterHead, 'Chapter_' + str(self.chapterCurrent), chapter)
+                    print(chapter)
+                    break
+                except:
+                    chapter = soup.find(class_='fr-view')
+                    book.addChapter('Chapter ' + str(self.chapterCurrent), 'Chapter_' + str(self.chapterCurrent), chapter)
+
+            head = 1
+            msg('Chapter: ' + str(self.chapterCurrent) + ' compiled!')
+            self.chapterCurrent+=1
+
+        book.addTOC()
+        book.style()
         
-        if volume_list == []:
-            msg('Either the link is invalid or your IP is timed out.')
-            msg('In case of an IP timeout, it usually fixes itself after some time.')
-            msg('Ping me @ https://github.com/dr-nyt/ if this issue persists')
-        
-        for v in volume_list:
-            chapter_links = []
-            
-            self.HD.stylesConfig('Heading 1', 36)
-            self.HD.stylesConfig('Normal', 32)
-            
-            if v.find(class_="col-sm-6") == None:
-                continue
-            
-            if self.cover != '':
-                self.HD.addCover(self.cover)
-                self.HD.addSection()
-            
-            self.HD.sectionConfig(0.5)
-            
-            if self.volumeNum != 1 and self.volume_limit == 1:
-                self.volumeNum-=1
-                continue
-            
-            chapter_html_links = v.find_all(class_="chapter-item")
-            for chapter_http in chapter_html_links:
-                chapter_links.append(chapter_http.find('a').get('href'))
-            
-            self.volume_links.append(chapter_links)
+        self.volume_links = []
+        volumeName = self.novelName + ' Vol.' + str(self.volume) + ' ' + str(self.chapterNum_start) + '-' + str(self.chapterNum_end)
 
-            self.getMetaData(chapter_links[0], chapter_links[-1])
-            
-            self.getChapter()
-
-            self.volume_links = []
-            if(self.volume_limit == 1):
-                self.HD.saveBook(self.novelName, self.volume, self.chapterNum_start, self.chapterNum_end)
-                msg('+'*20)
-                msg('Volume: ' + str(self.volume) + ' compiled!') 
-                msg('+'*20)
-                break
-            
-            self.volume+=1
-            self.HD.saveBook(self.novelName, self.volume, self.chapterNum_start, self.chapterNum_end)
+        #If only one volume is to be compiled
+        if(self.volume_limit == 1):
+            book.writeBook(volumeName)
+            shutil.move(volumeName + '.epub', self.novelName + '/' + volumeName + '.epub')
             msg('+'*20)
             msg('Volume: ' + str(self.volume) + ' compiled!') 
             msg('+'*20)
-            self.HD = HanaDocument()
-            
-    #This method loops through every chapter of a volume and compiles them properly, adding in headers and separator between each chapter.
-    def getChapter(self):
-        firstLine = 0
-        for v in self.volume_links:
-            for chapters in v:
-                chapter_list = []
-                page = requests.get('https://www.wuxiaworld.com' + chapters)
-                soup = BeautifulSoup(page.text, 'html.parser')
-                story_view = soup.find_all(class_='p-15')
-                for story_list in story_view:
-                    if self.head == 0:
-                            chapterHead = story_list.find('h4').get_text()
-                            self.HD.addHead(chapterHead)
-                            self.head = 1
-                    story_text = story_list.find_all('p')
-
-                    for story in story_text:
-                        chapter_list.append(story.get_text().replace('\xa0', ' ').replace('Previous Chapter', ''))
-                        if firstLine == 0:
-                            if story.get_text().replace(' ', '').replace('-', '').replace('<', '').replace('>', '') == chapterHead.replace(' ', '').replace('-', '').replace('<', '').replace('>', ''):
-                                chapter_list[0] = ''
-                            firstLine = 1
-
-                for paragraph in chapter_list:
-                    if paragraph != '':
-                        self.HD.addPara(paragraph)
-                self.HD.addPara(" ")
-                self.HD.addPara("Powered by dr_nyt")
-                self.HD.addPara("If any errors occur, open an issue here: github.com/dr-nyt/WuxiaWorld-Novel-Downloader/issues")
-                self.HD.addPara("You can download more novels using the app here: github.com/dr-nyt/WuxiaWorld-Novel-Downloader")
-                self.HD.addSection()
-                self.head = 0
-                firstLine = 0
-                msg('Chapter: ' + str(self.chapterCurrent) + ' compiled!')
-                self.chapterCurrent+=1
+            self._break = 1
+        else:
+            #Increment the volume number and continue
+            self.volume+=1
+            book.writeBook(volumeName)
+            shutil.move(volumeName + '.epub', self.novelName + '/' + volumeName + '.epub')
+            msg('+'*20)
+            msg('Volume: ' + str(self.volume) + ' compiled!') 
+            msg('+'*20)
 
 ###############################
 #TKINTER
 #BEYOND THIS POINT IS CHAOS AND DESTRUCTION, DONT EVEN BOTHER...
+versionCheck = 0
+
+def updateMsg():
+    popup = Tk()
+    popup.wm_title("Update")
+    popup.configure(background = "black")
+    label = Label(popup, text="New Update Available here: ", bg="black", fg="white", font="none 15")
+    link = Label(popup, text="Github/WuxiaNovelDownloader", bg="black", fg="lightblue", font="none 12")
+    B1 = Button(popup, text="Okay", command=popup.destroy)
+    label.pack(padx=10)
+    link.pack(padx=10)
+    link.bind("<Button-1>", callback)
+    link.bind("<Enter>", partial(color_config, link, "white"))
+    link.bind("<Leave>", partial(color_config, link, "lightblue"))
+    B1.pack()
+    popup.call('wm', 'attributes', '.', '-topmost', '1')
+    popup.mainloop()
+
+def color_config(widget, color, event):
+    widget.configure(foreground=color)
+
+def callback(event):
+    webbrowser.open_new(r"https://github.com/dr-nyt/WuxiaWorld-Novel-Downloader")
+
+def versionControl():
+    version = "0.5"
+    url = 'https://pastebin.com/7HUqzRGT'
+    page = requests.get(url)
+    soup = BeautifulSoup(page.text, 'lxml')
+    checkVersion = soup.find(class_='de1')
+    if version not in checkVersion:
+        updateMsg()
+        
+
 def msg(text):
     output.config(state='normal')
     output.insert(END, text + '\n')
@@ -192,20 +239,20 @@ def compiler():
             return       
 
     def callback():
-        try:
+        #try:
             Novel = WuxiaScraper(link, cover, volume)
             msg('starting...')
             Novel.start()
             msg('+'*20)
             msg('ALL DONE!')
             msg('+'*20)
-        except Exception as e:
+        #except Exception as e:
             msg('+'*20)
             msg('Error Occured!')
             msg('+'*20)
             msg(str(e))
-            msg("If you continue to have this error then consult the developer")
-            msg("https://github.com/dr-nyt")
+            msg("If you continue to have this error then open an issue here:")
+            msg("github.com/dr-nyt/WuxiaWorld-Novel-Downloader/issues")
             msg('+'*20)
             msg('')
     t = threading.Thread(target=callback)
@@ -249,5 +296,9 @@ msg('LOG:')
 scroll = Scrollbar(window, width=10, command=output.yview)
 output.config(yscrollcommand=scroll.set)
 scroll.grid(row=4, column=1, sticky=E)
+
+if versionCheck == 0:
+    versionControl()
+    versionCheck = 1
 
 window.mainloop()
