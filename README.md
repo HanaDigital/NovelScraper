@@ -22,8 +22,8 @@
 4. Click compile to let it rip! [The files will be compiled in a way that makes them easily convertable to .epub files]
 5. You can install [calibre] from "https://calibre-ebook.com/download" to easily convert them to .epub files. [It is recommend that you convert them to epub for the best experience.]
 
-### TO-DO
-- Automate the calibre [.docx to .epub], using calibre modules.
+### Alpha Build
+- Currently working to automate the coversion to .epub without external software.
 
 ### Notes
 This is just a programme I made for fun and would love for your input,
