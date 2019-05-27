@@ -1,14 +1,14 @@
-# Objective ? To be able to crawl m.wuxiaworld.co websites as well.
-import os
+# Objective ? To be able to crawl wuxia.co websites as well.
+from icecream import ic
 import requests
 from bs4 import BeautifulSoup
-
+version = "0.1"
 
 class WuxiaCoScraper(object):
-
-    def __init__(self, link, cover=0):
+    def __init__(self, link, cover):
         self.link = link  # Holds the link to the novel
         self.cover = cover
+        #self.HD = HanaDocument()
         # Get novel name
         self.novelName = ''
         # Split the link of the website into a list to get novel name, eg https://m.wuxiaworld.co/Reverend-Insanity
@@ -20,12 +20,14 @@ class WuxiaCoScraper(object):
             self.novelName = self.novelName + name.capitalize() + ' '
         # To remove last whitespace from the novel name
         self.novelName = self.novelName[:-1]
+        ic(self.novelName)
 
         # Luckily appending /all.html to wuxia.co/novel-name gives a page with all html links
         self.new_link = self.link + '/all.html/'
 
         # Get the page
         page = requests.get(self.new_link)
+        ic(page)
         self.soup = BeautifulSoup(page.text, 'html.parser')
 
     def start(self):
@@ -33,8 +35,7 @@ class WuxiaCoScraper(object):
 
     def buildChapterLinks(self):
         # My approach is to get all <p> tags since they carry the <a> links we need
-        # This dictionary would have the format of ({"chapter_number chapter_name": "link_to")
-        chapter_dictionaries = []
+        chapter_dictionaries = []  # This dictionary would have the format of ({"chapter_number chapter_name": "link_to")
         for all_links in self.soup.find_all('a', href=True):
             # Since all wuxia.co valid chapters start with digits, check to see if the string starts with digits
             if all_links['href'][0].isdigit():
@@ -52,18 +53,15 @@ class WuxiaCoScraper(object):
             tempLink = list(chapter.values())[0]
             chapter_name = list(chapter.keys())[0]
             link = self.link + '/' + tempLink
-            # TODO get this printing out in log like dr_nyt's
-            print("Getting: {0}".format(chapter_name))
             url = requests.get(link)
-
             soup = BeautifulSoup(url.text, 'html.parser')
             story_text = self.get_page(soup)
             # build a single html file with all the chapters and stories
             chapter = "<h1>" + str(chapter_name) + "</h1><br/>"
             story = "<p>" + str(story_text) + "</p><br/><br/><br/>"
             html_page = html + chapter + story
-        self.save_html(html)
-        print("Process finished!")
+            ic(html_page)
+        ic(html)
 
 
 
@@ -73,10 +71,11 @@ class WuxiaCoScraper(object):
         return text
 
     def save_html(self, html):
-        file = open(self.novelName+".html", "w")
-        file.write(html)
-        file.close()
+        if not os.path.exists(self.novelName):
+            os.mkdir(self.novelName)
 
 
-if __name__ == '__main__':
-    pass
+
+newts = WuxiaCoScraper(link = "https://m.wuxiaworld.co/Reverend-Insanity/", cover=0)
+
+newts.start()
