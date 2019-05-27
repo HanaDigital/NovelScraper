@@ -1,4 +1,4 @@
-# Objective ? To be able to crawl wuxia.co websites as well.
+# Objective ? To be able to crawl m.wuxiaworld.co websites as well.
 import os
 import requests
 from bs4 import BeautifulSoup
