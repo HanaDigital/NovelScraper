@@ -6,6 +6,7 @@ from tkinter import *
 import threading
 import webbrowser
 from functools import partial
+from WuxiaCo import WuxiaCoScraper
 
 version = "0.5"
 
@@ -264,12 +265,21 @@ def compiler():
 
     def callback():
         try:
-            Novel = WuxiaScraper(link, cover, volume)
-            msg('starting...')
-            Novel.start()
-            msg('+'*20)
-            msg('ALL DONE!')
-            msg('+'*20)
+            # check if url is wuxiaworld.com or wuxiaworld.co
+            url = eNovel.get().split('/')[2]
+            msg(url)
+            if url == "m.wuxiaworld.co":
+                Novel = WuxiaCoScraper(link, cover)
+                msg('starting...')
+                Novel.start()
+            else:
+
+                Novel = WuxiaScraper(link, cover, volume)
+                msg('starting...')
+                Novel.start()
+                msg('+'*20)
+                msg('ALL DONE!')
+                msg('+'*20)
         except Exception as e:
             msg('+'*20)
             msg('Error Occured!')
