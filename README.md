@@ -1,6 +1,6 @@
 ### About
  *	Author: dr_nyt
- *	Version: 0.4
+ *	Version: 0.5
 
 ### Features
 - Download any Wuxia Novel and get them in .docx or .epub formats.
