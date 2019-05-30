@@ -7,7 +7,7 @@
 
 ### Pre-Requistes
 - Install python 3 [https://www.python.org/downloads/]
-- Make sure you check the 'install pip' option when installing python 3.
+- Make sure you check the 'ADD Python to PATH' option when installing python 3.
 - Feel free to ping me, if you need help :)
 
 ### Usage
