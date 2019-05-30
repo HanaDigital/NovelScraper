@@ -1,4 +1,3 @@
-import os
 from docx import Document
 from docx.shared import Inches
 from docx.shared import Cm
@@ -16,9 +15,6 @@ class HanaDocument(object):
         
     def addPara(self, text):
         self.document.add_paragraph(text)
-
-    def addCover(self, coverPath):
-        self.document.add_picture(coverPath, width=Inches(8.5), height=Inches(11))
 
     def addSection(self):
         self.document.add_section()
@@ -39,8 +35,5 @@ class HanaDocument(object):
         font.size = Pt(pt)
 
     def saveBook(self, name, volume, start, end):
-        if not os.path.exists(name):
-            os.mkdir(name)
-            
-        self.document.save(name + '/' + name + ' ' + str(volume) + ' ' + str(start) + '-' + str(end) + '.docx')
+        self.document.save(name + ' ' + str(volume) + ' ' + str(start) + '-' + str(end) + '.docx')
         
