@@ -4,10 +4,6 @@ from bs4 import BeautifulSoup
 from HanaDocument import HanaDocument
 from tkinter import *
 import threading
-import webbrowser
-from functools import partial
-
-version = "0.5"
 
 class WuxiaScraper(object):
 
@@ -149,34 +145,18 @@ class WuxiaScraper(object):
                 chapter_list = []
                 page = requests.get('https://www.wuxiaworld.com' + chapters)
                 soup = BeautifulSoup(page.text, 'lxml')
-                story_view = soup.find(class_='p-15')
-                if self.head == 0:
-                    try:
-                        chapterHead = story_view.find('h4').get_text()
-                        self.HD.addHead(chapterHead)
-                        self.head = 1
-                    except:
-                        self.HD.addHead("Chapter " + self.chapterCurrent)
+                story_view = soup.find_all(class_='p-15')
+                for story_list in story_view:
+                    if self.head == 0:
+                            chapterHead = story_list.find('h4').get_text()
+                            self.HD.addHead(chapterHead)
+                            self.head = 1
+                    story_text = story_list.find_all('p')
 
-                story_view = soup.find(class_='fr-view')
-                story_text = []
-                story_text.append(story_view.find_all('div'))
-                if len(story_text) != 0:
-                    for story in story_text:
-                        for story2 in story:
-                            chapter_list.append(story2.get_text().replace('\xa0', ' ').replace('Previous Chapter', ''))
-                            if firstLine == 0 and self.head != 0:
-                                if chapterHead.replace(' ', '').replace('-', '').replace('<', '').replace('>', '') in story2.get_text().replace(' ', '').replace('-', '').replace('<', '').replace('>', ''):
-                                    chapter_list[0] = ''
-                                firstLine = 1
-
-                story_view = soup.find(class_='p-15')
-                story_text = story_view.find_all('p')
-                if len(story_text) != 0:
                     for story in story_text:
                         chapter_list.append(story.get_text().replace('\xa0', ' ').replace('Previous Chapter', ''))
-                        if firstLine == 0 and self.head != 0:
-                            if chapterHead.replace(' ', '').replace('-', '').replace('<', '').replace('>', '') in story.get_text().replace(' ', '').replace('-', '').replace('<', '').replace('>', ''):
+                        if firstLine == 0:
+                            if story.get_text().replace(' ', '').replace('-', '').replace('<', '').replace('>', '') == chapterHead.replace(' ', '').replace('-', '').replace('<', '').replace('>', ''):
                                 chapter_list[0] = ''
                             firstLine = 1
 
@@ -196,40 +176,6 @@ class WuxiaScraper(object):
 ###############################
 #TKINTER
 #BEYOND THIS POINT IS CHAOS AND DESTRUCTION, DONT EVEN BOTHER...
-versionCheck = 0
-
-def updateMsg():
-    popup = Tk()
-    popup.wm_title("Update")
-    popup.configure(background = "black")
-    label = Label(popup, text="New Update Available here: ", bg="black", fg="white", font="none 15")
-    link = Label(popup, text="Github/WuxiaNovelDownloader", bg="black", fg="lightblue", font="none 12")
-    B1 = Button(popup, text="Okay", command=popup.destroy)
-    label.pack(padx=10)
-    link.pack(padx=10)
-    link.bind("<Button-1>", callback)
-    link.bind("<Enter>", partial(color_config, link, "white"))
-    link.bind("<Leave>", partial(color_config, link, "lightblue"))
-    B1.pack()
-    popup.call('wm', 'attributes', '.', '-topmost', '1')
-    popup.mainloop()
-
-def color_config(widget, color, event):
-    widget.configure(foreground=color)
-
-def callback(event):
-    webbrowser.open_new(r"https://github.com/dr-nyt/WuxiaWorld-Novel-Downloader")
-
-def versionControl():
-    version = "0.5"
-    url = 'https://pastebin.com/7HUqzRGT'
-    page = requests.get(url)
-    soup = BeautifulSoup(page.text, 'lxml')
-    checkVersion = soup.find(class_='de1')
-    if version not in checkVersion:
-        updateMsg()
-        
-
 def msg(text):
     output.config(state='normal')
     output.insert(END, text + '\n')
@@ -275,8 +221,8 @@ def compiler():
             msg('Error Occured!')
             msg('+'*20)
             msg(str(e))
-            msg("If you continue to have this error then open an issue here:")
-            msg("github.com/dr-nyt/WuxiaWorld-Novel-Downloader/issues")
+            msg("If you continue to have this error then consult the developer")
+            msg("https://github.com/dr-nyt")
             msg('+'*20)
             msg('')
     t = threading.Thread(target=callback)
@@ -320,9 +266,5 @@ msg('LOG:')
 scroll = Scrollbar(window, width=10, command=output.yview)
 output.config(yscrollcommand=scroll.set)
 scroll.grid(row=4, column=1, sticky=E)
-
-if versionCheck == 0:
-    versionControl()
-    versionCheck = 1
 
 window.mainloop()
