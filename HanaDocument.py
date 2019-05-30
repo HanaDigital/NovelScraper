@@ -17,9 +17,6 @@ class HanaDocument(object):
     def addPara(self, text):
         self.document.add_paragraph(text)
 
-    def addCover(self, coverPath):
-        self.document.add_picture(coverPath, width=Inches(8.5), height=Inches(11))
-
     def addSection(self):
         self.document.add_section()
 
