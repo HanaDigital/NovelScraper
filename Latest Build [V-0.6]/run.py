@@ -70,7 +70,7 @@ def color_config(widget, color, event):
 
 # Open the link to the novel on a browser
 def callback(event):
-    webbrowser.open_new(r"https://github.com/dr-nyt/WuxiaWorld-Novel-Downloader")
+    webbrowser.open_new(r"https://github.com/dr-nyt/Translated-Novel-Downloader")
 
 #Checks if this is the latest version
 def versionControl():

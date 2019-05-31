@@ -89,7 +89,7 @@ class WuxiaScraper(object):
         if volume_list == []:
             msg('Either the link is invalid or your IP is timed out.')
             msg('In case of an IP timeout, it usually fixes itself after some time.')
-            msg('Ping me @ https://github.com/dr-nyt/ if this issue persists')
+            msg('Raise an issue @ https://github.com/dr-nyt/Translated-Novel-Downloader/issues if this issue persists')
         
         for v in volume_list:
             chapter_links = []
@@ -181,8 +181,8 @@ class WuxiaScraper(object):
                         self.HD.addPara(paragraph)
                 self.HD.addPara(" ")
                 self.HD.addPara("Powered by dr_nyt")
-                self.HD.addPara("If any errors occur, open an issue here: github.com/dr-nyt/WuxiaWorld-Novel-Downloader/issues")
-                self.HD.addPara("You can download more novels using the app here: github.com/dr-nyt/WuxiaWorld-Novel-Downloader")
+                self.HD.addPara("If any errors occur, open an issue here: github.com/dr-nyt/Translated-Novel-Downloader/issues")
+                self.HD.addPara("You can download more novels using the app here: github.com/dr-nyt/Translated-Novel-Downloader")
                 self.HD.addSection()
                 self.head = 0
                 firstLine = 0
@@ -237,7 +237,7 @@ def compiler():
             msg('+'*20)
             msg(str(e))
             msg("If you continue to have this error then open an issue here:")
-            msg("github.com/dr-nyt/WuxiaWorld-Novel-Downloader/issues")
+            msg("github.com/dr-nyt/Translated-Novel-Downloader/issues")
             msg('+'*20)
             msg('')
     t = threading.Thread(target=callback)

@@ -81,8 +81,8 @@ class NovelPlanetScraper(object):
 
             HD.addPara(" ")
             HD.addPara("Powered by dr_nyt")
-            HD.addPara("If any errors occur, open an issue here: github.com/dr-nyt/WuxiaWorld-Novel-Downloader/issues")
-            HD.addPara("You can download more novels using the app here: github.com/dr-nyt/WuxiaWorld-Novel-Downloader")
+            HD.addPara("If any errors occur, open an issue here: github.com/dr-nyt/Translated-Novel-Downloader/issues")
+            HD.addPara("You can download more novels using the app here: github.com/dr-nyt/Translated-Novel-Downloader")
             HD.addSection()
 
             msg('Chapter: ' + str(self.currentChapter) + ' compiled!')
@@ -158,7 +158,7 @@ def compiler():
             msg('+'*20)
             msg(str(e))
             msg("If you continue to have this error then open an issue here:")
-            msg("github.com/dr-nyt/WuxiaWorld-Novel-Downloader/issues")
+            msg("github.com/dr-nyt/Translated-Novel-Downloader/issues")
             msg('+'*20)
             msg('')
     t = threading.Thread(target=callback)
