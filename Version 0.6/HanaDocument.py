@@ -38,9 +38,12 @@ class HanaDocument(object):
         font.name = 'Times'
         font.size = Pt(pt)
 
-    def saveBook(self, name, volume, start, end):
+    def saveBook(self, name, start, end, volume=''):
         if not os.path.exists(name):
             os.mkdir(name)
-            
-        self.document.save(name + '/' + name + ' ' + str(volume) + ' ' + str(start) + '-' + str(end) + '.docx')
+
+        if volume != '': 
+            self.document.save(name + '/' + name + ' ' + str(volume) + ' ' + str(start) + '-' + str(end) + '.docx')
+        else:
+            self.document.save(name + '/' + name + ' ' + str(start) + '-' + str(end) + '.docx')
         
