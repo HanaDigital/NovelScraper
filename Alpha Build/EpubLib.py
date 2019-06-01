@@ -1,7 +1,9 @@
 # coding=utf-8
 
 from ebooklib import epub
-
+import cfscrape
+import requests
+from bs4 import BeautifulSoup
 
 if __name__ == '__main__':
     book = epub.EpubBook()
@@ -16,27 +18,35 @@ if __name__ == '__main__':
     # add cover image
     book.set_cover("image.jpg", open('cover.jpeg', 'rb').read())
 
+    chapters = []
+
+    scraper = cfscrape.create_scraper()
+    page = scraper.get('https://novelplanet.com/Novel/Overgeared/c2?id=270678')
+    soup = BeautifulSoup(page.text, 'lxml')
+    paras = soup.find(id="divReadContent").find_all('p')
+
+    content = ''
+    for para in paras:
+        content += para.prettify()
+
     # intro chapter
-    c1 = epub.EpubHtml(title='Introduction', file_name='intro.xhtml', lang='hr')
-    c1.content=u'<html><head></head><body><h1>Introduction</h1><p>Introduction paragraph where i explain what is happening.</p></body></html>'
-
+    c = epub.EpubHtml(title='Chapter 2', file_name='Chapter_2.xhtml', lang='en')
+    c.content=u'%s' % content
+    chapters.append(c)
     # about chapter
-    c2 = epub.EpubHtml(title='About this book', file_name='about.xhtml')
-    c2.content='<h1>About this book</h1><p>Helou, this is my book! There are many books, but this one is mine.</p><p><img src="image.jpg" alt="Cover Image"/></p>'
-
+    c = epub.EpubHtml(title='About this book', file_name='about.xhtml')
+    c.content='<h1>About this book</h1><p>Helou, this is my book! There are many books, but this one is mine.</p><p><img src="image.jpg" alt="Cover Image"/></p>'
+    chapters.append(c)
     # add chapters to the book
-    book.add_item(c1)
-    book.add_item(c2)
+    for chap in chapters:
+        book.add_item(chap)
     
     # create table of contents
     # - add manual link
     # - add section
     # - add auto created links to chapters
 
-    book.toc = (epub.Link('intro.xhtml', 'Introduction', 'intro'),
-                (epub.Section('Languages'),
-                 (c1, c2))
-                )
+    book.toc = (chapters)
 
     # add navigation files
     book.add_item(epub.EpubNcx())
@@ -72,7 +82,7 @@ nav[epub|type~='toc'] > ol > li > ol > li {
     book.add_item(nav_css)
 
     # create spin, add cover page as first page
-    book.spine = ['cover', 'nav', c1, c2]
+    book.spine = ['cover', 'nav'] + chapters
 
     # create epub file
-    epub.write_epub('test.epub', book, {})
+    epub.write_epub('Overgeared.epub', book, {})

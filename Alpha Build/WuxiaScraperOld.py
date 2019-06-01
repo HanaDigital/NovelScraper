@@ -1,228 +1,155 @@
 import os
+import shutil
 import requests
 from bs4 import BeautifulSoup
-from HanaDocument import HanaDocument
+import cfscrape
 from tkinter import *
 import threading
-import webbrowser
-from functools import partial
+from ebooklib import epub
 
-version = "0.5"
+class NovelPlanetScraper(object):
 
-class WuxiaScraper(object):
-
-    def __init__(self, link, cover, volume=0):
-        self.link = link    #Holds the link to the novel.
+    def __init__(self, link, chapterStart, chapterEnd, cover='Novel Cover.png'):
+        self.link = link
         self.cover = cover
 
-        self.HD = HanaDocument()
-        self.head = 0   #Indicator to check if the current chapter has a title.
+        #Initialize connection with NovelPlanet
+        self.scraper = cfscrape.create_scraper()
+        page = self.scraper.get(link)
+        soup = BeautifulSoup(page.text, 'html.parser')
+
         #Get Novel Name
-        self.novelName = ''
-        tempName = self.link.split('/')[4]  #Split the link of the website into a list separated by "/" and get the 4th index [eg: http://wuxiaworld/novel/my-novel-name/].
-        tempName = tempName.split('-')  #Split that into another list separated by "-" [eg: my-novel-name].
-        for name in tempName:
-            self.novelName = self.novelName + name.capitalize() + ' '   #Capatalize each word of the novel name and add a space in between [eg: My Novel Name].
-        self.novelName = self.novelName[:-1]    #IDK why I did this but there must be a reason... I'm sure of it!!!
-        ###########
-        self.chapterNum_start = 1   #The number of the starting chapter is initialized.
-        self.chapterNum_end = 0     #This number of the last chapter is initialized.
-        self.chapterCurrent = 1     #This is stores the number of the current chapter being compiled.
+        self.novelName = soup.find(class_='title').get_text()
 
-        self.volume = volume    #Holds the volume number specified, if no volume number is specified then default is 0.
-        if(self.volume != 0):   #If the volume is not 0 then only the volume number specified will be downloaded.
-            self.volume_limit = 1   #Sets the volume limit so only one volume will be allowed to download.
-            self.volumeNum = int(self.volume)   #This variable is only used when only one volume needs to downloaded
-        else:   #If the volume number is specified as 0 then all the volumes will be downloaded.
-            self.volume_limit = 0   #Removes the volume limit to allow all volumes to be downloaded.
-            self.volumeNum = 0  #This is set to 0 because all volumes will be downloaded now.
-        self.volume_links = []  #Empty list to store links to the chapters of each volume, one volume at a time.
+        #Get the html that stores links to each chapter
+        chapters = soup.find_all(class_='rowChapter')
 
-        page = requests.get(link)   #Connects to the website.
-        self.soup = BeautifulSoup(page.text, 'html.parser')     #Gets the html from the website and converts it to readable text.
-        
-    def start(self):
-        self.getChapterLinks()
+        #Get all the specified links from the html
+        self.chapter_links = []
+        for chapter in chapters:
+            self.chapter_links.append(chapter.find('a').get('href'))
+        self.chapter_links.reverse() #Reverse the list so the first index will be the first chapter and so on
 
-    #I forgot what exactly this method does but it is something related to setting pointers to the starting and ending chapters of each volume in a novel.
-    def getMetaData(self, link_start, link_end):
-        metaData = []
-        index = -1
-        
-        partsX = link_start.split('/')
-        for x in partsX:
-            if x != '' and x != 'novel':
-                metaData.append(x)
-        chapter_start = metaData[1].split('-')
-        while index >= -len(chapter_start):
-            if chapter_start[index].isdigit():
-                self.chapterNum_start = int(chapter_start[index])
-                index = -1
-                break
-            else:
-                index = index - 1
+        #Cut down the links if the number of chapters are specified and,
+        #Set the starting and last chapter number
+        if chapterStart != '':
+            self.chapterNum_start = int(chapterStart)
+            self.currentChapter = int(chapterStart)
+            self.chapter_links = self.chapter_links[self.chapterNum_start - 1:]
+        else:
+            self.chapterNum_start = 1
+            self.currentChapter = 1
 
-        self.chapterCurrent = self.chapterNum_start
-        
-        metaData = []
+        if chapterEnd != '':
+            self.chapterNum_end = int(chapterEnd)
+            self.chapter_links = self.chapter_links[:abs((int(chapterEnd) + 1) - self.chapterNum_start)]
+        else:
+            self.chapterNum_end = len(chapters)
 
-        partsY = link_end.split('/')
-        for y in partsY:
-            if y != '' and y != 'novel':
-                metaData.append(y)
-        chapter_end = metaData[1].split('-')
-        while index >= -len(chapter_end):
-            if chapter_end[index].isdigit():
-                self.chapterNum_end = int(chapter_end[index])
-                index = -1
-                break
-            else:
-                index = index - 1
-                
-    #This method loops between volumes and calls the getChapter method for each volume's chapters to be compiled and then saves them to a .doc file.   
-    def getChapterLinks(self):
-        volume_list = self.soup.find_all(class_="panel-body")
-        
-        if volume_list == []:
-            msg('Either the link is invalid or your IP is timed out.')
-            msg('In case of an IP timeout, it usually fixes itself after some time.')
-            msg('Ping me @ https://github.com/dr-nyt/ if this issue persists')
-        
-        for v in volume_list:
-            chapter_links = []
-            
-            self.HD.stylesConfig('Heading 1', 36)
-            self.HD.stylesConfig('Normal', 32)
-            
-            if v.find(class_="col-sm-6") == None:
-                continue
-            
-            self.HD.sectionConfig(0.5)
-            
-            #Skip over volumes if a specific volume is defined
-            if self.volumeNum != 1 and self.volume_limit == 1:
-                self.volumeNum-=1
-                continue
+        msg("Chapter " + str(self.chapterNum_start) + " to Chapter " + str(self.chapterNum_end) + " will be compiled!")
 
-            #Add Coverpage if not already added
-            if self.cover != '':
-                self.HD.addCover(self.cover)
-                self.HD.addSection()
-            
-            chapter_html_links = v.find_all(class_="chapter-item")
-            for chapter_http in chapter_html_links:
-                chapter_links.append(chapter_http.find('a').get('href'))
-            
-            self.volume_links.append(chapter_links)
+    def compileNovel(self):
+        book = epub.EpubBook()
+        # add metadata
+        book.set_identifier('dr_nyt')
+        book.set_title(self.novelName)
+        book.set_language('en')
+        book.add_author('Unknown')
 
-            self.getMetaData(chapter_links[0], chapter_links[-1])
-            
-            self.getChapter()
+        #Set the cover if defined by the user
+        if self.cover != '':
+            book.set_cover("image.jpg", open(self.cover, 'rb').read())
 
-            self.volume_links = []
-            if(self.volume_limit == 1):
-                self.HD.saveBook(self.novelName, self.volume, self.chapterNum_start, self.chapterNum_end)
-                msg('+'*20)
-                msg('Volume: ' + str(self.volume) + ' compiled!') 
-                msg('+'*20)
-                break
-            
-            self.volume+=1
-            self.HD.saveBook(self.novelName, self.volume, self.chapterNum_start, self.chapterNum_end)
-            msg('+'*20)
-            msg('Volume: ' + str(self.volume) + ' compiled!') 
-            msg('+'*20)
-            self.HD = HanaDocument()
-            
-    #This method loops through every chapter of a volume and compiles them properly, adding in headers and separator between each chapter.
-    def getChapter(self):
-        firstLine = 0
-        for v in self.volume_links:
-            for chapters in v:
-                chapter_list = []
-                page = requests.get('https://www.wuxiaworld.com' + chapters)
-                soup = BeautifulSoup(page.text, 'lxml')
-                story_view = soup.find(class_='p-15')
-                if self.head == 0:
-                    try:
-                        chapterHead = story_view.find('h4').get_text()
-                        self.HD.addHead(chapterHead)
-                        self.head = 1
-                    except:
-                        self.HD.addHead("Chapter " + self.chapterCurrent)
+        chapters = []
+        #Loop through each link
+        for chapter_link in self.chapter_links:
 
-                story_view = soup.find(class_='fr-view')
-                story_text = []
-                story_text.append(story_view.find_all('div'))
-                if len(story_text) != 0:
-                    for story in story_text:
-                        for story2 in story:
-                            chapter_list.append(story2.get_text().replace('\xa0', ' ').replace('Previous Chapter', ''))
-                            if firstLine == 0 and self.head != 0:
-                                if chapterHead.replace(' ', '').replace('-', '').replace('<', '').replace('>', '') in story2.get_text().replace(' ', '').replace('-', '').replace('<', '').replace('>', ''):
-                                    chapter_list[0] = ''
-                                firstLine = 1
+            page = self.scraper.get('https://novelplanet.com' + chapter_link)
+            soup = BeautifulSoup(page.text, 'lxml')
 
-                story_view = soup.find(class_='p-15')
-                story_text = story_view.find_all('p')
-                if len(story_text) != 0:
-                    for story in story_text:
-                        chapter_list.append(story.get_text().replace('\xa0', ' ').replace('Previous Chapter', ''))
-                        if firstLine == 0 and self.head != 0:
-                            if chapterHead.replace(' ', '').replace('-', '').replace('<', '').replace('>', '') in story.get_text().replace(' ', '').replace('-', '').replace('<', '').replace('>', ''):
-                                chapter_list[0] = ''
-                            firstLine = 1
+            #Add a header for the chapter
+            try:
+                chapterHead = soup.find('h4').get_text()
+                c = epub.EpubHtml(title=chapterHead, file_name='Chapter_' + str(self.currentChapter) + '.xhtml', lang='en')
+                content = '<h3>' + chapterHead + '</h4>'
+            except:
+                c = epub.EpubHtml(title="Chapter "  + str(self.currentChapter), file_name='Chapter_' + str(self.currentChapter) + '.xhtml', lang='en')
+                content = "<h3> Chapter "  + str(self.currentChapter) + "</h4>"
 
-                for paragraph in chapter_list:
-                    if paragraph != '':
-                        self.HD.addPara(paragraph)
-                self.HD.addPara(" ")
-                self.HD.addPara("Powered by dr_nyt")
-                self.HD.addPara("If any errors occur, open an issue here: github.com/dr-nyt/WuxiaWorld-Novel-Downloader/issues")
-                self.HD.addPara("You can download more novels using the app here: github.com/dr-nyt/WuxiaWorld-Novel-Downloader")
-                self.HD.addSection()
-                self.head = 0
-                firstLine = 0
-                msg('Chapter: ' + str(self.chapterCurrent) + ' compiled!')
-                self.chapterCurrent+=1
+            #Get all the paragraphs from the chapter
+            paras = soup.find(id="divReadContent").find_all('p')
+
+            #Add each paragraph to the docx file
+            for para in paras:
+                content += para.prettify()
+
+            content += "<p> </p>"
+            content += "<p>Powered by dr_nyt</p>"
+            content += "<p>If any errors occur, open an issue here: github.com/dr-nyt/Translated-Novel-Downloader/issues</p>"
+            content += "<p>You can download more novels using the app here: github.com/dr-nyt/Translated-Novel-Downloader</p>"
+
+            c.content = u'%s' % content
+            chapters.append(c)
+
+            msg('Chapter: ' + str(self.currentChapter) + ' compiled!')
+            self.currentChapter+=1
+
+        for chap in chapters:
+            book.add_item(chap)
+
+        book.toc = (chapters)
+
+        # add navigation files
+        book.add_item(epub.EpubNcx())
+        book.add_item(epub.EpubNav())
+
+        # define css style
+        style = '''
+    @namespace epub "http://www.idpf.org/2007/ops";
+    body {
+        font-family: Cambria, Liberation Serif, Bitstream Vera Serif, Georgia, Times, Times New Roman, serif;
+    }
+    h2 {
+         text-align: left;
+         text-transform: uppercase;
+         font-weight: 200;     
+    }
+    ol {
+            list-style-type: none;
+    }
+    ol > li:first-child {
+            margin-top: 0.3em;
+    }
+    nav[epub|type~='toc'] > ol > li > ol  {
+        list-style-type:square;
+    }
+    nav[epub|type~='toc'] > ol > li > ol > li {
+            margin-top: 0.3em;
+    }
+    '''
+
+        # add css file
+        nav_css = epub.EpubItem(uid="style_nav", file_name="style/nav.css", media_type="text/css", content=style)
+        book.add_item(nav_css)
+
+        # create spin, add cover page as first page
+        book.spine = ['cover', 'nav'] + chapters
+
+        # create epub file
+        epub.write_epub(self.novelName + ' ' + str(self.chapterNum_start) + '-' + str(self.chapterNum_end) + '.epub', book, {})
+
+        if not os.path.exists(self.novelName):
+            os.mkdir(self.novelName)
+
+        shutil.move(self.novelName + ' ' + str(self.chapterNum_start) + '-' + str(self.chapterNum_end) + '.epub', self.novelName + '/' + self.novelName + ' ' + str(self.chapterNum_start) + '-' + str(self.chapterNum_end) + '.epub')
+
+        msg('+'*20)
+        msg(self.novelName + ' has compiled!') 
+        msg('+'*20)
+
 
 ###############################
-#TKINTER
-#BEYOND THIS POINT IS CHAOS AND DESTRUCTION, DONT EVEN BOTHER...
-versionCheck = 0
-
-def updateMsg():
-    popup = Tk()
-    popup.wm_title("Update")
-    popup.configure(background = "black")
-    label = Label(popup, text="New Update Available here: ", bg="black", fg="white", font="none 15")
-    link = Label(popup, text="Github/WuxiaNovelDownloader", bg="black", fg="lightblue", font="none 12")
-    B1 = Button(popup, text="Okay", command=popup.destroy)
-    label.pack(padx=10)
-    link.pack(padx=10)
-    link.bind("<Button-1>", callback)
-    link.bind("<Enter>", partial(color_config, link, "white"))
-    link.bind("<Leave>", partial(color_config, link, "lightblue"))
-    B1.pack()
-    popup.call('wm', 'attributes', '.', '-topmost', '1')
-    popup.mainloop()
-
-def color_config(widget, color, event):
-    widget.configure(foreground=color)
-
-def callback(event):
-    webbrowser.open_new(r"https://github.com/dr-nyt/WuxiaWorld-Novel-Downloader")
-
-def versionControl():
-    version = "0.5"
-    url = 'https://pastebin.com/7HUqzRGT'
-    page = requests.get(url)
-    soup = BeautifulSoup(page.text, 'lxml')
-    checkVersion = soup.find(class_='de1')
-    if version not in checkVersion:
-        updateMsg()
-        
-
+#tkINTER
 def msg(text):
     output.config(state='normal')
     output.insert(END, text + '\n')
@@ -231,17 +158,32 @@ def msg(text):
 
 def compiler():
     link = eNovel.get()
-    volume = eVolume.get()
-    cover = eCover.get()
-    
-    if volume == '':
-        volume = 0
-        msg('All Volumes will be compiled.')
-    else:
-        msg('Only Volume: ' + volume + ' will be compiled.')
+    start = eChapterStart.get()
+    end = eChapterEnd.get()
 
+    #Checks for invalid input
+    if start != '':
+        try:
+            int(start)
+        except:
+            msg('+'*20)
+            msg('Error Occured!')
+            msg('Invalid chapter start number')
+            msg('+'*20)
+            return
+    if end != '':
+        try:
+            int(end)
+        except:
+            msg('+'*20)
+            msg('Error Occured!')
+            msg('Invalid chapter end number')
+            msg('+'*20)
+            return
+
+    cover = eCover.get()
     if cover == '':
-        msg('No cover will be added')
+        msg('The default cover will be added')
     else:
         exists = os.path.isfile('rsc/' + cover)
         if exists:
@@ -257,9 +199,10 @@ def compiler():
 
     def callback():
         try:
-            Novel = WuxiaScraper(link, cover, volume)
+            msg('Connecting to NovelPlanet...')
+            Novel = NovelPlanetScraper(link, start, end, cover)
             msg('starting...')
-            Novel.start()
+            Novel.compileNovel()
             msg('+'*20)
             msg('ALL DONE!')
             msg('+'*20)
@@ -269,7 +212,7 @@ def compiler():
             msg('+'*20)
             msg(str(e))
             msg("If you continue to have this error then open an issue here:")
-            msg("github.com/dr-nyt/WuxiaWorld-Novel-Downloader/issues")
+            msg("github.com/dr-nyt/Translated-Novel-Downloader/issues")
             msg('+'*20)
             msg('')
     t = threading.Thread(target=callback)
@@ -278,44 +221,60 @@ def compiler():
 
 ## Window Creator
 window = Tk()
-window.title("Hana Novel Scraper")
+window.title("NovelPlanet Scraper")
 window.configure(background = "black")
 
-#Labels
-Label(window, text="Novel Link: ", bg="black", fg="white", font="none 16").grid(row=0, column=0, sticky=W)
+#Canvas 1
+canv1 = Canvas(window, highlightthickness=0, relief='ridge')
+canv1.configure(background = "black")
+canv1.pack(fill=X)
 
-Label(window, text="Volume Num [optional]: ", bg="black", fg="white", font="none 10").grid(row=1, column=0, sticky=W)
-
-Label(window, text="Cover Page [optional]: ", bg="black", fg="white", font="none 10").grid(row=2, column=0, sticky=W)
-
-#Entries
-eNovel = Entry(window, width=75, bg="white")
-eNovel.grid(row=0, column=1, sticky=W)
+Label(canv1, text="Novel Link: ", bg="black", fg="white", font="none 16").pack(padx=5, side=LEFT)
+eNovel = Entry(canv1, width=75, bg="white")
+eNovel.pack(padx=5, side=LEFT)
 eNovel.bind('<Return>', lambda _: compiler())
 
-eVolume = Entry(window, width=5, bg="white")
-eVolume.grid(row=1, column=1, sticky=W)
-eVolume.bind('<Return>', lambda _: compiler())
+#Canvas 2
+canv2 = Canvas(window, highlightthickness=0, relief='ridge')
+canv2.configure(background = "black")
+canv2.pack(fill=X)
 
-eCover = Entry(window, width=20, bg="white")
-eCover.grid(row=2, column=1, sticky=W)
+Label(canv2, text="Chapter Range [optional]: ", bg="black", fg="white", font="none 10").pack(padx=5, side=LEFT)
+
+eChapterStart = Entry(canv2, width=5, bg="white")
+eChapterStart.pack(padx=5, side=LEFT)
+eChapterStart.bind('<Return>', lambda _: compiler())
+
+eChapterEnd = Entry(canv2, width=5, bg="white")
+eChapterEnd.pack(padx=5, side=LEFT)
+eChapterEnd.bind('<Return>', lambda _: compiler())
+
+#Canvas 3
+canv3 = Canvas(window, highlightthickness=0, relief='ridge')
+canv3.configure(background = "black")
+canv3.pack(fill=X)
+
+Label(canv3, text="Cover Page [optional]: ", bg="black", fg="white", font="none 10").pack(padx=5, side=LEFT)
+
+eCover = Entry(canv3, width=20, bg="white")
+eCover.pack(padx=5, side=LEFT)
 eCover.bind('<Return>', lambda _: compiler())
 
-#Buttons
-Button(window, text="Compile", width=8, command=compiler).grid(row=3, column=1, sticky=W)
+#Canvas 4
+canv4 = Canvas(window, highlightthickness=0, relief='ridge')
+canv4.configure(background = "black")
+canv4.pack(fill=X)
+
+Button(canv4, text="Compile", width=8, command=compiler).pack(padx=150, side=LEFT)
 
 #Text Boxes
 output = Text(window, width=75, height=10, state='disabled', wrap=WORD, background="white")
-output.grid(row=4, column=0, padx=5, columnspan=2, sticky=W)
+output.pack(fill=X, side=LEFT)
 msg('LOG:')
 
 #Scroll Bars
 scroll = Scrollbar(window, width=10, command=output.yview)
 output.config(yscrollcommand=scroll.set)
-scroll.grid(row=4, column=1, sticky=E)
-
-if versionCheck == 0:
-    versionControl()
-    versionCheck = 1
+scroll.pack(side=LEFT)
 
 window.mainloop()
