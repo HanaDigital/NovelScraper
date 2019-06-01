@@ -10,7 +10,7 @@ import webbrowser
 from functools import partial
 import time
 
-version = "0.6" #Defines the current version
+version = "0.6.1" #Defines the current version
 
 #install packages
 def install(package):
@@ -26,18 +26,20 @@ Label(window, text="Checking for dependecies...", bg="black", fg="white", font="
 progress = ttk.Progressbar(orient="horizontal", length=200, mode="determinate")
 progress.pack()
 progress["value"] = 10
-progress["maximum"] = 50
+progress["maximum"] = 60
 
 def callback():
-	install('requests')
-	progress["value"] += 10
-	install('beautifulsoup4')
-	progress["value"] += 10
-	install('python-docx')
-	progress["value"] += 10
-	install('cfscrape')
-	progress["value"] += 10
-	window.destroy()
+    install('requests')
+    progress["value"] += 10
+    install('beautifulsoup4')
+    progress["value"] += 10
+    install('python-docx')
+    progress["value"] += 10
+    install('cfscrape')
+    progress["value"] += 10
+    install('ebooklib')
+    progress["value"] += 10
+    window.destroy()
 
 t = threading.Thread(target=callback)
 t.daemon = True
@@ -70,7 +72,7 @@ def color_config(widget, color, event):
 
 # Open the link to the novel on a browser
 def callback(event):
-    webbrowser.open_new(r"https://github.com/dr-nyt/Translated-Novel-Downloader")
+    webbrowser.open_new(r"https://github.com/dr-nyt/WuxiaWorld-Novel-Downloader")
 
 #Checks if this is the latest version
 def versionControl():
@@ -80,27 +82,8 @@ def versionControl():
     checkVersion = soup.find(class_='de1')
     if version not in checkVersion:
         updateMsg()
-        
-############################################################################
-#Tkinter
-window = Tk()
-window.title("Hana Novel Scraper")
-window.configure(background = "black")
 
-# Create a Tkinter variable
-tkvar = StringVar(window)
-
-# Dictionary with options
-choices = {' ', 'NovelPlanet', 'WuxiaWorld'}
-tkvar.set(' ') # set the default option
-
-# Drop down menu
-popupMenu = OptionMenu(window, tkvar, *choices)
-Label(window, text="Select Source: ", bg="black", fg="white", font="none 16").grid(row=0, column=0, sticky=W, padx=10, pady=10)
-popupMenu.grid(row = 0, column =1, sticky=W, padx=10, pady=10)
-
-# This is run when you select an option from the drop down menu
-def change_dropdown(*args):
+def okButtonClick():
     if tkvar.get() == "NovelPlanet":
         def callback():
             os.system('python NovelPlanetScraper.py')    
@@ -113,9 +96,33 @@ def change_dropdown(*args):
         t = threading.Thread(target=callback)
         t.daemon = True
         t.start()
+        
+############################################################################
+#Tkinter
+window = Tk()
+window.title("Hana Novel Scraper")
+window.configure(background = "black")
+
+# Create a Tkinter variable
+tkvar = StringVar(window)
+
+# Dictionary with options
+choices = {'NovelPlanet', 'WuxiaWorld'}
+tkvar.set('NovelPlanet') # set the default option
+
+# Drop down menu
+dropMenu = OptionMenu(window, tkvar, *choices)
+Label(window, text="Select Source: ", bg="black", fg="white", font="none 16").grid(row=0, column=0, sticky=W, padx=5, pady=10)
+dropMenu.grid(row=0, column=1, sticky=W, padx=10, pady=10)
+
+canv1 = Canvas(window, highlightthickness=0, relief='ridge')
+canv1.configure(background="black")
+canv1.grid(row=1, column=0, columnspan=2)
+
+Button(canv1, text="OK", width=8, command=okButtonClick).pack(pady=5)
 
 # link function to change dropdown
-tkvar.trace('w', change_dropdown)
+# tkvar.trace('w', change_dropdown)
 
 if versionCheck == 0:
     versionControl()

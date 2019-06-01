@@ -1,10 +1,11 @@
 import os
+import shutil
 import requests
 from bs4 import BeautifulSoup
 import cfscrape
-from HanaDocument import HanaDocument
 from tkinter import *
 import threading
+from ebooklib import epub
 
 class NovelPlanetScraper(object):
 
@@ -48,51 +49,103 @@ class NovelPlanetScraper(object):
         msg("Chapter " + str(self.chapterNum_start) + " to Chapter " + str(self.chapterNum_end) + " will be compiled!")
 
     def compileNovel(self):
-        HD = HanaDocument()
-        HD.sectionConfig(0.5)
+        book = epub.EpubBook()
+        # add metadata
+        book.set_identifier('dr_nyt')
+        book.set_title(self.novelName)
+        book.set_language('en')
+        book.add_author('Unknown')
 
         #Set the cover if defined by the user
         if self.cover != '':
-            HD.addCover(self.cover)
-            HD.addSection()
+            book.set_cover("image.jpg", open(self.cover, 'rb').read())
 
+        chapters = []
         #Loop through each link
         for chapter_link in self.chapter_links:
-            HD.stylesConfig('Heading 1', 36)
-            HD.stylesConfig('Normal', 32)
 
             page = self.scraper.get('https://novelplanet.com' + chapter_link)
             soup = BeautifulSoup(page.text, 'lxml')
 
             #Add a header for the chapter
             try:
-                HD.addHead(soup.find('h4').get_text())
-                print(soup.find('h4').get_text())
+                chapterHead = soup.find('h4').get_text()
+                c = epub.EpubHtml(title=chapterHead, file_name='Chapter_' + str(self.currentChapter) + '.xhtml', lang='en')
+                content = '<h2>' + chapterHead + '</h4>'
             except:
-                HD.addHead("Chapter "  + str(self.currentChapter))
-                print("HERE")
+                c = epub.EpubHtml(title="Chapter "  + str(self.currentChapter), file_name='Chapter_' + str(self.currentChapter) + '.xhtml', lang='en')
+                content = "<h2> Chapter "  + str(self.currentChapter) + "</h4>"
 
             #Get all the paragraphs from the chapter
             paras = soup.find(id="divReadContent").find_all('p')
 
             #Add each paragraph to the docx file
             for para in paras:
-                HD.addPara(para.get_text())
+                content += para.prettify()
 
-            HD.addPara(" ")
-            HD.addPara("Powered by dr_nyt")
-            HD.addPara("If any errors occur, open an issue here: github.com/dr-nyt/Translated-Novel-Downloader/issues")
-            HD.addPara("You can download more novels using the app here: github.com/dr-nyt/Translated-Novel-Downloader")
-            HD.addSection()
+            content += "<p> </p>"
+            content += "<p>Powered by dr_nyt</p>"
+            content += "<p>If any errors occur, open an issue here: github.com/dr-nyt/Translated-Novel-Downloader/issues</p>"
+            content += "<p>You can download more novels using the app here: github.com/dr-nyt/Translated-Novel-Downloader</p>"
+
+            c.content = u'%s' % content
+            chapters.append(c)
 
             msg('Chapter: ' + str(self.currentChapter) + ' compiled!')
             self.currentChapter+=1
 
-        HD.saveBook(self.novelName, self.chapterNum_start, self.chapterNum_end)
+        for chap in chapters:
+            book.add_item(chap)
+
+        book.toc = (chapters)
+
+        # add navigation files
+        book.add_item(epub.EpubNcx())
+        book.add_item(epub.EpubNav())
+
+        # define css style
+        style = '''
+    @namespace epub "http://www.idpf.org/2007/ops";
+    body {
+        font-family: Cambria, Liberation Serif, Bitstream Vera Serif, Georgia, Times, Times New Roman, serif;
+    }
+    h2 {
+         text-align: left;
+         text-transform: uppercase;
+         font-weight: 200;     
+    }
+    ol {
+            list-style-type: none;
+    }
+    ol > li:first-child {
+            margin-top: 0.3em;
+    }
+    nav[epub|type~='toc'] > ol > li > ol  {
+        list-style-type:square;
+    }
+    nav[epub|type~='toc'] > ol > li > ol > li {
+            margin-top: 0.3em;
+    }
+    '''
+
+        # add css file
+        nav_css = epub.EpubItem(uid="style_nav", file_name="style/nav.css", media_type="text/css", content=style)
+        book.add_item(nav_css)
+
+        # create spin, add cover page as first page
+        book.spine = ['cover', 'nav'] + chapters
+
+        # create epub file
+        epub.write_epub(self.novelName + ' ' + str(self.chapterNum_start) + '-' + str(self.chapterNum_end) + '.epub', book, {})
+
+        if not os.path.exists(self.novelName):
+            os.mkdir(self.novelName)
+
+        shutil.move(self.novelName + ' ' + str(self.chapterNum_start) + '-' + str(self.chapterNum_end) + '.epub', self.novelName + '/' + self.novelName + ' ' + str(self.chapterNum_start) + '-' + str(self.chapterNum_end) + '.epub')
+
         msg('+'*20)
         msg(self.novelName + ' has compiled!') 
         msg('+'*20)
-        HD = HanaDocument()
 
 
 ###############################
@@ -130,7 +183,8 @@ def compiler():
 
     cover = eCover.get()
     if cover == '':
-        msg('No cover will be added')
+        msg('The default cover will be added')
+        cover = 'rsc/Novel Cover.png'
     else:
         exists = os.path.isfile('rsc/' + cover)
         if exists:
@@ -146,6 +200,7 @@ def compiler():
 
     def callback():
         try:
+            msg('Connecting to NovelPlanet...')
             Novel = NovelPlanetScraper(link, start, end, cover)
             msg('starting...')
             Novel.compileNovel()

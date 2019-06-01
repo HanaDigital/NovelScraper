@@ -1,9 +1,9 @@
 ### About
  *	Author: dr_nyt
- *	Version: 0.6
+ *	Version: 0.6.1
 
 ### Features
-- Download any Wuxia Novel and get them in .docx formats. [You can then easily convert to .epub using calibre "https://calibre-ebook.com/download"]
+- Download any Translated Novel form either NovelPlanet or WuxiaWorld in .epub or .docx. [Currently only the NovelPlanet source supports direct conversion to .epub] 
 
 ### Pre-Requistes
 - Install python 3 [https://www.python.org/downloads/]
@@ -18,12 +18,14 @@
       - Paste the link of the novel from novelplanet.com [Eg: https://novelplanet.com/Novel/Overgeared]
       - You can optionally specify the range of chapters you want or leave it blank to get the whole novel.
       - You can optinally save a cover image in the rsc/ folder and enter its name in the GUI. [Eg: Novel Cover.png]
+
    - If your source is WuxiaWorld:
+   	  - Please note that this source will compile your novels in .docx format. You can then convert them to .epub using calibre.
       - Paste the link of the novel from novelplanet.com [Eg: https://www.wuxiaworld.com/novel/overgeared]
       - If you want a specific volume, then type in the volume number you want.
       - You can optinally save a cover image in the rsc/ folder and enter its name in the GUI. [Eg: Novel Cover.png]
-4. Click compile to let it rip! [The files will be compiled in a way that makes them easily convertable to .epub files]
-5. You can install [calibre] from "https://calibre-ebook.com/download" to easily convert them to .epub files. [It is recommend that you convert them to epub for the best experience.]
+
+4. Click compile to let it rip!
 
 ### Alpha Build
 - Currently working to automate the coversion to .epub without external software.
