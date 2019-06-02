@@ -60,7 +60,8 @@ class NovelPlanetScraper(object):
         if self.cover != '':
             book.set_cover("image.jpg", open(self.cover, 'rb').read())
 
-        chapters = []
+        chapters = [] #Stores each chapter of the story as an object. Later used to reference the chapters to the table of content
+
         #Loop through each link
         for chapter_link in self.chapter_links:
 
@@ -71,32 +72,33 @@ class NovelPlanetScraper(object):
             try:
                 chapterHead = soup.find('h4').get_text()
                 c = epub.EpubHtml(title=chapterHead, file_name='Chapter_' + str(self.currentChapter) + '.xhtml', lang='en')
-                content = '<h2>' + chapterHead + '</h4>'
+                content = '<h2>' + chapterHead + '</h2>'
             except:
                 c = epub.EpubHtml(title="Chapter "  + str(self.currentChapter), file_name='Chapter_' + str(self.currentChapter) + '.xhtml', lang='en')
-                content = "<h2> Chapter "  + str(self.currentChapter) + "</h4>"
+                content = "<h2> Chapter "  + str(self.currentChapter) + "</h2>"
 
             #Get all the paragraphs from the chapter
-            paras = soup.find(id="divReadContent").find_all('p')
+            paras = soup.find(id="divReadContent")
 
-            #Add each paragraph to the docx file
-            for para in paras:
-                content += para.prettify()
+            #Append all paragraph to content which will be added to the .xhtml
+            content += paras.prettify()
 
             content += "<p> </p>"
             content += "<p>Powered by dr_nyt</p>"
             content += "<p>If any errors occur, open an issue here: github.com/dr-nyt/Translated-Novel-Downloader/issues</p>"
             content += "<p>You can download more novels using the app here: github.com/dr-nyt/Translated-Novel-Downloader</p>"
 
-            c.content = u'%s' % content
-            chapters.append(c)
+            c.content = u'%s' % content #Add the content to the chapter
+            chapters.append(c) #Add the chapter object to the chapter list
 
             msg('Chapter: ' + str(self.currentChapter) + ' compiled!')
             self.currentChapter+=1
 
+        #Add each chapter object to the book
         for chap in chapters:
             book.add_item(chap)
 
+        #Give the table of content the list of chapter objects
         book.toc = (chapters)
 
         # add navigation files
