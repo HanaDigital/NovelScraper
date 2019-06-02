@@ -15,42 +15,6 @@ from ebooklib import epub
 
 version = "0.7" #Defines the current version
 
-#install packages
-# def install(package):
-#     subprocess.call([sys.executable, "-m", "pip", "install", package])
-
-###################################################
-#Tkinter for visualising the install of dependecies
-# window = Tk()
-# window.title("Hana Novel Scraper")
-# window.configure(background = "black")
-
-# Label(window, text="Checking for dependecies...", bg="black", fg="white", font="none 12").pack()
-# progress = ttk.Progressbar(orient="horizontal", length=200, mode="determinate")
-# progress.pack()
-# progress["value"] = 10
-# progress["maximum"] = 60
-
-# def callback():
-#     install('requests')
-#     progress["value"] += 10
-#     install('beautifulsoup4')
-#     progress["value"] += 10
-#     install('python-docx')
-#     progress["value"] += 10
-#     install('cfscrape')
-#     progress["value"] += 10
-#     install('ebooklib')
-#     progress["value"] += 10
-#     window.destroy()
-
-# t = threading.Thread(target=callback)
-# t.daemon = True
-# t.start()
-
-# window.mainloop()
-###################################################
-
 class WuxiaScraper(object):
 
     def __init__(self, window):
