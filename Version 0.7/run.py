@@ -10,7 +10,7 @@ import webbrowser
 from functools import partial
 import time
 
-version = "0.6.1" #Defines the current version
+version = "0.7" #Defines the current version
 
 #install packages
 def install(package):

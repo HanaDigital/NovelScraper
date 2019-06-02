@@ -1,9 +1,10 @@
 import os
+import shutil
 import requests
 from bs4 import BeautifulSoup
-from HanaDocument import HanaDocument
 from tkinter import *
 import threading
+from ebooklib import epub
 
 class WuxiaScraper(object):
 
@@ -11,7 +12,6 @@ class WuxiaScraper(object):
         self.link = link    #Holds the link to the novel.
         self.cover = cover
 
-        self.HD = HanaDocument()
         self.head = 0   #Indicator to check if the current chapter has a title.
         #Get Novel Name
         self.novelName = ''
@@ -94,23 +94,13 @@ class WuxiaScraper(object):
         for v in volume_list:
             chapter_links = []
             
-            self.HD.stylesConfig('Heading 1', 36)
-            self.HD.stylesConfig('Normal', 32)
-            
             if v.find(class_="col-sm-6") == None:
                 continue
-            
-            self.HD.sectionConfig(0.5)
-            
+
             #Skip over volumes if a specific volume is defined
             if self.volumeNum != 1 and self.volume_limit == 1:
                 self.volumeNum-=1
                 continue
-
-            #Add Coverpage if not already added
-            if self.cover != '':
-                self.HD.addCover(self.cover)
-                self.HD.addSection()
             
             chapter_html_links = v.find_all(class_="chapter-item")
             for chapter_http in chapter_html_links:
@@ -119,75 +109,116 @@ class WuxiaScraper(object):
             self.volume_links.append(chapter_links)
 
             self.getMetaData(chapter_links[0], chapter_links[-1])
+
+            self.book = epub.EpubBook()
+            # add metadata
+            self.book.set_identifier('dr_nyt')
+            self.book.set_title(self.novelName + " Vol." + str(self.volume) + ' ' + str(self.chapterNum_start) + '-' + str(self.chapterNum_end))
+            self.book.set_language('en')
+            self.book.add_author('Unknown')
+            self.chapterList = []
+
+            #Add Coverpage if not already added
+            if self.cover != '':
+                self.book.set_cover("image.jpg", open(self.cover, 'rb').read())
             
             self.getChapter()
 
             self.volume_links = []
             if(self.volume_limit == 1):
-                self.HD.saveBook(self.novelName, self.volume, self.chapterNum_start, self.chapterNum_end)
+                # create epub file
+                epub.write_epub(self.novelName + " Vol." + str(self.volume) + ' ' + str(self.chapterNum_start) + '-' + str(self.chapterNum_end) + '.epub', self.book, {})
+                if not os.path.exists(self.novelName):
+                    os.mkdir(self.novelName)
+
+                shutil.move(self.novelName + " Vol." + str(self.volume) + ' ' + str(self.chapterNum_start) + '-' + str(self.chapterNum_end) + '.epub', self.novelName + '/' + self.novelName + " Vol." + str(self.volume) + ' ' + str(self.chapterNum_start) + '-' + str(self.chapterNum_end) + '.epub')
+
                 msg('+'*20)
                 msg('Volume: ' + str(self.volume) + ' compiled!') 
                 msg('+'*20)
                 break
             
             self.volume+=1
-            self.HD.saveBook(self.novelName, self.chapterNum_start, self.chapterNum_end, volume=self.volume)
+            epub.write_epub(self.novelName + " Vol." + str(self.volume) + ' ' + str(self.chapterNum_start) + '-' + str(self.chapterNum_end) + '.epub', self.book, {})
+            if not os.path.exists(self.novelName):
+                os.mkdir(self.novelName)
+                
+            shutil.move(self.novelName + " Vol." + str(self.volume) + ' ' + str(self.chapterNum_start) + '-' + str(self.chapterNum_end) + '.epub', self.novelName + '/' + self.novelName + " Vol." + str(self.volume) + ' ' + str(self.chapterNum_start) + '-' + str(self.chapterNum_end) + '.epub')
+
             msg('+'*20)
             msg('Volume: ' + str(self.volume) + ' compiled!') 
             msg('+'*20)
-            self.HD = HanaDocument()
             
     #This method loops through every chapter of a volume and compiles them properly, adding in headers and separator between each chapter.
     def getChapter(self):
         firstLine = 0
         for v in self.volume_links:
             for chapters in v:
-                chapter_list = []
                 page = requests.get('https://www.wuxiaworld.com' + chapters)
                 soup = BeautifulSoup(page.text, 'lxml')
                 story_view = soup.find(class_='p-15')
-                if self.head == 0:
-                    try:
-                        chapterHead = story_view.find('h4').get_text()
-                        self.HD.addHead(chapterHead)
-                        self.head = 1
-                    except:
-                        self.HD.addHead("Chapter " + self.chapterCurrent)
+                try:
+                    chapterHead = story_view.find('h4').get_text()
+                    c = epub.EpubHtml(title=chapterHead, file_name='Chapter_' + str(self.chapterCurrent) + '.xhtml', lang='en')
+                    content = '<h2>' + chapterHead + '</h2>'
+                except:
+                    c = epub.EpubHtml(title="Chapter "  + str(self.chapterCurrent), file_name='Chapter_' + str(self.chapterCurrent) + '.xhtml', lang='en')
+                    content = "<h2>Chapter " + str(self.chapterCurrent + "</h2>")
 
                 story_view = soup.find(class_='fr-view')
-                story_text = []
-                story_text.append(story_view.find_all('div'))
-                if len(story_text) != 0:
-                    for story in story_text:
-                        for story2 in story:
-                            chapter_list.append(story2.get_text().replace('\xa0', ' ').replace('Previous Chapter', ''))
-                            if firstLine == 0 and self.head != 0:
-                                if chapterHead.replace(' ', '').replace('-', '').replace('<', '').replace('>', '') in story2.get_text().replace(' ', '').replace('-', '').replace('<', '').replace('>', ''):
-                                    chapter_list[0] = ''
-                                firstLine = 1
+                content += story_view.prettify().replace('\xa0', ' ').replace('Previous Chapter', '')
 
-                story_view = soup.find(class_='p-15')
-                story_text = story_view.find_all('p')
-                if len(story_text) != 0:
-                    for story in story_text:
-                        chapter_list.append(story.get_text().replace('\xa0', ' ').replace('Previous Chapter', ''))
-                        if firstLine == 0 and self.head != 0:
-                            if chapterHead.replace(' ', '').replace('-', '').replace('<', '').replace('>', '') in story.get_text().replace(' ', '').replace('-', '').replace('<', '').replace('>', ''):
-                                chapter_list[0] = ''
-                            firstLine = 1
+                content += "<p> </p>"
+                content += "<p>Powered by dr_nyt</p>"
+                content += "<p>If any errors occur, open an issue here: github.com/dr-nyt/Translated-Novel-Downloader/issues</p>"
+                content += "<p>You can download more novels using the app here: github.com/dr-nyt/Translated-Novel-Downloader</p>"
 
-                for paragraph in chapter_list:
-                    if paragraph != '':
-                        self.HD.addPara(paragraph)
-                self.HD.addPara(" ")
-                self.HD.addPara("Powered by dr_nyt")
-                self.HD.addPara("If any errors occur, open an issue here: github.com/dr-nyt/Translated-Novel-Downloader/issues")
-                self.HD.addPara("You can download more novels using the app here: github.com/dr-nyt/Translated-Novel-Downloader")
-                self.HD.addSection()
-                self.head = 0
-                firstLine = 0
+                c.content = u'%s' % content
+                self.chapterList.append(c)
+
                 msg('Chapter: ' + str(self.chapterCurrent) + ' compiled!')
                 self.chapterCurrent+=1
+
+        for chap in self.chapterList:
+            self.book.add_item(chap)
+
+        self.book.toc = (self.chapterList)
+
+        # add navigation files
+        self.book.add_item(epub.EpubNcx())
+        self.book.add_item(epub.EpubNav())
+
+        # define css style
+        style = '''
+    @namespace epub "http://www.idpf.org/2007/ops";
+    body {
+        font-family: Cambria, Liberation Serif, Bitstream Vera Serif, Georgia, Times, Times New Roman, serif;
+    }
+    h2 {
+         text-align: left;
+         text-transform: uppercase;
+         font-weight: 200;     
+    }
+    ol {
+            list-style-type: none;
+    }
+    ol > li:first-child {
+            margin-top: 0.3em;
+    }
+    nav[epub|type~='toc'] > ol > li > ol  {
+        list-style-type:square;
+    }
+    nav[epub|type~='toc'] > ol > li > ol > li {
+            margin-top: 0.3em;
+    }
+    '''
+
+        # add css file
+        nav_css = epub.EpubItem(uid="style_nav", file_name="style/nav.css", media_type="text/css", content=style)
+        self.book.add_item(nav_css)
+
+        # create spin, add cover page as first page
+        self.book.spine = ['cover', 'nav'] + self.chapterList
 
 ###############################
 #TKINTER
