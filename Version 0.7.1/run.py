@@ -10,7 +10,7 @@ import webbrowser
 from functools import partial
 import time
 
-version = "0.7" #Defines the current version
+version = "0.7.1" #Defines the current version
 
 #install packages
 def install(package):
@@ -22,6 +22,7 @@ window = Tk()
 window.title("Hana Novel Scraper")
 window.iconbitmap(r"rsc/icon.ico")
 window.configure(background = "black")
+window.resizable(0,0)
 
 Label(window, text="Checking for dependecies...", bg="black", fg="white", font="none 12").pack()
 progress = ttk.Progressbar(orient="horizontal", length=200, mode="determinate")
@@ -57,15 +58,15 @@ def updateMsg():
     popup.wm_title("Update")
     popup.iconbitmap(r"rsc/icon.ico")
     popup.configure(background = "black")
-    label = Label(popup, text="New Update Available here: ", bg="black", fg="white", font="none 15")
-    link = Label(popup, text="Github/WuxiaNovelDownloader", bg="black", fg="lightblue", font="none 12")
-    B1 = Button(popup, text="Okay", command=popup.destroy)
+    popup.resizable(0,0)
+
+    label = Label(popup, text="New Update Available", bg="black", fg="white", font="none 15")
+    downloadButton = Button(popup, text="Download", fg="blue", command=callback)
+    okButton = Button(popup, text="OK", command=popup.destroy)
+
     label.pack(padx=10)
-    link.pack(padx=10)
-    link.bind("<Button-1>", callback)
-    link.bind("<Enter>", partial(color_config, link, "white"))
-    link.bind("<Leave>", partial(color_config, link, "lightblue"))
-    B1.pack()
+    downloadButton.pack(padx=5)
+
     popup.call('wm', 'attributes', '.', '-topmost', '1')
     popup.mainloop()
 
@@ -73,8 +74,8 @@ def color_config(widget, color, event):
     widget.configure(foreground=color)
 
 # Open the link to the novel on a browser
-def callback(event):
-    webbrowser.open_new(r"https://github.com/dr-nyt/WuxiaWorld-Novel-Downloader")
+def callback():
+    webbrowser.open_new(r"https://github.com/dr-nyt/Translated-Novel-Downloader/releases")
 
 #Checks if this is the latest version
 def versionControl():
@@ -111,12 +112,13 @@ window = Tk()
 window.title("Hana Novel Scraper")
 window.iconbitmap(r"rsc/icon.ico")
 window.configure(background = "black")
+window.resizable(0,0)
 
 # Create a Tkinter variable
 tkvar = StringVar(window)
 
 # Dictionary with options
-choices = {'NovelPlanet', 'WuxiaWorld.com', 'm.Wuxiaworld.Co'}
+choices = {'NovelPlanet', 'WuxiaWorld', 'm.Wuxiaworld.Co'}
 tkvar.set('NovelPlanet') # set the default option
 
 # Drop down menu
