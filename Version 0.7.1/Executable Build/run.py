@@ -87,6 +87,12 @@ class NovelPlanetScraper(object):
 
     def compiler(self):
         link = self.eNovel.get()
+        if 'novelplanet.com' not in link:
+            self.msg('Your link seems to lead to the wrong website.')
+            self.msg('Please make sure you get the novel link from: m.wuxiaworld.co')
+            self.msg("If you continue to have this error then open an issue here:")
+            self.msg("github.com/dr-nyt/Translated-Novel-Downloader/issues")
+            return
         start = self.eChapterStart.get()
         end = self.eChapterEnd.get()
 
@@ -231,7 +237,7 @@ class NovelPlanetScraper(object):
             c.content = u'%s' % content
             chapters.append(c)
 
-            msg('Added: ' + chapterHead)
+            self.msg('Added: ' + chapterHead)
             self.currentChapter+=1
 
         for chap in chapters:
@@ -337,6 +343,13 @@ class WuxiaScraper(object):
 
     def compiler(self):
         link = self.eNovel.get()
+        if 'wuxiaworld.com' not in link:
+            self.msg('Your link seems to lead to the wrong website.')
+            self.msg('Please make sure you get the novel link from: m.wuxiaworld.co')
+            self.msg("If you continue to have this error then open an issue here:")
+            self.msg("github.com/dr-nyt/Translated-Novel-Downloader/issues")
+            return
+
         volume = self.eVolume.get()
         cover = self.eCover.get()
         
@@ -348,7 +361,7 @@ class WuxiaScraper(object):
 
         if cover == '':
             self.msg('The default cover will be added.')
-            self.cover = 'rsc/Novel Cover.png'
+            cover = 'rsc/Novel Cover.png'
         else:
             exists = os.path.isfile('rsc/' + cover)
             if exists:
@@ -552,7 +565,7 @@ class WuxiaScraper(object):
                 c.content = u'%s' % content
                 self.chapterList.append(c)
 
-                msg('Added: ' + chapterHead)
+                self.msg('Added: ' + chapterHead)
                 self.chapterCurrent+=1
 
         for chap in self.chapterList:
@@ -595,8 +608,6 @@ class WuxiaScraper(object):
 
         # create spin, add cover page as first page
         self.book.spine = ['cover', 'nav'] + self.chapterList
-
-
 
 class WuxiaCoScraper(object):
 
@@ -645,6 +656,13 @@ class WuxiaCoScraper(object):
 
     def compiler(self):
         link = self.eNovel.get()
+        if 'm.wuxiaworld.co' not in link:
+            self.msg('Your link seems to lead to the wrong website.')
+            self.msg('Please make sure you get the novel link from: m.wuxiaworld.co')
+            self.msg("If you continue to have this error then open an issue here:")
+            self.msg("github.com/dr-nyt/Translated-Novel-Downloader/issues")
+            return
+
         cover = self.eCover.get()
 
         if cover == '':
@@ -653,33 +671,33 @@ class WuxiaCoScraper(object):
         else:
             exists = os.path.isfile('rsc/' + cover)
             if exists:
-                msg('The cover ' + cover + ' will be added from the rsc folder.')
+                self.msg('The cover ' + cover + ' will be added from the rsc folder.')
                 cover = 'rsc/' + cover
             else:
-                msg('+' * 20)
-                msg('Error Occured!')
-                msg('No cover found with the name ' + cover + ' in the rsc folder.')
-                msg('Make sure the cover is inside the rsc folder and the name is correct.')
-                msg('+' * 20)
+                self.msg('+' * 20)
+                self.msg('Error Occured!')
+                self.msg('No cover found with the name ' + cover + ' in the rsc folder.')
+                self.msg('Make sure the cover is inside the rsc folder and the name is correct.')
+                self.msg('+' * 20)
                 return
 
         def callback():
             try:
                 self.getNovel(link, cover)
-                msg('starting...')
+                self.msg('starting...')
                 self.start()
-                msg('+' * 20)
-                msg('ALL DONE!')
-                msg('+' * 20)
+                self.msg('+' * 20)
+                self.msg('ALL DONE!')
+                self.msg('+' * 20)
             except Exception as e:
-                msg('+' * 20)
-                msg('Error Occured!')
-                msg('+' * 20)
-                msg(str(e))
-                msg("If you continue to have this error then open an issue here:")
-                msg("github.com/dr-nyt/Translated-Novel-Downloader/issues")
-                msg('+' * 20)
-                msg('')
+                self.msg('+' * 20)
+                self.msg('Error Occured!')
+                self.msg('+' * 20)
+                self.msg(str(e))
+                self.msg("If you continue to have this error then open an issue here:")
+                self.msg("github.com/dr-nyt/Translated-Novel-Downloader/issues")
+                self.msg('+' * 20)
+                self.msg('')
 
         t = threading.Thread(target=callback)
         t.daemon = True
@@ -701,7 +719,7 @@ class WuxiaCoScraper(object):
             self.novelName = self.novelName + name.capitalize() + ' '
         # To remove last whitespace from the novel name
         self.novelName = self.novelName[:-1]
-        msg(self.novelName)
+        self.msg(self.novelName)
 
         # Luckily appending /all.html to wuxia.co/novel-name gives a page with all html links
         self.new_link = self.link + '/all.html/'
@@ -718,13 +736,11 @@ class WuxiaCoScraper(object):
                 page = requests.get(self.new_link)
                 self.soup = BeautifulSoup(page.text, 'html.parser')
             else:
-                msg('Error occurred')
-                msg('Either the link is invalid or your IP is timed out.')
-                msg('In case of an IP timeout, it usually fixes itself after some time.')
-                msg(
-                    'Raise an issue @ https://github.com/dr-nyt/Translated-Novel-Downloader/issues if this issue persists')
-                time.sleep(5)
-                exit(1)
+                self.msg('Error occurred')
+                self.msg('Either the link is invalid or your IP is timed out.')
+                self.msg('In case of an IP timeout, it usually fixes itself after some time.')
+                self.msg('If this issue presists, raise an issue here:')
+                self.msg('https://github.com/dr-nyt/Translated-Novel-Downloader/issues')
 
     def start(self):
         self.buildChapterLinks()
@@ -773,7 +789,7 @@ class WuxiaCoScraper(object):
 
             chap.content = u'%s' % content
             chapterList.append(chap)
-            msg(f"Added {chapter_name}")
+            self.msg(f"Added {chapter_name}")
 
         for c in chapterList:
             book.add_item(c)
@@ -813,11 +829,18 @@ class WuxiaCoScraper(object):
 
         # create spin, add cover page as first page
         book.spine = ['cover', 'nav'] + chapterList
-        epub.write_epub(self.novelName+'.epub', book, {})
-        #shutil.move(self.novelName+'.epub', self.novelName +'/' + self.novelName+'.epub')
-        msg('+' * 20)
-        msg('Novel: ' + str(self.novelName) + ' compiled!')
-        msg('+' * 20)
+
+        # create epub file
+        epub.write_epub(self.novelName + '.epub', book, {})
+
+        if not os.path.exists(self.novelName):
+            os.mkdir(self.novelName)
+
+        shutil.move(self.novelName + '.epub', self.novelName + '/' + self.novelName + '.epub')
+
+        self.msg('+' * 20)
+        self.msg('Novel: ' + str(self.novelName) + ' compiled!')
+        self.msg('+' * 20)
 
     def get_page(self, soup):
         page = soup.find_all("div", id="chaptercontent")

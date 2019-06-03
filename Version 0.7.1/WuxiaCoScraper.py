@@ -30,7 +30,7 @@ class WuxiaCoScraper(object):
         # Luckily appending /all.html to wuxia.co/novel-name gives a page with all html links
         self.new_link = self.link + '/all.html/'
         retry_count = 0
-        # Get the page
+        #Get the page
         try:
             #error handling in case there is error trying to get the page,
             #  I have slow network
@@ -45,8 +45,7 @@ class WuxiaCoScraper(object):
                 msg('Error occurred')
                 msg('Either the link is invalid or your IP is timed out.')
                 msg('In case of an IP timeout, it usually fixes itself after some time.')
-                msg(
-                    'Raise an issue @ https://github.com/dr-nyt/Translated-Novel-Downloader/issues if this issue persists')
+                msg('Raise an issue @ https://github.com/dr-nyt/Translated-Novel-Downloader/issues if this issue persists')
                 time.sleep(5)
                 exit(1)
 
@@ -160,6 +159,13 @@ def msg(text):
 
 def compiler():
     link = eNovel.get()
+    if 'm.wuxiaworld.co' not in link:
+        msg('Your link seems to lead to the wrong website.')
+        msg('Please make sure you get the novel link from: m.wuxiaworld.co')
+        msg("If you continue to have this error then open an issue here:")
+        msg("github.com/dr-nyt/Translated-Novel-Downloader/issues")
+        return
+
     cover = eCover.get()
 
     if cover == '':
