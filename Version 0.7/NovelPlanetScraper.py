@@ -46,8 +46,6 @@ class NovelPlanetScraper(object):
         else:
             self.chapterNum_end = len(chapters)
 
-        msg("Chapter " + str(self.chapterNum_start) + " to Chapter " + str(self.chapterNum_end) + " will be compiled!")
-
     def compileNovel(self):
         book = epub.EpubBook()
         # add metadata
@@ -74,6 +72,7 @@ class NovelPlanetScraper(object):
                 c = epub.EpubHtml(title=chapterHead, file_name='Chapter_' + str(self.currentChapter) + '.xhtml', lang='en')
                 content = '<h2>' + chapterHead + '</h2>'
             except:
+                chapterHead = "Chapter "  + str(self.chapterCurrent)
                 c = epub.EpubHtml(title="Chapter "  + str(self.currentChapter), file_name='Chapter_' + str(self.currentChapter) + '.xhtml', lang='en')
                 content = "<h2> Chapter "  + str(self.currentChapter) + "</h2>"
 
@@ -91,7 +90,7 @@ class NovelPlanetScraper(object):
             c.content = u'%s' % content #Add the content to the chapter
             chapters.append(c) #Add the chapter object to the chapter list
 
-            msg('Chapter: ' + str(self.currentChapter) + ' compiled!')
+            msg('Added: ' + chapterHead)
             self.currentChapter+=1
 
         #Add each chapter object to the book

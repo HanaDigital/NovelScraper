@@ -162,7 +162,8 @@ class WuxiaScraper(object):
                     c = epub.EpubHtml(title=chapterHead, file_name='Chapter_' + str(self.chapterCurrent) + '.xhtml', lang='en')
                     content = '<h2>' + chapterHead + '</h2>'
                 except:
-                    c = epub.EpubHtml(title="Chapter "  + str(self.chapterCurrent), file_name='Chapter_' + str(self.chapterCurrent) + '.xhtml', lang='en')
+                    chapterHead = "Chapter "  + str(self.chapterCurrent)
+                    c = epub.EpubHtml(title=chapterHead, file_name='Chapter_' + str(self.chapterCurrent) + '.xhtml', lang='en')
                     content = "<h2>Chapter " + str(self.chapterCurrent + "</h2>")
 
                 story_view = soup.find(class_='fr-view')
@@ -176,7 +177,7 @@ class WuxiaScraper(object):
                 c.content = u'%s' % content
                 self.chapterList.append(c)
 
-                msg('Chapter: ' + str(self.chapterCurrent) + ' compiled!')
+                msg('Added: ' + chapterHead)
                 self.chapterCurrent+=1
 
         for chap in self.chapterList:

@@ -163,7 +163,8 @@ def compiler():
     cover = eCover.get()
 
     if cover == '':
-        msg('No cover will be added')
+        msg('The default cover will be added')
+        cover = 'rsc/Novel Cover.png'
     else:
         exists = os.path.isfile('rsc/' + cover)
         if exists:
