@@ -203,7 +203,8 @@ def compiler():
 
 ## Window Creator
 window = Tk()
-window.title("WuxiaWorld Scraper")
+window.title("WuxiaCo Scrapper")
+window.iconbitmap(r"rsc/icon.ico")
 window.configure(background="black")
 
 # Labels

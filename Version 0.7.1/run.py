@@ -20,6 +20,7 @@ def install(package):
 #Tkinter for visualising the install of dependecies
 window = Tk()
 window.title("Hana Novel Scraper")
+window.iconbitmap(r"rsc/icon.ico")
 window.configure(background = "black")
 
 Label(window, text="Checking for dependecies...", bg="black", fg="white", font="none 12").pack()
@@ -54,6 +55,7 @@ versionCheck = 0 #Boolean to check if we have already checked for a newer versio
 def updateMsg():
     popup = Tk()
     popup.wm_title("Update")
+    popup.iconbitmap(r"rsc/icon.ico")
     popup.configure(background = "black")
     label = Label(popup, text="New Update Available here: ", bg="black", fg="white", font="none 15")
     link = Label(popup, text="Github/WuxiaNovelDownloader", bg="black", fg="lightblue", font="none 12")
@@ -107,6 +109,7 @@ def okButtonClick():
 #Tkinter
 window = Tk()
 window.title("Hana Novel Scraper")
+window.iconbitmap(r"rsc/icon.ico")
 window.configure(background = "black")
 
 # Create a Tkinter variable

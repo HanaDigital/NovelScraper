@@ -224,6 +224,7 @@ def compiler():
 ## Window Creator
 window = Tk()
 window.title("NovelPlanet Scraper")
+window.iconbitmap(r"rsc/icon.ico")
 window.configure(background = "black")
 
 #Canvas 1
