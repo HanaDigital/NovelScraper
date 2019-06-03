@@ -24,6 +24,11 @@
       - If you want a specific volume, then type in the volume number you want.
       - You can optinally save a cover image in the rsc/ folder and enter its name in the GUI. [Eg: Novel Cover.png]
 
+   #### If your source is m.WuxiaWorld.co:
+   ![wuxiaCo](https://user-images.githubusercontent.com/41040912/58810099-4d006580-862e-11e9-985e-aa4612e1ddac.jpg)
+      - Paste the link of the novel from novelplanet.com [Eg: https://www.wuxiaworld.co/Dragon-Marked-War-God]
+      - You can optinally save a cover image in the rsc/ folder and enter its name in the GUI. [Eg: Novel Cover.png]
+
 4. Click compile to let it rip!
 
 ### Alpha Build
