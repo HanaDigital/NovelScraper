@@ -1,6 +1,6 @@
 ### About
  *	Author: dr_nyt
- * Co-Authors: webdagger (WuxiaCo Scraper)
+ * Co-Authors: webdagger (WuxiaCo)
  *	Version: 0.7.1
 
 ### Features
@@ -33,9 +33,4 @@
 
 ### Alpha Build
 - Currently working to make the app run on android.
-
-### Notes
-This is just a programme I made for fun and would love for your input,
-so feel free to report any issues and I'm open to anyone who wants to improve the code :)
-Also this is just educational, and I dont support piracy, nor am I responsible for anything you do with this.
 
