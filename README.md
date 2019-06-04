@@ -1,7 +1,7 @@
 ### About
  *	Author: dr_nyt
  * Co-Authors: webdagger (WuxiaCo)
- *	Version: 0.7.1
+ *	Version: 0.7.2
 
 ### Features
 - Download any Translated Novel form NovelPlanet, WuxiaWorld.com or m.WuxiaWorld.co in .epub format.
@@ -32,5 +32,6 @@
 4. Click compile to let it rip!
 
 ### Alpha Build
-- Currently working to make the app run on android.
+- Better GUI using wxpython.
+- Android build.
 
