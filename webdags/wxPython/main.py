@@ -2,9 +2,12 @@ import os
 import wx
 import threading
 import requests
+from random import seed
+from random import randint
 from bs4 import BeautifulSoup
 import cfscrape
 from ebooklib import epub
+import string
 
 # for the file dialog in the selection of book covers
 wildcard = "Image file (*.png)" \
@@ -85,6 +88,12 @@ class LaunchPanel(wx.Panel):
         self.wuxia_world_volume_sizer.Add(self.wuxia_world_volume_number)
         self.wuxia_world_panel.SetSizer(self.wuxia_world_volume_sizer)
         self.wuxia_world_panel.Hide()
+        # specifics for only wuxia co # TODO This is only a temp fix
+        self.chapter_start = None  # The number of the starting chapter is initialized.
+        self.chapter_end = None  # This number of the last chapter is initialized.
+        self.chapter_current = None  # This is stores the number of the current chapter being compiled.
+        self.volume_links = None
+        self.chapterList = None
 
         # WuxiaWorldCo
         self.wuxia_co_panel = wx.Panel(self, id=wx.ID_ANY)
@@ -433,8 +442,203 @@ class LaunchPanel(wx.Panel):
             else:
                 self.remove_cover_button.Enable()
 
-    def wuxiaworld(self, url, cover, volume):
-        pass
+
+
+    def wuxiaworld(self, link, cover, volume=0):
+        link = link
+        cover = cover
+        volume = volume
+        if volume != 0:
+            volume_limit = 1
+            volume_number = int(volume)
+        else:
+            volume_limit = 0
+            volume_number = 1
+
+        # if volume != 0:  # If the volume is not 0 then only the volume number specified will be downloaded.
+        #     volume_limit = 1  # Sets the volume limit so only one volume will be allowed to download.
+        #     volume_number = int(volume)  # This variable is only used when only one volume needs to downloaded
+        # else:  # If the volume number is specified as 0 then all the volumes will be downloaded.
+        #     volume_limit = 0  # Removes the volume limit to allow all volumes to be downloaded.
+        #     volume_number = 0  # This is set to 0 because all volumes will be downloaded now.
+
+        self.log.write("\n ************* Starting ***************")
+
+        try:
+            head = 0
+            novel_name = ""
+            temp_name = link.split('/')[4]  #Split the link of the website into a list separated by "/" and get the 4th index [eg: http://wuxiaworld/novel/my-novel-name/].
+            temp_name = temp_name.split('-')  #Split that into another list separated by "-" [eg: my-novel-name].
+            for name in temp_name:
+                novel_name = novel_name + name.capitalize() + ' '
+            novel_name = novel_name[:-1]  # Remove the last ' ' from the novel name
+            self.chapter_start = 1  #The number of the starting chapter is initialized.
+            self.chapter_end = 0  #This number of the last chapter is initialized.
+            self.chapter_current = 1  #This is stores the number of the current chapter being compiled.
+            self.volume_links = []  # Empty list to store links to the chapters of each volume, one volume at a time.
+            page = requests.get(link)
+            soup = BeautifulSoup(page.text, 'html.parser')
+            volume_list = soup.find_all(class_="panel-body")
+            valid_chars = "-_.() %s%s" % (string.ascii_letters,
+                                          string.digits)  # Characters allowed in a file name [Characters such as $%"" are not allowed as file names in windows]
+
+            if volume_list == []:
+                self.log.write("\nEither the link is invalid or your IP is timed out.")
+                self.log.write("\nIn case of an IP timeout, it usually fixes itself after some time.")
+                self.log.write("\nRaise an issue @ "
+                               "https://github.com/dr-nyt/Translated-Novel-Downloader/issues if this issue persists")
+            self.book = epub.EpubBook()
+            self.book.set_identifier('dr_nyt')
+            self.book.set_title(f"{novel_name} Vol {str(volume)} {self.chapter_start} - {self.chapter_end}")
+            self.book.set_language('en')
+            self.book.add_author('Unknown')
+            self.chapterList = []
+            # This will  only run of cover == ""
+            if cover == "":
+                cover = self.current_directory + '/cover.png'
+                self.log.write("\n\n No cover was chosen"
+                                   "\nDefault cover will be used")
+            self.book.set_cover("image.jpg", open(cover, 'rb').read())
+            for v in volume_list:
+                chapter_links = []
+                if v.find(class_="col-sm-6") == None:
+                    continue
+                # Skip over volumes if a specific volume is defined
+                if volume_number != 1 and volume_limit == 1:
+                    volume_number -= 1
+                    continue
+                chapter_html_links = v.find_all(class_="chapter-item")
+                for chapter_http in chapter_html_links:
+                    chapter_links.append(chapter_http.find('a').get('href'))
+                self.volume_links.append(chapter_links)
+                self.getMetaData(chapter_links[0], chapter_links[-1])
+
+                #######
+                self.getChapter()
+                ################
+                if volume_limit == 1:
+                    self.log.write(f'\nVolume: {str(volume)} compiled!')
+                    epub.write_epub(novel_name + '.epub', self.book, {})
+                    break
+                volume += 1
+                self.log.write(f'\nVolume: {str(volume)} compiled!')
+                epub.write_epub(novel_name + '.epub', self.book, {})
+                self.log.write(f'\nVolume: {str(volume)} compiled!')
+            self.log.write(f"\n{novel_name} has compiled")
+            self.log.write(f"/n{novel_name} compiled /n saved in {os.getcwd()}")
+            self.run_button.Enable()
+            self.select_cover_dialog_button.Enable()
+            self.select_cover_dialog_button.Enable()
+            if self.remove_cover_button.IsEnabled():
+                pass
+            else:
+                self.remove_cover_button.Enable()
+
+        except Exception as e:
+            self.log.write('\n\n Error occurred')
+            self.log.write('\n\n Either the link is invalid or your IP is timed out.')
+            self.log.write('\n\n In case of an IP timeout, it usually fixes itself after some time.')
+            self.log.write(
+                '\n\n Raise an issue @ https://github.com/dr-nyt/Translated-Novel-Downloader/issues if this issue persists')
+            self.log.write(f'\n\n\n error was:\n{e}')
+            self.select_cover_dialog_button.Enable()
+            self.run_button.Enable()
+            if self.remove_cover_button.IsEnabled():
+                pass
+            else:
+                self.remove_cover_button.Enable()
+
+    def getChapter(self):
+        first_line = 0
+        for volume in self.volume_links:
+            for chapters in volume:
+                page = requests.get('https://www.wuxiaworld.com' + chapters)
+                soup = BeautifulSoup(page.text, 'lxml')
+                story_view = soup.find(class_='p-15')
+                # ISSUE the name that's used to save the .xhtml needs to have a random seed
+                # make them unique even when they clash
+                seed(1)
+                value = randint(0, 10)
+                try:
+                    chapter_head = story_view.find('h4').get_text()
+                    c = epub.EpubHtml(title=chapter_head, file_name=f'Chapter_{self.chapter_current}_{value}.xhtml',
+                                  lang='en')
+                    content = f'<h2>{chapter_head}</h2>'
+                except:
+                    c = epub.EpubHtml(title=f"Chapter {self.chapter_current}",
+                                  file_name=f"Chapter_{self.chapter_current}.xhtml", lang='en')
+                    content = f"<h2>{self.chapter_current}</h2>"
+                story_view = story_view.find(class_='fr-view')
+                content += story_view.prettify().replace('\xa0', ' ').replace('Previous Chapter', '').replace('Next Chapter', '')
+                content += "<p> </p>"
+                content += "<p>Powered by dr_nyt</p>"
+                content += "<p>If any errors occur, open an issue here: github.com/dr-nyt/Translated-Novel-Downloader/issues</p>"
+                content += "<p>You can download more novels using the app here: github.com/dr-nyt/Translated-Novel-Downloader</p>"
+
+                c.content = u'%s' % content
+                self.chapterList.append(c)
+                self.log.write(f'\nChapter:{self.chapter_current}  {chapter_head} compiled!')
+                self.chapter_current += 1
+        for chap in self.chapterList:
+            self.book.add_item(chap)
+        self.book.toc = self.chapterList
+        self.book.toc = self.chapterList
+
+        # add navigation files
+        self.book.add_item(epub.EpubNcx())
+        self.book.add_item(epub.EpubNav())
+        # add css file
+        nav_css = epub.EpubItem(uid="style_nav", file_name="style/nav.css", media_type="text/css",
+                            content=style)
+        self.book.add_item(nav_css)
+        # create spin, add cover page as first page
+        self.book.spine = ['cover', 'nav'] + self.chapterList
+
+
+
+    # I forgot what exactly this method does but it is something related to setting pointers to the starting and ending chapters of each volume in a novel.
+    def getMetaData(self, link_start, link_end):
+        metaData = []
+        index = -1
+
+        partsX = link_start.split('/')
+        for x in partsX:
+            if x != '' and x != 'novel':
+                metaData.append(x)
+        chapter_start = metaData[1].split('-')
+        while index >= -len(chapter_start):
+            if chapter_start[index].isdigit():
+                self.chapter_start = int(chapter_start[index])
+                index = -1
+                break
+            else:
+                index = index - 1
+        # for chapter in chapter_start:
+        #     if chapter.isdigit():
+        #         self.chapterNum_start = int(chapter)
+        #         break
+        self.chapter_current = self.chapter_start
+
+        metaData = []
+
+        partsY = link_end.split('/')
+        for y in partsY:
+            if y != '' and y != 'novel':
+                metaData.append(y)
+        chapter_end = metaData[1].split('-')
+        while index >= -len(chapter_end):
+            if chapter_end[index].isdigit():
+                self.chapter_end = int(chapter_end[index])
+                index = -1
+                break
+            else:
+                index = index - 1
+        # for chapter in chapter_end:
+        #     if chapter.isdigit():
+        #         self.chapterNum_end = int(chapter)
+        #         break
+    # wuxiaworld specific TODO Clean this up better
+
 
 
 class MainFrame(wx.Frame):
@@ -473,7 +677,10 @@ class BookThread(threading.Thread):
         if self.which_site == "m.Wuxiaworld.co":
             self.book_function(self.url, self.cover)
         elif self.which_site == "Wuxiaworld.com":
-            self.book_function(self.url, self.cover, self.volume)
+            if self.volume == "":
+                self.book_function(self.url, self.cover)
+            else:
+                self.book_function(self.url, self.cover, self.volume)
         elif self.which_site == "NovelPlanet":
             self.book_function(self.url, self.cover, self.min_chapter, self.max_chapter)
 
