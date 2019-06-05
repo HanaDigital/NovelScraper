@@ -1,6 +1,5 @@
 ### About
- *	Author: dr_nyt
- * Co-Authors: webdagger (WuxiaCo)
+ *	Authors: dr_nyt, webdagger
  *	Version: 0.7.2
 
 ### Features
