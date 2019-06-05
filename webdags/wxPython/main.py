@@ -3,6 +3,7 @@ import wx
 import threading
 import requests
 from bs4 import BeautifulSoup
+import cfscrape
 from ebooklib import epub
 
 # for the file dialog in the selection of book covers
@@ -23,7 +24,7 @@ class LaunchPanel(wx.Panel):
 
         # widget for the combo box to select from novelplanet, wuxiaworld or wuxiaco
         self.novel_websites_list = ['NovelPlanet', 'm.Wuxiaworld.co', 'Wuxiaworld.com']
-        self.novel_website_box = wx.ComboBox(self, id=wx.ID_ANY ,
+        self.novel_website_box = wx.ComboBox(self, id=wx.ID_ANY, style= wx.CB_READONLY,
                                              choices=self.novel_websites_list)
 
         # widget for the cover page selector
@@ -73,7 +74,6 @@ class LaunchPanel(wx.Panel):
         self.novel_planet_chapter_sizer.Add((10,10))
         self.novel_planet_chapter_sizer.Add(self.novel_planet_chapter_range_max_box, wx.ALL, 5)
         self.novel_planet_chapter_panel.SetSizer(self.novel_planet_chapter_sizer)
-        self.novel_planet_chapter_panel.Hide()
 
         # WuxiaWorld
         # The panel object has a .Hide() method that makes it easy to show or hide the panel
@@ -169,6 +169,12 @@ class LaunchPanel(wx.Panel):
         # Novel planet added options
         min_chapter = self.novel_planet_chapter_range_min_box.GetValue()
         max_chapter = self.novel_planet_chapter_range_max_box.GetValue()
+        kwargs = {'url': url,
+                  'cover': cover,
+                  'volume': volume,
+                  'min_chapter': min_chapter,
+                  'max_chapter': max_chapter
+                  }
 
         which_site = self.novel_website_box.GetValue()
         # disable buttons
@@ -191,13 +197,12 @@ class LaunchPanel(wx.Panel):
                 self.remove_cover_button.Enable()
         else:
             if which_site == "m.Wuxiaworld.co":
-                kwargs = {'url': url, 'cover': cover}
-                BookThread( self.co_wuxia_world, **kwargs)
+                BookThread(self.co_wuxia_world, which_site=which_site, **kwargs)
                 #self.co_wuxia_world(url, cover)
             elif which_site == "Wuxiaworld.com":
-                self.wuxiaworld()
+                BookThread(self.wuxiaworld, which_site=which_site, **kwargs)
             elif which_site == "NovelPlanet":
-                self.novel_planet()
+                BookThread(self.novel_planet, which_site=which_site, **kwargs)
 
     def co_wuxia_world(self, url, cover):
         link = url
@@ -302,6 +307,136 @@ class LaunchPanel(wx.Panel):
             else:
                 self.remove_cover_button.Enable()
 
+    def novel_planet(self, link, cover, chapter_start, chapter_end):
+        link = link
+        cover = cover
+        chapter_start = chapter_start
+        chapter_end = chapter_end
+        self.log.write("\n ************* Starting ***************")
+        try:
+            # Initialize connection with NovelPlanet
+            scrapper = cfscrape.create_scraper()
+            page = scrapper.get(link)
+            soup = BeautifulSoup(page.text, 'html.parser')
+
+            # Get Novel Name
+            novel_name = soup.find(class_= 'title').get_text()
+            # Get the html that stores links to each chapter
+            chapters = soup.find_all(class_= 'rowChapter')
+
+            # Get all the specified links from the html
+            chapter_links = []
+            for chapter in chapters:
+                chapter_links.append(chapter.find('a').get('href'))
+            chapter_links.reverse()  #Reverse the list so the first index will be the first chapter and so on
+
+            # Cut down the links if the number of chapters are specified and,
+            # Set the starting and last chapter number
+            if chapter_start != "":
+                chapter_start = int(chapter_start)
+                current_chapter = chapter_start
+                # TODO ask @dr-nyt why this is done like this
+                chapter_links = chapter_links[chapter_start - 1:]
+            else:
+                chapter_start = 1
+                current_chapter = 1
+
+            if chapter_end != "":
+                chapter_end = int(chapter_end)
+                chapter_links = chapter_links[:abs(chapter_end)]
+            else:
+                chapter_end = len(chapters)
+            self.log.write(f"\nChapter {chapter_start}  to Chapter {chapter_end} will be compiled!")
+
+
+            book = epub.EpubBook()
+            # add metadata
+            book.set_identifier('dr_nyt')
+            book.set_title(novel_name)
+            book.set_language('en')
+            book.add_author('Unknown')
+            # This will  only run of cover == ""
+            if cover == "":
+                cover = self.current_directory + '/cover.png'
+                self.log.write("\n\n No cover was chosen"
+                               "\nDefault cover will be used")
+            book.set_cover("image.jpg", open(cover, 'rb').read())
+
+            # Stores each chapter of the story as an object.
+            #  Later used to reference the chapters to the table of content
+            chapters = []
+            for chapter_link in chapter_links:
+                page = scrapper.get(f'https://novelplanet.com{chapter_link}')
+                soup = BeautifulSoup(page.text, 'lxml')
+
+                # Add a header for the chapter
+                try:
+                    chapter_head = soup.find('h4').get_text()
+                    c = epub.EpubHtml(title = chapter_head, file_name=f"Chapter_{current_chapter}.xhtml, lang=en")
+                    content = f"<h2>{chapter_head}</h2>"
+                except:
+                    c = epub.EpubHtml(title=f"Chapter {current_chapter}", file_name=f"Chapter_{current_chapter}.xhtml",
+                                      lang="en")
+                    content = f"<h2>{current_chapter}</h2>"
+                # Get all the paragraphs from the chapter
+                paras = soup.find(id="divReadContent")
+                # Append all paragraph to content which will be added to the .xhtml
+                content += paras.prettify()
+                content += "<p> </p>"
+                content += "<p>Powered by dr_nyt</p>"
+                content += "<p>If any errors occur," \
+                           " open an issue here: github.com/dr-nyt/Translated-Novel-Downloader/issues</p>"
+                content += "<p>You can download more novels using the app here:" \
+                           " github.com/dr-nyt/Translated-Novel-Downloader</p>"
+                c.content = u'%s' % content #Add the content to the chapter
+                chapters.append(c) #Add the chapter object to the chapter list
+                self.log.write(f"\nChapter: {current_chapter} compiled!")
+                current_chapter += 1
+
+            # Add each chapter object to the book
+            for chap in chapters:
+                book.add_item(chap)
+
+            # Give the table of content the list of chapter objects
+            book.toc = (chapters)
+            # add navigation files
+            book.add_item(epub.EpubNcx())
+            book.add_item(epub.EpubNav())
+            # add css file
+            nav_css = epub.EpubItem(uid="style_nav", file_name="style/nav.css", media_type="text/css", content=style)
+            book.add_item(nav_css)
+
+            # create spin, add cover page as first page
+            book.spine = ['cover', 'nav'] + chapters
+            # create epub file
+            epub.write_epub(novel_name + f' {chapter_start}-{chapter_end}.epub', book, {})
+            self.log.write(f"\n{novel_name} has compiled")
+            self.log.write(f"/n{novel_name} compiled /n saved in {os.getcwd()}")
+            self.run_button.Enable()
+            self.select_cover_dialog_button.Enable()
+            self.select_cover_dialog_button.Enable()
+            if self.remove_cover_button.IsEnabled():
+                pass
+            else:
+                self.remove_cover_button.Enable()
+
+        except Exception as e:
+            self.log.write('\n\n Error occurred')
+            self.log.write('\n\n Either the link is invalid or your IP is timed out.')
+            self.log.write('\n\n In case of an IP timeout, it usually fixes itself after some time.')
+            self.log.write('\n\n Raise an issue @ https://github.com/dr-nyt/Translated-Novel-Downloader/issues if this issue persists')
+            self.log.write(f'\n\n\n error was:\n{e}')
+            self.select_cover_dialog_button.Enable()
+            self.run_button.Enable()
+            if self.remove_cover_button.IsEnabled():
+                pass
+            else:
+                self.remove_cover_button.Enable()
+
+    def wuxiaworld(self, url, cover, volume):
+        pass
+
+
 class MainFrame(wx.Frame):
 
     # the style= wx.DEFAULT_FRAME_STYLE & ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX) makes the frame non-resizable
@@ -323,14 +458,26 @@ class Log(object):
 
 
 class BookThread(threading.Thread):
-    def __init__(self,book_function, **kwargs):
+    def __init__(self,book_function, which_site, **kwargs):
         threading.Thread.__init__(self)
+        self.which_site = which_site
         self.url = kwargs['url']
         self.cover = kwargs['cover']
+        self.min_chapter = kwargs['min_chapter']
+        self.max_chapter = kwargs['max_chapter']
+        self.volume = kwargs['volume']
         self.book_function = book_function
         self.start()
+
     def run(self):
-        self.book_function(self.url, self.cover)
+        if self.which_site == "m.Wuxiaworld.co":
+            self.book_function(self.url, self.cover)
+        elif self.which_site == "Wuxiaworld.com":
+            self.book_function(self.url, self.cover, self.volume)
+        elif self.which_site == "NovelPlanet":
+            self.book_function(self.url, self.cover, self.min_chapter, self.max_chapter)
+
+
 
 style = '''
         @namespace epub "http://www.idpf.org/2007/ops";
