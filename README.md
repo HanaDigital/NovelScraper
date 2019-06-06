@@ -1,6 +1,6 @@
 ### About
  *	Authors: dr_nyt, webdagger
- * Discription: This is the re-build of the python based Novel Scraper in Java
+ * Description: This is the re-build of the python based Novel Scraper in Java
  * Java IDLE: Netbeans 8.2 [https://netbeans.org/downloads/8.2/]
  * Currently installed Libs: 
       - jSoup [https://jsoup.org/] 
