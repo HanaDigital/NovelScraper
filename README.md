@@ -5,6 +5,7 @@
  * Currently installed Libs: 
       - jSoup [https://jsoup.org/] 
          - For HTML parsing
+         - Documentaion: https://jsoup.org/cookbook/introduction/parsing-a-document
 
 
 ### Goals/Notes
