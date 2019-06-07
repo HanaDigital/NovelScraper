@@ -19,11 +19,15 @@ class LaunchPanel(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, id=wx.ID_ANY)
 
+        #Set the background and foreground colors
+        self.SetBackgroundColour('BLACK')
+        self.SetForegroundColour('WHITE')
+
         # widget to hold the text "Enter URL:
         self.enter_url_text = wx.StaticText(self, id=wx.ID_ANY, label = "Enter Url: ")
 
         # widget to enter the url link
-        self.url_box = wx.TextCtrl(self, value="eg https://www.wuxiaworld.com/novel/overgeared")
+        self.url_box = wx.TextCtrl(self)
 
         # widget for the combo box to select from novelplanet, wuxiaworld or wuxiaco
         self.novel_websites_list = ['NovelPlanet', 'm.Wuxiaworld.co', 'Wuxiaworld.com']
@@ -33,7 +37,7 @@ class LaunchPanel(wx.Panel):
         # widget for the cover page selector
         self.current_directory = os.getcwd()
         self.cover_path = ""
-        self.select_cover_dialog_button = wx.Button(self, label="[optional] Book Cover")
+        self.select_cover_dialog_button = wx.Button(self, label="Add Book Cover [optional]")
         # button to clear selected image
         self.remove_cover_button = wx.Button(self, label="Remove Image")
 
@@ -57,18 +61,24 @@ class LaunchPanel(wx.Panel):
         self.urls_sizer.Add(self.enter_url_text, wx.ALL|wx.ALIGN_LEFT, 5)
         self.urls_sizer.Add(self.url_box, wx.ALL|wx.EXPAND, 5)
 
-        # Sizer to hold the combo box and the start button
-        self.combo_and_start_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        # Sizer to hold the combo box that contains all the sources
+        self.combo_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.combo_and_start_sizer.Add(self.run_button, wx.ALL|wx.CENTER, 5)
-        self.combo_and_start_sizer.Add(self.novel_website_box, wx.ALL|wx.ALIGN_RIGHT, 5)
+        self.select_source_text = wx.StaticText(self, label="Select Source:")
+        self.combo_sizer.Add(self.select_source_text, wx.ALL|wx.ALIGN_LEFT, 5)
+        self.combo_sizer.Add(self.novel_website_box, wx.ALL|wx.EXPAND, 5)
+
+        #Sizer to hold the run button that starts compiling
+        self.start_sizer = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.start_sizer.Add(self.run_button, wx.ALL|wx.ALIGN_LEFT, 5)
 
         # Unique controls belonging to specific novels
         # Novel planet
         # The panel object has a .Hide() method that makes it easy to show or hide the panel
         self.novel_planet_chapter_panel = wx.Panel(self, wx.ID_ANY)
-        self.novel_planet_chapter_range_text = wx.StaticText(self.novel_planet_chapter_panel,
-                                                             label="Chapter Range [optional eg 0-100 ]:")
+        self.novel_planet_chapter_range_text = wx.StaticText(self.novel_planet_chapter_panel, label="Chapter Range [optional]:")
+        self.novel_planet_chapter_range_text.SetForegroundColour('WHITE')
         self.novel_planet_chapter_range_min_box = wx.TextCtrl(self.novel_planet_chapter_panel, size=(40, 20))
         self.novel_planet_chapter_range_max_box = wx.TextCtrl(self.novel_planet_chapter_panel, size=(40, 20))
         self.novel_planet_chapter_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -83,6 +93,7 @@ class LaunchPanel(wx.Panel):
         self.wuxia_world_panel = wx.Panel(self, id=wx.ID_ANY)
         self.wuxia_world_volume_number = wx.TextCtrl(self.wuxia_world_panel, size=(40, 20))
         self.wuxia_world_volume_text = wx.StaticText(self.wuxia_world_panel, label="Volume Num [optional]:")
+        self.wuxia_world_volume_text.SetForegroundColour('WHITE')
         self.wuxia_world_volume_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.wuxia_world_volume_sizer.Add(self.wuxia_world_volume_text)
         self.wuxia_world_volume_sizer.Add(self.wuxia_world_volume_number)
@@ -97,21 +108,23 @@ class LaunchPanel(wx.Panel):
 
         # WuxiaWorldCo
         self.wuxia_co_panel = wx.Panel(self, id=wx.ID_ANY)
-        self.wuxia_co_text = wx.StaticText(self.wuxia_co_panel, label="m.wuxiaworld.co does not require any args")
+        # self.wuxia_co_text = wx.StaticText(self.wuxia_co_panel, label="m.wuxiaworld.co does not require any args")
+        # self.wuxia_co_text.SetForegroundColour('WHITE')
         self.wuxia_co_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.wuxia_co_sizer.Add(self.wuxia_co_text)
+        # self.wuxia_co_sizer.Add(self.wuxia_co_text)
         self.wuxia_co_panel.SetSizer(self.wuxia_co_sizer)
         self.wuxia_co_panel.Hide()
 
         # Add all the widgets together with a vertical sizer
         self.main_sizer = wx.BoxSizer(wx.VERTICAL)
 
+        self.main_sizer.Add(self.combo_sizer)
         self.main_sizer.Add(self.urls_sizer)
-        self.main_sizer.Add(self.combo_and_start_sizer)
         self.main_sizer.Add(self.cover_sizer)
         self.main_sizer.Add(self.novel_planet_chapter_panel)
         self.main_sizer.Add(self.wuxia_world_panel)
         self.main_sizer.Add(self.wuxia_co_panel)
+        self.main_sizer.Add(self.start_sizer)
         self.main_sizer.Add(self.log_report, wx.ALL|wx.CENTER|wx.EXPAND, 5)
         self.SetSizer(self.main_sizer)
         #self.main_sizer.Fit(self)
@@ -186,6 +199,7 @@ class LaunchPanel(wx.Panel):
                   }
 
         which_site = self.novel_website_box.GetValue()
+
         # disable buttons
         self.select_cover_dialog_button.Disable()
         if self.remove_cover_button.IsEnabled():
@@ -193,25 +207,77 @@ class LaunchPanel(wx.Panel):
         self.run_button.Disable()
 
         # Small error handling
-        if url == "" or url == "eg https://www.wuxiaworld.com/novel/overgeared":
-            self.log.write("\n\n\n You need to enter a valid link")
-            self.log.write("\nFor wuxiaworld.com: https://www.wuxiaworld.com/novel/overgeared")
-            self.log.write("\nFor m.wuxiaworld.co: https://m.wuxiaworld.co/Reverend-Insanity/")
-            self.log.write("\nFor NovelPlanet.com: https://novelplanet.com/Novel/Overgeared")
+        if which_site == "":
+            self.log.write("\n\n\n Please select a source.")
             self.run_button.Enable()
             self.select_cover_dialog_button.Enable()
             if self.remove_cover_button.IsEnabled():
                 pass
             else:
                 self.remove_cover_button.Enable()
-        else:
-            if which_site == "m.Wuxiaworld.co":
-                BookThread(self.co_wuxia_world, which_site=which_site, **kwargs)
-                #self.co_wuxia_world(url, cover)
-            elif which_site == "Wuxiaworld.com":
-                BookThread(self.wuxiaworld, which_site=which_site, **kwargs)
-            elif which_site == "NovelPlanet":
+
+        if which_site == "NovelPlanet":
+            if 'novelplanet.com' in url:
                 BookThread(self.novel_planet, which_site=which_site, **kwargs)
+            else:
+                self.log.write("\n\n\n Your link is invalid.")
+                self.log.write("\nSelect the correct source and enter a valid link.")
+                self.log.write("\nFor NovelPlanet.com: https://novelplanet.com/Novel/Overgeared")
+                self.run_button.Enable()
+                self.select_cover_dialog_button.Enable()
+                if self.remove_cover_button.IsEnabled():
+                    pass
+                else:
+                    self.remove_cover_button.Enable()
+
+
+        if which_site == "Wuxiaworld.com":
+            if 'wuxiaworld.com' in url:
+                BookThread(self.novel_planet, which_site=which_site, **kwargs)
+            else:
+                self.log.write("\n\n\n Your link is invalid.")
+                self.log.write("\nSelect the correct source and enter a valid link.")
+                self.log.write("\nFor wuxiaworld.com: https://www.wuxiaworld.com/novel/overgeared")
+                self.run_button.Enable()
+                self.select_cover_dialog_button.Enable()
+                if self.remove_cover_button.IsEnabled():
+                    pass
+                else:
+                    self.remove_cover_button.Enable()
+
+        if which_site == "m.Wuxiaworld.co":
+            if 'm.wuxiaworld.co' in url:
+                BookThread(self.novel_planet, which_site=which_site, **kwargs)
+            else:
+                self.log.write("\n\n\n Your link is invalid.")
+                self.log.write("\nSelect the correct source and enter a valid link.")
+                self.log.write("\nFor m.wuxiaworld.co: https://m.wuxiaworld.co/Reverend-Insanity/")
+                self.run_button.Enable()
+                self.select_cover_dialog_button.Enable()
+                if self.remove_cover_button.IsEnabled():
+                    pass
+                else:
+                    self.remove_cover_button.Enable()
+
+        # if url == "" or url == "eg https://www.wuxiaworld.com/novel/overgeared":
+        #     self.log.write("\n\n\n You need to enter a valid link")
+        #     self.log.write("\nFor wuxiaworld.com: https://www.wuxiaworld.com/novel/overgeared")
+        #     self.log.write("\nFor m.wuxiaworld.co: https://m.wuxiaworld.co/Reverend-Insanity/")
+        #     self.log.write("\nFor NovelPlanet.com: https://novelplanet.com/Novel/Overgeared")
+            # self.run_button.Enable()
+            # self.select_cover_dialog_button.Enable()
+            # if self.remove_cover_button.IsEnabled():
+            #     pass
+            # else:
+            #     self.remove_cover_button.Enable()
+        # else:
+        #     if which_site == "m.Wuxiaworld.co":
+        #         BookThread(self.co_wuxia_world, which_site=which_site, **kwargs)
+        #         #self.co_wuxia_world(url, cover)
+        #     elif which_site == "Wuxiaworld.com":
+        #         BookThread(self.wuxiaworld, which_site=which_site, **kwargs)
+        #     elif which_site == "NovelPlanet":
+        #         BookThread(self.novel_planet, which_site=which_site, **kwargs)
 
     def co_wuxia_world(self, url, cover):
         link = url
