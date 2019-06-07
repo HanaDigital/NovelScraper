@@ -22,7 +22,7 @@ class LaunchPanel(wx.Panel):
 
         # Set the background and foreground colors
         self.SetBackgroundColour('BLACK')
-        self.SetForegroundColour('WHITE')
+        self.SetForegroundColour('RED')
 
         # widget to hold the text "Enter URL:
         self.enter_url_text = wx.StaticText(self, id=wx.ID_ANY, label="Enter Url: ")
@@ -61,7 +61,7 @@ class LaunchPanel(wx.Panel):
 
         # Box to display progress report and status
         self.log_report = wx.TextCtrl(self, id=wx.ID_ANY, size=(600, 300),
-                                      style=wx.TE_MULTILINE | wx.TE_READONLY | wx.VSCROLL, value="Log Box")
+                                      style=wx.TE_MULTILINE | wx.TE_READONLY | wx.VSCROLL | wx.TE_RICH, value="Log Box")
         # Disables mouse touches in the logbox
         self.log_report.Disable()
         self.log = Log(self.log_report)
@@ -759,7 +759,7 @@ class MainFrame(wx.Frame):
     # the style= wx.DEFAULT_FRAME_STYLE & ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX) makes the frame non-resizable
     def __init__(self, parent):
         wx.Frame.__init__(self, parent=parent, style=wx.DEFAULT_FRAME_STYLE & ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX),
-                          title="dr-nyt's Novel Downloader")
+                          title="Nyt's Novel Downloader")
         panel = LaunchPanel(self)
         self.Center()
         self.Show()
@@ -784,6 +784,8 @@ class BookThread(threading.Thread):
         self.max_chapter = kwargs['max_chapter']
         self.volume = kwargs['volume']
         self.book_function = book_function
+        # Fix's the issue where onclose does not kill the background thread
+        self.daemon = True
         self.start()
 
     def run(self):
