@@ -37,6 +37,7 @@ class LaunchPanel(wx.Panel):
         self.novel_website_box = wx.ComboBox(self, id=wx.ID_ANY, style=wx.CB_READONLY,
                                              choices=self.novel_websites_list)
 
+
         # widget for the cover page selector
         self.current_directory = os.getcwd()
         self.cover_path = ""
@@ -60,7 +61,9 @@ class LaunchPanel(wx.Panel):
 
         # Box to display progress report and status
         self.log_report = wx.TextCtrl(self, id=wx.ID_ANY, size=(600, 300),
-                                      style=wx.TE_MULTILINE | wx.TE_READONLY | wx.VSCROLL, value="Log box")
+                                      style=wx.TE_MULTILINE | wx.TE_READONLY | wx.VSCROLL, value="Log Box")
+        # Disables mouse touches in the logbox
+        self.log_report.Disable()
         self.log = Log(self.log_report)
         # Button to run the progran
         self.run_button = wx.Button(self, label="Compile")
@@ -355,7 +358,7 @@ class LaunchPanel(wx.Panel):
                 soup = BeautifulSoup(temp_page.text, 'html.parser').find_all("div", id="chaptercontent")
                 story_text = str(soup).split('</div>')[1]
                 chapter = "<h2>" + str(chapter_name) + "</h2><br/>"
-                story = f"<h2>{chapter_name}</h2><br/><p>" + str(story_text) + "</p><br/><br/><br/>"
+                story = f"<h2>{chapter_name}</h2><br/><p>" + str(story_text) + "</p><br/>"
                 try:
                     chap = epub.EpubHtml(title=chapter_name, file_name=temp_link + '.xhtml', lang='en')
                     content = story
@@ -503,7 +506,7 @@ class LaunchPanel(wx.Panel):
             # create epub file
             epub.write_epub(novel_name + f' {chapter_start}-{chapter_end}.epub', book, {})
             self.log.write(f"\n{novel_name} has compiled")
-            self.log.write(f"/n{novel_name} compiled /n saved in {os.getcwd()}")
+            self.log.write(f"\n{novel_name} compiled /n saved in {os.getcwd()}")
             self.run_button.Enable()
             self.select_cover_dialog_button.Enable()
             self.select_cover_dialog_button.Enable()
