@@ -25,6 +25,7 @@ class LaunchPanel(wx.Panel):
 
         # widget to hold the text "Enter URL:
         self.enter_url_text = wx.StaticText(self, id=wx.ID_ANY, label = "Enter Url: ")
+        self.enter_url_text.SetFont( wx.Font( 10, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
 
         # widget to enter the url link
         self.url_box = wx.TextCtrl(self)
@@ -37,14 +38,22 @@ class LaunchPanel(wx.Panel):
         # widget for the cover page selector
         self.current_directory = os.getcwd()
         self.cover_path = ""
-        self.select_cover_dialog_button = wx.Button(self, label="Add Book Cover [optional]")
+        self.add_cover_text = wx.StaticText(self, id=wx.ID_ANY, label = "Add Cover [optional]: ")
+        self.add_cover_text.SetFont( wx.Font( 8, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
+
+        self.cover_directory_box = wx.TextCtrl(self, -1, size=(200, -1))
+        # self.cover_directory_box.SetValue(self.current_directory)
+
+        self.select_cover_dialog_button = wx.Button(self, label="browse")
         # button to clear selected image
-        self.remove_cover_button = wx.Button(self, label="Remove Image")
+        # self.remove_cover_button = wx.Button(self, label="Remove Image")
 
         self.cover_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.cover_sizer.Add(self.select_cover_dialog_button, wx.ALL | wx.ALIGN_LEFT, 5)
-        self.cover_sizer.Add(self.remove_cover_button)
-        self.remove_cover_button.Hide()
+        self.cover_sizer.Add(self.add_cover_text, wx.ALL | wx.ALIGN_LEFT, 5)
+        self.cover_sizer.Add(self.cover_directory_box, wx.ALL|wx.ALIGN_LEFT, 5)
+        self.cover_sizer.Add(self.select_cover_dialog_button, wx.ALIGN_LEFT, 5)
+        # self.cover_sizer.Add(self.remove_cover_button)
+        # self.remove_cover_button.Hide()
 
         # Box to display progress report and status
         self.log_report= wx.TextCtrl(self, id=wx.ID_ANY, size=(600, 300),
@@ -52,6 +61,7 @@ class LaunchPanel(wx.Panel):
         self.log = Log(self.log_report)
         # Button to run the progran
         self.run_button = wx.Button(self, label="Compile")
+        self.run_button.SetFont( wx.Font( 10, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
 
         # Sizers and arrangment
         #
@@ -64,7 +74,8 @@ class LaunchPanel(wx.Panel):
         # Sizer to hold the combo box that contains all the sources
         self.combo_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.select_source_text = wx.StaticText(self, label="Select Source:")
+        self.select_source_text = wx.StaticText(self, label="Select Source: ")
+        self.select_source_text.SetFont( wx.Font( 10, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
         self.combo_sizer.Add(self.select_source_text, wx.ALL|wx.ALIGN_LEFT, 5)
         self.combo_sizer.Add(self.novel_website_box, wx.ALL|wx.EXPAND, 5)
 
@@ -87,6 +98,7 @@ class LaunchPanel(wx.Panel):
         self.novel_planet_chapter_sizer.Add((10,10))
         self.novel_planet_chapter_sizer.Add(self.novel_planet_chapter_range_max_box, wx.ALL, 5)
         self.novel_planet_chapter_panel.SetSizer(self.novel_planet_chapter_sizer)
+        self.novel_planet_chapter_panel.Hide()
 
         # WuxiaWorld
         # The panel object has a .Hide() method that makes it easy to show or hide the panel
@@ -137,7 +149,7 @@ class LaunchPanel(wx.Panel):
         # BIND the cover page selector button
         self.select_cover_dialog_button.Bind(wx.EVT_BUTTON, self.on_cover_button)
         # BIND the remove cover button
-        self.remove_cover_button.Bind(wx.EVT_BUTTON, self.on_remove_cover)
+        # self.remove_cover_button.Bind(wx.EVT_BUTTON, self.on_remove_cover)
 
         # BIND the compile button
         self.run_button.Bind(wx.EVT_BUTTON, self.on_run)
@@ -171,16 +183,18 @@ class LaunchPanel(wx.Panel):
                                )
         if dialog.ShowModal() == wx.ID_OK:
             self.cover_path = dialog.GetPath()
-            self.log.write(f"\n\n\nYou have chosen the cover located at: \n{self.cover_path}")
-            self.remove_cover_button.Show()
+            # self.log.write(f"\n\n\nYou have chosen the cover located at: \n{self.cover_path}")
+            self.cover_directory_box.SetValue(self.cover_path)
+            # self.remove_cover_button.Show()
             self.Layout()
         dialog.Destroy()
 
-    def on_remove_cover(self, event):
-        if self.cover_path != "":
-            self.log.write(f"\n\n\nYou have removed the cover located at: \n{self.cover_path}")
-            self.remove_cover_button.Hide()
-            self.cover_path = ""
+    # def on_remove_cover(self, event):
+    #     if self.cover_path != "":
+    #         self.log.write(f"\n\n\nYou have removed the cover located at: \n{self.cover_path}")
+    #         self.cover_directory_box.SetValue("")
+    #         self.remove_cover_button.Hide()
+    #         self.cover_path = ""
 
     def on_run(self, event):
         url = self.url_box.GetValue()
@@ -202,8 +216,8 @@ class LaunchPanel(wx.Panel):
 
         # disable buttons
         self.select_cover_dialog_button.Disable()
-        if self.remove_cover_button.IsEnabled():
-            self.remove_cover_button.Disable()
+        # if self.remove_cover_button.IsEnabled():
+        #     self.remove_cover_button.Disable()
         self.run_button.Disable()
 
         # Small error handling
@@ -211,10 +225,10 @@ class LaunchPanel(wx.Panel):
             self.log.write("\n\n\n Please select a source.")
             self.run_button.Enable()
             self.select_cover_dialog_button.Enable()
-            if self.remove_cover_button.IsEnabled():
-                pass
-            else:
-                self.remove_cover_button.Enable()
+            # if self.remove_cover_button.IsEnabled():
+            #     pass
+            # else:
+            #     self.remove_cover_button.Enable()
 
         if which_site == "NovelPlanet":
             if 'novelplanet.com' in url:
@@ -225,10 +239,10 @@ class LaunchPanel(wx.Panel):
                 self.log.write("\nFor NovelPlanet.com: https://novelplanet.com/Novel/Overgeared")
                 self.run_button.Enable()
                 self.select_cover_dialog_button.Enable()
-                if self.remove_cover_button.IsEnabled():
-                    pass
-                else:
-                    self.remove_cover_button.Enable()
+                # if self.remove_cover_button.IsEnabled():
+                #     pass
+                # else:
+                #     self.remove_cover_button.Enable()
 
 
         if which_site == "Wuxiaworld.com":
@@ -240,10 +254,10 @@ class LaunchPanel(wx.Panel):
                 self.log.write("\nFor wuxiaworld.com: https://www.wuxiaworld.com/novel/overgeared")
                 self.run_button.Enable()
                 self.select_cover_dialog_button.Enable()
-                if self.remove_cover_button.IsEnabled():
-                    pass
-                else:
-                    self.remove_cover_button.Enable()
+                # if self.remove_cover_button.IsEnabled():
+                #     pass
+                # else:
+                #     self.remove_cover_button.Enable()
 
         if which_site == "m.Wuxiaworld.co":
             if 'm.wuxiaworld.co' in url:
@@ -254,10 +268,10 @@ class LaunchPanel(wx.Panel):
                 self.log.write("\nFor m.wuxiaworld.co: https://m.wuxiaworld.co/Reverend-Insanity/")
                 self.run_button.Enable()
                 self.select_cover_dialog_button.Enable()
-                if self.remove_cover_button.IsEnabled():
-                    pass
-                else:
-                    self.remove_cover_button.Enable()
+                # if self.remove_cover_button.IsEnabled():
+                #     pass
+                # else:
+                #     self.remove_cover_button.Enable()
 
         # if url == "" or url == "eg https://www.wuxiaworld.com/novel/overgeared":
         #     self.log.write("\n\n\n You need to enter a valid link")
@@ -365,10 +379,10 @@ class LaunchPanel(wx.Panel):
             self.run_button.Enable()
             self.select_cover_dialog_button.Enable()
             self.select_cover_dialog_button.Enable()
-            if self.remove_cover_button.IsEnabled():
-                pass
-            else:
-                self.remove_cover_button.Enable()
+            # if self.remove_cover_button.IsEnabled():
+            #     pass
+            # else:
+            #     self.remove_cover_button.Enable()
         except Exception as e:
             self.log.write('\n\n Error occurred')
             self.log.write('\n\n Either the link is invalid or your IP is timed out.')
@@ -377,10 +391,10 @@ class LaunchPanel(wx.Panel):
             self.log.write(f'\n\n\n error was:\n{e}')
             self.select_cover_dialog_button.Enable()
             self.run_button.Enable()
-            if self.remove_cover_button.IsEnabled():
-                pass
-            else:
-                self.remove_cover_button.Enable()
+            # if self.remove_cover_button.IsEnabled():
+            #     pass
+            # else:
+            #     self.remove_cover_button.Enable()
 
     def novel_planet(self, link, cover, chapter_start, chapter_end):
         link = link
@@ -487,10 +501,10 @@ class LaunchPanel(wx.Panel):
             self.run_button.Enable()
             self.select_cover_dialog_button.Enable()
             self.select_cover_dialog_button.Enable()
-            if self.remove_cover_button.IsEnabled():
-                pass
-            else:
-                self.remove_cover_button.Enable()
+            # if self.remove_cover_button.IsEnabled():
+            #     pass
+            # else:
+            #     self.remove_cover_button.Enable()
 
         except Exception as e:
             self.log.write('\n\n Error occurred')
@@ -500,10 +514,10 @@ class LaunchPanel(wx.Panel):
             self.log.write(f'\n\n\n error was:\n{e}')
             self.select_cover_dialog_button.Enable()
             self.run_button.Enable()
-            if self.remove_cover_button.IsEnabled():
-                pass
-            else:
-                self.remove_cover_button.Enable()
+            # if self.remove_cover_button.IsEnabled():
+            #     pass
+            # else:
+            #     self.remove_cover_button.Enable()
 
     def wuxiaworld(self, link, cover, volume=0):
         link = link
@@ -612,10 +626,10 @@ class LaunchPanel(wx.Panel):
             self.select_cover_dialog_button.Enable()
             self.select_cover_dialog_button.Enable()
 
-            if self.remove_cover_button.IsEnabled():
-                pass
-            else:
-                self.remove_cover_button.Enable()
+            # if self.remove_cover_button.IsEnabled():
+            #     pass
+            # else:
+            #     self.remove_cover_button.Enable()
 
         except Exception as e:
             self.log.write('\n\n Error occurred WW2')
@@ -626,10 +640,10 @@ class LaunchPanel(wx.Panel):
             self.log.write(f'\n\n\n error was:\n{e}')
             self.select_cover_dialog_button.Enable()
             self.run_button.Enable()
-            if self.remove_cover_button.IsEnabled():
-                pass
-            else:
-                self.remove_cover_button.Enable()
+            # if self.remove_cover_button.IsEnabled():
+            #     pass
+            # else:
+            #     self.remove_cover_button.Enable()
 
     def getChapter(self):
         first_line = 0
