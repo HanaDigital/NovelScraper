@@ -771,7 +771,10 @@ class Log(object):
         self.out = wxTextCtrl
 
     def write(self, string):
+        # Enables and disables the log after writing 
+        self.out.Enable()
         wx.CallAfter(self.out.WriteText, string)
+        self.out.Disable()
 
 
 class BookThread(threading.Thread):
