@@ -2,7 +2,21 @@ import os
 import shutil
 import subprocess
 import sys
-from tkinter import *
+from tkinter import Canvas
+from tkinter import X
+from tkinter import Label
+from tkinter import LEFT
+from tkinter import Entry
+from tkinter import Button
+from tkinter import Text
+from tkinter import WORD
+from tkinter import Scrollbar
+from tkinter import END
+from tkinter import W
+from tkinter import E
+from tkinter import Tk
+from tkinter import StringVar
+from tkinter import OptionMenu
 from tkinter import ttk
 import threading
 import requests
@@ -219,7 +233,7 @@ class NovelPlanetScraper(object):
                 c = epub.EpubHtml(title=chapterHead, file_name='Chapter_' + str(self.currentChapter) + '.xhtml', lang='en')
                 content = '<h2>' + chapterHead + '</h2>'
             except:
-                chapterHead = "Chapter "  + str(self.chapterCurrent)
+                chapterHead = "Chapter "  + str(self.currentChapter)
                 c = epub.EpubHtml(title="Chapter "  + str(self.currentChapter), file_name='Chapter_' + str(self.currentChapter) + '.xhtml', lang='en')
                 content = "<h2> Chapter "  + str(self.currentChapter) + "</h2>"
 
@@ -558,7 +572,6 @@ class WuxiaScraper(object):
             
     #This method loops through every chapter of a volume and compiles them properly, adding in headers and separator between each chapter.
     def getChapter(self):
-        firstLine = 0
         for v in self.volume_links:
             for chapters in v:
                 page = requests.get('https://www.wuxiaworld.com' + chapters)
@@ -647,11 +660,11 @@ class WuxiaCoScraper(object):
         # Entries
         self.eNovel = Entry(self.window, width=75, bg="white")
         self.eNovel.grid(row=0, column=1, sticky=W)
-        self.eNovel.bind('<Return>', lambda _: compiler())
+        self.eNovel.bind('<Return>', lambda _: self.compiler())
 
         self.eCover = Entry(self.window, width=20, bg="white")
         self.eCover.grid(row=2, column=1, sticky=W)
-        self.eCover.bind('<Return>', lambda _: compiler())
+        self.eCover.bind('<Return>', lambda _: self.compiler())
 
         # Buttons
         Button(self.window, text="Compile", width=8, command=self.compiler).grid(row=3, column=1, sticky=W)
@@ -749,7 +762,7 @@ class WuxiaCoScraper(object):
             #  I have slow network
             page = requests.get(self.new_link)
             self.soup = BeautifulSoup(page.text, 'html.parser')
-        except Exception as e:
+        except:
             if retry_count < 3:
                 retry_count += 1
                 page = requests.get(self.new_link)
@@ -888,7 +901,7 @@ def updateMsg():
 
     label = Label(popup, text="New Update Available", bg="black", fg="white", font="none 15")
     downloadButton = Button(popup, text="Download", fg="blue", command=callback)
-    okButton = Button(popup, text="OK", command=popup.destroy)
+    # okButton = Button(popup, text="OK", command=popup.destroy)
 
     label.pack(padx=10)
     downloadButton.pack(padx=5)
