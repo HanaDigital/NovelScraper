@@ -61,10 +61,10 @@ class LaunchPanel(wx.Panel):
 
         # Box to display progress report and status
         self.log_report = wx.TextCtrl(self, id=wx.ID_ANY, size=(600, 300),
-                                      style=wx.TE_MULTILINE | wx.TE_READONLY | wx.VSCROLL | wx.TE_RICH, value="Log Box")
-        # Disables mouse touches in the logbox
-        self.log_report.Disable()
+                                      style=wx.TE_MULTILINE | wx.TE_READONLY | wx.VSCROLL | wx.TE_RICH)
         self.log = Log(self.log_report)
+        self.log.write("Log:")
+
         # Button to run the progran
         self.run_button = wx.Button(self, label="Compile")
         self.run_button.SetFont(
@@ -163,6 +163,12 @@ class LaunchPanel(wx.Panel):
         # BIND the compile button
         self.run_button.Bind(wx.EVT_BUTTON, self.on_run)
 
+    def msg(self, text):
+        self.log_report.Enable() #Enable the log for writing
+        self.log.write(text)    #Write the text
+        self.log_report.ShowPosition(self.log_report.GetLastPosition ())    #Set the position to the bottom
+        self.log_report.Disable() #Disable the log after writing
+
     def novel_website_panel_changer(self, event):
         selection = event.GetEventObject()
         if selection.GetValue() == "NovelPlanet":
@@ -192,7 +198,7 @@ class LaunchPanel(wx.Panel):
                                )
         if dialog.ShowModal() == wx.ID_OK:
             self.cover_path = dialog.GetPath()
-            # self.log.write(f"\n\n\nYou have chosen the cover located at: \n{self.cover_path}")
+            # self.msg(f"\n\n\nYou have chosen the cover located at: \n{self.cover_path}")
             self.cover_directory_box.SetValue(self.cover_path)
             # self.remove_cover_button.Show()
             self.Layout()
@@ -200,12 +206,16 @@ class LaunchPanel(wx.Panel):
 
     # def on_remove_cover(self, event):
     #     if self.cover_path != "":
-    #         self.log.write(f"\n\n\nYou have removed the cover located at: \n{self.cover_path}")
+    #         self.msg(f"\n\n\nYou have removed the cover located at: \n{self.cover_path}")
     #         self.cover_directory_box.SetValue("")
     #         self.remove_cover_button.Hide()
     #         self.cover_path = ""
 
     def on_run(self, event):
+        self.log_report.Disable()
+        self.log_report.SetValue("")
+        self.msg("Log:")
+
         url = self.url_box.GetValue()
         cover = self.cover_path
         # wuxiaworld.com added options
@@ -231,9 +241,10 @@ class LaunchPanel(wx.Panel):
 
         # Small error handling
         if which_site == "":
-            self.log.write("\n\n\n Please select a source.")
+            self.msg("\n\n\n Please select a source.")
             self.run_button.Enable()
             self.select_cover_dialog_button.Enable()
+            self.log_report.Enable()
             # if self.remove_cover_button.IsEnabled():
             #     pass
             # else:
@@ -243,11 +254,12 @@ class LaunchPanel(wx.Panel):
             if 'novelplanet.com' in url:
                 BookThread(self.novel_planet, which_site=which_site, **kwargs)
             else:
-                self.log.write("\n\n\n Your link is invalid.")
-                self.log.write("\nSelect the correct source and enter a valid link.")
-                self.log.write("\nFor NovelPlanet.com: https://novelplanet.com/Novel/Overgeared")
+                self.msg("\n\n\n Your link is invalid.")
+                self.msg("\nSelect the correct source and enter a valid link.")
+                self.msg("\nFor NovelPlanet.com: https://novelplanet.com/Novel/Overgeared")
                 self.run_button.Enable()
                 self.select_cover_dialog_button.Enable()
+                self.log_report.Enable()
                 # if self.remove_cover_button.IsEnabled():
                 #     pass
                 # else:
@@ -257,11 +269,12 @@ class LaunchPanel(wx.Panel):
             if 'wuxiaworld.com' in url:
                 BookThread(self.wuxiaworld, which_site=which_site, **kwargs)
             else:
-                self.log.write("\n\n\n Your link is invalid.")
-                self.log.write("\nSelect the correct source and enter a valid link.")
-                self.log.write("\nFor wuxiaworld.com: https://www.wuxiaworld.com/novel/overgeared")
+                self.msg("\n\n\n Your link is invalid.")
+                self.msg("\nSelect the correct source and enter a valid link.")
+                self.msg("\nFor wuxiaworld.com: https://www.wuxiaworld.com/novel/overgeared")
                 self.run_button.Enable()
                 self.select_cover_dialog_button.Enable()
+                self.log_report.Enable()
                 # if self.remove_cover_button.IsEnabled():
                 #     pass
                 # else:
@@ -271,21 +284,22 @@ class LaunchPanel(wx.Panel):
             if 'm.wuxiaworld.co' in url:
                 BookThread(self.co_wuxia_world, which_site=which_site, **kwargs)
             else:
-                self.log.write("\n\n\n Your link is invalid.")
-                self.log.write("\nSelect the correct source and enter a valid link.")
-                self.log.write("\nFor m.wuxiaworld.co: https://m.wuxiaworld.co/Reverend-Insanity/")
+                self.msg("\n\n\n Your link is invalid.")
+                self.msg("\nSelect the correct source and enter a valid link.")
+                self.msg("\nFor m.wuxiaworld.co: https://m.wuxiaworld.co/Reverend-Insanity/")
                 self.run_button.Enable()
                 self.select_cover_dialog_button.Enable()
+                self.log_report.Enable()
                 # if self.remove_cover_button.IsEnabled():
                 #     pass
                 # else:
                 #     self.remove_cover_button.Enable()
 
         # if url == "" or url == "eg https://www.wuxiaworld.com/novel/overgeared":
-        #     self.log.write("\n\n\n You need to enter a valid link")
-        #     self.log.write("\nFor wuxiaworld.com: https://www.wuxiaworld.com/novel/overgeared")
-        #     self.log.write("\nFor m.wuxiaworld.co: https://m.wuxiaworld.co/Reverend-Insanity/")
-        #     self.log.write("\nFor NovelPlanet.com: https://novelplanet.com/Novel/Overgeared")
+        #     self.msg("\n\n\n You need to enter a valid link")
+        #     self.msg("\nFor wuxiaworld.com: https://www.wuxiaworld.com/novel/overgeared")
+        #     self.msg("\nFor m.wuxiaworld.co: https://m.wuxiaworld.co/Reverend-Insanity/")
+        #     self.msg("\nFor NovelPlanet.com: https://novelplanet.com/Novel/Overgeared")
         # self.run_button.Enable()
         # self.select_cover_dialog_button.Enable()
         # if self.remove_cover_button.IsEnabled():
@@ -306,10 +320,10 @@ class LaunchPanel(wx.Panel):
         cover = cover
         if cover == "":
             cover = self.current_directory + '/cover.png'
-            self.log.write("\n\n No cover was chosen"
+            self.msg("\n\n No cover was chosen"
                            "\nDefault cover will be used")
         try:
-            self.log.write("\n\n\n ***** Starting *****")
+            self.msg("\n\n\n ***** Starting *****")
             novel_name = ""
             # Split the link of the website into a list to get novel name, eg https://m.wuxiaworld.co/Reverend-Insanity
             temp_name = link.split('/')[3]
@@ -321,7 +335,7 @@ class LaunchPanel(wx.Panel):
                 novel_name = novel_name + name.capitalize() + " "
             # To remove last whitespace from the novel name
             novel_name = novel_name[:-1]
-            self.log.write(f"\n\n The compiled novel name is {novel_name}")
+            self.msg(f"\n\n The compiled novel name is {novel_name}")
             # Luckily appending /all.html to wuxia.co/novel-name gives a page with all html links
             real_url = link + "/all.html/"
             # TODO reliably handle network failiure to avoid redownloading novel
@@ -367,7 +381,7 @@ class LaunchPanel(wx.Panel):
                     content = story
                 chap.content = u'%s' % content
                 chapterList.append(chap)
-                self.log.write(f"\n Added {chapter_name}")
+                self.msg(f"\n Added {chapter_name}")
 
             for chapter in chapterList:
                 book.add_item(chapter)
@@ -383,8 +397,9 @@ class LaunchPanel(wx.Panel):
             # create spin, add cover page as first page
             book.spine = ['cover', 'nav'] + chapterList
             epub.write_epub(novel_name + '.epub', book, {})
-            self.log.write(f"/n{novel_name} compiled /n saved in {os.getcwd()}")
+            self.msg(f"\n{novel_name} compiled!  \nSaved in {os.getcwd()}")
             self.run_button.Enable()
+            self.log_report.Enable()
             self.select_cover_dialog_button.Enable()
             self.select_cover_dialog_button.Enable()
             # if self.remove_cover_button.IsEnabled():
@@ -392,14 +407,15 @@ class LaunchPanel(wx.Panel):
             # else:
             #     self.remove_cover_button.Enable()
         except Exception as e:
-            self.log.write('\n\n Error occurred')
-            self.log.write('\n\n Either the link is invalid or your IP is timed out.')
-            self.log.write('\n\n In case of an IP timeout, it usually fixes itself after some time.')
-            self.log.write(
+            self.msg('\n\n Error occurred')
+            self.msg('\n\n Either the link is invalid or your IP is timed out.')
+            self.msg('\n\n In case of an IP timeout, it usually fixes itself after some time.')
+            self.msg(
                 '\n\n Raise an issue @ https://github.com/dr-nyt/Translated-Novel-Downloader/issues if this issue persists')
-            self.log.write(f'\n\n\n error was:\n{e}')
+            self.msg(f'\n\n\n error was:\n{e}')
             self.select_cover_dialog_button.Enable()
             self.run_button.Enable()
+            self.log_report.Enable()
             # if self.remove_cover_button.IsEnabled():
             #     pass
             # else:
@@ -410,7 +426,7 @@ class LaunchPanel(wx.Panel):
         cover = cover
         chapter_start = chapter_start
         chapter_end = chapter_end
-        self.log.write("\n ************* Starting ***************")
+        self.msg("\n ************* Starting ***************")
         try:
             # Initialize connection with NovelPlanet
             scrapper = cfscrape.create_scraper()
@@ -444,7 +460,7 @@ class LaunchPanel(wx.Panel):
                 chapter_links = chapter_links[:abs(chapter_end)]
             else:
                 chapter_end = len(chapters)
-            self.log.write(f"\nChapter {chapter_start}  to Chapter {chapter_end} will be compiled!")
+            self.msg(f"\nChapter {chapter_start}  to Chapter {chapter_end} will be compiled!")
 
             book = epub.EpubBook()
             # add metadata
@@ -455,7 +471,7 @@ class LaunchPanel(wx.Panel):
             # This will  only run of cover == ""
             if cover == "":
                 cover = self.current_directory + '/cover.png'
-                self.log.write("\n\n No cover was chosen"
+                self.msg("\n\n No cover was chosen"
                                "\nDefault cover will be used")
             book.set_cover("image.jpg", open(cover, 'rb').read())
 
@@ -485,7 +501,7 @@ class LaunchPanel(wx.Panel):
                 content += "<p>You can download more novels using the app here: github.com/dr-nyt/Translated-Novel-Downloader</p>"
                 c.content = u'%s' % content  # Add the content to the chapter
                 chapters.append(c)  # Add the chapter object to the chapter list
-                self.log.write(f"\nChapter: {current_chapter} compiled!")
+                self.msg(f"\nChapter: {current_chapter} compiled!")
                 current_chapter += 1
 
             # Add each chapter object to the book
@@ -505,9 +521,10 @@ class LaunchPanel(wx.Panel):
             book.spine = ['cover', 'nav'] + chapters
             # create epub file
             epub.write_epub(novel_name + f' {chapter_start}-{chapter_end}.epub', book, {})
-            self.log.write(f"\n{novel_name} has compiled")
-            self.log.write(f"\n{novel_name} compiled /n saved in {os.getcwd()}")
+            self.msg(f"\n{novel_name} has compiled")
+            self.msg(f"\n{novel_name} compiled /n saved in {os.getcwd()}")
             self.run_button.Enable()
+            self.log_report.Enable()
             self.select_cover_dialog_button.Enable()
             self.select_cover_dialog_button.Enable()
             # if self.remove_cover_button.IsEnabled():
@@ -516,14 +533,16 @@ class LaunchPanel(wx.Panel):
             #     self.remove_cover_button.Enable()
 
         except Exception as e:
-            self.log.write('\n\n Error occurred')
-            self.log.write('\n\n Either the link is invalid or your IP is timed out.')
-            self.log.write('\n\n In case of an IP timeout, it usually fixes itself after some time.')
-            self.log.write(
+            self.msg('\n\n Error occurred')
+            self.msg('\n\n Either the link is invalid or your IP is timed out.')
+            self.msg('\n\n In case of an IP timeout, it usually fixes itself after some time.')
+            self.msg(
                 '\n\n Raise an issue @ https://github.com/dr-nyt/Translated-Novel-Downloader/issues if this issue persists')
-            self.log.write(f'\n\n\n error was:\n{e}')
+            self.msg(f'\n\n\n error was:\n{e}')
             self.select_cover_dialog_button.Enable()
             self.run_button.Enable()
+            self.log_report.Enable()
+            self.log_report.Enable()
             # if self.remove_cover_button.IsEnabled():
             #     pass
             # else:
@@ -547,7 +566,7 @@ class LaunchPanel(wx.Panel):
         #     volume_limit = 0  # Removes the volume limit to allow all volumes to be downloaded.
         #     volume_number = 0  # This is set to 0 because all volumes will be downloaded now.
 
-        self.log.write("\n ************* Starting ***************")
+        self.msg("\n ************* Starting ***************")
 
         try:
             head = 0
@@ -569,9 +588,9 @@ class LaunchPanel(wx.Panel):
                                           string.digits)  # Characters allowed in a file name [Characters such as $%"" are not allowed as file names in windows]
 
             if volume_list == []:
-                self.log.write("\nEither the link is invalid or your IP is timed out. WW")
-                self.log.write("\nIn case of an IP timeout, it usually fixes itself after some time.")
-                self.log.write("\nRaise an issue @ "
+                self.msg("\nEither the link is invalid or your IP is timed out. WW")
+                self.msg("\nIn case of an IP timeout, it usually fixes itself after some time.")
+                self.msg("\nRaise an issue @ "
                                "https://github.com/dr-nyt/Translated-Novel-Downloader/issues if this issue persists")
 
             ############################################
@@ -581,7 +600,7 @@ class LaunchPanel(wx.Panel):
             # This will  only run of cover == ""
             if cover == "":
                 cover = self.current_directory + '/cover.png'
-                self.log.write("\n\n No cover was chosen"
+                self.msg("\n\n No cover was chosen"
                                "\nDefault cover will be used")
 
             ############################################
@@ -624,17 +643,18 @@ class LaunchPanel(wx.Panel):
 
                 # If a specific volume is asked then it saves that volume and breaks
                 if volume_limit == 1:
-                    self.log.write(f'\nVolume: {str(volume)} compiled!')
+                    self.msg(f'\nVolume: {str(volume)} compiled!')
                     epub.write_epub(novel_name + 'Vol.' + str(volume) + '.epub', self.book, {})
                     break
 
                 volume += 1
                 epub.write_epub(novel_name + 'Vol.' + str(volume) + '.epub', self.book, {})
-                self.log.write(f'\nVolume: {str(volume)} compiled!')
+                self.msg(f'\nVolume: {str(volume)} compiled!')
 
-            self.log.write(f"\n{novel_name} has compiled")
-            self.log.write(f"/n{novel_name} compiled /n saved in {os.getcwd()}")
+            self.msg(f"\n{novel_name} has compiled")
+            self.msg(f"/n{novel_name} compiled /n saved in {os.getcwd()}")
             self.run_button.Enable()
+            self.log_report.Enable()
             self.select_cover_dialog_button.Enable()
             self.select_cover_dialog_button.Enable()
 
@@ -642,16 +662,16 @@ class LaunchPanel(wx.Panel):
             #     pass
             # else:
             #     self.remove_cover_button.Enable()
-
         except Exception as e:
-            self.log.write('\n\n Error occurred WW2')
-            self.log.write('\n\n Either the link is invalid or your IP is timed out.')
-            self.log.write('\n\n In case of an IP timeout, it usually fixes itself after some time.')
-            self.log.write(
+            self.msg('\n\n Error occurred WW2')
+            self.msg('\n\n Either the link is invalid or your IP is timed out.')
+            self.msg('\n\n In case of an IP timeout, it usually fixes itself after some time.')
+            self.msg(
                 '\n\n Raise an issue @ https://github.com/dr-nyt/Translated-Novel-Downloader/issues if this issue persists')
-            self.log.write(f'\n\n\n error was:\n{e}')
+            self.msg(f'\n\n\n error was:\n{e}')
             self.select_cover_dialog_button.Enable()
             self.run_button.Enable()
+            self.log_report.Enable()
             # if self.remove_cover_button.IsEnabled():
             #     pass
             # else:
@@ -688,7 +708,7 @@ class LaunchPanel(wx.Panel):
 
                 c.content = u'%s' % content
                 self.chapterList.append(c)
-                self.log.write(f'\n Added: {chapter_head}')
+                self.msg(f'\n Added: {chapter_head}')
                 self.chapter_current += 1
 
         # Add each chapter to the book
