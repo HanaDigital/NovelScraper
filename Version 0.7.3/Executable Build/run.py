@@ -18,6 +18,7 @@ from tkinter import Tk
 from tkinter import StringVar
 from tkinter import OptionMenu
 from tkinter import ttk
+from tkinter import HORIZONTAL
 import threading
 import requests
 import cfscrape
@@ -28,7 +29,7 @@ import time
 from ebooklib import epub
 import string
 
-version = "0.7.2" #Defines the current version
+version = "0.7.3" #Defines the current version
 
 class NovelPlanetScraper(object):
 
@@ -244,7 +245,7 @@ class NovelPlanetScraper(object):
             content += paras.prettify()
 
             content += "<p> </p>"
-            content += "<p>Powered by dr_nyt</p>"
+            content += "<p>Support us by joining our discord: https://discord.gg/pktZVwV</p>"
             content += "<p>If any errors occur, open an issue here: github.com/dr-nyt/Translated-Novel-Downloader/issues</p>"
             content += "<p>You can download more novels using the app here: github.com/dr-nyt/Translated-Novel-Downloader</p>"
 
@@ -314,6 +315,7 @@ class NovelPlanetScraper(object):
 
         self.msg('+'*20)
         self.msg(self.novelName + ' has compiled!') 
+        self.msg("You can support this project by joining our discord: https://discord.gg/pktZVwV")
         self.msg('+'*20)
 
 class WuxiaScraper(object):
@@ -555,7 +557,8 @@ class WuxiaScraper(object):
                 shutil.move(file, folder + '/' + file)
 
                 self.msg('+'*20)
-                self.msg('Volume: ' + str(self.volume) + ' compiled!') 
+                self.msg('Volume: ' + str(self.volume) + ' compiled!')
+                self.msg("You can support this project by joining our discord: https://discord.gg/pktZVwV")
                 self.msg('+'*20)
                 break
             
@@ -568,6 +571,7 @@ class WuxiaScraper(object):
 
             self.msg('+'*20)
             self.msg('Volume: ' + str(self.volume) + ' compiled!') 
+            self.msg("You can support this project by joining our discord: https://discord.gg/pktZVwV")
             self.msg('+'*20)
             
     #This method loops through every chapter of a volume and compiles them properly, adding in headers and separator between each chapter.
@@ -590,7 +594,7 @@ class WuxiaScraper(object):
                 content += story_view.prettify().replace('\xa0', ' ').replace('Previous Chapter', '').replace('Next Chapter', '')
 
                 content += "<p> </p>"
-                content += "<p>Powered by dr_nyt</p>"
+                content += "<p>Support us by joining our discord: https://discord.gg/pktZVwV</p>"
                 content += "<p>If any errors occur, open an issue here: github.com/dr-nyt/Translated-Novel-Downloader/issues</p>"
                 content += "<p>You can download more novels using the app here: github.com/dr-nyt/Translated-Novel-Downloader</p>"
 
@@ -810,14 +814,21 @@ class WuxiaCoScraper(object):
             url = requests.get(link)
             soup = BeautifulSoup(url.text, 'html.parser')
             story_text = self.get_page(soup)
+
             chapter = "<h1>" + str(chapter_name) + "</h1><br/>"
-            story = f"<h1>{chapter_name}</h1><br/><p>" + str(story_text) + "</p><br/><br/><br/>"
+            content = f"<h2>{chapter_name}</h2>"
+
             try:
                 chap = epub.EpubHtml(title=chapter_name, file_name=tempLink + '.xhtml', lang='en')
-                content = story
             except:
                 chap = epub.EpubHtml(title=chapter_name, file_name=tempLink + '.xhtml', lang='en')
-                content = story
+
+            content += story_text.prettify()
+
+            content += "<p> </p>"
+            content += "<p>Support us by joining our discord: https://discord.gg/pktZVwV</p>"
+            content += "<p>If any errors occur, open an issue here: github.com/dr-nyt/Translated-Novel-Downloader/issues</p>"
+            content += "<p>You can download more novels using the app here: github.com/dr-nyt/Translated-Novel-Downloader</p>"
 
             chap.content = u'%s' % content
             chapterList.append(chap)
@@ -880,12 +891,12 @@ class WuxiaCoScraper(object):
 
         self.msg('+' * 20)
         self.msg('Novel: ' + str(self.novelName) + ' compiled!')
+        self.msg("You can support this project by joining our discord: https://discord.gg/pktZVwV")
         self.msg('+' * 20)
 
     def get_page(self, soup):
-        page = soup.find_all("div", id="chaptercontent")
-        text = str(page).split('</div>')[1]
-        return text
+        page = soup.find("div", id="chaptercontent")
+        return page
 
 
 
