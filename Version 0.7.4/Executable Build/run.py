@@ -6,6 +6,7 @@ from tkinter import Canvas
 from tkinter import X
 from tkinter import Label
 from tkinter import LEFT
+from tkinter import BOTTOM
 from tkinter import Entry
 from tkinter import Button
 from tkinter import Text
@@ -29,7 +30,7 @@ import time
 from ebooklib import epub
 import string
 
-version = "0.7.3" #Defines the current version
+version = "0.7.4" #Defines the current version
 
 class NovelPlanetScraper(object):
 
@@ -161,16 +162,49 @@ class NovelPlanetScraper(object):
                 self.msg('+'*20)
             except Exception as e:
                 self.msg('+'*20)
-                self.msg('Error Occured!')
+                self.msg('Error Occured')
                 self.msg('+'*20)
-                self.msg(str(e))
-                self.msg("If you continue to have this error then open an issue here:")
-                self.msg("github.com/dr-nyt/Translated-Novel-Downloader/issues")
-                self.msg('+'*20)
-                self.msg('')
+                if 'Missing Node.js' in str(e):
+                    self.msg("Please install nodeJS and restart the app.")
+                    self.nodejsUpdate()
+                else:
+                    self.msg(str(e))
+                    self.msg("If you continue to have this error then open an issue here:")
+                    self.msg("github.com/dr-nyt/Translated-Novel-Downloader/issues")
+                    self.msg('+'*20)
+                    self.msg('')
         t = threading.Thread(target=callback)
         t.daemon = True
         t.start()
+
+    def nodejsUpdate(self):
+        popup = Tk()
+        popup.wm_title("Install NodeJS")
+        # popup.iconbitmap(r"rsc/icon.ico")
+        popup.configure(background = "black")
+        popup.resizable(0,0)
+
+        label = Label(popup, text="NovelPlanet requires NodeJS to be installed!", bg="black", fg="white", font="none 15")
+        download32_bit = Button(popup, text="Download 32-bit", fg="blue", command=self.installNodejs32)
+        download64_bit = Button(popup, text="Download 64-bit", fg="blue", command=self.installNodejs64)
+        # okButton = Button(popup, text="OK", command=popup.destroy)
+
+        label.pack()
+        download64_bit.pack(side=BOTTOM)
+        download32_bit.pack(side=BOTTOM)
+
+        popup.call('wm', 'attributes', '.', '-topmost', '1')
+        popup.mainloop()
+
+    # Open the link to the nedejs on a browser
+    def installNodejs32(self):
+        webbrowser.open_new(r"https://nodejs.org/dist/v10.16.0/node-v10.16.0-x86.msi")
+        os._exit(1)
+
+    def installNodejs64(self):
+        webbrowser.open_new(r"https://nodejs.org/dist/v10.16.0/node-v10.16.0-x64.msi")
+        os._exit(1)
+
 
     def getNovel(self, link, chapterStart, chapterEnd, cover):
         self.link = link
