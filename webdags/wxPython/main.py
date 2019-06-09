@@ -8,10 +8,14 @@ from bs4 import BeautifulSoup
 import cfscrape
 from ebooklib import epub
 import string
+import webbrowser
+from tkinter import *
 
 # for the file dialog in the selection of book covers
 wildcard = "Image file (*.png)" \
            "All files (*.*)|*.*"
+
+version = "0.8"
 
 
 # The launch panel
@@ -19,6 +23,8 @@ class LaunchPanel(wx.Panel):
 
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, id=wx.ID_ANY)
+
+        self.versionControl()
 
         # Set the background and foreground colors
         self.SetBackgroundColour('BLACK')
@@ -315,6 +321,40 @@ class LaunchPanel(wx.Panel):
         #     elif which_site == "NovelPlanet":
         #         BookThread(self.novel_planet, which_site=which_site, **kwargs)
 
+    # This function makes a pop up box if the current version is out of date.
+    def updateMsg(self):
+        popup = Tk()
+        popup.wm_title("Update")
+        # popup.iconbitmap(r"rsc/icon.ico")
+        popup.configure(background = "black")
+        popup.resizable(0,0)
+
+        label = Label(popup, text="New Update Available", bg="black", fg="white", font="none 15")
+        downloadButton = Button(popup, text="Download", fg="blue", command=self.downloadUpdate)
+        # okButton = Button(popup, text="OK", command=popup.destroy)
+
+        label.pack(padx=10)
+        downloadButton.pack(padx=5)
+
+        popup.call('wm', 'attributes', '.', '-topmost', '1')
+        popup.mainloop()
+
+    def color_config(self, widget, color, event):
+        widget.configure(foreground=color)
+
+    # Open the link to the novel on a browser
+    def downloadUpdate(self):
+        webbrowser.open_new(r"https://github.com/dr-nyt/Translated-Novel-Downloader/releases")
+
+    #Checks if this is the latest version
+    def versionControl(self):
+        url = 'https://pastebin.com/7HUqzRGT'
+        page = requests.get(url)
+        soup = BeautifulSoup(page.text, 'lxml')
+        checkVersion = soup.find(class_='de1')
+        if version not in checkVersion:
+            self.updateMsg()
+
     def co_wuxia_world(self, url, cover):
         link = url
         cover = cover
@@ -533,12 +573,15 @@ class LaunchPanel(wx.Panel):
             #     self.remove_cover_button.Enable()
 
         except Exception as e:
-            self.msg('\n\n Error occurred')
-            self.msg('\n\n Either the link is invalid or your IP is timed out.')
-            self.msg('\n\n In case of an IP timeout, it usually fixes itself after some time.')
-            self.msg(
-                '\n\n Raise an issue @ https://github.com/dr-nyt/Translated-Novel-Downloader/issues if this issue persists')
-            self.msg(f'\n\n\n error was:\n{e}')
+            if 'Missing Node.js' in str(e):
+                    self.msg("Please install nodeJS and restart the app.")
+                    self.nodejsUpdate()
+            else:
+                self.msg('\n\n Error occurred')
+                self.msg(f'\n error was:\n{str(e)}')
+                self.msg('\n In case of an IP timeout, it usually fixes itself after some time.')
+                self.msg('\n Raise an issue @ https://github.com/dr-nyt/Translated-Novel-Downloader/issues if this issue persists')
+
             self.select_cover_dialog_button.Enable()
             self.run_button.Enable()
             self.log_report.Enable()
@@ -547,6 +590,38 @@ class LaunchPanel(wx.Panel):
             #     pass
             # else:
             #     self.remove_cover_button.Enable()
+
+    #Opens a gui if nodejs isnt installed 
+    def nodejsUpdate(self):
+        popup = Tk()
+        popup.wm_title("Install NodeJS")
+        # popup.iconbitmap(r"rsc/icon.ico")
+        popup.configure(background = "black")
+        popup.resizable(0,0)
+
+        label = Label(popup, text="NovelPlanet requires NodeJS to be installed!", bg="black", fg="white", font="none 15")
+        download32_bit = Button(popup, text="Download 32-bit", fg="blue", command=self.installNodejs32)
+        download64_bit = Button(popup, text="Download 64-bit", fg="blue", command=self.installNodejs64)
+        # okButton = Button(popup, text="OK", command=popup.destroy)
+
+        label.pack()
+        download64_bit.pack(side=BOTTOM)
+        download32_bit.pack(side=BOTTOM)
+
+        popup.call('wm', 'attributes', '.', '-topmost', '1')
+        popup.mainloop()
+
+    # Open the link to the nedejs 32bit on a browser
+    def installNodejs32(self):
+        webbrowser.open_new(r"https://nodejs.org/dist/v10.16.0/node-v10.16.0-x86.msi")
+        os._exit(1)
+    # Open the link to the nedejs 64bit on a browser
+    def installNodejs64(self):
+        webbrowser.open_new(r"https://nodejs.org/dist/v10.16.0/node-v10.16.0-x64.msi")
+        os._exit(1)
+
+
+
 
     def wuxiaworld(self, link, cover, volume=0):
         link = link
