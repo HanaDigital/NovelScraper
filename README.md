@@ -1,6 +1,6 @@
 ### About
  *	Authors: dr_nyt, webdagger
- *	Version: 0.7.3
+ *	Version: 0.7.4
  * You can support us by joining our discord group: https://discord.gg/pktZVwV :heart:
 
 ### Features
