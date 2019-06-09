@@ -251,7 +251,7 @@ class LaunchPanel(wx.Panel):
             #     self.remove_cover_button.Enable()
 
         if which_site == "NovelPlanet":
-            if 'novelplanet.com' in url:
+            if 'https://novelplanet.com/' in url:
                 BookThread(self.novel_planet, which_site=which_site, **kwargs)
             else:
                 self.msg("\n\n\n Your link is invalid.")
@@ -266,7 +266,7 @@ class LaunchPanel(wx.Panel):
                 #     self.remove_cover_button.Enable()
 
         if which_site == "Wuxiaworld.com":
-            if 'wuxiaworld.com' in url:
+            if 'https://www.wuxiaworld.com/' in url:
                 BookThread(self.wuxiaworld, which_site=which_site, **kwargs)
             else:
                 self.msg("\n\n\n Your link is invalid.")
@@ -281,7 +281,7 @@ class LaunchPanel(wx.Panel):
                 #     self.remove_cover_button.Enable()
 
         if which_site == "m.Wuxiaworld.co":
-            if 'm.wuxiaworld.co' in url:
+            if 'https://m.wuxiaworld.co/' in url:
                 BookThread(self.co_wuxia_world, which_site=which_site, **kwargs)
             else:
                 self.msg("\n\n\n Your link is invalid.")
