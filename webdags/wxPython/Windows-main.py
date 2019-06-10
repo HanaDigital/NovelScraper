@@ -398,6 +398,7 @@ class LaunchPanel(wx.Panel):
             book.set_title(novel_name)
             book.set_language('en')
             book.add_author('Unknown')
+            book.add_item(default_style)
             chapterList = []
             # Add cover
             book.set_cover("image.jpg", open(cover, 'rb').read())
@@ -424,6 +425,7 @@ class LaunchPanel(wx.Panel):
                 self.msg(f"\n Added {chapter_name}")
 
             for chapter in chapterList:
+                chapter.add_item(default_style) #Links the css file to each chapter html page in epub
                 book.add_item(chapter)
             book.toc = (chapterList)
             # add navigation files
@@ -508,6 +510,7 @@ class LaunchPanel(wx.Panel):
             book.set_title(novel_name)
             book.set_language('en')
             book.add_author('Unknown')
+            book.add_item(default_style)
             # This will  only run of cover == ""
             if cover == "":
                 cover = self.current_directory + '/cover.png'
@@ -546,6 +549,7 @@ class LaunchPanel(wx.Panel):
 
             # Add each chapter object to the book
             for chap in chapters:
+                chap.add_item(default_style)    #Links the css file to each chapter html page in epub
                 book.add_item(chap)
 
             # Give the table of content the list of chapter objects
@@ -708,6 +712,7 @@ class LaunchPanel(wx.Panel):
                 self.book.set_language('en')
                 self.book.add_author('Unknown')
                 self.book.set_cover("image.jpg", open(cover, 'rb').read())
+                self.book.add_item(default_style)
                 self.chapterList = []  # Resets the chapter list for the new volume
                 ################################################
                 ################################################
@@ -738,7 +743,7 @@ class LaunchPanel(wx.Panel):
             # else:
             #     self.remove_cover_button.Enable()
         except Exception as e:
-            self.msg('\n\n Error occurred WW2')
+            self.msg('\n\n Error occurred!')
             self.msg('\n\n Either the link is invalid or your IP is timed out.')
             self.msg('\n\n In case of an IP timeout, it usually fixes itself after some time.')
             self.msg(
@@ -788,6 +793,7 @@ class LaunchPanel(wx.Panel):
 
         # Add each chapter to the book
         for chap in self.chapterList:
+            chap.add_item(default_style)    #Links the css file to each chapter html page in epub
             self.book.add_item(chap)
 
         # Add
@@ -904,9 +910,12 @@ style = '''
             font-family: Cambria, Liberation Serif, Bitstream Vera Serif, Georgia, Times, Times New Roman, serif;
         }
         h2 {
-             text-align: left;
+             text-align: center;
              text-transform: uppercase;
-             font-weight: 200;     
+             font-weight: 500;     
+        }
+         p {
+      margin-bottom:1px;
         }
         ol {
                 list-style-type: none;
@@ -921,6 +930,7 @@ style = '''
                 margin-top: 0.3em;
         }
         '''
+default_style = epub.EpubItem(uid="style_default", file_name="style/default.css", media_type="text/css", content=style)
 
 if __name__ == "__main__":
     app = wx.App()
