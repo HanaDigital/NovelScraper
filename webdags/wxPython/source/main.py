@@ -11,7 +11,8 @@ from novelplanet import NovelPlanetPanel
 
 
 # file dialog, used in the selection of book covers
-wildcard = "Image File (*.png)"
+wildcard = "Image file (*.png)" \
+           "All files (*.*)|*.*"
 # Version number
 version = "0.7.4"
 # Platforms
@@ -157,7 +158,7 @@ class LaunchPanel(wx.Panel):
         self.run_button.Disable()
         # Small error handling
         if which_site == "":
-            self.log.write("\n\n\n Please select a source.")
+            self.msg("\n\n\n Please select a source.")
             self.run_button.Enable()
             self.select_cover_dialog_button.Enable()
 
@@ -165,36 +166,37 @@ class LaunchPanel(wx.Panel):
             if 'novelplanet.com' in url:
                 BookThread(self.novel_planet_panel.run, which_site=which_site, **kwargs)
             else:
-                self.log.write("\n\n\n Your link is invalid.")
-                self.log.write("\nSelect the correct source and enter a valid link.")
-                self.log.write("\nFor NovelPlanet.com: https://novelplanet.com/Novel/Overgeared")
+                self.msg("\n\n\n Your link is invalid.")
+                self.msg("\nSelect the correct source and enter a valid link.")
+                self.msg("\nFor NovelPlanet.com: https://novelplanet.com/Novel/Overgeared")
                 self.run_button.Enable()
                 self.select_cover_dialog_button.Enable()
         if which_site == "Wuxiaworld.com":
             if 'wuxiaworld.com' in url:
                 BookThread(self.wuxiaworld_panel.run, which_site=which_site, **kwargs)
             else:
-                self.log.write("\n\n\n Your link is invalid.")
-                self.log.write("\nSelect the correct source and enter a valid link.")
-                self.log.write("\nFor wuxiaworld.com: https://www.wuxiaworld.com/novel/overgeared")
+                self.msg("\n\n\n Your link is invalid.")
+                self.msg("\nSelect the correct source and enter a valid link.")
+                self.msg("\nFor wuxiaworld.com: https://www.wuxiaworld.com/novel/overgeared")
                 self.run_button.Enable()
                 self.select_cover_dialog_button.Enable()
         if which_site == "m.Wuxiaworld.co":
             if 'm.wuxiaworld.co' in url:
                 BookThread(self.co_wuxiaworld_panel.run, which_site=which_site, **kwargs)
             else:
-                self.log.write("\n\n\n Your link is invalid.")
-                self.log.write("\nSelect the correct source and enter a valid link.")
-                self.log.write("\nFor m.wuxiaworld.co: https://m.wuxiaworld.co/Reverend-Insanity/")
+                self.msg("\n\n\n Your link is invalid.")
+                self.msg("\nSelect the correct source and enter a valid link.")
+                self.msg("\nFor m.wuxiaworld.co: https://m.wuxiaworld.co/Reverend-Insanity/")
                 self.run_button.Enable()
                 self.select_cover_dialog_button.Enable()
-    
+
     def msg(self, string):
+        # Todo find how to properly fix the logging, disabling the log and renabling it sometimes leads to crashes
         # Enables and disables the log after writing
-        self.log_report.Enable()
+        #self.log_report.Enable()
         wx.CallAfter(self.log_report.WriteText, string)
         self.log_report.ShowPosition(self.log_report.GetLastPosition())  # Set the position to the bottom
-        self.log_report.Disable()  # Disable the log after writing
+        #self.log_report.Disable()  # Disable the log after writing
 
 
 class BookThread(threading.Thread):
@@ -255,7 +257,6 @@ class MainFrame(wx.Frame):
         # TODO dr-nyt please verify if this implementation is correct
         # TODO isn't it beter to use version < checkVersion?
         if version not in checkVersion:
-            text = "New Update Available"
             dlg = wx.MessageDialog(None,"Update found, \n A new version has been found", "Update Found", wx.OK)
             dlg.ShowModal()
             webbrowser.open_new(r"https://github.com/dr-nyt/Translated-Novel-Downloader/releases")
