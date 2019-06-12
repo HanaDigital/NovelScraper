@@ -2,8 +2,6 @@ import os
 import wx
 import threading
 import requests
-from random import seed
-from random import randint
 from bs4 import BeautifulSoup
 import cfscrape
 from ebooklib import epub
@@ -771,7 +769,7 @@ class Log(object):
         self.out = wxTextCtrl
 
     def write(self, string):
-        # Enables and disables the log after writing 
+        # Enables and disables the log after writing
         self.out.Enable()
         wx.CallAfter(self.out.WriteText, string)
         self.out.Disable()
