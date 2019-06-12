@@ -150,7 +150,7 @@ class NovelPlanetPanel(wx.Panel):
         message = "Nodejs is a dependency for downloading from NovelPlanet. Please install it and restart the app"
         dlg = wx.MessageDialog(None, message, "Nodejs Required", wx.OK | wx.ICON_EXCLAMATION)
         dlg.ShowModal()
-        webbrowser.open_new(r"https://github.com/dr-nyt/Translated-Novel-Downloader/releases")
+        webbrowser.open_new(r"https://nodejs.org/en/download/")
 
 
 style = '''
