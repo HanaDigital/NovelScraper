@@ -1,9 +1,10 @@
 ### About
- *	Author: dr_nyt
- *	Version: 0.7
+ *	Authors: dr_nyt, webdagger
+ *	Version: 0.7.4
+ * You can support us by joining our discord group: https://discord.gg/pktZVwV :heart:
 
 ### Features
-- Download any Translated Novel form either NovelPlanet or WuxiaWorld in .epub format.
+- Download any Translated Novel form NovelPlanet, WuxiaWorld.com or m.WuxiaWorld.co in .epub format.
 
 ### Usage
 1. Download the latest release from here and unzip it: https://github.com/dr-nyt/Translated-Novel-Downloader/releases
@@ -23,13 +24,14 @@
       - If you want a specific volume, then type in the volume number you want.
       - You can optinally save a cover image in the rsc/ folder and enter its name in the GUI. [Eg: Novel Cover.png]
 
+   #### If your source is m.WuxiaWorld.co:
+   ![wuxiaCo](https://user-images.githubusercontent.com/41040912/58810099-4d006580-862e-11e9-985e-aa4612e1ddac.jpg)
+      - Paste the link of the novel from novelplanet.com [Eg: https://www.wuxiaworld.co/Dragon-Marked-War-God]
+      - You can optinally save a cover image in the rsc/ folder and enter its name in the GUI. [Eg: Novel Cover.png]
+
 4. Click compile to let it rip!
 
 ### Alpha Build
-- Currently working to make the app run on android.
-
-### Notes
-This is just a programme I made for fun and would love for your input,
-so feel free to report any issues and I'm open to anyone who wants to improve the code :)
-Also this is just educational, and I dont support piracy, nor am I responsible for anything you do with this.
+- Better GUI using wxpython.
+- Android build.
 
