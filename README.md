@@ -1,7 +1,7 @@
 ### About
  *	Authors: dr_nyt, webdagger
  *	Version: 0.7.4
- * You can support us by joining our discord group: https://discord.gg/pktZVwV :heart:
+ * You can support us by joining our discord group: https://discord.gg/Wya4Dst :heart:
 
 ### Features
 - Download any Translated Novel form NovelPlanet, WuxiaWorld.com or m.WuxiaWorld.co in .epub format.
