@@ -20,7 +20,7 @@
       
    #### If your source is m.WuxiaWorld.co:
    ![V0 8 WuxiaCo](https://user-images.githubusercontent.com/41040912/59525617-dbef6680-8ee7-11e9-83de-b511066052c1.jpg)
-      - Paste the link of the novel from novelplanet.com [Eg: https://www.wuxiaworld.co/Dragon-Marked-War-God]
+      - Paste the link of the novel from novelplanet.com [Eg: https://m.wuxiaworld.co/Dragon-Marked-War-God]
       - You can optinally save a cover image in the rsc/ folder and enter its name in the GUI. [Eg: Novel Cover.png]
       
    #### If your source is WuxiaWorld:
