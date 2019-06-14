@@ -1,7 +1,7 @@
 ### About
  *	Authors: dr_nyt, webdagger
- *	Version: 0.7.4
- * You can support us by joining our discord group: https://discord.gg/pktZVwV :heart:
+ *	Version: 0.7.8
+ * You can support us by joining our discord group: https://discord.gg/Wya4Dst :heart:
 
 ### Features
 - Download any Translated Novel form NovelPlanet, WuxiaWorld.com or m.WuxiaWorld.co in .epub format.
@@ -32,6 +32,5 @@
 4. Click compile to let it rip!
 
 ### Alpha Build
-- Better GUI using wxpython.
 - Android build.
 
