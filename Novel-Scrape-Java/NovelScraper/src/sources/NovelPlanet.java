@@ -5,11 +5,18 @@
  */
 package sources;
 
+import main.Handler;
+
 /**
  *
  * @author dr_nyt
  */
 //This is the independent class for the NovelPlanet.com source
 public class NovelPlanet {
+    
+    public NovelPlanet(Handler handler)
+    {
+        
+    }
     
 }

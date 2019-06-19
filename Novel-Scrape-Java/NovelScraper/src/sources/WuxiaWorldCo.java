@@ -5,11 +5,18 @@
  */
 package sources;
 
+import main.Handler;
+
 /**
  *
  * @author super
  */
 //This is the independent class for the WuxiaWorld.co source
 public class WuxiaWorldCo {
+    
+    public WuxiaWorldCo(Handler handler)
+    {
+        
+    }
     
 }

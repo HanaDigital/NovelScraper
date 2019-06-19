@@ -5,6 +5,7 @@
  */
 package main;
 
+import Display.GUI;
 import java.io.IOException;
 import sources.WuxiaWorld;
 
@@ -27,6 +28,11 @@ public class NovelScraper
 //        gui.setVisible(true);
 //        gui.setResizable(true);
         
-        WuxiaWorld ww = new WuxiaWorld();
+        Handler handler = new Handler();
+        
+        handler.setGUI(handler);
+        GUI gui = handler.getGUI();
+        gui.setVisible(true);
+        gui.setResizable(true);
     }   
 }
