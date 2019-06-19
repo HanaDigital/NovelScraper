@@ -14,7 +14,7 @@
   - ebooklib
     - To use the parsed HTML and convert it into a .epub format.
     - ref: https://pypi.org/project/EbookLib/
-  -wxpython
+  - wxpython
     - To create the GUI used by the app.
     - ref: https://wxpython.org/
     
