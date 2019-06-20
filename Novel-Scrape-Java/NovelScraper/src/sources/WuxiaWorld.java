@@ -19,7 +19,6 @@ import nl.siegmann.epublib.domain.Author;
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.Metadata;
 import nl.siegmann.epublib.domain.Resource;
-import nl.siegmann.epublib.domain.TOCReference;
 import nl.siegmann.epublib.epub.EpubWriter;
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
@@ -74,7 +73,7 @@ public class WuxiaWorld
     public WuxiaWorld(String url, String cover, int volumeNumber, Handler handler) throws IOException
     { 
         this.url = url;
-        this.cover = "rsc/" + cover;
+        this.cover = cover;
         this.volumeNumber = volumeNumber;
         this.handler = handler;
         
@@ -130,7 +129,7 @@ public class WuxiaWorld
         
         if(this.links.isEmpty())
         {
-            System.out.println("Either the volume number isn't correct or there is a connection problem!");
+            this.log("Either the volume number isn't correct or there is a connection problem!");
         }
     }
     
@@ -213,10 +212,11 @@ public class WuxiaWorld
         {
             if (file.mkdir()) 
             {
-                System.out.println("Novel directory created!");
+                this.log("Novel directory created!");
             } else 
             {
-                System.out.println("Failed to create novel directory!");
+                this.log("Failed to create novel directory!");
+                return;
             }
         }
 
@@ -226,10 +226,11 @@ public class WuxiaWorld
         {
             if (file.mkdir()) 
             {
-                System.out.println("Temp directory created!");
+                this.log("Temp directory created!");
             } else 
             {
-                System.out.println("Failed to create temp directory!");
+                this.log("Failed to create temp directory!");
+                return;
             }
         }
         
@@ -260,7 +261,7 @@ public class WuxiaWorld
                 this.chapterFile.println(this.getPropaganda());
                 this.chapterFile.println(this.getHtmlFooter());
                 this.chapterFile.close();
-                System.out.println("chapter " + Integer.toString(this.chapterCurrentNumber) + " down!");
+                this.log("Added: " + this.chapterHead);
                 this.chapterCurrentNumber++;
                 break;
             }
@@ -301,7 +302,12 @@ public class WuxiaWorld
             // Write the Book as Epub
             epubWriter.write(book, new FileOutputStream(this.novelName + "/" + this.novelName + " Vol." + this.volumeNumber + "-" + this.volumeCurrentNumber + ".epub"));
             
+            this.log("Your ebook " + this.novelName + " from WuxiaWorld was written to the " + this.novelName + "/ folder.");
+            this.log("You can delete the temp/ folder inside the " + this.novelName + "/ folder.");
+            this.log("You can support us on our discord: https://discord.gg/Wya4Dst");
+            
             this.handler.getGUI().getWuxiaWorldRunButton().setEnabled(true);
+            this.handler.getGUI().getWuxiaWorldCoverButton().setEnabled(true);
         } 
         catch (Exception e) 
         {
@@ -349,5 +355,10 @@ public class WuxiaWorld
     private static Resource getResource( String path, String href ) throws IOException 
     {
         return new Resource( getResource( path ), href );
+    }
+    
+    private void log(String text)
+    {
+        this.handler.getGUI().log(text);
     }
 }

@@ -5,9 +5,19 @@
  */
 package Display;
 
+import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Image;
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JScrollPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import main.Handler;
 
 /**
@@ -20,6 +30,14 @@ public class GUI extends javax.swing.JFrame {
      * Creates new form GUI
      */
     private Handler handler;
+    private String novelName;
+    private String coverPath;
+    private int volumeNumber;
+    
+    private Desktop desktop = java.awt.Desktop.getDesktop();
+    private URI browseURL;
+    
+    private File cwd = new File(System.getProperty("user.dir"));
     
     private Image img =(new ImageIcon(getClass().getResource("/rsc/icon.png"))).getImage();
     public GUI(Handler handler) {
@@ -45,13 +63,28 @@ public class GUI extends javax.swing.JFrame {
         titleLabel = new javax.swing.JLabel();
         contentPanel = new javax.swing.JPanel();
         homePanel = new javax.swing.JPanel();
+        homeDescriptionLabel = new javax.swing.JLabel();
+        homeDiscordLabel = new javax.swing.JLabel();
+        homeHeartIcon = new javax.swing.JLabel();
+        homeDiscordLinkLabel = new javax.swing.JLabel();
+        homeBugIcon = new javax.swing.JLabel();
+        homeBugReportLabel = new javax.swing.JLabel();
+        homeBugReportLinkLabel = new javax.swing.JLabel();
         wuxiaWorldPanel = new javax.swing.JPanel();
         wuxiaWorldRunButton = new javax.swing.JButton();
-        urlLabel = new javax.swing.JLabel();
-        urlTextField = new javax.swing.JTextField();
-        coverLabel = new javax.swing.JLabel();
-        coverTextField = new javax.swing.JTextField();
-        wuxiaWorldRunButton1 = new javax.swing.JButton();
+        wuxiaWorldUrlLabel = new javax.swing.JLabel();
+        wuxiaWorldUrlTextField = new javax.swing.JTextField();
+        wuxiaWorldCoverLabel = new javax.swing.JLabel();
+        wuxiaWorldCoverTextField = new javax.swing.JTextField();
+        wuxiaWorldCoverButton = new javax.swing.JButton();
+        wuxiaWorldVolumeLabel1 = new javax.swing.JLabel();
+        wuxiaWorldVolumeTextField1 = new javax.swing.JTextField();
+        wuxiaWorldScrollPanel = new javax.swing.JScrollPane();
+        wuxiaWorldLogTextArea = new javax.swing.JTextArea();
+        novelPlanetPanel = new javax.swing.JPanel();
+        novelPlanetLabel = new javax.swing.JLabel();
+        wuxiaCoWorldPanel = new javax.swing.JPanel();
+        wuxiaCoWorldLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("dr_nyt's NovelScraper");
@@ -64,6 +97,9 @@ public class GUI extends javax.swing.JFrame {
 
         novelPlanetIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/NovelPlanet Logo.png"))); // NOI18N
         novelPlanetIconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                novelPlanetIconLabelMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 novelPlanetIconLabelMouseEntered(evt);
             }
@@ -87,6 +123,9 @@ public class GUI extends javax.swing.JFrame {
 
         wuxiaCoWorldIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/m.WuxiaWorld Logo.png"))); // NOI18N
         wuxiaCoWorldIconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                wuxiaCoWorldIconLabelMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 wuxiaCoWorldIconLabelMouseEntered(evt);
             }
@@ -98,6 +137,9 @@ public class GUI extends javax.swing.JFrame {
         homeIconLabel.setBackground(new java.awt.Color(255, 255, 255));
         homeIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/home.png"))); // NOI18N
         homeIconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                homeIconLabelMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 homeIconLabelMouseEntered(evt);
             }
@@ -156,7 +198,7 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(headerPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(titleLabel)
-                .addContainerGap(406, Short.MAX_VALUE))
+                .addContainerGap(643, Short.MAX_VALUE))
         );
         headerPanelLayout.setVerticalGroup(
             headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,15 +212,102 @@ public class GUI extends javax.swing.JFrame {
 
         homePanel.setBackground(new java.awt.Color(255, 255, 255));
 
+        homeDescriptionLabel.setBackground(new java.awt.Color(2, 39, 87));
+        homeDescriptionLabel.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
+        homeDescriptionLabel.setForeground(new java.awt.Color(2, 39, 87));
+        homeDescriptionLabel.setText("-    This app lets you download translated novels from multiple sources.");
+
+        homeDiscordLabel.setBackground(new java.awt.Color(2, 39, 87));
+        homeDiscordLabel.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
+        homeDiscordLabel.setForeground(new java.awt.Color(2, 39, 87));
+        homeDiscordLabel.setText("You can support us by joining our");
+
+        homeHeartIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/pixel-heart-ldp.png"))); // NOI18N
+
+        homeDiscordLinkLabel.setBackground(new java.awt.Color(2, 39, 87));
+        homeDiscordLinkLabel.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
+        homeDiscordLinkLabel.setForeground(new java.awt.Color(51, 153, 255));
+        homeDiscordLinkLabel.setText("discord.");
+        homeDiscordLinkLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                homeDiscordLinkLabelMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                homeDiscordLinkLabelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                homeDiscordLinkLabelMouseExited(evt);
+            }
+        });
+
+        homeBugIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/bug-ldp.png"))); // NOI18N
+
+        homeBugReportLabel.setBackground(new java.awt.Color(2, 39, 87));
+        homeBugReportLabel.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
+        homeBugReportLabel.setForeground(new java.awt.Color(2, 39, 87));
+        homeBugReportLabel.setText("Please report any bugs");
+
+        homeBugReportLinkLabel.setBackground(new java.awt.Color(2, 39, 87));
+        homeBugReportLinkLabel.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
+        homeBugReportLinkLabel.setForeground(new java.awt.Color(51, 153, 255));
+        homeBugReportLinkLabel.setText("here.");
+        homeBugReportLinkLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                homeBugReportLinkLabelMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                homeBugReportLinkLabelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                homeBugReportLinkLabelMouseExited(evt);
+            }
+        });
+
         javax.swing.GroupLayout homePanelLayout = new javax.swing.GroupLayout(homePanel);
         homePanel.setLayout(homePanelLayout);
         homePanelLayout.setHorizontalGroup(
             homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 668, Short.MAX_VALUE)
+            .addGroup(homePanelLayout.createSequentialGroup()
+                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(homePanelLayout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(homeDescriptionLabel))
+                    .addGroup(homePanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(homeBugIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(homeBugReportLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(homeBugReportLinkLabel))
+                    .addGroup(homePanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(homeHeartIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(homeDiscordLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(homeDiscordLinkLabel)))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
         homePanelLayout.setVerticalGroup(
             homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 512, Short.MAX_VALUE)
+            .addGroup(homePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(homeDescriptionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(homeDiscordLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(homeDiscordLinkLabel))
+                    .addGroup(homePanelLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(homeHeartIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(26, 26, 26)
+                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(homeBugIcon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(homeBugReportLabel)
+                        .addComponent(homeBugReportLinkLabel)))
+                .addGap(343, 343, 343))
         );
 
         wuxiaWorldPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -186,125 +315,214 @@ public class GUI extends javax.swing.JFrame {
         wuxiaWorldRunButton.setBackground(new java.awt.Color(2, 39, 87));
         wuxiaWorldRunButton.setForeground(new java.awt.Color(255, 255, 255));
         wuxiaWorldRunButton.setText("Run");
-        wuxiaWorldRunButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                wuxiaWorldRunButtonMouseClicked(evt);
-            }
-        });
         wuxiaWorldRunButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 wuxiaWorldRunButtonActionPerformed(evt);
             }
         });
 
-        urlLabel.setBackground(new java.awt.Color(2, 39, 87));
-        urlLabel.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
-        urlLabel.setForeground(new java.awt.Color(2, 39, 87));
-        urlLabel.setText("URL :");
+        wuxiaWorldUrlLabel.setBackground(new java.awt.Color(2, 39, 87));
+        wuxiaWorldUrlLabel.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
+        wuxiaWorldUrlLabel.setForeground(new java.awt.Color(2, 39, 87));
+        wuxiaWorldUrlLabel.setText("URL :");
 
-        urlTextField.setBackground(new java.awt.Color(255, 255, 255));
-        urlTextField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        urlTextField.setForeground(new java.awt.Color(2, 39, 87));
-        urlTextField.setToolTipText("");
-        urlTextField.addActionListener(new java.awt.event.ActionListener() {
+        wuxiaWorldUrlTextField.setBackground(new java.awt.Color(255, 255, 255));
+        wuxiaWorldUrlTextField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        wuxiaWorldUrlTextField.setForeground(new java.awt.Color(2, 39, 87));
+        wuxiaWorldUrlTextField.setToolTipText("");
+
+        wuxiaWorldCoverLabel.setBackground(new java.awt.Color(2, 39, 87));
+        wuxiaWorldCoverLabel.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
+        wuxiaWorldCoverLabel.setForeground(new java.awt.Color(2, 39, 87));
+        wuxiaWorldCoverLabel.setText("Cover :");
+
+        wuxiaWorldCoverTextField.setEditable(false);
+        wuxiaWorldCoverTextField.setBackground(new java.awt.Color(255, 255, 255));
+        wuxiaWorldCoverTextField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        wuxiaWorldCoverTextField.setForeground(new java.awt.Color(2, 39, 87));
+        wuxiaWorldCoverTextField.setText("rsc/cover.png");
+        wuxiaWorldCoverTextField.setToolTipText("");
+
+        wuxiaWorldCoverButton.setBackground(new java.awt.Color(2, 39, 87));
+        wuxiaWorldCoverButton.setForeground(new java.awt.Color(255, 255, 255));
+        wuxiaWorldCoverButton.setText("Browse");
+        wuxiaWorldCoverButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                urlTextFieldActionPerformed(evt);
+                wuxiaWorldCoverButtonActionPerformed(evt);
             }
         });
 
-        coverLabel.setBackground(new java.awt.Color(2, 39, 87));
-        coverLabel.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
-        coverLabel.setForeground(new java.awt.Color(2, 39, 87));
-        coverLabel.setText("Cover :");
+        wuxiaWorldVolumeLabel1.setBackground(new java.awt.Color(2, 39, 87));
+        wuxiaWorldVolumeLabel1.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
+        wuxiaWorldVolumeLabel1.setForeground(new java.awt.Color(2, 39, 87));
+        wuxiaWorldVolumeLabel1.setText("Volume :");
 
-        coverTextField.setBackground(new java.awt.Color(255, 255, 255));
-        coverTextField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        coverTextField.setForeground(new java.awt.Color(2, 39, 87));
-        coverTextField.setText("rsc/cover.png");
-        coverTextField.setToolTipText("");
-        coverTextField.setEnabled(false);
-        coverTextField.addActionListener(new java.awt.event.ActionListener() {
+        wuxiaWorldVolumeTextField1.setBackground(new java.awt.Color(255, 255, 255));
+        wuxiaWorldVolumeTextField1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        wuxiaWorldVolumeTextField1.setForeground(new java.awt.Color(2, 39, 87));
+        wuxiaWorldVolumeTextField1.setText("All");
+        wuxiaWorldVolumeTextField1.setToolTipText("Change this to a number to compile a specific volume.");
+        wuxiaWorldVolumeTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                coverTextFieldActionPerformed(evt);
+                wuxiaWorldVolumeTextField1ActionPerformed(evt);
             }
         });
 
-        wuxiaWorldRunButton1.setBackground(new java.awt.Color(2, 39, 87));
-        wuxiaWorldRunButton1.setForeground(new java.awt.Color(255, 255, 255));
-        wuxiaWorldRunButton1.setText("Browse");
+        wuxiaWorldLogTextArea.setEditable(false);
+        wuxiaWorldLogTextArea.setBackground(new java.awt.Color(255, 255, 255));
+        wuxiaWorldLogTextArea.setColumns(20);
+        wuxiaWorldLogTextArea.setRows(5);
+        wuxiaWorldLogTextArea.setText("Log:\n");
+        wuxiaWorldLogTextArea.setToolTipText("");
+        wuxiaWorldScrollPanel.setViewportView(wuxiaWorldLogTextArea);
+
+        new SmartScroller( wuxiaWorldScrollPanel );
 
         javax.swing.GroupLayout wuxiaWorldPanelLayout = new javax.swing.GroupLayout(wuxiaWorldPanel);
         wuxiaWorldPanel.setLayout(wuxiaWorldPanelLayout);
         wuxiaWorldPanelLayout.setHorizontalGroup(
             wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, wuxiaWorldPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(wuxiaWorldRunButton)
-                .addGap(293, 293, 293))
             .addGroup(wuxiaWorldPanelLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addGroup(wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(wuxiaWorldPanelLayout.createSequentialGroup()
-                        .addComponent(coverLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(coverTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(wuxiaWorldPanelLayout.createSequentialGroup()
+                                .addGroup(wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(wuxiaWorldRunButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, wuxiaWorldPanelLayout.createSequentialGroup()
+                                        .addComponent(wuxiaWorldVolumeLabel1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(wuxiaWorldVolumeTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(wuxiaWorldPanelLayout.createSequentialGroup()
+                                .addComponent(wuxiaWorldCoverLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(wuxiaWorldCoverTextField)))
                         .addGap(18, 18, 18)
-                        .addComponent(wuxiaWorldRunButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(wuxiaWorldCoverButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(wuxiaWorldPanelLayout.createSequentialGroup()
-                        .addComponent(urlLabel)
+                        .addComponent(wuxiaWorldUrlLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(urlTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 583, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(33, Short.MAX_VALUE))
+                        .addComponent(wuxiaWorldUrlTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(wuxiaWorldScrollPanel))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         wuxiaWorldPanelLayout.setVerticalGroup(
             wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, wuxiaWorldPanelLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(urlLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(urlTextField))
+                    .addComponent(wuxiaWorldUrlLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(wuxiaWorldUrlTextField))
                 .addGap(18, 18, 18)
                 .addGroup(wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(coverLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(wuxiaWorldRunButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(coverTextField))
-                .addGap(164, 164, 164)
-                .addComponent(wuxiaWorldRunButton)
-                .addGap(208, 208, 208))
+                    .addComponent(wuxiaWorldCoverLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(wuxiaWorldCoverButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(wuxiaWorldCoverTextField))
+                .addGap(18, 18, 18)
+                .addGroup(wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(wuxiaWorldVolumeTextField1)
+                    .addComponent(wuxiaWorldVolumeLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(wuxiaWorldRunButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(wuxiaWorldScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        novelPlanetPanel.setBackground(new java.awt.Color(255, 255, 255));
+
+        novelPlanetLabel.setForeground(new java.awt.Color(2, 39, 87));
+        novelPlanetLabel.setText("Atleast the void is full of emptiness");
+
+        javax.swing.GroupLayout novelPlanetPanelLayout = new javax.swing.GroupLayout(novelPlanetPanel);
+        novelPlanetPanel.setLayout(novelPlanetPanelLayout);
+        novelPlanetPanelLayout.setHorizontalGroup(
+            novelPlanetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(novelPlanetPanelLayout.createSequentialGroup()
+                .addGap(254, 254, 254)
+                .addComponent(novelPlanetLabel)
+                .addContainerGap(479, Short.MAX_VALUE))
+        );
+        novelPlanetPanelLayout.setVerticalGroup(
+            novelPlanetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(novelPlanetPanelLayout.createSequentialGroup()
+                .addGap(249, 249, 249)
+                .addComponent(novelPlanetLabel)
+                .addContainerGap(283, Short.MAX_VALUE))
+        );
+
+        wuxiaCoWorldPanel.setBackground(new java.awt.Color(255, 255, 255));
+
+        wuxiaCoWorldLabel.setForeground(new java.awt.Color(2, 39, 87));
+        wuxiaCoWorldLabel.setText("Another one? How much empty do you even have?");
+
+        javax.swing.GroupLayout wuxiaCoWorldPanelLayout = new javax.swing.GroupLayout(wuxiaCoWorldPanel);
+        wuxiaCoWorldPanel.setLayout(wuxiaCoWorldPanelLayout);
+        wuxiaCoWorldPanelLayout.setHorizontalGroup(
+            wuxiaCoWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, wuxiaCoWorldPanelLayout.createSequentialGroup()
+                .addContainerGap(430, Short.MAX_VALUE)
+                .addComponent(wuxiaCoWorldLabel)
+                .addGap(204, 204, 204))
+        );
+        wuxiaCoWorldPanelLayout.setVerticalGroup(
+            wuxiaCoWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(wuxiaCoWorldPanelLayout.createSequentialGroup()
+                .addGap(249, 249, 249)
+                .addComponent(wuxiaCoWorldLabel)
+                .addContainerGap(271, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
         contentPanel.setLayout(contentPanelLayout);
         contentPanelLayout.setHorizontalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 692, Short.MAX_VALUE)
+            .addGap(0, 942, Short.MAX_VALUE)
             .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(contentPanelLayout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(wuxiaWorldPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addContainerGap()))
             .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(homePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(contentPanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(novelPlanetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
+            .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(contentPanelLayout.createSequentialGroup()
                     .addGap(12, 12, 12)
-                    .addComponent(homePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(wuxiaCoWorldPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(12, 12, 12)))
         );
         contentPanelLayout.setVerticalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 536, Short.MAX_VALUE)
+            .addGap(0, 560, Short.MAX_VALUE)
             .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(contentPanelLayout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(wuxiaWorldPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(30, Short.MAX_VALUE)))
+            .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(homePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(contentPanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(novelPlanetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(contentPanelLayout.createSequentialGroup()
                     .addGap(12, 12, 12)
-                    .addComponent(homePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(wuxiaCoWorldPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(12, Short.MAX_VALUE)))
         );
 
         wuxiaWorldPanel.setVisible(false);
+        novelPlanetPanel.setVisible(false);
+        wuxiaCoWorldPanel.setVisible(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -387,30 +605,127 @@ public class GUI extends javax.swing.JFrame {
     private void wuxiaWorldIconLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_wuxiaWorldIconLabelMouseClicked
 
         this.homePanel.setVisible(false);
+        this.wuxiaCoWorldPanel.setVisible(false);
+        this.novelPlanetPanel.setVisible(false);
         this.wuxiaWorldPanel.setVisible(true);
+        this.titleLabel.setText("WuxiaWorld");
     }//GEN-LAST:event_wuxiaWorldIconLabelMouseClicked
-
-    private void wuxiaWorldRunButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_wuxiaWorldRunButtonMouseClicked
-
-    }//GEN-LAST:event_wuxiaWorldRunButtonMouseClicked
-
+    
     private void wuxiaWorldRunButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wuxiaWorldRunButtonActionPerformed
-        handler.setWuxiaWorld("https://www.wuxiaworld.com/novel/overgeared", "cover.png", 1, handler);
+        this.novelName = this.wuxiaWorldUrlTextField.getText();
+        this.coverPath = this.wuxiaWorldCoverTextField.getText();
+        try{
+            this.volumeNumber = Integer.parseInt(this.wuxiaWorldVolumeTextField1.getText());
+        } catch(Exception e){
+            if(!this.wuxiaWorldVolumeTextField1.getText().toLowerCase().equals("all"))
+            {
+                this.log("Incorrect Volume Number\n");
+                return;
+            }
+            else
+            {
+                this.volumeNumber = 0;
+            }
+        }
+        
+        if(!this.novelName.toLowerCase().contains("https://www.wuxiaworld.com/novel/"))
+        {
+            this.log("Incorrect URL!");
+            this.log("This source only accepts links from https://www.wuxiaworld.com");
+            return;
+        }
+        
+        
+        handler.setWuxiaWorld(this.novelName, this.coverPath, this.volumeNumber, this.handler);
         this.wuxiaWorldRunButton.setEnabled(false);
+        this.wuxiaWorldCoverButton.setEnabled(false);
     }//GEN-LAST:event_wuxiaWorldRunButtonActionPerformed
 
-    private void urlTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_urlTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_urlTextFieldActionPerformed
+    private void wuxiaWorldCoverButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wuxiaWorldCoverButtonActionPerformed
+        JFileChooser wuxiaWorldCoverChooser = new JFileChooser();
+        wuxiaWorldCoverChooser.setCurrentDirectory(cwd);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "jpg", "png");
+        wuxiaWorldCoverChooser.setFileFilter(filter);
+        wuxiaWorldCoverChooser.showOpenDialog(null);
+        File wuxiaWorldCover = wuxiaWorldCoverChooser.getSelectedFile();
+        this.wuxiaWorldCoverTextField.setText(wuxiaWorldCover.getAbsolutePath());
+    }//GEN-LAST:event_wuxiaWorldCoverButtonActionPerformed
 
-    private void coverTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_coverTextFieldActionPerformed
+    private void homeIconLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeIconLabelMouseClicked
+        
+        this.wuxiaWorldPanel.setVisible(false);
+        this.wuxiaCoWorldPanel.setVisible(false);
+        this.novelPlanetPanel.setVisible(false);
+        this.homePanel.setVisible(true);
+        this.titleLabel.setText("NovelScraper");
+    }//GEN-LAST:event_homeIconLabelMouseClicked
+
+    private void wuxiaWorldVolumeTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wuxiaWorldVolumeTextField1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_coverTextFieldActionPerformed
+    }//GEN-LAST:event_wuxiaWorldVolumeTextField1ActionPerformed
+
+    private void novelPlanetIconLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_novelPlanetIconLabelMouseClicked
+        this.homePanel.setVisible(false);
+        this.wuxiaCoWorldPanel.setVisible(false);
+        this.wuxiaWorldPanel.setVisible(false);
+        this.novelPlanetPanel.setVisible(true);
+        this.titleLabel.setText("NovelPlanet");
+    }//GEN-LAST:event_novelPlanetIconLabelMouseClicked
+
+    private void wuxiaCoWorldIconLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_wuxiaCoWorldIconLabelMouseClicked
+        this.homePanel.setVisible(false);
+        this.wuxiaWorldPanel.setVisible(false);
+        this.novelPlanetPanel.setVisible(false);
+        this.wuxiaCoWorldPanel.setVisible(true);
+        this.titleLabel.setText("WuxiaWorldCo");
+    }//GEN-LAST:event_wuxiaCoWorldIconLabelMouseClicked
+
+    private void homeDiscordLinkLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeDiscordLinkLabelMouseEntered
+        this.homeDiscordLinkLabel.setForeground(Color.blue);
+    }//GEN-LAST:event_homeDiscordLinkLabelMouseEntered
+
+    private void homeDiscordLinkLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeDiscordLinkLabelMouseClicked
+        try {
+            this.browseURL = new URI("https://discord.gg/Wya4Dst");
+            this.desktop.browse(this.browseURL);
+        } catch (Exception ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_homeDiscordLinkLabelMouseClicked
+
+    private void homeDiscordLinkLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeDiscordLinkLabelMouseExited
+        this.homeDiscordLinkLabel.setForeground(Color.decode("#3399ff"));
+    }//GEN-LAST:event_homeDiscordLinkLabelMouseExited
+
+    private void homeBugReportLinkLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeBugReportLinkLabelMouseEntered
+        this.homeBugReportLinkLabel.setForeground(Color.blue);
+    }//GEN-LAST:event_homeBugReportLinkLabelMouseEntered
+
+    private void homeBugReportLinkLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeBugReportLinkLabelMouseExited
+        this.homeBugReportLinkLabel.setForeground(Color.decode("#3399ff"));
+    }//GEN-LAST:event_homeBugReportLinkLabelMouseExited
+
+    private void homeBugReportLinkLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeBugReportLinkLabelMouseClicked
+        try {
+            this.browseURL = new URI("https://github.com/dr-nyt/Translated-Novel-Downloader/issues");
+            this.desktop.browse(this.browseURL);
+        } catch (Exception ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_homeBugReportLinkLabelMouseClicked
 
     public JButton getWuxiaWorldRunButton() {
         return wuxiaWorldRunButton;
     }
 
+    public JButton getWuxiaWorldCoverButton() {
+        return wuxiaWorldCoverButton;
+    }
+
+    public void log(String text)
+    {
+        this.wuxiaWorldLogTextArea.append(text + "\n");
+    }
     
     /**
      * @param args the command line arguments
@@ -448,20 +763,35 @@ public class GUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel contentPanel;
-    private javax.swing.JLabel coverLabel;
-    private javax.swing.JTextField coverTextField;
     private javax.swing.JPanel headerPanel;
+    private javax.swing.JLabel homeBugIcon;
+    private javax.swing.JLabel homeBugReportLabel;
+    private javax.swing.JLabel homeBugReportLinkLabel;
+    private javax.swing.JLabel homeDescriptionLabel;
+    private javax.swing.JLabel homeDiscordLabel;
+    private javax.swing.JLabel homeDiscordLinkLabel;
+    private javax.swing.JLabel homeHeartIcon;
     private javax.swing.JLabel homeIconLabel;
     private javax.swing.JPanel homePanel;
     private javax.swing.JLabel novelPlanetIconLabel;
+    private javax.swing.JLabel novelPlanetLabel;
+    private javax.swing.JPanel novelPlanetPanel;
     private javax.swing.JPanel sourceSelectionPanel;
     private javax.swing.JLabel titleLabel;
-    private javax.swing.JLabel urlLabel;
-    private javax.swing.JTextField urlTextField;
     private javax.swing.JLabel wuxiaCoWorldIconLabel;
+    private javax.swing.JLabel wuxiaCoWorldLabel;
+    private javax.swing.JPanel wuxiaCoWorldPanel;
+    private javax.swing.JButton wuxiaWorldCoverButton;
+    private javax.swing.JLabel wuxiaWorldCoverLabel;
+    private javax.swing.JTextField wuxiaWorldCoverTextField;
     private javax.swing.JLabel wuxiaWorldIconLabel;
+    private javax.swing.JTextArea wuxiaWorldLogTextArea;
     private javax.swing.JPanel wuxiaWorldPanel;
     private javax.swing.JButton wuxiaWorldRunButton;
-    private javax.swing.JButton wuxiaWorldRunButton1;
+    private javax.swing.JScrollPane wuxiaWorldScrollPanel;
+    private javax.swing.JLabel wuxiaWorldUrlLabel;
+    private javax.swing.JTextField wuxiaWorldUrlTextField;
+    private javax.swing.JLabel wuxiaWorldVolumeLabel1;
+    private javax.swing.JTextField wuxiaWorldVolumeTextField1;
     // End of variables declaration//GEN-END:variables
 }
