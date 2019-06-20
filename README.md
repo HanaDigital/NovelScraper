@@ -4,12 +4,16 @@
  * Java IDLE: Netbeans 8.2 [https://netbeans.org/downloads/8.2/]
  * Currently installed Libs: 
       - jSoup [https://jsoup.org/] 
+      
             - For HTML parsing
             - Docs: https://jsoup.org/cookbook/introduction/parsing-a-document
+            
       - epublib [http://www.siegmann.nl/epublib]
+      
             - For creating epub files.
             - Docs: http://www.siegmann.nl/epublib/example-programs/epub-sample-simple1
       - commonsio [https://commons.apache.org/proper/commons-io/]
+      
             - A simple utility libraray for IO related functions
             - Docs: https://commons.apache.org/proper/commons-io/apidocs/index.html
 
