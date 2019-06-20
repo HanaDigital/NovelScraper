@@ -62,7 +62,11 @@
         .getGUI() is a method in the Handler class that returns the variable that stores the link to the GUI.java class 
         and .getTextBox() is a method inside the gui class that returns the variable of the textBox.
       
-
+ * The Epub File Making Logic:
+      
+      - The way epubs are made is a bit different from our python build of the app. This is due to the epublib module. The html scrapped from the webpages is first stored into their own files. [Eg: Chapter 1 is stored in chapter1.xhtml, Chapter 2 in chapter2.xhtml and so on]. 
+      
+      - After all the chapter.xhtml files are made in a temp folder, the epublib module is made to loop through them and add them to the book.
 
 ### Goals/Notes
  * The main goal behind this build is to lay the foundation for the final port to android.
