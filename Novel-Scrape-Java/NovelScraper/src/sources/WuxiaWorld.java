@@ -170,7 +170,7 @@ public class WuxiaWorld
                 break;
             } catch(NumberFormatException e)
             {
-                //So much empty
+                this.log(e.toString());
             }
             index--;
         }
@@ -198,7 +198,7 @@ public class WuxiaWorld
                 break;
             } catch(NumberFormatException e)
             {
-                //So much empty
+                this.log(e.toString());
             }
             index--;
         }
@@ -246,7 +246,6 @@ public class WuxiaWorld
                 try
                 {
                     this.chapterHead = content.select("h4").text();
-                    this.chapterHead = this.chapterHead;
                 } catch(Exception e)
                 {
                     this.chapterHead = "Chapter " + Integer.toString(this.chapterCurrentNumber);
@@ -311,7 +310,7 @@ public class WuxiaWorld
         } 
         catch (Exception e) 
         {
-            e.printStackTrace();
+            this.log(e.toString());
         }
     }
     
@@ -326,11 +325,11 @@ public class WuxiaWorld
         return  "<?xml version='1.0' encoding='utf-8'?>\n" +
                 "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" +
                 "<head>\n" +
-                "<title>" + chapterName + "</title>\n" +
+                "<title>" + chapterName.replace("<", "&lt;").replace(">", "&gt;") + "</title>\n" +
                 "<link href=\"" + cssFile + "\" rel=\"stylesheet\" type=\"text/css\"/>\n" +
                 "</head>\n" +
                 "<body>\n" +
-                "<h2>" + chapterName + "</h2>";
+                "<h2>" + chapterName.replace("<", "&lt;").replace(">", "&gt;") + "</h2>";
     }
     
     private String getPropaganda()

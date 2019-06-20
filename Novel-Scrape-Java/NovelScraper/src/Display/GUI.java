@@ -620,6 +620,7 @@ public class GUI extends javax.swing.JFrame {
             if(!this.wuxiaWorldVolumeTextField1.getText().toLowerCase().equals("all"))
             {
                 this.log("Incorrect Volume Number\n");
+                this.log(e.toString());
                 return;
             }
             else
@@ -690,6 +691,7 @@ public class GUI extends javax.swing.JFrame {
             this.desktop.browse(this.browseURL);
         } catch (Exception ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            this.log(ex.toString());
         }
     }//GEN-LAST:event_homeDiscordLinkLabelMouseClicked
 
@@ -711,6 +713,7 @@ public class GUI extends javax.swing.JFrame {
             this.desktop.browse(this.browseURL);
         } catch (Exception ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            this.log(ex.toString());
         }
     }//GEN-LAST:event_homeBugReportLinkLabelMouseClicked
 
