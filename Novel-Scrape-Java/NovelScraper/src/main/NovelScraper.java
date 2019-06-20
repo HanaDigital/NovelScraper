@@ -23,16 +23,12 @@ public class NovelScraper
     
     //This is the main function which is run on start and will be called everytime, you can use this to call and start this class itself
     public static void main(String[] args) throws IOException 
-    {
-//        GUI gui = new GUI();
-//        gui.setVisible(true);
-//        gui.setResizable(true);
-        
+    {  
         Handler handler = new Handler();
         
         handler.setGUI(handler);
         GUI gui = handler.getGUI();
         gui.setVisible(true);
-        gui.setResizable(true);
+        gui.setResizable(false);
     }   
 }

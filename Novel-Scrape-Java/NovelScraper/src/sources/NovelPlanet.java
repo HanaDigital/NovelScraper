@@ -14,6 +14,7 @@ import main.Handler;
 //This is the independent class for the NovelPlanet.com source
 public class NovelPlanet {
     
+    //Class constructor
     public NovelPlanet(Handler handler)
     {
         
