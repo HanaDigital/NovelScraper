@@ -36,7 +36,7 @@
             - WuxiaWorldCo.java
 
  * The Handler Class:
-      - This class is initially started by the main class of the project [NovelScraper.java]:
+      - The Handler class is initially started by the main class of the project [NovelScraper.java]:
       
       ![handler-var-main](https://user-images.githubusercontent.com/41040912/59818275-42371780-9334-11e9-8f34-c46ea891381e.jpg)
       
