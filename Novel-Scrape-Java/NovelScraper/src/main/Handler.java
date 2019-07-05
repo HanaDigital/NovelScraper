@@ -34,11 +34,14 @@ public class Handler {
             {
                 try 
                 {
-                wuxiaWorld = new WuxiaWorld(url, cover, volumeNumber, handler);
-                } catch (IOException ex) 
+                    wuxiaWorld = new WuxiaWorld(url, cover, volumeNumber, handler);
+                } catch (Exception ex) 
                 {
-                Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+                    Handler.this.logError(ex.toString());
                 }
+                
+                Handler.this.gui.unLock();
             }
 
         });
@@ -46,7 +49,7 @@ public class Handler {
         thread.start();
     }
     
-    public void setNovelPlanet(String url, String cover, int volumeNumber, Handler handler)
+    public void setNovelPlanet(String url, String cover, int volumeNumber, Handler handler) throws IOException
     {
         this.novelPlanet = new NovelPlanet(handler);
     }
@@ -64,7 +67,17 @@ public class Handler {
     public GUI getGUI() {
         return gui;
     }
-
+    
+    public void log(String text)
+    {
+        gui.log(text);
+    }
+    
+    public void logError(String text)
+    {
+        gui.logError(text);
+    }
+    
     public WuxiaWorld getWuxiaWorld() {
         return wuxiaWorld;
     }

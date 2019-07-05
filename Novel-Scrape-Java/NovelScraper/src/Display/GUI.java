@@ -55,21 +55,17 @@ public class GUI extends javax.swing.JFrame {
     private void initComponents() {
 
         sourceSelectionPanel = new javax.swing.JPanel();
-        novelPlanetIconLabel = new javax.swing.JLabel();
-        wuxiaWorldIconLabel = new javax.swing.JLabel();
-        wuxiaCoWorldIconLabel = new javax.swing.JLabel();
         homeIconLabel = new javax.swing.JLabel();
         headerPanel = new javax.swing.JPanel();
         titleLabel = new javax.swing.JLabel();
         contentPanel = new javax.swing.JPanel();
         homePanel = new javax.swing.JPanel();
-        homeDescriptionLabel = new javax.swing.JLabel();
-        homeDiscordLabel = new javax.swing.JLabel();
-        homeHeartIcon = new javax.swing.JLabel();
-        homeDiscordLinkLabel = new javax.swing.JLabel();
-        homeBugIcon = new javax.swing.JLabel();
-        homeBugReportLabel = new javax.swing.JLabel();
-        homeBugReportLinkLabel = new javax.swing.JLabel();
+        homeNovelPlanetIconLabel = new javax.swing.JLabel();
+        homeWuxiaWorldIconLabel = new javax.swing.JLabel();
+        homeWuxiaCoWorldIconLabel = new javax.swing.JLabel();
+        homeNovelPlanetTextField = new javax.swing.JLabel();
+        homeNovelPlanetTextField1 = new javax.swing.JLabel();
+        homeNovelPlanetTextField2 = new javax.swing.JLabel();
         wuxiaWorldPanel = new javax.swing.JPanel();
         wuxiaWorldRunButton = new javax.swing.JButton();
         wuxiaWorldUrlLabel = new javax.swing.JLabel();
@@ -95,45 +91,6 @@ public class GUI extends javax.swing.JFrame {
         sourceSelectionPanel.setBackground(new java.awt.Color(2, 39, 87));
         sourceSelectionPanel.setForeground(new java.awt.Color(255, 255, 255));
 
-        novelPlanetIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/NovelPlanet Logo.png"))); // NOI18N
-        novelPlanetIconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                novelPlanetIconLabelMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                novelPlanetIconLabelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                novelPlanetIconLabelMouseExited(evt);
-            }
-        });
-
-        wuxiaWorldIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/WuxiaWorld Logo.png"))); // NOI18N
-        wuxiaWorldIconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                wuxiaWorldIconLabelMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                wuxiaWorldIconLabelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                wuxiaWorldIconLabelMouseExited(evt);
-            }
-        });
-
-        wuxiaCoWorldIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/m.WuxiaWorld Logo.png"))); // NOI18N
-        wuxiaCoWorldIconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                wuxiaCoWorldIconLabelMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                wuxiaCoWorldIconLabelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                wuxiaCoWorldIconLabelMouseExited(evt);
-            }
-        });
-
         homeIconLabel.setBackground(new java.awt.Color(255, 255, 255));
         homeIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/home.png"))); // NOI18N
         homeIconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -154,11 +111,7 @@ public class GUI extends javax.swing.JFrame {
             sourceSelectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sourceSelectionPanelLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(sourceSelectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(wuxiaCoWorldIconLabel)
-                    .addComponent(wuxiaWorldIconLabel)
-                    .addComponent(novelPlanetIconLabel)
-                    .addComponent(homeIconLabel))
+                .addComponent(homeIconLabel)
                 .addContainerGap(25, Short.MAX_VALUE))
         );
         sourceSelectionPanelLayout.setVerticalGroup(
@@ -166,12 +119,6 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(sourceSelectionPanelLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(homeIconLabel)
-                .addGap(60, 60, 60)
-                .addComponent(novelPlanetIconLabel)
-                .addGap(60, 60, 60)
-                .addComponent(wuxiaWorldIconLabel)
-                .addGap(60, 60, 60)
-                .addComponent(wuxiaCoWorldIconLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -212,56 +159,59 @@ public class GUI extends javax.swing.JFrame {
 
         homePanel.setBackground(new java.awt.Color(255, 255, 255));
 
-        homeDescriptionLabel.setBackground(new java.awt.Color(2, 39, 87));
-        homeDescriptionLabel.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
-        homeDescriptionLabel.setForeground(new java.awt.Color(2, 39, 87));
-        homeDescriptionLabel.setText("-    This app lets you download translated novels from multiple sources.");
-
-        homeDiscordLabel.setBackground(new java.awt.Color(2, 39, 87));
-        homeDiscordLabel.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
-        homeDiscordLabel.setForeground(new java.awt.Color(2, 39, 87));
-        homeDiscordLabel.setText("You can support us by joining our");
-
-        homeHeartIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/pixel-heart-ldp.png"))); // NOI18N
-
-        homeDiscordLinkLabel.setBackground(new java.awt.Color(2, 39, 87));
-        homeDiscordLinkLabel.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
-        homeDiscordLinkLabel.setForeground(new java.awt.Color(51, 153, 255));
-        homeDiscordLinkLabel.setText("discord.");
-        homeDiscordLinkLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+        homeNovelPlanetIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/NovelPlanet Logo.png"))); // NOI18N
+        homeNovelPlanetIconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                homeDiscordLinkLabelMouseClicked(evt);
+                homeNovelPlanetIconLabelMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                homeDiscordLinkLabelMouseEntered(evt);
+                homeNovelPlanetIconLabelMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                homeDiscordLinkLabelMouseExited(evt);
+                homeNovelPlanetIconLabelMouseExited(evt);
             }
         });
 
-        homeBugIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/bug-ldp.png"))); // NOI18N
-
-        homeBugReportLabel.setBackground(new java.awt.Color(2, 39, 87));
-        homeBugReportLabel.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
-        homeBugReportLabel.setForeground(new java.awt.Color(2, 39, 87));
-        homeBugReportLabel.setText("Please report any bugs");
-
-        homeBugReportLinkLabel.setBackground(new java.awt.Color(2, 39, 87));
-        homeBugReportLinkLabel.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
-        homeBugReportLinkLabel.setForeground(new java.awt.Color(51, 153, 255));
-        homeBugReportLinkLabel.setText("here.");
-        homeBugReportLinkLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+        homeWuxiaWorldIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/WuxiaWorld Logo.png"))); // NOI18N
+        homeWuxiaWorldIconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                homeBugReportLinkLabelMouseClicked(evt);
+                homeWuxiaWorldIconLabelMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                homeBugReportLinkLabelMouseEntered(evt);
+                homeWuxiaWorldIconLabelMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                homeBugReportLinkLabelMouseExited(evt);
+                homeWuxiaWorldIconLabelMouseExited(evt);
             }
         });
+
+        homeWuxiaCoWorldIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/m.WuxiaWorld Logo.png"))); // NOI18N
+        homeWuxiaCoWorldIconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                homeWuxiaCoWorldIconLabelMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                homeWuxiaCoWorldIconLabelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                homeWuxiaCoWorldIconLabelMouseExited(evt);
+            }
+        });
+
+        homeNovelPlanetTextField.setBackground(new java.awt.Color(2, 39, 87));
+        homeNovelPlanetTextField.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
+        homeNovelPlanetTextField.setForeground(new java.awt.Color(2, 39, 87));
+        homeNovelPlanetTextField.setText("WuxiaWorldCo");
+
+        homeNovelPlanetTextField1.setBackground(new java.awt.Color(2, 39, 87));
+        homeNovelPlanetTextField1.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
+        homeNovelPlanetTextField1.setForeground(new java.awt.Color(2, 39, 87));
+        homeNovelPlanetTextField1.setText("NovelPlanet");
+
+        homeNovelPlanetTextField2.setBackground(new java.awt.Color(2, 39, 87));
+        homeNovelPlanetTextField2.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
+        homeNovelPlanetTextField2.setForeground(new java.awt.Color(2, 39, 87));
+        homeNovelPlanetTextField2.setText("WuxiaWorld");
 
         javax.swing.GroupLayout homePanelLayout = new javax.swing.GroupLayout(homePanel);
         homePanel.setLayout(homePanelLayout);
@@ -270,44 +220,35 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(homePanelLayout.createSequentialGroup()
                 .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(homePanelLayout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(homeDescriptionLabel))
+                        .addGap(46, 46, 46)
+                        .addComponent(homeNovelPlanetIconLabel)
+                        .addGap(120, 120, 120)
+                        .addComponent(homeWuxiaWorldIconLabel)
+                        .addGap(111, 111, 111)
+                        .addComponent(homeWuxiaCoWorldIconLabel))
                     .addGroup(homePanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(homeBugIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(homeBugReportLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(homeBugReportLinkLabel))
-                    .addGroup(homePanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(homeHeartIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(homeDiscordLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(homeDiscordLinkLabel)))
-                .addContainerGap(84, Short.MAX_VALUE))
+                        .addGap(29, 29, 29)
+                        .addComponent(homeNovelPlanetTextField1)
+                        .addGap(93, 93, 93)
+                        .addComponent(homeNovelPlanetTextField2)
+                        .addGap(67, 67, 67)
+                        .addComponent(homeNovelPlanetTextField)))
+                .addContainerGap(459, Short.MAX_VALUE))
         );
         homePanelLayout.setVerticalGroup(
             homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(homePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(homeDescriptionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
+                .addGap(34, 34, 34)
+                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(homeWuxiaCoWorldIconLabel)
+                    .addComponent(homeWuxiaWorldIconLabel)
+                    .addComponent(homeNovelPlanetIconLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(homeDiscordLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(homeDiscordLinkLabel))
-                    .addGroup(homePanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(homeHeartIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(26, 26, 26)
-                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(homeBugIcon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(homeBugReportLabel)
-                        .addComponent(homeBugReportLinkLabel)))
-                .addGap(343, 343, 343))
+                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(homeNovelPlanetTextField)
+                    .addComponent(homeNovelPlanetTextField1)
+                    .addComponent(homeNovelPlanetTextField2))
+                .addContainerGap(431, Short.MAX_VALUE))
         );
 
         wuxiaWorldPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -558,35 +499,35 @@ public class GUI extends javax.swing.JFrame {
         homeIconLabel.setIcon(defaultIcon);
     }//GEN-LAST:event_homeIconLabelMouseExited
 
-    private void novelPlanetIconLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_novelPlanetIconLabelMouseEntered
+    private void homeNovelPlanetIconLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeNovelPlanetIconLabelMouseEntered
         ImageIcon hoverIcon = new ImageIcon(getClass().getResource("/rsc/NovelPlanet Logo-hover.png"));
-        novelPlanetIconLabel.setIcon(hoverIcon);
-    }//GEN-LAST:event_novelPlanetIconLabelMouseEntered
+        homeNovelPlanetIconLabel.setIcon(hoverIcon);
+    }//GEN-LAST:event_homeNovelPlanetIconLabelMouseEntered
 
-    private void novelPlanetIconLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_novelPlanetIconLabelMouseExited
+    private void homeNovelPlanetIconLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeNovelPlanetIconLabelMouseExited
         ImageIcon defaultIcon = new ImageIcon(getClass().getResource("/rsc/NovelPlanet Logo.png"));
-        novelPlanetIconLabel.setIcon(defaultIcon);
-    }//GEN-LAST:event_novelPlanetIconLabelMouseExited
+        homeNovelPlanetIconLabel.setIcon(defaultIcon);
+    }//GEN-LAST:event_homeNovelPlanetIconLabelMouseExited
 
-    private void wuxiaWorldIconLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_wuxiaWorldIconLabelMouseEntered
+    private void homeWuxiaWorldIconLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeWuxiaWorldIconLabelMouseEntered
         ImageIcon hoverIcon = new ImageIcon(getClass().getResource("/rsc/WuxiaWorld Logo-hover.png"));
-        wuxiaWorldIconLabel.setIcon(hoverIcon);
-    }//GEN-LAST:event_wuxiaWorldIconLabelMouseEntered
+        homeWuxiaWorldIconLabel.setIcon(hoverIcon);
+    }//GEN-LAST:event_homeWuxiaWorldIconLabelMouseEntered
 
-    private void wuxiaWorldIconLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_wuxiaWorldIconLabelMouseExited
+    private void homeWuxiaWorldIconLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeWuxiaWorldIconLabelMouseExited
         ImageIcon defaultIcon = new ImageIcon(getClass().getResource("/rsc/WuxiaWorld Logo.png"));
-        wuxiaWorldIconLabel.setIcon(defaultIcon);
-    }//GEN-LAST:event_wuxiaWorldIconLabelMouseExited
+        homeWuxiaWorldIconLabel.setIcon(defaultIcon);
+    }//GEN-LAST:event_homeWuxiaWorldIconLabelMouseExited
 
-    private void wuxiaCoWorldIconLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_wuxiaCoWorldIconLabelMouseEntered
+    private void homeWuxiaCoWorldIconLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeWuxiaCoWorldIconLabelMouseEntered
         ImageIcon hoverIcon = new ImageIcon(getClass().getResource("/rsc/m.WuxiaWorld Logo-hover.png"));
-        wuxiaCoWorldIconLabel.setIcon(hoverIcon);
-    }//GEN-LAST:event_wuxiaCoWorldIconLabelMouseEntered
+        homeWuxiaCoWorldIconLabel.setIcon(hoverIcon);
+    }//GEN-LAST:event_homeWuxiaCoWorldIconLabelMouseEntered
 
-    private void wuxiaCoWorldIconLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_wuxiaCoWorldIconLabelMouseExited
+    private void homeWuxiaCoWorldIconLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeWuxiaCoWorldIconLabelMouseExited
         ImageIcon defaultIcon = new ImageIcon(getClass().getResource("/rsc/m.WuxiaWorld Logo.png"));
-        wuxiaCoWorldIconLabel.setIcon(defaultIcon);
-    }//GEN-LAST:event_wuxiaCoWorldIconLabelMouseExited
+        homeWuxiaCoWorldIconLabel.setIcon(defaultIcon);
+    }//GEN-LAST:event_homeWuxiaCoWorldIconLabelMouseExited
 
 //    Uncomment his section when undecorated frame is used. Ask dr_nyt for more info.
 //    int xx = 0;
@@ -602,16 +543,17 @@ public class GUI extends javax.swing.JFrame {
 //        this.setLocation(x-xx, y-yy);
     }//GEN-LAST:event_headerPanelMouseDragged
 
-    private void wuxiaWorldIconLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_wuxiaWorldIconLabelMouseClicked
+    private void homeWuxiaWorldIconLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeWuxiaWorldIconLabelMouseClicked
 
         this.homePanel.setVisible(false);
         this.wuxiaCoWorldPanel.setVisible(false);
         this.novelPlanetPanel.setVisible(false);
         this.wuxiaWorldPanel.setVisible(true);
         this.titleLabel.setText("WuxiaWorld");
-    }//GEN-LAST:event_wuxiaWorldIconLabelMouseClicked
+    }//GEN-LAST:event_homeWuxiaWorldIconLabelMouseClicked
     
     private void wuxiaWorldRunButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wuxiaWorldRunButtonActionPerformed
+        this.wuxiaWorldLogTextArea.setText("Log:\n");
         this.novelName = this.wuxiaWorldUrlTextField.getText();
         this.coverPath = this.wuxiaWorldCoverTextField.getText();
         try{
@@ -619,8 +561,8 @@ public class GUI extends javax.swing.JFrame {
         } catch(Exception e){
             if(!this.wuxiaWorldVolumeTextField1.getText().toLowerCase().equals("all"))
             {
-                this.log("Incorrect Volume Number\n");
-                this.log(e.toString());
+                this.logError("Incorrect Volume Number\n" + 
+                        e.toString());
                 return;
             }
             else
@@ -631,15 +573,14 @@ public class GUI extends javax.swing.JFrame {
         
         if(!this.novelName.toLowerCase().contains("https://www.wuxiaworld.com/novel/"))
         {
-            this.log("Incorrect URL!");
-            this.log("This source only accepts links from https://www.wuxiaworld.com");
+            this.logError("Incorrect URL!\n" +
+                            "This source only accepts links from https://www.wuxiaworld.com");
             return;
         }
         
         
         handler.setWuxiaWorld(this.novelName, this.coverPath, this.volumeNumber, this.handler);
-        this.wuxiaWorldRunButton.setEnabled(false);
-        this.wuxiaWorldCoverButton.setEnabled(false);
+        this.lock();
     }//GEN-LAST:event_wuxiaWorldRunButtonActionPerformed
 
     private void wuxiaWorldCoverButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wuxiaWorldCoverButtonActionPerformed
@@ -665,57 +606,21 @@ public class GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_wuxiaWorldVolumeTextField1ActionPerformed
 
-    private void novelPlanetIconLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_novelPlanetIconLabelMouseClicked
+    private void homeNovelPlanetIconLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeNovelPlanetIconLabelMouseClicked
         this.homePanel.setVisible(false);
         this.wuxiaCoWorldPanel.setVisible(false);
         this.wuxiaWorldPanel.setVisible(false);
         this.novelPlanetPanel.setVisible(true);
         this.titleLabel.setText("NovelPlanet");
-    }//GEN-LAST:event_novelPlanetIconLabelMouseClicked
+    }//GEN-LAST:event_homeNovelPlanetIconLabelMouseClicked
 
-    private void wuxiaCoWorldIconLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_wuxiaCoWorldIconLabelMouseClicked
+    private void homeWuxiaCoWorldIconLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeWuxiaCoWorldIconLabelMouseClicked
         this.homePanel.setVisible(false);
         this.wuxiaWorldPanel.setVisible(false);
         this.novelPlanetPanel.setVisible(false);
         this.wuxiaCoWorldPanel.setVisible(true);
         this.titleLabel.setText("WuxiaWorldCo");
-    }//GEN-LAST:event_wuxiaCoWorldIconLabelMouseClicked
-
-    private void homeDiscordLinkLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeDiscordLinkLabelMouseEntered
-        this.homeDiscordLinkLabel.setForeground(Color.blue);
-    }//GEN-LAST:event_homeDiscordLinkLabelMouseEntered
-
-    private void homeDiscordLinkLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeDiscordLinkLabelMouseClicked
-        try {
-            this.browseURL = new URI("https://discord.gg/Wya4Dst");
-            this.desktop.browse(this.browseURL);
-        } catch (Exception ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-            this.log(ex.toString());
-        }
-    }//GEN-LAST:event_homeDiscordLinkLabelMouseClicked
-
-    private void homeDiscordLinkLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeDiscordLinkLabelMouseExited
-        this.homeDiscordLinkLabel.setForeground(Color.decode("#3399ff"));
-    }//GEN-LAST:event_homeDiscordLinkLabelMouseExited
-
-    private void homeBugReportLinkLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeBugReportLinkLabelMouseEntered
-        this.homeBugReportLinkLabel.setForeground(Color.blue);
-    }//GEN-LAST:event_homeBugReportLinkLabelMouseEntered
-
-    private void homeBugReportLinkLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeBugReportLinkLabelMouseExited
-        this.homeBugReportLinkLabel.setForeground(Color.decode("#3399ff"));
-    }//GEN-LAST:event_homeBugReportLinkLabelMouseExited
-
-    private void homeBugReportLinkLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeBugReportLinkLabelMouseClicked
-        try {
-            this.browseURL = new URI("https://github.com/dr-nyt/Translated-Novel-Downloader/issues");
-            this.desktop.browse(this.browseURL);
-        } catch (Exception ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-            this.log(ex.toString());
-        }
-    }//GEN-LAST:event_homeBugReportLinkLabelMouseClicked
+    }//GEN-LAST:event_homeWuxiaCoWorldIconLabelMouseClicked
 
     public JButton getWuxiaWorldRunButton() {
         return wuxiaWorldRunButton;
@@ -727,7 +632,20 @@ public class GUI extends javax.swing.JFrame {
 
     public void log(String text)
     {
+        this.wuxiaWorldLogTextArea.setForeground(Color.black);
         this.wuxiaWorldLogTextArea.append(text + "\n");
+    }
+    
+    public void logError(String text)
+    {
+        this.wuxiaWorldLogTextArea.setForeground(Color.red);
+        this.wuxiaWorldLogTextArea.append("An Error Ocurred!\n");
+        this.wuxiaWorldLogTextArea.append("==========================================\n");
+        this.wuxiaWorldLogTextArea.append("\n");
+        this.wuxiaWorldLogTextArea.append(text + "\n");
+        this.wuxiaWorldLogTextArea.append("\n");
+        this.wuxiaWorldLogTextArea.append("==========================================\n");
+        this.wuxiaWorldLogTextArea.append("If this issue persists, open and issue here: https://github.com/dr-nyt/Translated-Novel-Downloader/issues \n");
     }
     
     /**
@@ -763,31 +681,39 @@ public class GUI extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void lock()
+    {
+        this.wuxiaWorldRunButton.setEnabled(false);
+        this.wuxiaWorldCoverButton.setEnabled(false);
+    }
+    
+    public void unLock()
+    {
+        this.wuxiaWorldRunButton.setEnabled(true);
+        this.wuxiaWorldCoverButton.setEnabled(true);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel contentPanel;
     private javax.swing.JPanel headerPanel;
-    private javax.swing.JLabel homeBugIcon;
-    private javax.swing.JLabel homeBugReportLabel;
-    private javax.swing.JLabel homeBugReportLinkLabel;
-    private javax.swing.JLabel homeDescriptionLabel;
-    private javax.swing.JLabel homeDiscordLabel;
-    private javax.swing.JLabel homeDiscordLinkLabel;
-    private javax.swing.JLabel homeHeartIcon;
     private javax.swing.JLabel homeIconLabel;
+    private javax.swing.JLabel homeNovelPlanetIconLabel;
+    private javax.swing.JLabel homeNovelPlanetTextField;
+    private javax.swing.JLabel homeNovelPlanetTextField1;
+    private javax.swing.JLabel homeNovelPlanetTextField2;
     private javax.swing.JPanel homePanel;
-    private javax.swing.JLabel novelPlanetIconLabel;
+    private javax.swing.JLabel homeWuxiaCoWorldIconLabel;
+    private javax.swing.JLabel homeWuxiaWorldIconLabel;
     private javax.swing.JLabel novelPlanetLabel;
     private javax.swing.JPanel novelPlanetPanel;
     private javax.swing.JPanel sourceSelectionPanel;
     private javax.swing.JLabel titleLabel;
-    private javax.swing.JLabel wuxiaCoWorldIconLabel;
     private javax.swing.JLabel wuxiaCoWorldLabel;
     private javax.swing.JPanel wuxiaCoWorldPanel;
     private javax.swing.JButton wuxiaWorldCoverButton;
     private javax.swing.JLabel wuxiaWorldCoverLabel;
     private javax.swing.JTextField wuxiaWorldCoverTextField;
-    private javax.swing.JLabel wuxiaWorldIconLabel;
     private javax.swing.JTextArea wuxiaWorldLogTextArea;
     private javax.swing.JPanel wuxiaWorldPanel;
     private javax.swing.JButton wuxiaWorldRunButton;

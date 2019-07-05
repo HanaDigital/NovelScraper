@@ -25,10 +25,12 @@ public class NovelScraper
     public static void main(String[] args) throws IOException 
     {  
         Handler handler = new Handler();
+//        
+//        handler.setGUI(handler);
+//        GUI gui = handler.getGUI();
+//        gui.setVisible(true);
+//        gui.setResizable(false);
         
-        handler.setGUI(handler);
-        GUI gui = handler.getGUI();
-        gui.setVisible(true);
-        gui.setResizable(false);
+        handler.setNovelPlanet("https://novelplanet.com/Novel/The-Divine-Nine-Dragon-Cauldron", "cover.png", 0, handler);
     }   
 }

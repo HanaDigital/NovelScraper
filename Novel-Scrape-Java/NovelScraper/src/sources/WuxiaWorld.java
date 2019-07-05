@@ -129,7 +129,8 @@ public class WuxiaWorld
         
         if(this.links.isEmpty())
         {
-            this.log("Either the volume number isn't correct or there is a connection problem!");
+            this.logError("Either the volume number isn't correct or there is a connection problem!");
+            return;
         }
     }
     
@@ -170,7 +171,7 @@ public class WuxiaWorld
                 break;
             } catch(NumberFormatException e)
             {
-                this.log(e.toString());
+                this.logError(e.toString());
             }
             index--;
         }
@@ -198,7 +199,7 @@ public class WuxiaWorld
                 break;
             } catch(NumberFormatException e)
             {
-                this.log(e.toString());
+                this.logError(e.toString());
             }
             index--;
         }
@@ -215,7 +216,7 @@ public class WuxiaWorld
                 this.log("Novel directory created!");
             } else 
             {
-                this.log("Failed to create novel directory!");
+                this.logError("Failed to create novel directory!");
                 return;
             }
         }
@@ -229,7 +230,7 @@ public class WuxiaWorld
                 this.log("Temp directory created!");
             } else 
             {
-                this.log("Failed to create temp directory!");
+                this.logError("Failed to create temp directory!");
                 return;
             }
         }
@@ -310,7 +311,7 @@ public class WuxiaWorld
         } 
         catch (Exception e) 
         {
-            this.log(e.toString());
+            this.logError(e.toString());
         }
     }
     
@@ -358,6 +359,11 @@ public class WuxiaWorld
     
     private void log(String text)
     {
-        this.handler.getGUI().log(text);
+        this.handler.log(text);
+    }
+    
+    private void logError(String text)
+    {
+        this.handler.logError(text);
     }
 }
