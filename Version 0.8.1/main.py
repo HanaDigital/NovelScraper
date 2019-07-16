@@ -10,7 +10,7 @@ from wuxiaworld_com import WuxiaWorldPanel
 from novelplanet import NovelPlanetPanel
 
 # Version number
-version = "0.8"
+version = "0.8.1"
 
 # file dialog, used in the selection of book covers
 wildcard = "Image file (*.png)" \
