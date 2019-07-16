@@ -22,13 +22,14 @@ class NovelPlanetPanel(wx.Panel):
         self.chapter_sizer.Add(self.chapter_range_max_box, wx.ALL, 5)
         self.SetSizer(self.chapter_sizer)
 
-        self.book = epub.EpubBook()
         self.parent = parent
         self.msg = self.parent.msg
         self.current_directory = self.parent.current_directory
 
     def run(self, link, cover, chapter_start, chapter_end, directory):
         os.chdir(directory)   #Set the correct working directory
+
+        self.book = epub.EpubBook()
 
         link = link
         cover = cover
@@ -69,6 +70,7 @@ class NovelPlanetPanel(wx.Panel):
             else:
                 chapter_end = len(chapters)
             self.msg(f"\nChapter {chapter_start}  to Chapter {chapter_end} will be compiled!")
+
             book = self.book
             # add metadata
             book.set_identifier('dr_nyt')
