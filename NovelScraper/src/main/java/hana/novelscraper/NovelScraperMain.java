@@ -5,7 +5,21 @@
  */
 package hana.novelscraper;
 
-import hana.display.MainFrame;
+import com.machinepublishers.jbrowserdriver.JBrowserDriver;
+import com.machinepublishers.jbrowserdriver.Settings;
+import com.machinepublishers.jbrowserdriver.Timezone;
+import hana.display.GUI;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javax.swing.JFrame;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.python.core.PyObject;
+import org.python.core.PyString;
+import org.python.util.PythonInterpreter;
 
 /**
  *
@@ -19,9 +33,10 @@ public class NovelScraperMain {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        MainFrame mainFrame = new MainFrame();
+        GUI mainFrame = new GUI();
         mainFrame.setVisible(true);
-        mainFrame.addContent();
+        
+        
         
     }
     

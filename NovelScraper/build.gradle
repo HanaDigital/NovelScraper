@@ -15,6 +15,8 @@ repositories {
 
 dependencies {
     testCompile 'junit:junit:4.12'
+    compile fileTree(include: ['*.jar'], dir: 'lib')
     // jsoup HTML parser library @ https://jsoup.org/
     compile 'org.jsoup:jsoup:1.12.1'
+    implementation 'com.machinepublishers:jbrowserdriver:1.1.0-RC1'
 }
