@@ -19,10 +19,10 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        GUI mainFrame = new GUI();
-        mainFrame.setVisible(true);
+        Handler handler = new Handler();
+        handler.setHandler(handler);
         
-        WuxiaWorldLoader wwl = new WuxiaWorldLoader();
+        handler.setGUI();
     }
     
 }

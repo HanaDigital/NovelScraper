@@ -5,9 +5,11 @@
  */
 package Display;
 
+import NovelScraperV2.Handler;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Image;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -21,32 +23,17 @@ public class GUI extends javax.swing.JFrame {
     /**
      * Creates new form GUI
      */
+    private Handler handler;
+    
     public GUI() {
+        
         initComponents();
         loadPage("home");
-        
-        JPanel p2 = new JPanel();
-        p2.setLayout(new FlowLayout());
-        p2.setBackground(new Color(2,39,87));
-        p2.setPreferredSize(new Dimension(734, 900));
-        p2.setAutoscrolls(true);
-        
-        JScrollPane scrollPane = new JScrollPane(p2);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(20);
-        scrollPane.setBounds(0, 0, 734, 400);
-        
-        this.wuxiaWorldContentPanel.add(scrollPane);
-        
-        for(int i = 0; i < 20; i++) {
-
-            JPanel sp1 = new ContentPanel();
-            p2.add(sp1);    
-
-        }
-        
-        
+    }
+    
+    public void setHandler(Handler handler)
+    {
+        this.handler = handler;
     }
 
     /**
@@ -310,6 +297,7 @@ public class GUI extends javax.swing.JFrame {
 
     private void wuxiaWorldIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_wuxiaWorldIconMouseClicked
         this.loadPage("wuxiaworld");
+        this.handler.setWuxiaWorldLoader();
     }//GEN-LAST:event_wuxiaWorldIconMouseClicked
 
     /**
@@ -372,6 +360,11 @@ public class GUI extends javax.swing.JFrame {
             default:
                 break;
         }
+    }
+    
+    public JPanel getWuxiaWorldContentPanel()
+    {
+        return this.wuxiaWorldContentPanel;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

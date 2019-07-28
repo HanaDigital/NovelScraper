@@ -5,6 +5,10 @@
  */
 package Display;
 
+import java.awt.Image;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author super
@@ -27,15 +31,15 @@ public class ContentPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        wuxiaWorldNovelCover = new javax.swing.JLabel();
         wuxiaWorldUrlLabel = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setAlignmentX(0.0F);
         setAlignmentY(0.0F);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/missing-image.png"))); // NOI18N
-        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        wuxiaWorldNovelCover.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/missing-image.png"))); // NOI18N
+        wuxiaWorldNovelCover.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         wuxiaWorldUrlLabel.setBackground(new java.awt.Color(2, 39, 87));
         wuxiaWorldUrlLabel.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
@@ -47,14 +51,14 @@ public class ContentPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1)
+                .addComponent(wuxiaWorldNovelCover)
                 .addGap(18, 18, 18)
                 .addComponent(wuxiaWorldUrlLabel)
                 .addGap(0, 395, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(wuxiaWorldNovelCover, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(wuxiaWorldUrlLabel))
@@ -62,8 +66,14 @@ public class ContentPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
 
+    public void setImage(Image image)
+    {
+        ImageIcon icon = new ImageIcon(image);
+        this.wuxiaWorldNovelCover.setIcon(icon);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel wuxiaWorldNovelCover;
     private javax.swing.JLabel wuxiaWorldUrlLabel;
     // End of variables declaration//GEN-END:variables
 }
