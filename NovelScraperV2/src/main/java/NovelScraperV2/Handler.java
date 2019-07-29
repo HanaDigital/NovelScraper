@@ -7,6 +7,8 @@ package NovelScraperV2;
 
 import Display.GUI;
 import Sources.WuxiaWorldLoader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,7 +34,18 @@ public class Handler
     
     public void setWuxiaWorldLoader()
     {
-        wuxiaWorldLoader = new WuxiaWorldLoader(handler);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    wuxiaWorldLoader = new WuxiaWorldLoader(handler);
+                } catch (Exception ex) {
+                    Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+
+        thread.start();
     }
     
     public GUI getGUI()

@@ -26,8 +26,25 @@
           <Group type="102" alignment="0" attributes="0">
               <Component id="wuxiaWorldNovelCover" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="wuxiaWorldUrlLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="395" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="wuxiaWorldLatestChapterLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="wuxiaWorldLatestChapterName" min="-2" pref="432" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="wuxiaWorldTranslatorLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="wuxiaWorldTranslatorName" min="-2" pref="454" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="wuxiaWorldUpdateTimeLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="wuxiaWorldUpdateTime" min="-2" pref="486" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="wuxiaWorldNovelName" alignment="0" min="-2" pref="524" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -36,7 +53,22 @@
           <Component id="wuxiaWorldNovelCover" min="-2" pref="180" max="-2" attributes="0"/>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="wuxiaWorldUrlLabel" min="-2" max="-2" attributes="0"/>
+              <Component id="wuxiaWorldNovelName" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="wuxiaWorldLatestChapterLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="wuxiaWorldLatestChapterName" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="wuxiaWorldTranslatorLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="wuxiaWorldTranslatorName" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="wuxiaWorldUpdateTimeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="wuxiaWorldUpdateTime" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
           </Group>
       </Group>
     </DimensionLayout>
@@ -54,7 +86,7 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="wuxiaWorldUrlLabel">
+    <Component class="javax.swing.JLabel" name="wuxiaWorldNovelName">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="57" green="27" red="2" type="rgb"/>
@@ -66,6 +98,90 @@
           <Color blue="57" green="27" red="2" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Novel Name"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="wuxiaWorldLatestChapterName">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="57" green="27" red="2" type="rgb"/>
+        </Property>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Agency FB" size="18" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="57" green="27" red="2" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="None"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="wuxiaWorldLatestChapterLabel">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="57" green="27" red="2" type="rgb"/>
+        </Property>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Agency FB" size="18" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="57" green="27" red="2" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Latest Chapter:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="wuxiaWorldTranslatorLabel">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="57" green="27" red="2" type="rgb"/>
+        </Property>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Agency FB" size="18" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="57" green="27" red="2" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Translator:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="wuxiaWorldUpdateTimeLabel">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="57" green="27" red="2" type="rgb"/>
+        </Property>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Agency FB" size="18" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="57" green="27" red="2" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Time:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="wuxiaWorldTranslatorName">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="57" green="27" red="2" type="rgb"/>
+        </Property>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Agency FB" size="18" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="57" green="27" red="2" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="None"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="wuxiaWorldUpdateTime">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="57" green="27" red="2" type="rgb"/>
+        </Property>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Agency FB" size="18" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="57" green="27" red="2" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="None"/>
       </Properties>
     </Component>
   </SubComponents>

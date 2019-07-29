@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -57,6 +58,12 @@ public class GUI extends javax.swing.JFrame {
         wuxiaWorldTitle = new javax.swing.JLabel();
         wuxiaWorldPanel = new javax.swing.JPanel();
         wuxiaWorldContentPanel = new javax.swing.JPanel();
+        wuxiaWorldLoadingGif = new javax.swing.JLabel();
+        wuxiaWorldTab1 = new javax.swing.JPanel();
+        titleLabel1 = new javax.swing.JLabel();
+        wuxiaWorldURLBar = new javax.swing.JTextField();
+        wuxiaWorldTab4 = new javax.swing.JPanel();
+        titleLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -122,7 +129,7 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(titlePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(titleLabel)
-                .addContainerGap(610, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         titlePanelLayout.setVerticalGroup(
             titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -140,11 +147,11 @@ public class GUI extends javax.swing.JFrame {
         homePanel.setLayout(homePanelLayout);
         homePanelLayout.setHorizontalGroup(
             homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 734, Short.MAX_VALUE)
+            .addGap(0, 740, Short.MAX_VALUE)
         );
         homePanelLayout.setVerticalGroup(
             homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 495, Short.MAX_VALUE)
+            .addGap(0, 526, Short.MAX_VALUE)
         );
 
         sourcesPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -192,15 +199,81 @@ public class GUI extends javax.swing.JFrame {
 
         wuxiaWorldContentPanel.setBackground(new java.awt.Color(2, 39, 87));
 
+        wuxiaWorldLoadingGif.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/ajax-loader.gif"))); // NOI18N
+
         javax.swing.GroupLayout wuxiaWorldContentPanelLayout = new javax.swing.GroupLayout(wuxiaWorldContentPanel);
         wuxiaWorldContentPanel.setLayout(wuxiaWorldContentPanelLayout);
         wuxiaWorldContentPanelLayout.setHorizontalGroup(
             wuxiaWorldContentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 734, Short.MAX_VALUE)
+            .addGroup(wuxiaWorldContentPanelLayout.createSequentialGroup()
+                .addGap(333, 333, 333)
+                .addComponent(wuxiaWorldLoadingGif)
+                .addContainerGap(375, Short.MAX_VALUE))
         );
         wuxiaWorldContentPanelLayout.setVerticalGroup(
             wuxiaWorldContentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(wuxiaWorldContentPanelLayout.createSequentialGroup()
+                .addGap(164, 164, 164)
+                .addComponent(wuxiaWorldLoadingGif)
+                .addContainerGap(222, Short.MAX_VALUE))
+        );
+
+        wuxiaWorldTab1.setBackground(new java.awt.Color(2, 39, 87));
+
+        titleLabel1.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
+        titleLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        titleLabel1.setText("Updates");
+
+        javax.swing.GroupLayout wuxiaWorldTab1Layout = new javax.swing.GroupLayout(wuxiaWorldTab1);
+        wuxiaWorldTab1.setLayout(wuxiaWorldTab1Layout);
+        wuxiaWorldTab1Layout.setHorizontalGroup(
+            wuxiaWorldTab1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(wuxiaWorldTab1Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(titleLabel1)
+                .addContainerGap(22, Short.MAX_VALUE))
+        );
+        wuxiaWorldTab1Layout.setVerticalGroup(
+            wuxiaWorldTab1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(wuxiaWorldTab1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(titleLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        wuxiaWorldURLBar.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
+        wuxiaWorldURLBar.setText("URL");
+        wuxiaWorldURLBar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                wuxiaWorldURLBarFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                wuxiaWorldURLBarFocusLost(evt);
+            }
+        });
+
+        wuxiaWorldTab4.setBackground(new java.awt.Color(255, 255, 255));
+        wuxiaWorldTab4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        titleLabel4.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
+        titleLabel4.setForeground(new java.awt.Color(100, 100, 100));
+        titleLabel4.setText("New");
+
+        javax.swing.GroupLayout wuxiaWorldTab4Layout = new javax.swing.GroupLayout(wuxiaWorldTab4);
+        wuxiaWorldTab4.setLayout(wuxiaWorldTab4Layout);
+        wuxiaWorldTab4Layout.setHorizontalGroup(
+            wuxiaWorldTab4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(wuxiaWorldTab4Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(titleLabel4)
+                .addContainerGap(32, Short.MAX_VALUE))
+        );
+        wuxiaWorldTab4Layout.setVerticalGroup(
+            wuxiaWorldTab4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(wuxiaWorldTab4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(titleLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout wuxiaWorldPanelLayout = new javax.swing.GroupLayout(wuxiaWorldPanel);
@@ -208,11 +281,27 @@ public class GUI extends javax.swing.JFrame {
         wuxiaWorldPanelLayout.setHorizontalGroup(
             wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(wuxiaWorldContentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(wuxiaWorldPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(wuxiaWorldURLBar)
+                    .addGroup(wuxiaWorldPanelLayout.createSequentialGroup()
+                        .addComponent(wuxiaWorldTab1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(wuxiaWorldTab4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 532, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         wuxiaWorldPanelLayout.setVerticalGroup(
             wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, wuxiaWorldPanelLayout.createSequentialGroup()
-                .addGap(0, 95, Short.MAX_VALUE)
+                .addContainerGap(12, Short.MAX_VALUE)
+                .addComponent(wuxiaWorldURLBar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(wuxiaWorldTab1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(wuxiaWorldTab4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
                 .addComponent(wuxiaWorldContentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -247,9 +336,7 @@ public class GUI extends javax.swing.JFrame {
                 .addComponent(menuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(titlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, 0)
-                        .addComponent(jLayeredPane1))))
+                    .addComponent(jLayeredPane1)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -300,6 +387,20 @@ public class GUI extends javax.swing.JFrame {
         this.handler.setWuxiaWorldLoader();
     }//GEN-LAST:event_wuxiaWorldIconMouseClicked
 
+    private void wuxiaWorldURLBarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_wuxiaWorldURLBarFocusGained
+        if(this.wuxiaWorldURLBar.getText().equals("URL"))
+        {
+            this.wuxiaWorldURLBar.setText("");
+        }
+    }//GEN-LAST:event_wuxiaWorldURLBarFocusGained
+
+    private void wuxiaWorldURLBarFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_wuxiaWorldURLBarFocusLost
+        if(this.wuxiaWorldURLBar.getText().equals(""))
+        {
+            this.wuxiaWorldURLBar.setText("URL");
+        }
+    }//GEN-LAST:event_wuxiaWorldURLBarFocusLost
+
     /**
      * @param args the command line arguments
      */
@@ -343,18 +444,27 @@ public class GUI extends javax.swing.JFrame {
                 homePanel.setVisible(true);
                 sourcesPanel.setVisible(false);
                 wuxiaWorldPanel.setVisible(false);
+                
+                this.titleLabel.setText("Home");
+                
                 break;
             
             case "sources":
                 homePanel.setVisible(false);
                 sourcesPanel.setVisible(true);
                 wuxiaWorldPanel.setVisible(false);
+                
+                this.titleLabel.setText("Sources");
+                
                 break;
                 
             case "wuxiaworld":
                 homePanel.setVisible(false);
                 sourcesPanel.setVisible(false);
                 wuxiaWorldPanel.setVisible(true);
+                
+                this.titleLabel.setText("WuxiaWorld");
+                
                 break;
                 
             default:
@@ -366,6 +476,11 @@ public class GUI extends javax.swing.JFrame {
     {
         return this.wuxiaWorldContentPanel;
     }
+    
+    public JLabel getWuxiaWorldLoadingGif()
+    {
+        return this.wuxiaWorldLoadingGif;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel homeIconLabel;
@@ -375,10 +490,20 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel sourcesIconLabel;
     private javax.swing.JPanel sourcesPanel;
     private javax.swing.JLabel titleLabel;
+    private javax.swing.JLabel titleLabel1;
+    private javax.swing.JLabel titleLabel2;
+    private javax.swing.JLabel titleLabel3;
+    private javax.swing.JLabel titleLabel4;
     private javax.swing.JPanel titlePanel;
     private javax.swing.JPanel wuxiaWorldContentPanel;
     private javax.swing.JLabel wuxiaWorldIcon;
+    private javax.swing.JLabel wuxiaWorldLoadingGif;
     private javax.swing.JPanel wuxiaWorldPanel;
+    private javax.swing.JPanel wuxiaWorldTab1;
+    private javax.swing.JPanel wuxiaWorldTab2;
+    private javax.swing.JPanel wuxiaWorldTab3;
+    private javax.swing.JPanel wuxiaWorldTab4;
     private javax.swing.JLabel wuxiaWorldTitle;
+    private javax.swing.JTextField wuxiaWorldURLBar;
     // End of variables declaration//GEN-END:variables
 }
