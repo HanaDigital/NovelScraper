@@ -6,6 +6,7 @@ apply plugin: 'application'
 mainClassName = 'NovelScraperV2.Main'
 
 repositories {
+    mavenCentral()
     jcenter()
 }
 
@@ -14,4 +15,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     // jsoup HTML parser library @ https://jsoup.org/
     compile 'org.jsoup:jsoup:1.12.1'
+//    compile 'com.jfoenix:jfoenix:8.0.8' // Java 8
 }

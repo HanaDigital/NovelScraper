@@ -93,18 +93,18 @@ public class WuxiaWorldLoader
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
-        scrollPane.setBounds(0, 0, 739, 417);
+        scrollPane.setBounds(0, 0, 745, 390);
         
         for(int i = 0; i < this.contentSize; i++)
         {
             this.contentPanels.add(new ContentPanel());
             panel.add(contentPanels.get(i));
-            this.handler.getGUI().getWuxiaWorldLoadingGif().setVisible(false);
+//            this.handler.getGUI().getWuxiaWorldLoadingGif().setVisible(false);
             panel.repaint();
             panel.revalidate();
         }
 
-        this.handler.getGUI().getWuxiaWorldContentPanel().add(scrollPane);
+//        this.handler.getGUI().getWuxiaWorldContentPanel().add(scrollPane);
             
             for(int i = 0; i < this.contentSize; i++)
             {
