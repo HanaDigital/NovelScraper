@@ -6,6 +6,7 @@
 package Display;
 
 import NovelScraperV2.Handler;
+import NovelScraperV2.Novel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -13,6 +14,7 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -65,6 +67,7 @@ public class GUI extends javax.swing.JFrame {
         wuxiaWorldSearchURLButton = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         novelPanel = new javax.swing.JPanel();
+        novelCoverHolder = new javax.swing.JLabel();
         libraryPanel = new javax.swing.JPanel();
         sourcesPanel = new javax.swing.JPanel();
         sourcesWuxiaWorldButton = new javax.swing.JButton();
@@ -289,15 +292,21 @@ public class GUI extends javax.swing.JFrame {
 
         novelPanel.setBackground(new java.awt.Color(255, 255, 255));
 
+        novelCoverHolder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/loading-images.gif"))); // NOI18N
+
         javax.swing.GroupLayout novelPanelLayout = new javax.swing.GroupLayout(novelPanel);
         novelPanel.setLayout(novelPanelLayout);
         novelPanelLayout.setHorizontalGroup(
             novelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 790, Short.MAX_VALUE)
+            .addGroup(novelPanelLayout.createSequentialGroup()
+                .addComponent(novelCoverHolder)
+                .addGap(0, 610, Short.MAX_VALUE))
         );
         novelPanelLayout.setVerticalGroup(
             novelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 596, Short.MAX_VALUE)
+            .addGroup(novelPanelLayout.createSequentialGroup()
+                .addComponent(novelCoverHolder)
+                .addGap(0, 416, Short.MAX_VALUE))
         );
 
         libraryPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -563,6 +572,11 @@ public class GUI extends javax.swing.JFrame {
     //Page Loader
     public void loadPage(String page)
     {
+        this.loadPage(page, null);
+    }
+    
+    public void loadPage(String page, Novel novel)
+    {
         this.currentPage = page;
         
         //Reset Button Images
@@ -625,8 +639,10 @@ public class GUI extends javax.swing.JFrame {
                 //Change visiblility of the panels
                 this.switchPages();
                 
+                this.novelCoverHolder.setIcon(new ImageIcon(novel.getNovelCover()));
+                
                 //Change title text
-                this.mainTitle.setText("Novel");
+                this.mainTitle.setText(novel.getNovelName());
                 
                 break;
                 
@@ -693,6 +709,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JButton mainSourcesButton;
     private javax.swing.JLabel mainTitle;
     private javax.swing.JPanel mainTitlePanel;
+    private javax.swing.JLabel novelCoverHolder;
     private javax.swing.JPanel novelPanel;
     private javax.swing.JPanel settingsPanel;
     private javax.swing.JPanel sourcesPanel;

@@ -103,7 +103,7 @@ public class WuxiaWorldLoader
             panel.repaint();
             panel.revalidate();
         }
-
+        
         this.handler.getGUI().getWuxiaWorldContentPanel().add(scrollPane);
             
             for(int i = 0; i < this.contentSize; i++)
@@ -112,6 +112,7 @@ public class WuxiaWorldLoader
                 
                 Elements items = this.novelList.get(i).getElementsByTag("td");
                 novel.setNovelName(items.get(0).select("a").first().text());
+                novel.setNovelURL(items.get(0).select("a").first().select("a[href]").attr("href"));
                 novel.setLatestChapterName(items.get(1).text());
                 novel.setTranslator(items.get(2).text());
                 novel.setLastUpdateTime(items.get(3).text());

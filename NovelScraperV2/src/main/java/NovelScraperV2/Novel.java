@@ -15,27 +15,33 @@ public class Novel
 {
     
     private String novelName;
+    private String novelURL;
     private Image novelCover;
     private String latestChapterName;
     private String author;
     private String Translator;
     private String lastUpdateTime;
-    
-    public Novel()
-    {
-        
-    }
 
     public String getNovelName() {
-        return novelName;
+        return this.novelName;
     }
 
     public void setNovelName(String novelName) {
         this.novelName = novelName;
     }
     
+    public String getNovelURL()
+    {
+        return this.novelURL;
+    }
+    
+    public void setNovelURL(String novelURL)
+    {
+        this.novelURL = novelURL;
+    }
+    
     public Image getNovelCover() {
-        return novelCover;
+        return this.novelCover;
     }
 
     public void setNovelCover(Image novelCover) {
@@ -43,7 +49,7 @@ public class Novel
     }
 
     public String getLatestChapterName() {
-        return latestChapterName;
+        return this.latestChapterName;
     }
 
     public void setLatestChapterName(String latestChapterName) {
@@ -51,7 +57,7 @@ public class Novel
     }
 
     public String getAuthor() {
-        return author;
+        return this.author;
     }
 
     public void setAuthor(String author) {
@@ -59,7 +65,7 @@ public class Novel
     }
 
     public String getTranslator() {
-        return Translator;
+        return this.Translator;
     }
 
     public void setTranslator(String Translator) {
@@ -67,7 +73,7 @@ public class Novel
     }
 
     public String getLastUpdateTime() {
-        return lastUpdateTime;
+        return this.lastUpdateTime;
     }
 
     public void setLastUpdateTime(String lastUpdateTime) {

@@ -142,7 +142,11 @@ public class ContentPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-        handler.getGUI().loadPage("novel");
+        if(this.novel != null)
+        {
+            this.handler.getGUI().loadPage("novel", this.novel);
+            this.handler.getGUI().getWuxiaWorldContentPanel().removeAll();
+        }
     }//GEN-LAST:event_formMouseClicked
 
 
