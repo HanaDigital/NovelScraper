@@ -86,25 +86,25 @@ public class WuxiaWorldLoader
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
         panel.setBackground(new Color(2,39,87));
-        panel.setPreferredSize(new Dimension(739, 185 * this.contentSize));
+        panel.setPreferredSize(new Dimension(790, 185 * this.contentSize));
         panel.setAutoscrolls(true);
 
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
-        scrollPane.setBounds(0, 0, 745, 390);
+        scrollPane.setBounds(0, 0, 790, 435);
         
         for(int i = 0; i < this.contentSize; i++)
         {
             this.contentPanels.add(new ContentPanel());
             panel.add(contentPanels.get(i));
-//            this.handler.getGUI().getWuxiaWorldLoadingGif().setVisible(false);
+            this.handler.getGUI().getWuxiaWorldLoadingGif().setVisible(false);
             panel.repaint();
             panel.revalidate();
         }
 
-//        this.handler.getGUI().getWuxiaWorldContentPanel().add(scrollPane);
+        this.handler.getGUI().getWuxiaWorldContentPanel().add(scrollPane);
             
             for(int i = 0; i < this.contentSize; i++)
             {
