@@ -125,7 +125,7 @@ public class WuxiaWorldLoader
                 this.image = ImageIO.read(httpcon.getInputStream()).getScaledInstance(180, 180, Image.SCALE_FAST);
 //                
                 this.novel.setNovelCover(this.image);
-                this.contentPanels.get(i).setNovel(this.novel);
+                this.contentPanels.get(i).setNovel(this.novel, this.handler);
             }
             
         } catch (Exception ex) {

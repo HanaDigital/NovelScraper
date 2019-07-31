@@ -5,6 +5,7 @@
  */
 package Display;
 
+import NovelScraperV2.Handler;
 import NovelScraperV2.Novel;
 import java.awt.Image;
 import javax.swing.Icon;
@@ -19,6 +20,10 @@ public class ContentPanel extends javax.swing.JPanel {
     /**
      * Creates new form ContentPanel
      */
+    
+    private Novel novel;
+    private Handler handler;
+    
     public ContentPanel() {
         initComponents();
     }
@@ -44,6 +49,11 @@ public class ContentPanel extends javax.swing.JPanel {
         setBackground(new java.awt.Color(255, 255, 255));
         setAlignmentX(0.0F);
         setAlignmentY(0.0F);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
         wuxiaWorldNovelCover.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/loading-images.gif"))); // NOI18N
         wuxiaWorldNovelCover.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -131,11 +141,18 @@ public class ContentPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        handler.getGUI().loadPage("novel");
+    }//GEN-LAST:event_formMouseClicked
 
-    public void setNovel(Novel novel)
+
+    public void setNovel(Novel novel, Handler handler)
     {
+        this.novel = novel;
+        this.handler = handler;
         this.wuxiaWorldNovelName.setText(novel.getNovelName());
         this.wuxiaWorldNovelCover.setIcon(new ImageIcon(novel.getNovelCover()));
+        this.wuxiaWorldLatestChapterName.setText(novel.getLatestChapterName());
         this.wuxiaWorldTranslatorName.setText(novel.getTranslator());
         this.wuxiaWorldUpdateTime.setText(novel.getLastUpdateTime());
     }

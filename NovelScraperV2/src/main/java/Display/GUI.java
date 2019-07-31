@@ -63,6 +63,7 @@ public class GUI extends javax.swing.JFrame {
         wuxiaWorldLoadingGif = new javax.swing.JLabel();
         wuxiaWorldURLBar = new javax.swing.JTextField();
         wuxiaWorldSearchURLButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         novelPanel = new javax.swing.JPanel();
         libraryPanel = new javax.swing.JPanel();
         sourcesPanel = new javax.swing.JPanel();
@@ -111,7 +112,6 @@ public class GUI extends javax.swing.JFrame {
         mainLibraryButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/library.png"))); // NOI18N
         mainLibraryButton.setBorderPainted(false);
         mainLibraryButton.setContentAreaFilled(false);
-        mainLibraryButton.setOpaque(false);
         mainLibraryButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 mainLibraryButtonMouseEntered(evt);
@@ -129,7 +129,6 @@ public class GUI extends javax.swing.JFrame {
         mainSettingsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/settings.png"))); // NOI18N
         mainSettingsButton.setBorderPainted(false);
         mainSettingsButton.setContentAreaFilled(false);
-        mainSettingsButton.setOpaque(false);
         mainSettingsButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 mainSettingsButtonMouseEntered(evt);
@@ -252,17 +251,28 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setBackground(new java.awt.Color(2, 39, 87));
+        jButton1.setFont(new java.awt.Font("Agency FB", 1, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("NEW");
+        jButton1.setBorderPainted(false);
+
         javax.swing.GroupLayout wuxiaWorldPanelLayout = new javax.swing.GroupLayout(wuxiaWorldPanel);
         wuxiaWorldPanel.setLayout(wuxiaWorldPanelLayout);
         wuxiaWorldPanelLayout.setHorizontalGroup(
             wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(wuxiaWorldContentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(wuxiaWorldPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(wuxiaWorldURLBar, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(wuxiaWorldSearchURLButton, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
+                .addGroup(wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(wuxiaWorldPanelLayout.createSequentialGroup()
+                        .addComponent(wuxiaWorldURLBar, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(wuxiaWorldSearchURLButton, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE))
+                    .addGroup(wuxiaWorldPanelLayout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addComponent(wuxiaWorldContentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         wuxiaWorldPanelLayout.setVerticalGroup(
             wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -271,7 +281,9 @@ public class GUI extends javax.swing.JFrame {
                 .addGroup(wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(wuxiaWorldURLBar)
                     .addComponent(wuxiaWorldSearchURLButton, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
                 .addComponent(wuxiaWorldContentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -671,6 +683,7 @@ public class GUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel homePanel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel libraryPanel;
     private javax.swing.JLayeredPane mainContentPanel;
     private javax.swing.JButton mainHomeButton;
