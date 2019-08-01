@@ -48,6 +48,23 @@ public class Handler
         thread.start();
     }
     
+    public void getWuxiaWorldNewContent()
+    {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    wuxiaWorldLoader.loadNewContent();
+                } catch (Exception ex) {
+                    System.out.println(ex.toString());
+                    Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+
+        thread.start();
+    }
+    
     public GUI getGUI()
     {
         return this.gui;

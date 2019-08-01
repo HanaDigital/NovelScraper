@@ -15,6 +15,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -38,7 +39,8 @@ public class GUI extends javax.swing.JFrame {
         initComponents();
         
         this.currentPage = "home";
-        loadPage(this.currentPage);  
+        loadPage(this.currentPage);
+        this.reloadButton.setEnabled(false);
     }
 
     /**
@@ -65,9 +67,11 @@ public class GUI extends javax.swing.JFrame {
         wuxiaWorldLoadingGif = new javax.swing.JLabel();
         wuxiaWorldURLBar = new javax.swing.JTextField();
         wuxiaWorldSearchURLButton = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        newButton = new javax.swing.JButton();
+        reloadButton = new javax.swing.JButton();
         novelPanel = new javax.swing.JPanel();
         novelCoverHolder = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         libraryPanel = new javax.swing.JPanel();
         sourcesPanel = new javax.swing.JPanel();
         sourcesWuxiaWorldButton = new javax.swing.JButton();
@@ -254,11 +258,21 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(2, 39, 87));
-        jButton1.setFont(new java.awt.Font("Agency FB", 1, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("NEW");
-        jButton1.setBorderPainted(false);
+        newButton.setBackground(new java.awt.Color(2, 39, 87));
+        newButton.setFont(new java.awt.Font("Agency FB", 1, 14)); // NOI18N
+        newButton.setForeground(new java.awt.Color(255, 255, 255));
+        newButton.setText("NEW");
+        newButton.setBorderPainted(false);
+
+        reloadButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/Reload-2s-30px.gif"))); // NOI18N
+        reloadButton.setBorderPainted(false);
+        reloadButton.setContentAreaFilled(false);
+        reloadButton.setOpaque(false);
+        reloadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reloadButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout wuxiaWorldPanelLayout = new javax.swing.GroupLayout(wuxiaWorldPanel);
         wuxiaWorldPanel.setLayout(wuxiaWorldPanelLayout);
@@ -271,11 +285,12 @@ public class GUI extends javax.swing.JFrame {
                     .addGroup(wuxiaWorldPanelLayout.createSequentialGroup()
                         .addComponent(wuxiaWorldURLBar, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(wuxiaWorldSearchURLButton, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE))
+                        .addComponent(wuxiaWorldSearchURLButton, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(wuxiaWorldPanelLayout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(reloadButton))))
         );
         wuxiaWorldPanelLayout.setVerticalGroup(
             wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -285,7 +300,9 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(wuxiaWorldURLBar)
                     .addComponent(wuxiaWorldSearchURLButton, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(wuxiaWorldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(reloadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
                 .addComponent(wuxiaWorldContentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -294,6 +311,19 @@ public class GUI extends javax.swing.JFrame {
 
         novelCoverHolder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/eclipse-loading-200px.gif"))); // NOI18N
 
+        jPanel1.setBackground(new java.awt.Color(2, 39, 87));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 360, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout novelPanelLayout = new javax.swing.GroupLayout(novelPanel);
         novelPanel.setLayout(novelPanelLayout);
         novelPanelLayout.setHorizontalGroup(
@@ -301,12 +331,14 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(novelPanelLayout.createSequentialGroup()
                 .addComponent(novelCoverHolder)
                 .addGap(0, 590, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         novelPanelLayout.setVerticalGroup(
             novelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(novelPanelLayout.createSequentialGroup()
                 .addComponent(novelCoverHolder, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 366, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         libraryPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -527,12 +559,20 @@ public class GUI extends javax.swing.JFrame {
 
     private void sourcesWuxiaWorldButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sourcesWuxiaWorldButtonActionPerformed
         this.handler.setWuxiaWorldLoader();
+        this.handler.getWuxiaWorldNewContent();
         this.loadPage("wuxiaworld");
     }//GEN-LAST:event_sourcesWuxiaWorldButtonActionPerformed
 
     private void wuxiaWorldSearchURLButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wuxiaWorldSearchURLButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_wuxiaWorldSearchURLButtonActionPerformed
+
+    private void reloadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadButtonActionPerformed
+        this.reloadButton.setEnabled(false);
+        this.reloadButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/Reload-2s-30px.gif")));
+        this.wuxiaWorldContentPanel.removeAll();
+        this.handler.getWuxiaWorldNewContent();
+    }//GEN-LAST:event_reloadButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -696,10 +736,15 @@ public class GUI extends javax.swing.JFrame {
     {
         return this.wuxiaWorldLoadingGif;
     }
+    
+    public JButton getReloadButton()
+    {
+        return this.reloadButton;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel homePanel;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel libraryPanel;
     private javax.swing.JLayeredPane mainContentPanel;
     private javax.swing.JButton mainHomeButton;
@@ -709,8 +754,10 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JButton mainSourcesButton;
     private javax.swing.JLabel mainTitle;
     private javax.swing.JPanel mainTitlePanel;
+    private javax.swing.JButton newButton;
     private javax.swing.JLabel novelCoverHolder;
     private javax.swing.JPanel novelPanel;
+    private javax.swing.JButton reloadButton;
     private javax.swing.JPanel settingsPanel;
     private javax.swing.JPanel sourcesPanel;
     private javax.swing.JButton sourcesWuxiaWorldButton;

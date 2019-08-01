@@ -55,56 +55,45 @@ public class WuxiaWorldLoader
     
     public WuxiaWorldLoader(Handler handler)
     {
+        this.handler = handler;
+    }
+    
+    public void loadNewContent()
+    {
         try 
         {
-            
-        this.handler = handler;
-        
-//        try {
-//            webClient = new WebClient();
-//            webClient = new WebClient(BrowserVersion.CHROME);
-//            webClient.getOptions().setThrowExceptionOnScriptError(false);
-//            webClient.getOptions().setJavaScriptEnabled(true);
-//            webClient.waitForBackgroundJavaScript(3000);
-//            HtmlPage page = webClient.getPage("https://www.wuxiaworld.com/novels");
-//            System.out.println(page.asText());
-//            
-//        } catch (IOException ex ) {
-//            ex.printStackTrace();
-//        }
-        
-        this.doc = Jsoup.connect("https://www.wuxiaworld.com/").get().parser(Parser.xmlParser());
-        
-        for(Element body : this.doc.getElementsByTag("tbody"))
-        {
-            this.novelList = body.getElementsByTag("tr");
-        }
-        
-//        System.out.println(this.novelList);
-        this.contentSize = this.novelList.size();
-        
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());
-        panel.setBackground(new Color(2,39,87));
-        panel.setPreferredSize(new Dimension(790, 185 * this.contentSize));
-        panel.setAutoscrolls(true);
+            this.doc = Jsoup.connect("https://www.wuxiaworld.com/").get().parser(Parser.xmlParser());
 
-        JScrollPane scrollPane = new JScrollPane(panel);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(20);
-        scrollPane.setBounds(0, 0, 790, 435);
-        
-        for(int i = 0; i < this.contentSize; i++)
-        {
-            this.contentPanels.add(new ContentPanel());
-            panel.add(contentPanels.get(i));
-            this.handler.getGUI().getWuxiaWorldLoadingGif().setVisible(false);
-            panel.repaint();
-            panel.revalidate();
-        }
-        
-        this.handler.getGUI().getWuxiaWorldContentPanel().add(scrollPane);
+            for(Element body : this.doc.getElementsByTag("tbody"))
+            {
+                this.novelList = body.getElementsByTag("tr");
+            }
+
+    //        System.out.println(this.novelList);
+            this.contentSize = this.novelList.size();
+
+            JPanel panel = new JPanel();
+            panel.setLayout(new FlowLayout());
+            panel.setBackground(new Color(2,39,87));
+            panel.setPreferredSize(new Dimension(790, 185 * this.contentSize));
+            panel.setAutoscrolls(true);
+
+            JScrollPane scrollPane = new JScrollPane(panel);
+            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+            scrollPane.setBounds(0, 0, 790, 435);
+
+            for(int i = 0; i < this.contentSize; i++)
+            {
+                this.contentPanels.add(new ContentPanel());
+                panel.add(contentPanels.get(i));
+                this.handler.getGUI().getWuxiaWorldLoadingGif().setVisible(false);
+                panel.repaint();
+                panel.revalidate();
+            }
+
+            this.handler.getGUI().getWuxiaWorldContentPanel().add(scrollPane);
             
             for(int i = 0; i < this.contentSize; i++)
             {
@@ -129,6 +118,8 @@ public class WuxiaWorldLoader
                 this.novel.setNovelCover(this.image);
                 this.contentPanels.get(i).setNovel(this.novel, this.handler);
             }
+            this.handler.getGUI().getReloadButton().setEnabled(true);
+            this.handler.getGUI().getReloadButton().setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/Reload.png")));
             
         } catch (Exception ex) {
             Logger.getLogger(WuxiaWorldLoader.class.getName()).log(Level.SEVERE, null, ex);
