@@ -292,7 +292,7 @@ public class GUI extends javax.swing.JFrame {
 
         novelPanel.setBackground(new java.awt.Color(255, 255, 255));
 
-        novelCoverHolder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/loading-images.gif"))); // NOI18N
+        novelCoverHolder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rsc/eclipse-loading-200px.gif"))); // NOI18N
 
         javax.swing.GroupLayout novelPanelLayout = new javax.swing.GroupLayout(novelPanel);
         novelPanel.setLayout(novelPanelLayout);
@@ -300,13 +300,13 @@ public class GUI extends javax.swing.JFrame {
             novelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(novelPanelLayout.createSequentialGroup()
                 .addComponent(novelCoverHolder)
-                .addGap(0, 610, Short.MAX_VALUE))
+                .addGap(0, 590, Short.MAX_VALUE))
         );
         novelPanelLayout.setVerticalGroup(
             novelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(novelPanelLayout.createSequentialGroup()
-                .addComponent(novelCoverHolder)
-                .addGap(0, 416, Short.MAX_VALUE))
+                .addComponent(novelCoverHolder, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 366, Short.MAX_VALUE))
         );
 
         libraryPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -639,7 +639,7 @@ public class GUI extends javax.swing.JFrame {
                 //Change visiblility of the panels
                 this.switchPages();
                 
-                this.novelCoverHolder.setIcon(new ImageIcon(novel.getNovelCover()));
+                this.novelCoverHolder.setIcon(new ImageIcon(novel.getNovelCover().getScaledInstance(200, 230, Image.SCALE_FAST)));
                 
                 //Change title text
                 this.mainTitle.setText(novel.getNovelName());

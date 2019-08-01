@@ -155,7 +155,7 @@ public class ContentPanel extends javax.swing.JPanel {
         this.novel = novel;
         this.handler = handler;
         this.wuxiaWorldNovelName.setText(novel.getNovelName());
-        this.wuxiaWorldNovelCover.setIcon(new ImageIcon(novel.getNovelCover()));
+        this.wuxiaWorldNovelCover.setIcon(new ImageIcon(novel.getNovelCover().getScaledInstance(180, 180, Image.SCALE_FAST)));
         this.wuxiaWorldLatestChapterName.setText(novel.getLatestChapterName());
         this.wuxiaWorldTranslatorName.setText(novel.getTranslator());
         this.wuxiaWorldUpdateTime.setText(novel.getLastUpdateTime());

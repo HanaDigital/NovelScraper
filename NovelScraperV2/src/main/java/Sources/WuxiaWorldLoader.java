@@ -123,7 +123,8 @@ public class WuxiaWorldLoader
                 URL url = new URL(imageElements.get(0).absUrl("src"));
                 HttpURLConnection httpcon = (HttpURLConnection) url.openConnection(); 
                 httpcon.addRequestProperty("User-Agent", "");
-                this.image = ImageIO.read(httpcon.getInputStream()).getScaledInstance(180, 180, Image.SCALE_FAST);
+                this.image = ImageIO.read(httpcon.getInputStream());
+                
 //                
                 this.novel.setNovelCover(this.image);
                 this.contentPanels.get(i).setNovel(this.novel, this.handler);
