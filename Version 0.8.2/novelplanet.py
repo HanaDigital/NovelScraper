@@ -103,6 +103,11 @@ class NovelPlanetPanel(wx.Panel):
                     content = f"<h2>{current_chapter}</h2>"
                 # Get all the paragraphs from the chapter
                 paras = soup.find(id="divReadContent")
+
+                #Remove ads
+                for div in paras('div'):
+                    div.decompose()
+
                 # Append all paragraph to content which will be added to the .xhtml
                 content += paras.prettify()
                 content += "<p> </p>"
