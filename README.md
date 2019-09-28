@@ -1,13 +1,14 @@
 ### About
- *	Authors: dr_nyt, webdagger
+ *	Authors: dr_nyt
  *	Version: 0.9
  * You can support us by joining our discord group: https://discord.gg/Wya4Dst :heart:
 
 ### Features
-- Download any Translated Novel form novelplanet.com and boxnovel.com (for now) in .epub format.
+- Download any Translated Novel form www.novelplanet.com and www.boxnovel.com (for now) in .epub format.
+- Only supports the windows platform for now. Let me know on discord if you really want macOS/Linux support.
 
 ### Usage
-1. Download and install the latest release from [here](https://github.com/dr-nyt/Translated-Novel-Downloader/releases).
+1. Download and install the latest release from [here](https://github.com/dr-nyt/Translated-Novel-Downloader/releases). If you have already installed the app before, then installing again will update the app.
 
 2. Pick a source you want, from the sources tab. [www.novelplanet.com is recommended, but it is also slow in speed.]
 ![select_sources](https://user-images.githubusercontent.com/41040912/65813358-52894900-e1e5-11e9-85aa-3f34608d8032.png)
