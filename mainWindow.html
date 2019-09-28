@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Meta-data -->
+        <meta name="dr_nyt" content="dr_nyt">
+
+        <!-- Styles -->
+        <link rel="stylesheet" href="./assets/css/styles.css">
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <!-- The window holder -->
+        <div id="header">
+            <strong><span>Novel</span>Scraper</strong>
+
+            <!-- Buttons to minimize, maximize and close window -->
+            <nav>
+                <ul>
+                    <li><img src="assets/rsc/minimize-icon.png" id="min"></li>
+                    <li><img src="assets/rsc/close-icon.png" id="close"></li>
+                </ul>
+            </nav>
+        </div>
+
+
+        <div id="vertical-menu">
+
+            <!-- Home button -->
+            <a href="#" id="homeButton" class="menuButton">
+                <img 
+                    src="assets/rsc/home.png" 
+                    id="homeIcon" 
+                    onmouseover="this.src='assets/rsc/home-hover.png'"
+                    onmouseout="this.src='assets/rsc/home.png'"
+                    border="0" 
+                    alt=""
+                />
+            </a>
+
+            <!-- Sources button -->
+            <a href="#" id="sourcesButton" class="menuButton">
+                <img 
+                    src="assets/rsc/sources.png"
+                    id="sourcesIcon"
+                    onmouseover="this.src='assets/rsc/sources-hover.png'"
+                    onmouseout="this.src='assets/rsc/sources.png'"
+                    border="0" 
+                    alt=""
+                />
+            </a>
+
+            <!-- Library button -->
+            <a href="#" id="libraryButton" class="menuButton">
+                <img 
+                    src="assets/rsc/library.png" 
+                    id="libraryIcon" 
+                    onmouseover="this.src='assets/rsc/library-hover.png'"
+                    onmouseout="this.src='assets/rsc/library.png'"
+                    border="0" 
+                    alt=""/>
+            </a>
+        </div>
+
+        <div id="content">
+            
+            <!-- The pages itself -->
+            <div id="homePage" class="page"> 
+                <div class="headerPanel">
+                    <h1>Home</h1>
+                </div>
+
+                <div id="homeStatus" class="status">
+                    <img 
+                        class="statusImage"
+                        src="assets/rsc/icons8-construction-100.png"
+                        border="0"
+                        alt=""/>
+                    
+                    <p class="statusText">UNDER CONSTRUCTION</p>
+                </div>
+            </div>
+
+            <div id="sourcesPage" class="page"> 
+                <div class="headerPanel">
+                    <h1>Sources</h1>
+                </div>
+
+                <ul id="sourcesList">
+                    <li>
+                        <div id="novelPlanetHolder" class="sourceHolder">
+                            <img 
+                                src="assets/rsc/NovelPlanet Logo.png" 
+                                id="novelPlanetIcon"
+                                border="0" 
+                                alt=""/>
+                            
+                            <p>NovelPlanet</p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div id="boxNovelHolder" class="sourceHolder">
+                            <img 
+                                src="assets/rsc/BoxNovel Logo.png" 
+                                id="boxNovelIcon"
+                                border="0" 
+                                alt=""/>
+                            
+                            <p>BoxNovel</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+    
+            <div id="novelPlanetPage" class="page"> 
+                <div class="headerPanel">
+                    <input id="novelPlanetURLTextField" class="urlTextField" type="text" name="URL" placeholder="https://novelplanet.com/Novel/">
+                    <button id="novelPlanetFindURLButton" class="urlButton" type="button">FIND</button>
+                </div>
+
+                <div id="novelPlanetStatus" class="status">
+                    <img 
+                        class="sourceStatusImage"
+                        src="assets/rsc/empty.gif"
+                        border="0"
+                        alt=""/>
+                    
+                    <p class="statusText">SO MUCH EMPTY</p>
+                </div>
+
+                <div id="novelPlanetContent" class="content">
+                    <div class="novelInfoHolder">
+                        <img 
+                            class="novelCover"
+                            src="assets/rsc/loading-images.gif" 
+                            onerror="this.src='assets/rsc/missing-image.png'" 
+                            border="0" 
+                            alt=""/>
+
+                        <div class="novelInfo">
+                            <strong>Loading...</strong>
+                            <p>Please wait!</p>
+                        </div>
+
+                        <div id="novelPlanetNovelButtons" class="novelButtons">
+                            <button id="novelPlanetAddLibButton" class="novelButton" type="button">ADD TO LIBRARY</button>
+                            <button id="novelPlanetRemoveLibButton" class="novelRemoveButton" type="button">REMOVE FROM LIBRARY</button>
+                            <button id="novelPlanetDownloadButton" class="novelButton" type="button">DOWNLOAD</button>
+                            <button id="novelPlanetOpenFolderButton" class="novelFolderButton" type="button">OPEN FOLDER</button>
+    
+                            <div class="progressBar">
+                                <div class="loaderBar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="boxNovelPage" class="page"> 
+                <div class="headerPanel">
+                    <input id="boxNovelURLTextField" class="urlTextField" type="text" name="URL" placeholder="https://boxnovel.com/novel/">
+                    <button id="boxNovelFindURLButton" class="urlButton" type="button">FIND</button>
+                </div>
+
+                <div id="boxNovelStatus" class="status">
+                    <img 
+                        class="sourceStatusImage"
+                        src="assets/rsc/empty.gif"
+                        border="0"
+                        alt=""/>
+                    
+                    <p class="statusText">SO MUCH EMPTY</p>
+                </div>
+
+                <div id="boxNovelContent" class="content">
+                    <div class="novelInfoHolder">
+                        <img 
+                            class="novelCover"
+                            src="assets/rsc/loading-images.gif" 
+                            onerror="this.src='assets/rsc/missing-image.png'" 
+                            border="0" 
+                            alt=""/>
+
+                        <div class="novelInfo">
+                            <strong>Loading...</strong>
+                            <p>Please wait!</p>
+                        </div>
+
+                        <div id="boxNovelNovelButtons" class="novelButtons">
+                            <button id="boxNovelAddLibButton" class="novelButton" type="button">ADD TO LIBRARY</button>
+                            <button id="boxNovelRemoveLibButton" class="novelRemoveButton" type="button">REMOVE FROM LIBRARY</button>
+                            <button id="boxNovelDownloadButton" class="novelButton" type="button">DOWNLOAD</button>
+                            <button id="boxNovelOpenFolderButton" class="novelFolderButton" type="button">OPEN FOLDER</button>
+
+                            <div class="progressBar">
+                                <div class="loaderBar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="libraryPage" class="page">
+                <div class="headerPanel">
+                    <h1>Library</h1>
+                </div>
+            
+                <div id="libraryStatus" class="status">
+                    <img 
+                        class="sourceStatusImage"
+                        src="assets/rsc/empty.gif"
+                        border="0"
+                        alt=""/>
+                    
+                    <p class="statusText">SO MUCH EMPTY</p>
+                </div>
+
+                <div id="libraryContent">
+                    <ul id="libraryNovelList">
+                        <li id="0">
+                            <div class="libraryNovelHolder">
+                                <img class="novelCover" src="https://cdn.novelupdates.com/imgmid/series_5633.jpg" onerror="this.src='assets/rsc/missing-image.png'" border="0" alt="">
+                                <div class="novel-info">
+                                    <strong>Tempest of the Stellar War</strong>
+                                </div>
+                                <div class="novel-control">
+                                    <button class="libraryDownloadButton" type="button">DOWNLOAD</button>
+                                    <button class="libraryOpenFolderButton" type="button">OPEN FOLDER</button>
+                                    <button class="libraryRemoveButton" type="button">REMOVE FROM LIBRARY</button>
+
+                                    <div class="progressBar">
+                                        <div class="loaderBar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </body>
+
+    <footer>
+        <!-- Scripts -->
+        <script src="./assets/scripts/mainController.js"></script>
+        <script src="./assets/scripts/novelplanetController.js"></script>
+        <script src="./assets/scripts/boxnovelController.js"></script>
+        <script src="./assets/scripts/libraryController.js"></script>
+    </footer>
+</html>

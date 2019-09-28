@@ -1,0 +1,463 @@
+$header-background: rgb(49, 52, 54);
+$menu-background: #0c2852;
+$menu-selected: rgb(5, 69, 121);
+$menu-hover: rgb(14, 58, 94);
+$page-background: white;
+$content-background: rgb(255, 255, 255);
+
+html {
+    height: 100%;
+    font-family: helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: rgb(0, 153, 255);
+    margin: 0;
+
+    #header {
+        z-index: 9;
+        position: fixed;
+        width: 100%;
+        height: 30px;
+        background-color: $header-background;
+        display: grid;
+        grid-template-columns: 70% auto;
+        -webkit-app-region: drag;
+        box-shadow: inset 0px -5px 6px -6px black;
+
+        border-radius: 5% 5% 0 0;
+    
+        strong {
+            display: flex;
+            align-items: center;
+            margin-left: 5px;
+            color: white;
+    
+            span {
+                color: rgb(0, 153, 255);
+            }
+        }
+    
+        nav {
+            display: flex;
+            align-items: center;
+            justify-self: right;
+            -webkit-app-region: no-drag;
+    
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+    
+                li {
+                    float: left;
+    
+                    img {
+                        width: 20px;
+                        cursor: pointer;
+                    }
+    
+                    #min:hover {
+                        background: orange;
+                    }
+    
+                    #close:hover {
+                        background: red;
+                    }
+                }
+            }
+        }
+    }
+
+    #vertical-menu {
+        z-index: 10;
+        position: fixed;
+        width: 70px;
+        height: 100%;
+        top: 30px;
+        background-color: $menu-background;
+        border-right: 2px solid #8595af;
+        box-shadow: 4px -1px 6px -6px black;
+
+        a {
+            display: block;
+            width:70px;
+            height: 60px;
+            text-decoration: none;
+
+            img {
+                width: inherit;
+                height: inherit;
+            }
+
+            img:hover {
+                background-color: $menu-hover;
+            }
+        }
+
+        #homeButton {
+            background-color: $menu-selected;
+        }
+    }
+
+    #content {
+        position: absolute;
+        height: calc(100% - 30px);
+        width: calc(100% - 70px);
+        bottom: 0;
+        right: 0;
+        padding-bottom: 10px;
+        background-color: white;
+        box-sizing: border-box;
+        overflow: auto;
+        font-family: 'Open Sans', sans-serif;
+
+        .page {
+            display: none;
+            position: absolute;
+            height: calc(100% - 60px);
+            width: calc(100%);
+            bottom: 0;
+            right: 0;
+            padding-bottom: 10px;
+            box-sizing: border-box;
+            overflow: auto;
+
+            .headerPanel
+            {
+                display: grid;
+                grid-template-columns: auto 15%;
+                // padding-top: 5px;
+                padding-left: 5px;
+                height: 60px;
+                position: fixed;
+                right: 0;
+                left: 70px;
+                top: 30px;
+                background-color: rgb(0, 45, 74);
+                z-index: 8;
+                align-items: center;
+
+                h1 {
+                    font-size: 2.2rem;
+                    color: white;
+                    margin: 0;
+                    margin-left: 10px;
+                }
+
+                .urlTextField {
+                    height: 30px;
+                    margin-left: 5px;
+                    font-size: 1.1rem;
+                }
+
+                .urlButton {
+                    height: 37px;
+                    margin-right: 5px;
+                    margin-left: 5px;
+                    border: 1px solid #8595af;
+                    background-color: #0c2852;
+                    color: white;
+                    cursor: pointer;
+                }
+            }
+
+            .status {
+                position: absolute;
+                top: 30%;
+                left: 50%;
+                margin-left: -90px;
+                text-align: center;
+
+                img {
+                    width: 100px;
+                }
+
+                .sourceStatusImage {
+                    width: 200px;
+                }
+            }
+
+            .content {
+                display: none;
+                
+                .novelInfoHolder {
+                    position: relative;
+                    width: 100%;
+                    height: 300px;
+                    box-shadow: 0 8px 6px -6px black;
+
+                    img {
+                        width: 250px;
+                        height: 300px;
+                        float: left;
+                        margin-right: 5px;
+                    }
+
+                    .novelInfo {
+                        word-wrap: break-word;
+
+                        strong {
+                            font-size: 1.5rem;
+                        }
+                    }
+
+                    .novelButtons {
+                        position: absolute;
+                        left: 250px;
+                        bottom: 10px;
+    
+                        .novelButton {
+                            height: 37px;
+                            margin-right: 5px;
+                            margin-left: 5px;
+                            border: 1px solid #8595af;
+                            background-color: #0c2852;
+                            color: white;
+                            float: left;
+                            cursor: pointer;
+                        }
+    
+                        .novelRemoveButton {
+                            display: none;
+                            height: 37px;
+                            margin-right: 5px;
+                            margin-left: 5px;
+                            border: 1px solid #8595af;
+                            background-color: #6f0707;
+                            color: white;
+                            float: left;
+                            cursor: pointer;
+                        }
+
+                        .novelFolderButton {
+                            display: none;
+                            height: 37px;
+                            margin-right: 5px;
+                            margin-left: 5px;
+                            border: 1px solid #8595af;
+                            background-color: #4CAF50;
+                            color: white;
+                            float: left;
+                            cursor: pointer;
+                        }
+
+                        .progressBar {
+                            display: none;
+                            margin-top: 10px;
+                            margin-left: 5px; 
+                            height: 10px; 
+                            width: 100%;
+                            background-color: #ddd;
+                            border-radius: 10px;
+                            float: left;
+        
+                            .loaderBar {
+                                width: 0%;
+                                height: 10px;
+                                background-color: #4CAF50;
+                                border-radius: 20px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .testBox {
+                padding: 0;
+                margin: 0;
+                margin-top: 10px;
+                margin-left: 10px;
+                list-style-type: none;
+
+                li {
+                    font-size: 1.2rem;
+                    float: left;
+                    margin-right: 20px;
+
+                    .square {
+                        cursor: pointer;
+                        width: 150px;
+                        height: 150px;
+                        background-color: $content-background;
+                        border-radius: 5%;
+                        text-align: center;
+                        color: black;
+                        border-top: 1px solid #e5e9ec;
+                        border-left: 2px solid #8595af;
+                        border-right: 2px solid #8595af;
+                        box-shadow: 0 8px 6px -6px black;
+                    }
+                }
+            }
+        }
+
+        #homePage {
+            display: block;
+        }
+
+        #sourcesPage {
+
+            #sourcesList {
+                padding: 0;
+                margin: 0;
+                margin-top: 10px;
+                margin-left: 10px;
+                list-style-type: none;
+
+                li {
+                    font-size: 1.2rem;
+                    float: left;
+                    margin-right: 20px;
+
+                    .sourceHolder {
+                        cursor: pointer;
+                        width: 150px;
+                        height: 175px;
+                        background-color: $content-background;
+                        border-radius: 5%;
+                        text-align: center;
+                        color: black;
+                        border-top: 1px solid #e5e9ec;
+                        border-left: 2px solid #8595af;
+                        border-right: 2px solid #8595af;
+                        box-shadow: 0 8px 6px -6px black;
+
+                        img {
+                            width: 115px;
+                            margin-top: 10px;
+                        }
+
+                        p {
+                            margin-top: 0;
+                        }
+                    }
+
+                    .sourceHolder:hover {
+                        box-shadow: 0px 5px 16px -6px black;
+                    }
+                }
+            }
+        }
+
+
+        #libraryPage {
+            display: none;
+
+            #libraryStatus {
+                display: none;
+            }
+
+            #libraryContent {
+
+                #libraryNovelList {
+                    list-style-type: none;
+                    padding-left: 20px;
+
+                    li {
+                        font-size: 1.2rem;
+                        margin-right: 20px;
+                        text-align: left;
+                        
+                        .libraryNovelHolder {
+                            cursor: pointer;
+                            width: 100%;
+                            height: 280px;
+                            margin-top: 10px;
+                            background-color: $content-background;
+                            text-align: center;
+                            color: black;
+                            border-top: 1px solid #e5e9ec;
+                            border-left: 2px solid #8595af;
+                            border-right: 2px solid #8595af;
+                            border-bottom: 1px solid #e5e9ec;
+                            position: relative;
+
+                            .novelCover {
+                                float: left;
+                                width: 240px;
+                                height: 280px;
+                                margin-right: 10px;
+                            }
+
+                            .novel-info {
+                                text-align: left;
+                                word-wrap: break-word;
+                            }
+
+                            .novel-control {
+                                position: absolute;
+                                left: 250px;
+                                bottom: 10px;
+
+                                button {
+                                    height: 37px;
+                                    margin-right: 5px;
+                                    margin-left: 5px;
+                                    border: 1px solid #8595af;
+                                    background-color: #0c2852;
+                                    color: white;
+                                    float: left;
+                                }
+
+                                .libraryRemoveButton {
+                                    background-color: #6f0707;
+                                }
+
+                                .libraryOpenFolderButton {
+                                    display: none;
+                                    background-color: #4CAF50; 
+                                }
+
+                                .progressBar {
+                                    display: none;
+                                    margin-top: 10px;
+                                    height: 10px; 
+                                    width: 100%;
+                                    background-color: #ddd;
+                                    border-radius: 10px;
+                                    float: left;
+
+                                    .loaderBar {
+                                        width: 0%;
+                                        height: 10px;
+                                        background-color: #4CAF50;
+                                        border-radius: 20px;
+                                    }
+                                }
+                            }
+                        }
+
+                        .libraryNovelHolder:hover {
+                            box-shadow: 0px 2px 6px 3px #b9c5d8;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Let's get this party started */
+::-webkit-scrollbar {
+    width: 12px;
+    margin-top: 30px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgb(75, 77, 78); 
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background: rgb(49, 52, 54); 
+}
