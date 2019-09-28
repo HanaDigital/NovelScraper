@@ -1,38 +1,32 @@
 ### About
  *	Authors: dr_nyt, webdagger
- *	Version: 0.8
+ *	Version: 0.9
  * You can support us by joining our discord group: https://discord.gg/Wya4Dst :heart:
 
 ### Features
-- Download any Translated Novel form NovelPlanet, WuxiaWorld.com or m.WuxiaWorld.co in .epub format.
+- Download any Translated Novel form novelplanet.com and boxnovel.com (for now) in .epub format.
 
 ### Usage
-1. Download the latest release from here and unzip it: https://github.com/dr-nyt/Translated-Novel-Downloader/releases
-![V0 8 Folder](https://user-images.githubusercontent.com/41040912/59525103-85355d00-8ee6-11e9-8a30-a361f4e79e0d.jpg)
-   - Launch "NovelScraper.exe". [You can put your novel covers in the rsc/ folder but don't delete the one already inside]
-2. Choose the source you want to download your novels from. [www.NovelPlanet.com is recommended]
-![V0 8 Source](https://user-images.githubusercontent.com/41040912/59525573-bd896b00-8ee7-11e9-986f-f8872fcc7593.jpg)
-   #### If your source is NovelPlanet.com:
-   ![V0 8 NovelPlanet](https://user-images.githubusercontent.com/41040912/59525606-d5f98580-8ee7-11e9-8a31-f89059e8bb63.jpg)
-      - Paste the link of the novel from www.novelplanet.com [Eg: https://novelplanet.com/Novel/Overgeared]
-      - You can optionally specify the range of chapters you want or leave it blank to get the whole novel.
-      - You can optinally save a cover image in the rsc/ folder and enter its name in the GUI. [Eg: Novel Cover.png]
-      
-   #### If your source is m.WuxiaWorld.co:
-   ![V0 8 WuxiaCo](https://user-images.githubusercontent.com/41040912/59525617-dbef6680-8ee7-11e9-83de-b511066052c1.jpg)
-      - Paste the link of the novel from https://m.wuxiaworld.co [Eg: https://m.wuxiaworld.co/Dragon-Marked-War-God]
-      - You can optinally save a cover image in the rsc/ folder and enter its name in the GUI. [Eg: Novel Cover.png]
-      
-   #### If your source is WuxiaWorld.com:
-   ![V0 8 WuxiaWorld](https://user-images.githubusercontent.com/41040912/59525611-d98d0c80-8ee7-11e9-939c-b58bc2491936.jpg)
-      - Paste the link of the novel from www.wuxiaworld.com [Eg: https://www.wuxiaworld.com/novel/overgeared]
-      - If you want a specific volume, then type in the volume number you want.
-      - You can optinally save a cover image in the rsc/ folder and enter its name in the GUI. [Eg: Novel Cover.png]
+1. Download and install the latest release from [here](https://github.com/dr-nyt/Translated-Novel-Downloader/releases).
 
-3. Click compile to let it rip!
+2. Pick a source you want, from the sources tab. [www.novelplanet.com is recommended, but it is also slow in speed.]
+![select_sources](https://user-images.githubusercontent.com/41040912/65813358-52894900-e1e5-11e9-85aa-3f34608d8032.png)
+
+3. After picking a source, paste a link of a novel from that source and it to your library! Eg: [https://boxnovel.com/novel/i-alone-level-up/]
+![add_to_library](https://user-images.githubusercontent.com/41040912/65813424-1a363a80-e1e6-11e9-9c98-2d6a1011ed8f.png)
+
+4. Now go to the library tab, where you can download and update all your saved novels.
+![library_download](https://user-images.githubusercontent.com/41040912/65813426-21f5df00-e1e6-11e9-91ee-45bb26cac1d3.png)
+
+5. After downloading a novel, the app will give you an option to open the folder the novel is stored in.
+![open_folder](https://user-images.githubusercontent.com/41040912/65813450-71d4a600-e1e6-11e9-8a99-2e54dd60bf2d.png)
+
+6. To update your novels, just click download again and let it rip :D
+
+7. There are bound to be bugs and errors so please open an issue [here](https://github.com/dr-nyt/Translated-Novel-Downloader/issues/) if you find any.
 
 ### Alpha Build
-- Android build.
+- Android App.
 
 ### Citation
    - <div>Icons made by <a href="https://www.flaticon.com/authors/icon-works" title="Icon Works">Icon Works</a> from <a href="https://www.flaticon.com/"                 title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"                 title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
