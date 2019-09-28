@@ -36,11 +36,13 @@ boxNovelURLBox.addEventListener("keyup", function(event) {
 function boxNovelLoadURL() {
     var novelLink = boxNovelURLBox.value;
     if(!novelLink.includes('https://boxnovel.com/novel/')) {
+        boxNovelStatusImage.src = "assets/rsc/delete.svg";
+        boxNovelStatusText.innerText = "Invalid Link!";
         return;
     } else if(novelLink == '') {
         return;
     }
-    
+
     boxNovelStatusImage.src = "assets/rsc/eclipse-loading-200px.gif";
     boxNovelStatusText.innerText = "Loading...";
 
@@ -75,8 +77,8 @@ function boxNovelLoadURL() {
         boxNovelCheckLibrary(novelLink);
 
         boxNovelCurrentNovelName = novelName;
-        boxNovelCurrentNovelCoverSrc = novelCoverSrc;
         boxNovelCurrentNovelLink = novelLink;
+        boxNovelCurrentNovelCoverSrc = novelCoverSrc;
         boxNovelCurrentTotalChapters = html.getElementsByClassName("wp-manga-chapter").length;
 
         boxNovelStatus.style.display = "none";
@@ -106,10 +108,6 @@ function boxNovelCheckLibrary(link) {
     for(x in libObj.novels) {
         if(libObj.novels[x]['novelLink'] === link) {
             boxNovelLibButton(false);
-            if(libObj.novels[x]['downloaded'] === "true") {
-                document.getElementById("boxNovelOpenFolderButton").style.display = "block";
-                document.getElementById("boxNovelOpenFolderButton").addEventListener('click', function() {shell.openItem(libObj.novels[x]['folderPath']);})
-            }
             break;
         }
     }
@@ -123,11 +121,4 @@ function boxNovelLibButton(boolean) {
         boxNovelAddToLibButton.style.display = "none";
         boxNovelRemoveFromLibButton.style.display = "block";
     }
-}
-
-var boxNovelDownloadButton = document.getElementById('boxNovelDownloadButton');
-boxNovelDownloadButton.addEventListener('click', downloadBoxNovelNovel)
-
-function downloadBoxNovelNovel() {
-    downloadNovel(boxNovelCurrentNovelName, boxNovelCurrentNovelCoverSrc, boxNovelCurrentNovelLink, boxNovelCurrentTotalChapters, "boxnovel",);
 }

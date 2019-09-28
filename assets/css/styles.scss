@@ -230,18 +230,6 @@ body {
                             cursor: pointer;
                         }
 
-                        .novelFolderButton {
-                            display: none;
-                            height: 37px;
-                            margin-right: 5px;
-                            margin-left: 5px;
-                            border: 1px solid #8595af;
-                            background-color: #4CAF50;
-                            color: white;
-                            float: left;
-                            cursor: pointer;
-                        }
-
                         .progressBar {
                             display: none;
                             margin-top: 10px;
@@ -407,6 +395,11 @@ body {
                                 .libraryOpenFolderButton {
                                     display: none;
                                     background-color: #4CAF50; 
+                                }
+
+                                .libraryCancelButton {
+                                    display: none;
+                                    background-color: #6f0707;
                                 }
 
                                 .progressBar {

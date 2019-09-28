@@ -245,18 +245,6 @@ body #content .page .content .novelInfoHolder .novelButtons .novelRemoveButton {
   cursor: pointer;
 }
 
-body #content .page .content .novelInfoHolder .novelButtons .novelFolderButton {
-  display: none;
-  height: 37px;
-  margin-right: 5px;
-  margin-left: 5px;
-  border: 1px solid #8595af;
-  background-color: #4CAF50;
-  color: white;
-  float: left;
-  cursor: pointer;
-}
-
 body #content .page .content .novelInfoHolder .novelButtons .progressBar {
   display: none;
   margin-top: 10px;
@@ -420,6 +408,11 @@ body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHol
 body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder .novel-control .libraryOpenFolderButton {
   display: none;
   background-color: #4CAF50;
+}
+
+body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder .novel-control .libraryCancelButton {
+  display: none;
+  background-color: #6f0707;
 }
 
 body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder .novel-control .progressBar {

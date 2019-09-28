@@ -21,6 +21,7 @@ function addLibraryNovelHolder(id, novelName, novelCover, novelLink, totalChapte
     novelHolder += "<button class=\"libraryDownloadButton\" type=\"button\">DOWNLOAD</button>"
     novelHolder += "<button class=\"libraryOpenFolderButton\" type=\"button\">OPEN FOLDER</button>"
     novelHolder += "<button class=\"libraryRemoveButton\" type=\"button\">REMOVE FROM LIBRARY</button>"
+    novelHolder += "<button class=\"libraryCancelButton\" type=\"button\">CANCEL</button>"
     novelHolder += "<div class=\"progressBar\">"
     novelHolder += "<div class=\"loaderBar\"></div>"
     novelHolder += "</div>"
@@ -57,6 +58,7 @@ function removeFromLibrary(novelLink) {
         if(libObj.novels[x]['novelLink'] == novelLink) {
             libObj.novels.splice(x, x+1);
             saveLibObj();
+            cancelDownload(libObj.novels[x]['folderPath'] + '/alert')
             break;
         }
     }

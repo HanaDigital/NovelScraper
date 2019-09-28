@@ -66,6 +66,10 @@ class NovelPlanet():
                 epub.addChapter(chapter_head, current_chapter, content)
                 self.update_gui("%d" % current_chapter)
                 current_chapter += 1
+                
+                if(self.get_alert() == "cancel"):
+                    self.update_gui("CANCEL")
+                    return
             
             epub.createEpub()
             self.update_gui('END')
@@ -78,6 +82,12 @@ class NovelPlanet():
                 self.update_gui('ERROR')
 
     def update_gui(self, msg):
-        f = open(self.storage_path + '/' + "update.txt","w+")
+        f = open(self.storage_path + '/' + "update","w+")
         f.write("%s" % msg)
         f.close()
+    
+    def get_alert(self):
+        f = open(self.storage_path + '/' + "alert","r+")
+        alert = f.readline()
+        f.close()
+        return alert

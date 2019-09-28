@@ -11,10 +11,10 @@ let mainWindow;
 app.on('ready', function()
 {
     const windowOptions = {
-        width: 885,
+        width: 950,
         height: 600,
         'minWidth': 710,
-        'minHeight': 455,
+        'minHeight': 500,
         frame: false,
         webPreferences: {
         nodeIntegration: true

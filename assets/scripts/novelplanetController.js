@@ -23,6 +23,8 @@ var novelPlanetCurrentTotalChapters;
 function novelPlanetLoadURL() {
     var novelLink = novelPlanetURLBox.value;
     if(!novelLink.includes('https://novelplanet.com/Novel/')) {
+        novelPlanetStatusImage.src = "assets/rsc/delete.svg";
+        novelPlanetStatusText.innerText = "Invalid Link!";
         return;
     } else if(novelLink == '') {
         return;
@@ -43,26 +45,29 @@ function novelPlanetLoadURL() {
     cloudscraper(options)
     .then(function (htmlString) {
         var html = new DOMParser().parseFromString(htmlString, 'text/html');
-        // var novelInfoHtml = html.getElementsByClassName('container')[0];
+        console.log(html);
 
         var novelCoverSrc = html.getElementsByClassName('post-previewInDetails')[0].getElementsByTagName('img')[0].src;
         var novelName = html.getElementsByClassName('post-contentDetails')[0].getElementsByTagName('p')[0].innerText.replace(/(\r\n|\n|\r)/gm,"");
+
+        novelPlanetCurrentNovelName = novelName;
+        novelPlanetCurrentNovelLink = novelLink;
+        novelPlanetCurrentTotalChapters = html.getElementsByClassName("rowChapter").length;
+
+        novelPlanetContent.getElementsByTagName('strong')[0].innerText = novelName;
+        novelPlanetContent.getElementsByTagName('p')[0].innerText = "";
 
         if(novelCoverSrc.includes('/Uploads/') || novelCoverSrc.includes('/Content/') || novelCoverSrc.includes('/Novel/')) {
             novelPlanetContent.getElementsByTagName('img')[0].src = "assets/rsc/eclipse-loading-200px.gif";
             novelPlanetBackupCover(novelName);
         } else {
             novelPlanetContent.getElementsByTagName('img')[0].src = novelCoverSrc;
+            novelPlanetCurrentNovelCoverSrc = novelCoverSrc;
+            novelPlanetStatus.style.display = "none";
+            novelPlanetContent.style.display = "block";
         }
-        
-        novelPlanetContent.getElementsByTagName('strong')[0].innerText = novelName;
-        novelPlanetContent.getElementsByTagName('p')[0].innerText = "";
 
         novelPlanetCheckLibrary(novelLink);
-
-        novelPlanetCurrentNovelName = novelName;
-        novelPlanetCurrentNovelLink = novelLink;
-        novelPlanetCurrentTotalChapters = html.getElementsByClassName("rowChapter").length;
     })
     .catch(function (err) {
         console.log(err);
@@ -121,55 +126,17 @@ function novelPlanetCheckLibrary(link) {
     for(x in libObj.novels) {
         if(libObj.novels[x]['novelLink'] === link) {
             novelPlanetLibButton(false);
-            if(libObj.novels[x]['downloaded'] === "true") {
-                document.getElementById("novelPlanetOpenFolderButton").style.display = "block";
-                document.getElementById("novelPlanetOpenFolderButton").addEventListener('click', function() {shell.openItem(libObj.novels[x]['folderPath']);})
-            }
             break;
         }
     }
 }
 
 async function saveNovelToLibrary(novelName, novelCoverSrc, novelLink, totalChapters) {
-
-    if(novelCoverSrc.includes('/Uploads/') || novelCoverSrc.includes('/Content/') || novelCoverSrc.includes('/Novel/')) {
-        writeToLibrary(novelName, 'assets/rsc/loading-images.gif', novelLink, totalChapters, "novelplanet");
-        saveFromInvalidCover(novelName, novelLink);
-    } else {
-        writeToLibrary(novelName, novelCoverSrc, novelLink, totalChapters, "novelplanet");
-    }
-}
-
-function saveFromInvalidCover(novelName, novelLink) {
-    var tempNovelURL = novelName.replace(/ /g, "+");
-    tempNovelURL = 'https://www.novelupdates.com/?s=' + tempNovelURL + '&post_type=seriesplans';
-    request(tempNovelURL, function(error, response, html) {
-        if(!error && response.statusCode == 200) { 
-            let $ = cheerio.load(html);
-            var tempImgSrc = $('.search_img_nu').find('img').attr('src');
-            for(x in libObj.novels) {
-                if(libObj.novels[x]['novelLink'] === novelLink) {
-                    libObj.novels[x]['novelCoverSrc'] = tempImgSrc;
-                    document.getElementById(novelLink).getElementsByClassName('novelCover')[0].src = tempImgSrc;
-                    break
-                }
-            }
-        } else {
-            console.log(error);
-            for(x in libObj.novels) {
-                if(libObj.novels[x]['novelLink'] === novelLink) {
-                    libObj.novels[x]['novelCoverSr'] = "assets/rsc/missing-image.png";
-                    document.getElementById(novelLink).getElementsByClassName('novelCover')[0].src = "assets/rsc/missing-image.png";
-                    break
-                }
-            }
-        }
-    });
+    writeToLibrary(novelName, novelCoverSrc, novelLink, totalChapters, "novelplanet");
 }
 
 function novelPlanetRemoveLibrary() {
     novelPlanetLibButton(true);
-    document.getElementById("novelPlanetOpenFolderButton").style.display = "none";
     removeFromLibrary(novelPlanetCurrentNovelLink);
 }
 
@@ -181,11 +148,4 @@ function novelPlanetLibButton(boolean) {
         novelPlanetAddToLibButton.style.display = "none";
         novelPlanetRemoveFromLibButton.style.display = "block";
     }
-}
-
-var novelPlanetDownloadButton = document.getElementById('novelPlanetDownloadButton');
-novelPlanetDownloadButton.addEventListener('click', downloadNovelPlanetNovel)
-
-function downloadNovelPlanetNovel() {
-    downloadNovel(novelPlanetCurrentNovelName, novelPlanetCurrentNovelCoverSrc, novelPlanetCurrentNovelLink, novelPlanetCurrentTotalChapters, "novelplanet",);
 }

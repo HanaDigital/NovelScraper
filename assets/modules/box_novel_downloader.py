@@ -58,20 +58,27 @@ class BoxNovel():
                 content += paras.prettify()
                 
                 epub.addChapter(chapter_head, current_chapter, content)
-                self.updateGUI("%d" % current_chapter)
+                self.update_gui("%d" % current_chapter)
                 current_chapter += 1
+                
+                if(self.get_alert() == "cancel"):
+                    self.update_gui("CANCEL")
+                    return
             
             epub.createEpub()
-            self.updateGUI('END')
+            self.update_gui('END')
 
         except Exception as e:
             print(e)
-            self.updateGUI('ERROR')
+            self.update_gui('ERROR')
 
-    def updateGUI(self, msg):
-        f = open(self.storage_path + '/' + "update.txt","w+")
+    def update_gui(self, msg):
+        f = open(self.storage_path + '/' + "update","w+")
         f.write("%s" % msg)
         f.close()
-
-bn = BoxNovel("https://boxnovel.com/novel/young-master-mo-are-you-done-kissing/", r"C:\Users\super\Downloads\Novel-Library\Young Master Mo, Are You Done Kissing")
-bn.create_novel()
+    
+    def get_alert(self):
+        f = open(self.storage_path + '/' + "alert","r+")
+        alert = f.readline()
+        f.close()
+        return alert

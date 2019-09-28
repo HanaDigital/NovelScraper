@@ -80,8 +80,8 @@ var sourcesButton = document.getElementById('sourcesButton');
 var libraryButton = document.getElementById('libraryButton');
 
 //Sources
-var novelPlanetSource = document.getElementById('novelPlanetHolder');
-var boxNovelSource = document.getElementById('boxNovelHolder');
+var novelPlanetPage = document.getElementById('novelPlanetHolder');
+var boxNovelPage = document.getElementById('boxNovelHolder');
 
 // DECLARE VARIABLES
 var pages = document.getElementsByClassName("page");
@@ -94,8 +94,8 @@ var menuBackground = "#0c2852";
 homeButton.addEventListener('click', loadHomePage);
 sourcesButton.addEventListener('click', loadSourcesPage);
 libraryButton.addEventListener('click', loadLibraryPage);
-novelPlanetSource.addEventListener('click', loadNovelPlanetPage);
-boxNovelSource.addEventListener('click', loadBoxNovelPage);
+novelPlanetPage.addEventListener('click', loadNovelPlanetPage);
+boxNovelPage.addEventListener('click', loadBoxNovelPage);
 
 //Downloader
 var storagePath = remote.app.getPath('downloads') + '/' + "Novel-Library";
@@ -179,34 +179,26 @@ function hidePages()
     }
 }
 
-function downloadNovel(novelName, novelCoverSrc, novelLink, totalChapters, source) {
-    setTimeout(function() {
-        for(x in libObj.novels) {
-            if(libObj.novels[x]['novelLink'] === novelLink) {
-                if(libObj.novels[x]['status'] === "downloading") {
-                    console.log('Already downloading!')
-                    return;
-                } else {
-                    libObj.novels[x]['status'] = "downloading";
-                    saveLibObj();
-                }
-                break;
+async function downloadNovel(novelName, novelCoverSrc, novelLink, totalChapters, source) {
+    for(x in libObj.novels) {
+        if(libObj.novels[x]['novelLink'] === novelLink) {
+            if(libObj.novels[x]['status'] === "downloading") {
+                console.log('Already downloading!')
+                return;
+            } else {
+                libObj.novels[x]['status'] = "downloading";
+                saveLibObj();
             }
+            break;
         }
-        var novelPlanetSource = false;
-        var boxNovelSource = false;
-
-        if(novelPlanetCurrentNovelLink === novelLink) {
-            novelPlanetSource = true;
-        } else if(boxNovelCurrentNovelLink === novelLink) {
-            boxNovelSource = true;
-        }
-
+    }
+    setTimeout(function() {
         var holder = document.getElementById(novelLink);
-        libraryButtonDownloadState(holder, true, novelPlanetSource, boxNovelSource);
+        buttonDownloadState(holder, true);
 
         var folderPath = storagePath + '/' + novelName.replace(/[/\\?%*:|"<>]/g, '');
-        var updatePath = folderPath + '/update.txt';
+        var updatePath = folderPath + '/update';
+        var alertPath = folderPath + '/alert';
 
         fs.mkdir(storagePath, function(err) {
             if(err) {
@@ -232,18 +224,25 @@ function downloadNovel(novelName, novelCoverSrc, novelLink, totalChapters, sourc
                     req.pipe(out);
                     
                     var executablePath = 'assets\\modules\\download_manager.exe';
-                    console.log(source);
                     var parameters = [novelLink, folderPath, source];
 
                     setTimeout(function() {runPy(executablePath, parameters);}, 0);
                     downloadTracker.push(-1);
-                    var id = setInterval(function() {getDownloadUpdate(updatePath, id, downloadTrackerID, novelLink, totalChapters, folderPath, novelPlanetSource, boxNovelSource);}, 500);
+                    var id = setInterval(function() {getDownloadUpdate(updatePath, id, downloadTrackerID, novelLink, totalChapters, folderPath);}, 500);
                     downloadTrackerID += 1;
                     for(x in libObj.novels) {
                         if(libObj.novels[x]['novelLink'] === novelLink) {
                             libObj.novels[x]['folderPath'] = folderPath;
                         }
                     }
+                });
+
+                fs.writeFile(alertPath, "ok", (err) => {
+                    if(err){
+                        console.log(err);
+                    }
+                    holder.getElementsByClassName('libraryCancelButton')[0].style.display = "block";
+                    holder.getElementsByClassName('libraryCancelButton')[0].addEventListener('click', function() {cancelDownload(alertPath);});
                 });
             });
         });
@@ -257,36 +256,37 @@ function runPy(executablePath, parameters) {
    });
 }
 
-function getDownloadUpdate(updatePath, id, tracker, novelLink, totalChapters, folderPath, novelPlanetSource, boxNovelSource) {
+function getDownloadUpdate(updatePath, id, tracker, novelLink, totalChapters, folderPath) {
     var holder = document.getElementById(novelLink);
     fs.readFile(updatePath, 'utf8', function(err, data) {
         if (err){
             console.log(err);
+            buttonDownloadState(holder, false);
+            resetStatus(novelLink);
             clearInterval(id);
         } else if(data === "END") {
             resetStatus(novelLink);
-            console.log('Ending..')
-            if(holder) {
-                holder.getElementsByClassName("libraryOpenFolderButton")[0].style.display = "block";
-                holder.getElementsByClassName("libraryOpenFolderButton")[0].addEventListener('click', function() {shell.openItem(folderPath);});
-            }
-            if(novelPlanetSource) {
-                document.getElementById("novelPlanetOpenFolderButton").style.display = "block";
-                document.getElementById("novelPlanetOpenFolderButton").addEventListener('click', function() {shell.openItem(folderPath);});
-            } else if(boxNovelSource) {
-                document.getElementById("boxNovelOpenFolderButton").style.display = "block";
-                document.getElementById("boxNovelOpenFolderButton").addEventListener('click', function() {shell.openItem(folderPath);});
-            }
+            console.log('Ending..');
+
+            holder.getElementsByClassName("libraryOpenFolderButton")[0].style.display = "block";
+            holder.getElementsByClassName("libraryOpenFolderButton")[0].addEventListener('click', function() {shell.openItem(folderPath);});
+
             for(x in libObj.novels) {
                 if(libObj.novels[x]['novelLink'] === novelLink) {
                     libObj.novels[x]['downloaded'] = "true";
                     libObj.novels[x]['folderPath'] = folderPath;
+                    break;
                 }
             }
             saveLibObj();
-            libraryButtonDownloadState(holder, false, novelPlanetSource, boxNovelSource);
+            buttonDownloadState(holder, false);
             clearInterval(id);
             
+        } else if(data === "CANCEL") {
+            buttonDownloadState(holder, false)
+            resetStatus(novelLink);
+            clearInterval(id);
+
         } else if(data === "ERROR") {
             resetStatus(novelLink);
             let options = {
@@ -304,7 +304,7 @@ function getDownloadUpdate(updatePath, id, tracker, novelLink, totalChapters, fo
                     shell.openExternal('https://github.com/dr-nyt/Translated-Novel-Downloader/issues')
                 }
             });
-            libraryButtonDownloadState(holder, false, novelPlanetSource, boxNovelSource);
+            buttonDownloadState(holder, false);
             clearInterval(id);
         
         } else if(data === "NODEJS") {
@@ -324,7 +324,7 @@ function getDownloadUpdate(updatePath, id, tracker, novelLink, totalChapters, fo
                     shell.openExternal('https://nodejs.org/en/download/')
                 }
             });
-            libraryButtonDownloadState(holder, false, novelPlanetSource, boxNovelSource);
+            buttonDownloadState(holder, false);
             clearInterval(id);
 
         } else {
@@ -336,53 +336,33 @@ function getDownloadUpdate(updatePath, id, tracker, novelLink, totalChapters, fo
                 if(holder) {
                     holder.getElementsByClassName('loaderBar')[0].style.width = ((data * 100) / totalChapters).toString() + '%';
                 }
-                if(novelPlanetSource) {
-                    document.getElementById('novelPlanetNovelButtons').getElementsByClassName('loaderBar')[0].style.width = ((data * 100) / totalChapters).toString() + '%';
-                } else if(boxNovelSource) {
-                    document.getElementById('boxNovelNovelButtons').getElementsByClassName('loaderBar')[0].style.width = ((data * 100) / totalChapters).toString() + '%';
-                }
-                libraryButtonDownloadState(holder, true, novelPlanetSource, boxNovelSource);
+                buttonDownloadState(holder, true);
             }
         }
     });
 }
 
-function libraryButtonDownloadState(holder, state, novelPlanetSource, boxNovelSource) {
+function buttonDownloadState(holder, state) {
     if(state) {
-        if(holder) {
-            holder.getElementsByClassName('progressBar')[0].style.display = "block";
-            holder.getElementsByClassName('libraryDownloadButton')[0].innerHTML = "DOWNLOADING!";
-            holder.getElementsByClassName('libraryDownloadButton')[0].style.background = '#4CAF50';
-        }
-        if(novelPlanetSource) {
-            holder = document.getElementById('novelPlanetNovelButtons');
-            holder.getElementsByClassName('progressBar')[0].style.display = "block";
-            document.getElementById('novelPlanetDownloadButton').innerHTML = "DOWNLOADING!";
-            document.getElementById('novelPlanetDownloadButton').style.background = '#4CAF50';
-        } else if(boxNovelSource) {
-            holder = document.getElementById('boxNovelNovelButtons');
-            holder.getElementsByClassName('progressBar')[0].style.display = "block";
-            document.getElementById('boxNovelDownloadButton').innerHTML = "DOWNLOADING!";
-            document.getElementById('boxNovelDownloadButton').style.background = '#4CAF50';
-        }
+        holder.getElementsByClassName('progressBar')[0].style.display = "block";
+        holder.getElementsByClassName('libraryDownloadButton')[0].innerHTML = "DOWNLOADING!";
+        holder.getElementsByClassName('libraryDownloadButton')[0].style.background = '#4CAF50';
+        holder.getElementsByClassName('libraryCancelButton')[0].style.display = "block";
     } else {
-        if(holder) {
-            holder.getElementsByClassName('progressBar')[0].style.display = "none";
-            holder.getElementsByClassName('libraryDownloadButton')[0].innerHTML = "DOWNLOAD";
-            holder.getElementsByClassName('libraryDownloadButton')[0].style.background = '#0c2852';
-        }
-        if(novelPlanetSource) {
-            holder = document.getElementById('novelPlanetNovelButtons');
-            holder.getElementsByClassName('progressBar')[0].style.display = "none";
-            document.getElementById('novelPlanetDownloadButton').innerHTML = "DOWNLOAD";
-            document.getElementById('novelPlanetDownloadButton').style.background = '#0c2852';
-        } else if(boxNovelSource) {
-            holder = document.getElementById('boxNovelNovelButtons');
-            holder.getElementsByClassName('progressBar')[0].style.display = "none";
-            document.getElementById('boxNovelDownloadButton').innerHTML = "DOWNLOAD";
-            document.getElementById('boxNovelDownloadButton').style.background = '#0c2852';
-        }
+        holder.getElementsByClassName('progressBar')[0].style.display = "none";
+        holder.getElementsByClassName('libraryDownloadButton')[0].innerHTML = "DOWNLOAD";
+        holder.getElementsByClassName('libraryDownloadButton')[0].style.background = '#0c2852';
+        holder.getElementsByClassName('libraryCancelButton')[0].style.display = "none";
     }
+}
+
+function cancelDownload(alertPath) {
+    fs.writeFile(alertPath, "cancel", (err) => {
+        if(err){
+            console.log(err);
+        }
+        console.log('cancel issued!');
+    });
 }
 
 function resetStatus(novelLink) {
