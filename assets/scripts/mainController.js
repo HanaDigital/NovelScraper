@@ -128,6 +128,10 @@ function loadSourcesPage()
 {
     hidePages();
     document.getElementById('sourcesPage').style.display = "block";
+    let len = document.getElementById('sourcesPage').getElementsByClassName('sourceHolder').length;
+    for(let x = 0; x < len; x++) {
+        document.getElementById('sourcesPage').getElementsByClassName('sourceHolder')[x].classList.add('sourceHolderAnimate');
+    }
 
     deselectButtons();
     sourcesButton.style.background = buttonHighlight;
@@ -176,6 +180,10 @@ function hidePages()
     for(i = 0; i < pages.length; i++)
     {
         pages[i].style.display = "none";
+    }
+    let len = document.getElementById('sourcesPage').getElementsByClassName('sourceHolder').length;
+    for(let x = 0; x < len; x++) {
+        document.getElementById('sourcesPage').getElementsByClassName('sourceHolder')[x].classList.remove('sourceHolderAnimate');
     }
 }
 
