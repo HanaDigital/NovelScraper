@@ -87,7 +87,13 @@ function addLibraryNovelHolder(id, novelName, novelCover, novelLink, totalChapte
     }
 }
 
-function writeToLibrary(novelName, imgSrc, novelLink, totalChapters, source) {
+async function writeToLibrary(novelName, imgSrc, novelLink, totalChapters, source) {
+    for(x in libObj.novels) {
+        if(libObj.novels[x]['novelLink'] === novelLink) {
+            console.log("Already Exists!");
+            return;
+        }
+    }
     libObj.novels.push({'novelName': novelName, 'novelCoverSrc': imgSrc, 'novelLink': novelLink, 'totalChapters': totalChapters, 'source': source, 'status': 'none', 'downloaded': 'false', 'folderPath': 'none'}); //add some data
     saveLibObj();
 }
@@ -95,9 +101,11 @@ function writeToLibrary(novelName, imgSrc, novelLink, totalChapters, source) {
 function removeFromLibrary(novelLink) {
     for(x in libObj.novels) {
         if(libObj.novels[x]['novelLink'] == novelLink) {
-            libObj.novels.splice(x, x+1);
+            if(libObj.novels[x]['status'] === "downloading") {
+                cancelDownload(libObj.novels[x]['folderPath'] + '/alert')
+            }
+            libObj.novels.splice(x, 1);
             saveLibObj();
-            cancelDownload(libObj.novels[x]['folderPath'] + '/alert')
             break;
         }
     }

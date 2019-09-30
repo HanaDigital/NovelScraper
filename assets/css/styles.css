@@ -199,7 +199,7 @@ body #content .page .content .novelList {
   padding-right: 30px;
 }
 
-body #content .page .content .novelList .novelInfoHolder {
+body #content .page .content .novelList .sourceNovelHolder {
   position: relative;
   width: 100%;
   height: 300px;
@@ -208,31 +208,32 @@ body #content .page .content .novelList .novelInfoHolder {
   border-right: 2px solid #8595af;
   -webkit-box-shadow: 0 8px 6px -6px black;
           box-shadow: 0 8px 6px -6px black;
+  margin-top: 10px;
 }
 
-body #content .page .content .novelList .novelInfoHolder img {
+body #content .page .content .novelList .sourceNovelHolder img {
   width: 250px;
   height: 300px;
   float: left;
   margin-right: 5px;
 }
 
-body #content .page .content .novelList .novelInfoHolder .novelInfo {
+body #content .page .content .novelList .sourceNovelHolder .novelInfo {
   word-wrap: break-word;
 }
 
-body #content .page .content .novelList .novelInfoHolder .novelInfo strong {
+body #content .page .content .novelList .sourceNovelHolder .novelInfo strong {
   font-size: 1.5rem;
 }
 
-body #content .page .content .novelList .novelInfoHolder .novelButtons {
+body #content .page .content .novelList .sourceNovelHolder .novelButtons {
   position: absolute;
   left: 250px;
   bottom: 10px;
   right: 5px;
 }
 
-body #content .page .content .novelList .novelInfoHolder .novelButtons .novelButton {
+body #content .page .content .novelList .sourceNovelHolder .novelButtons .novelAddButton {
   height: 37px;
   margin-right: 5px;
   margin-left: 5px;
@@ -243,7 +244,7 @@ body #content .page .content .novelList .novelInfoHolder .novelButtons .novelBut
   cursor: pointer;
 }
 
-body #content .page .content .novelList .novelInfoHolder .novelButtons .novelRemoveButton {
+body #content .page .content .novelList .sourceNovelHolder .novelButtons .novelRemoveButton {
   display: none;
   height: 37px;
   margin-right: 5px;
@@ -253,6 +254,11 @@ body #content .page .content .novelList .novelInfoHolder .novelButtons .novelRem
   color: white;
   float: left;
   cursor: pointer;
+}
+
+body #content .page .content .novelList .sourceNovelHolder:hover {
+  -webkit-box-shadow: 0px 0px 20px 0px black;
+          box-shadow: 0px 0px 20px 0px black;
 }
 
 body #content .page .testBox {
@@ -327,8 +333,8 @@ body #content #sourcesPage #sourcesList li .sourceHolder p {
 }
 
 body #content #sourcesPage #sourcesList li .sourceHolder:hover {
-  -webkit-box-shadow: 0px 5px 16px -6px black;
-          box-shadow: 0px 5px 16px -6px black;
+  -webkit-box-shadow: 0px 0px 20px 0px black;
+          box-shadow: 0px 0px 20px 0px black;
 }
 
 body #content #sourcesPage #sourcesList li .sourceHolderAnimate {
@@ -359,10 +365,10 @@ body #content #libraryPage .headerPanel #librarySearchField {
 body #content #libraryPage .headerPanel #libraryCancelSearch {
   display: none;
   position: absolute;
-  right: 18px;
+  right: 20px;
   top: 0px;
   font-size: 1rem;
-  color: red;
+  color: #0c2658;
   cursor: pointer;
 }
 
@@ -459,8 +465,8 @@ body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHol
 }
 
 body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder:hover {
-  -webkit-box-shadow: 0px 2px 6px 3px #b9c5d8;
-          box-shadow: 0px 2px 6px 3px #b9c5d8;
+  -webkit-box-shadow: 0px 0px 20px 0px black;
+          box-shadow: 0px 0px 20px 0px black;
 }
 
 /* Let's get this party started */

@@ -9,11 +9,6 @@ var boxNovelStatusImage = document.getElementById('boxNovelStatus').getElementsB
 var boxNovelStatusText = document.getElementById('boxNovelStatus').getElementsByClassName('statusText')[0];
 
 var boxNovelContent = document.getElementById('boxNovelContent');
-var boxNovelAddToLibButton = document.getElementById('boxNovelAddLibButton');
-var boxNovelRemoveFromLibButton = document.getElementById('boxNovelRemoveLibButton');
-
-boxNovelAddToLibButton.addEventListener('click', boxNovelAddToLib);
-boxNovelRemoveFromLibButton.addEventListener('click', boxNovelRemoveLibrary);
 
 var boxNovelCurrentNovelName;
 var boxNovelCurrentNovelCoverSrc;
@@ -38,16 +33,30 @@ function boxNovelLoadURL() {
     if(!novelLink.includes('https://boxnovel.com/novel/')) {
         boxNovelStatusImage.src = "assets/rsc/delete.svg";
         boxNovelStatusText.innerText = "Invalid Link!";
+
+        boxNovelStatus.style.display = "block";
+        boxNovelContent.style.display = "none";
         return;
     } else if(novelLink == '') {
         return;
     }
 
-    boxNovelStatusImage.src = "assets/rsc/eclipse-loading-200px.gif";
-    boxNovelStatusText.innerText = "Loading...";
+    var holder = "<li id=\"boxnovel" + novelLink + "\"class=\"sourceNovelHolder\">";
+    holder += "<img class=\"novelCover\" src=\"assets/rsc/eclipse-loading-200px.gif\" onerror=\"this.src='assets/rsc/missing-image.png'\" border=\"0\" alt=\"\">";
+    holder += "<div class=\"novelInfo\">";
+    holder += "<strong>Loading...</strong>";
+    // holder += "<p>Please wait!</p>";
+    holder += "</div>";
+    holder += "<div id=\"boxNovelNovelButtons\" class=\"novelButtons\">";
+    holder += "<button class=\"novelAddButton\" type=\"button\">ADD TO LIBRARY</button>";
+    holder += "<button class=\"novelRemoveButton\" type=\"button\">REMOVE FROM LIBRARY</button>";
+    holder += "</div>";
+    holder += "</li>";
 
-    boxNovelStatus.style.display = "block";
-    boxNovelContent.style.display = "none";
+    $('#boxNovelContent ul').prepend(holder);
+
+    boxNovelStatus.style.display = "none";
+    boxNovelContent.style.display = "block";
 
     var options = {
       method: 'GET',
@@ -67,58 +76,76 @@ function boxNovelLoadURL() {
             novelName.removeChild(junk);
         }
         novelName = novelName.innerText.replace(/(\r\n|\n|\r)/gm,"").trim();
-        console.log(novelName);
+        var totalChapters = html.getElementsByClassName("wp-manga-chapter").length;
         
-        boxNovelContent.getElementsByTagName('img')[0].src = novelCoverSrc;
-        
-        boxNovelContent.getElementsByTagName('strong')[0].innerText = novelName;
-        boxNovelContent.getElementsByTagName('p')[0].innerText = "";
-
-        boxNovelCheckLibrary(novelLink);
-
         boxNovelCurrentNovelName = novelName;
         boxNovelCurrentNovelLink = novelLink;
         boxNovelCurrentNovelCoverSrc = novelCoverSrc;
-        boxNovelCurrentTotalChapters = html.getElementsByClassName("wp-manga-chapter").length;
+        boxNovelCurrentTotalChapters = totalChapters
+
+        boxNovelNovelHolder(novelName, novelLink, novelCoverSrc, totalChapters);
 
         boxNovelStatus.style.display = "none";
         boxNovelContent.style.display = "block";
     })
     .catch(function (err) {
         console.log(err);
+        boxNovelStatusImage.src = "assets/rsc/delete.svg";
+        boxNovelStatusText.innerText = "Invalid Link!";
+
+        boxNovelStatus.style.display = "block";
+        boxNovelContent.style.display = "none";
+
+        var controlHolder = document.getElementById('boxnovel' + novelLink);
+        controlHolder.parentNode.removeChild(controlHolder);
     });
 }
 
-function boxNovelAddToLib() {
-    if(boxNovelCurrentNovelName && boxNovelCurrentNovelCoverSrc && boxNovelCurrentNovelLink){
-        writeToLibrary(boxNovelCurrentNovelName, boxNovelCurrentNovelCoverSrc, boxNovelCurrentNovelLink, boxNovelCurrentTotalChapters, "boxnovel");
-        boxNovelLibButton(false);
-    } else {
-        console.log('No Novel Loaded!')
-    }
+function boxNovelNovelHolder(novelName, novelLink, novelCoverSrc, totalChapters) {
+    var controlHolder = document.getElementById('boxnovel' + novelLink);
+    controlHolder.getElementsByTagName('img')[0].src = novelCoverSrc;
+    controlHolder.getElementsByTagName('strong')[0].innerText = novelName;
+    controlHolder.getElementsByClassName('novelAddButton')[0].addEventListener('click', function() {
+        boxNovelAddToLib(controlHolder, novelName, novelLink, novelCoverSrc, totalChapters);
+    });
+    controlHolder.getElementsByClassName('novelRemoveButton')[0].addEventListener('click', function() {
+        boxNovelRemoveLibrary(controlHolder, novelLink);
+    });
+
+    refreshBoxNovelPageData();
 }
 
-function boxNovelRemoveLibrary() {
-    boxNovelLibButton(true);
-    removeFromLibrary(boxNovelCurrentNovelLink);
+function boxNovelAddToLib(holder, novelName, novelLink, novelCoverSrc, totalChapters) {
+    writeToLibrary(novelName, novelCoverSrc, novelLink, totalChapters, "boxnovel");
+    boxNovelLibButton(holder, false);
 }
 
-function boxNovelCheckLibrary(link) {
-    boxNovelLibButton(true);
-    for(x in libObj.novels) {
-        if(libObj.novels[x]['novelLink'] === link) {
-            boxNovelLibButton(false);
-            break;
+function boxNovelRemoveLibrary(holder, novelLink) {
+    removeFromLibrary(novelLink);
+    boxNovelLibButton(holder, true);
+}
+
+async function refreshBoxNovelPageData() {
+    var size = document.getElementById('boxNovelNovelList').getElementsByClassName('sourceNovelHolder').length;
+
+    for(let i = 0; i < size; i++) {
+        var holder = document.getElementById('boxNovelNovelList').getElementsByClassName('sourceNovelHolder')[i];
+        boxNovelLibButton(holder, true);
+        for(x in libObj.novels) {
+            if(libObj.novels[x]['novelLink'] === holder.id.slice(8,)) {
+                boxNovelLibButton(holder, false);
+                break;
+            }
         }
     }
 }
 
-function boxNovelLibButton(boolean) {
+function boxNovelLibButton(holder, boolean) {
     if(boolean) {
-        boxNovelRemoveFromLibButton.style.display = "none";
-        boxNovelAddToLibButton.style.display = "block";
+        holder.getElementsByClassName('novelAddButton')[0].style.display = "block";
+        holder.getElementsByClassName('novelRemoveButton')[0].style.display = "none";
     } else {
-        boxNovelAddToLibButton.style.display = "none";
-        boxNovelRemoveFromLibButton.style.display = "block";
+        holder.getElementsByClassName('novelAddButton')[0].style.display = "none";
+        holder.getElementsByClassName('novelRemoveButton')[0].style.display = "block";
     }
 }

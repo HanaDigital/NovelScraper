@@ -152,19 +152,15 @@ function loadNovelPlanetPage()
     hidePages();
     document.getElementById('novelPlanetPage').style.display = "block";
 
-    if(novelPlanetCurrentNovelLink) {
-        novelPlanetCheckLibrary(novelPlanetCurrentNovelLink);
-    }
+    refreshNovelPlanetPageData();
 }
 
 function loadBoxNovelPage()
 {
     hidePages();
     document.getElementById('boxNovelPage').style.display = "block";
-
-    if(boxNovelCurrentNovelLink) {
-        boxNovelCheckLibrary(boxNovelCurrentNovelLink);
-    }
+    
+    refreshBoxNovelPageData();
 }
 
 function deselectButtons()

@@ -186,7 +186,7 @@ body {
                     padding-left: 30px;
                     padding-right: 30px; 
 
-                    .novelInfoHolder {
+                    .sourceNovelHolder {
                         position: relative;
                         width: 100%;
                         height: 300px;
@@ -194,6 +194,7 @@ body {
                         border-left: 2px solid #8595af;
                         border-right: 2px solid #8595af;
                         box-shadow: 0 8px 6px -6px black;
+                        margin-top: 10px;
 
                         img {
                             width: 250px;
@@ -216,7 +217,7 @@ body {
                             bottom: 10px;
                             right: 5px;
         
-                            .novelButton {
+                            .novelAddButton {
                                 height: 37px;
                                 margin-right: 5px;
                                 margin-left: 5px;
@@ -239,6 +240,10 @@ body {
                                 cursor: pointer;
                             }
                         }
+                    }
+
+                    .sourceNovelHolder:hover {
+                        box-shadow: 0px 0px 20px 0px black;
                     }
                 }
             }
@@ -314,7 +319,7 @@ body {
                     }
 
                     .sourceHolder:hover {
-                        box-shadow: 0px 5px 16px -6px black;
+                        box-shadow: 0px 0px 20px 0px black;
                     }
 
                     .sourceHolderAnimate {
@@ -353,10 +358,10 @@ body {
                 #libraryCancelSearch {
                     display: none;
                     position: absolute;
-                    right: 18px;
+                    right: 20px;
                     top: 0px;
                     font-size: 1rem;
-                    color: red;
+                    color: #0c2658;
                     cursor: pointer;
                 }
             }
@@ -455,7 +460,8 @@ body {
                         }
 
                         .libraryNovelHolder:hover {
-                            box-shadow: 0px 2px 6px 3px #b9c5d8;
+                            // box-shadow: 0px 2px 6px 3px #b9c5d8;
+                            box-shadow: 0px 0px 20px 0px black;
                         }
                     }
                 }
