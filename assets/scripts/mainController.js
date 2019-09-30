@@ -9,7 +9,7 @@ const { shell } = require('electron');
 
 const { dialog } = require('electron').remote;
 
-const version = "0.9";
+const version = "0.9.1";
 
 //Library Objects
 var libObj = {"novels":[]};
