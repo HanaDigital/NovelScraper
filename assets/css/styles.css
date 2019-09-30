@@ -193,36 +193,46 @@ body #content .page .content {
   display: none;
 }
 
-body #content .page .content .novelInfoHolder {
+body #content .page .content .novelList {
+  list-style-type: none;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+body #content .page .content .novelList .novelInfoHolder {
   position: relative;
   width: 100%;
   height: 300px;
+  border-top: 1px solid #e5e9ec;
+  border-left: 2px solid #8595af;
+  border-right: 2px solid #8595af;
   -webkit-box-shadow: 0 8px 6px -6px black;
           box-shadow: 0 8px 6px -6px black;
 }
 
-body #content .page .content .novelInfoHolder img {
+body #content .page .content .novelList .novelInfoHolder img {
   width: 250px;
   height: 300px;
   float: left;
   margin-right: 5px;
 }
 
-body #content .page .content .novelInfoHolder .novelInfo {
+body #content .page .content .novelList .novelInfoHolder .novelInfo {
   word-wrap: break-word;
 }
 
-body #content .page .content .novelInfoHolder .novelInfo strong {
+body #content .page .content .novelList .novelInfoHolder .novelInfo strong {
   font-size: 1.5rem;
 }
 
-body #content .page .content .novelInfoHolder .novelButtons {
+body #content .page .content .novelList .novelInfoHolder .novelButtons {
   position: absolute;
   left: 250px;
   bottom: 10px;
+  right: 5px;
 }
 
-body #content .page .content .novelInfoHolder .novelButtons .novelButton {
+body #content .page .content .novelList .novelInfoHolder .novelButtons .novelButton {
   height: 37px;
   margin-right: 5px;
   margin-left: 5px;
@@ -233,7 +243,7 @@ body #content .page .content .novelInfoHolder .novelButtons .novelButton {
   cursor: pointer;
 }
 
-body #content .page .content .novelInfoHolder .novelButtons .novelRemoveButton {
+body #content .page .content .novelList .novelInfoHolder .novelButtons .novelRemoveButton {
   display: none;
   height: 37px;
   margin-right: 5px;
@@ -243,24 +253,6 @@ body #content .page .content .novelInfoHolder .novelButtons .novelRemoveButton {
   color: white;
   float: left;
   cursor: pointer;
-}
-
-body #content .page .content .novelInfoHolder .novelButtons .progressBar {
-  display: none;
-  margin-top: 10px;
-  margin-left: 5px;
-  height: 10px;
-  width: 100%;
-  background-color: #ddd;
-  border-radius: 10px;
-  float: left;
-}
-
-body #content .page .content .novelInfoHolder .novelButtons .progressBar .loaderBar {
-  width: 0%;
-  height: 10px;
-  background-color: #4CAF50;
-  border-radius: 20px;
 }
 
 body #content .page .testBox {
@@ -396,6 +388,7 @@ body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHol
   position: absolute;
   left: 250px;
   bottom: 10px;
+  right: 5px;
 }
 
 body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder .novel-control button {

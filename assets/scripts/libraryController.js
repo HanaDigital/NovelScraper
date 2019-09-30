@@ -39,6 +39,9 @@ function addLibraryNovelHolder(id, novelName, novelCover, novelLink, totalChapte
     if(libObj.novels[id]['downloaded'] === "true") {
         holder.getElementsByClassName("libraryOpenFolderButton")[0].style.display = "block";
         holder.getElementsByClassName("libraryOpenFolderButton")[0].addEventListener('click', function() {shell.openItem(libObj.novels[id]['folderPath']);})
+
+        holder.getElementsByClassName('libraryDownloadButton')[0].innerHTML = "UPDATE";
+        holder.getElementsByClassName('libraryDownloadButton')[0].style.background = '#0c2852';
     }
 
     if(libObj.novels[id]['status'] === "downloading") {

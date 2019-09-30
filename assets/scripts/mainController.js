@@ -287,7 +287,12 @@ function getDownloadUpdate(updatePath, id, tracker, novelLink, totalChapters, fo
                 }
             }
             saveLibObj();
-            buttonDownloadState(holder, false);
+            
+            holder.getElementsByClassName('progressBar')[0].style.display = "none";
+            holder.getElementsByClassName('libraryDownloadButton')[0].innerHTML = "UPDATE";
+            holder.getElementsByClassName('libraryDownloadButton')[0].style.background = '#0c2852';
+            holder.getElementsByClassName('libraryCancelButton')[0].style.display = "none";
+
             clearInterval(id);
             
         } else if(data === "CANCEL") {
