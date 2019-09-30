@@ -1,5 +1,41 @@
+librarySearchField = document.getElementById('librarySearchField');
+libraryCancelSearch = document.getElementById('libraryCancelSearch');
+libraryCancelSearch.addEventListener('click', function() {
+    librarySearchField.value = "";
+    loadLibrary();
+});
+
+librarySearchField.addEventListener("keyup", function(event) {
+    // Number 13 is the "Enter" key on the keyboard
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      searchLibrary(librarySearchField.value)
+    }
+});
+
+function searchLibrary(search) {
+    if(search !== '' && search !== ' ') {
+        libraryCancelSearch.style.display = "block";
+        $('#libraryNovelList').html("");
+        document.getElementById("libraryStatus").style.display = "block";
+        if(libObj.novels[0] !== undefined) { 
+            for(x in libObj.novels) {
+                if(libObj.novels[x]['novelName'].toLowerCase().includes(search.toLowerCase())) {
+                    document.getElementById("libraryStatus").style.display = "none";
+                    addLibraryNovelHolder(x, libObj.novels[x]['novelName'], libObj.novels[x]['novelCoverSrc'], libObj.novels[x]['novelLink'], libObj.novels[x]['totalChapters'], libObj.novels[x]['source'])
+                }
+            }
+        } else {
+            document.getElementById("libraryStatus").style.display = "block";
+        }
+    } else {
+        loadLibrary();
+    }
+}
+
 function loadLibrary() {
     $('#libraryNovelList').html("");
+    libraryCancelSearch.style.display = "none";
 
     if(libObj.novels[0] !== undefined) { 
         for(x in libObj.novels) {

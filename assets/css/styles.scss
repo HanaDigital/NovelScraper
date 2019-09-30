@@ -332,6 +332,35 @@ body {
         #libraryPage {
             display: none;
 
+            .headerPanel {
+
+                img {
+                    height: 30px;
+                    position: absolute;
+                    right: 260px;
+                    top: 12px;
+                }
+
+                #librarySearchField {
+                    height: 30px;
+                    position: absolute;
+                    right: 15px;
+                    top: 10px;
+                    padding-right: 12px; 
+                    font-size: 1.1rem;
+                }
+
+                #libraryCancelSearch {
+                    display: none;
+                    position: absolute;
+                    right: 18px;
+                    top: 0px;
+                    font-size: 1rem;
+                    color: red;
+                    cursor: pointer;
+                }
+            }
+
             #libraryStatus {
                 display: none;
             }

@@ -340,6 +340,32 @@ body #content #libraryPage {
   display: none;
 }
 
+body #content #libraryPage .headerPanel img {
+  height: 30px;
+  position: absolute;
+  right: 260px;
+  top: 12px;
+}
+
+body #content #libraryPage .headerPanel #librarySearchField {
+  height: 30px;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  padding-right: 12px;
+  font-size: 1.1rem;
+}
+
+body #content #libraryPage .headerPanel #libraryCancelSearch {
+  display: none;
+  position: absolute;
+  right: 18px;
+  top: 0px;
+  font-size: 1rem;
+  color: red;
+  cursor: pointer;
+}
+
 body #content #libraryPage #libraryStatus {
   display: none;
 }
