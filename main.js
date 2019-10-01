@@ -17,7 +17,8 @@ app.on('ready', function()
         'minHeight': 500,
         frame: false,
         webPreferences: {
-        nodeIntegration: true
+            nodeIntegration: true,
+            webviewTag: true
         },
         show: false
     };
