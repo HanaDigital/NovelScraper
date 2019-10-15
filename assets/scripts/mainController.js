@@ -29,6 +29,9 @@ fs.access('library.json', fs.F_OK, (err) => {
         if (err){
             console.log(err);
         } else {
+            if(data.slice(-2,) === "}}") {
+                data = data.slice(0, -1);
+            }
             libObj = JSON.parse(data);
             for(x in libObj.novels) {
                 libObj.novels[x]['status'] = "none";
@@ -36,6 +39,18 @@ fs.access('library.json', fs.F_OK, (err) => {
             }
         }
     });
+});
+
+require('electron').ipcRenderer.on('ping', (event, message) => {
+    console.log(message) // Prints 'whoooooooh!'
+
+    let json = JSON.stringify(libObj); //convert it back to json
+    fs.writeFile("library.json", 'json', function(err) {
+        if(err) {
+            return console.log(err);
+        }
+        console.log("Library Saved!");
+    }); // write it back 
 });
 
 //Check for updates
@@ -183,7 +198,7 @@ function hidePages()
     }
 }
 
-async function downloadNovel(novelName, novelCoverSrc, novelLink, totalChapters, source) {
+async function downloadNovel(novelName, novelCoverSrc, novelLink, totalChapters, source, update) {
     for(x in libObj.novels) {
         if(libObj.novels[x]['novelLink'] === novelLink) {
             if(libObj.novels[x]['status'] === "downloading") {
@@ -191,7 +206,6 @@ async function downloadNovel(novelName, novelCoverSrc, novelLink, totalChapters,
                 return;
             } else {
                 libObj.novels[x]['status'] = "downloading";
-                saveLibObj();
             }
             break;
         }
@@ -228,7 +242,8 @@ async function downloadNovel(novelName, novelCoverSrc, novelLink, totalChapters,
                     req.pipe(out);
                     
                     var executablePath = 'assets\\modules\\download_manager.exe';
-                    var parameters = [novelLink, folderPath, source];
+                    var parameters = [novelLink, folderPath, source, update];
+                    console.log(update);
 
                     setTimeout(function() {runPy(executablePath, parameters);}, 0);
                     downloadTracker.push(-1);
@@ -316,6 +331,33 @@ function getDownloadUpdate(updatePath, id, tracker, novelLink, totalChapters, fo
             buttonDownloadState(holder, false);
             clearInterval(id);
         
+        } else if(data === "NO-UPDATE") {
+            resetStatus(novelLink);
+            let options = {
+                type: 'info',
+                buttons: ['Report', 'Ok'],
+                defaultId: 1,
+                title: 'No Update',
+                message: 'This novel is up-to-date',
+                detail: 'If this was unexpected then please open an issue on github.',
+              };
+            
+            dialog.showMessageBox(null, options, (response) => {
+                console.log(response);
+                if(response == 0) {
+                    shell.openExternal('https://github.com/dr-nyt/Translated-Novel-Downloader/issues')
+                }
+            });
+            
+            holder.getElementsByClassName('progressBar')[0].style.display = "none";
+            holder.getElementsByClassName('libraryDownloadButton')[0].innerHTML = "UPDATE";
+            holder.getElementsByClassName('libraryDownloadButton')[0].style.background = '#0c2852';
+            holder.getElementsByClassName('libraryCancelButton')[0].style.display = "none";
+
+            loadLibrary();
+
+            clearInterval(id);
+        
         } else if(data === "NODEJS") {
             resetStatus(novelLink);
             let options = {
@@ -338,12 +380,11 @@ function getDownloadUpdate(updatePath, id, tracker, novelLink, totalChapters, fo
 
         } else {
             if(downloadTracker[tracker] !== data) {
-                console.log("data : " + data);
                 downloadTracker[tracker] = data;
 
-                console.log(((data * 100) / totalChapters).toString() + '%');
+                console.log("Novel Status: " + data + '%');
                 if(holder) {
-                    holder.getElementsByClassName('loaderBar')[0].style.width = ((data * 100) / totalChapters).toString() + '%';
+                    holder.getElementsByClassName('loaderBar')[0].style.width = data + '%';
                 }
                 buttonDownloadState(holder, true);
             }

@@ -69,7 +69,6 @@ function addLibraryNovelHolder(id, novelName, novelCover, novelLink, totalChapte
     $('#libraryNovelList').append(novelHolder);
     
     let holder = document.getElementById(novelLink);
-    holder.getElementsByClassName("libraryDownloadButton")[0].addEventListener('click', function() {downloadNovel(novelName, novelCover, novelLink, totalChapters, novelSource);})
     holder.getElementsByClassName("libraryRemoveButton")[0].addEventListener('click', function() {removeFromLibrary(novelLink); loadLibrary();})
 
     if(libObj.novels[id]['downloaded'] === "true") {
@@ -78,6 +77,9 @@ function addLibraryNovelHolder(id, novelName, novelCover, novelLink, totalChapte
 
         holder.getElementsByClassName('libraryDownloadButton')[0].innerHTML = "UPDATE";
         holder.getElementsByClassName('libraryDownloadButton')[0].style.background = '#0c2852';
+        holder.getElementsByClassName("libraryDownloadButton")[0].addEventListener('click', function() {downloadNovel(novelName, novelCover, novelLink, totalChapters, novelSource, "true");})
+    } else {
+        holder.getElementsByClassName("libraryDownloadButton")[0].addEventListener('click', function() {downloadNovel(novelName, novelCover, novelLink, totalChapters, novelSource, "false");})
     }
 
     if(libObj.novels[id]['status'] === "downloading") {
@@ -113,6 +115,9 @@ function removeFromLibrary(novelLink) {
 
 function saveLibObj() {
     let json = JSON.stringify(libObj); //convert it back to json
+    if(json.slice(-2,) === "}}") {
+        json = json.slice(0, -1);
+    }
     fs.writeFile("library.json", json, function(err) {
         if(err) {
             return console.log(err);

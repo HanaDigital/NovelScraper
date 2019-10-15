@@ -1,6 +1,7 @@
 html {
   height: 100%;
   font-family: helvetica, Arial, sans-serif;
+  -webkit-user-select: none;
 }
 
 body {
