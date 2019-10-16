@@ -11,6 +11,23 @@ const { dialog } = require('electron').remote;
 
 const version = "0.9.1";
 
+const electron = require('electron');
+const ipc = electron.ipcRenderer;
+
+//App close handling
+ipc.on('app-close', _ => {
+    //do something here...
+    let json = JSON.stringify(libObj);  //convert it back to json
+    fs.writeFile("library.json", json, function(err) {
+        if(err) {
+            return console.log(err);
+        }
+        console.log("Library Saved!");
+    });
+
+    ipc.send('closed');
+});
+
 //Library Objects
 var libObj = {"novels":[]};
 fs.access('library.json', fs.F_OK, (err) => {
@@ -39,18 +56,6 @@ fs.access('library.json', fs.F_OK, (err) => {
             }
         }
     });
-});
-
-require('electron').ipcRenderer.on('ping', (event, message) => {
-    console.log(message) // Prints 'whoooooooh!'
-
-    let json = JSON.stringify(libObj); //convert it back to json
-    fs.writeFile("library.json", 'json', function(err) {
-        if(err) {
-            return console.log(err);
-        }
-        console.log("Library Saved!");
-    }); // write it back 
 });
 
 //Check for updates

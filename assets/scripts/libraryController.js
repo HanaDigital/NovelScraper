@@ -113,15 +113,31 @@ function removeFromLibrary(novelLink) {
     }
 }
 
+var writeCheck = false;
+
 function saveLibObj() {
-    let json = JSON.stringify(libObj); //convert it back to json
-    if(json.slice(-2,) === "}}") {
-        json = json.slice(0, -1);
-    }
-    fs.writeFile("library.json", json, function(err) {
-        if(err) {
-            return console.log(err);
+    id = setInterval(function() {saveLibObjToFile(id);}, 500);
+    console.log("saving");
+}
+
+function saveLibObjToFile(id) {
+    if(!writeCheck) {
+        writeCheck = true;
+        let json = JSON.stringify(libObj); //convert it back to json
+        if(json.slice(-2,) === "}}") {
+            json = json.slice(0, -1);
         }
-        console.log("File saved successfully!");
-    }); // write it back 
+        fs.writeFile("library.json", json, function(err) {
+            if(err) {
+                return console.log(err);
+                writeCheck = false;
+                clearInterval(id);
+            }
+            writeCheck = false;
+            clearInterval(id);
+        }); // write it back
+    } else {
+        console.log("waiting...");
+    }
+
 }

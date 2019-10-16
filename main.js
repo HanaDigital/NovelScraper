@@ -2,7 +2,9 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 const Splashscreen = require('@trodi/electron-splashscreen');
-const { ipcMain } = require('electron')
+const ipc = require('electron').ipcMain;
+
+var status = 0;
 
 var {app} = electron;
 
@@ -44,21 +46,20 @@ app.on('ready', function()
         slashes: true
     }));
 
-    mainWindow.on('closed', () => {
-        mainWindow = null;
-    });
-
-    mainWindow.on('close', () => {
-        
-    });
-
-    mainWindow.webContents.on('did-stop-loading', () => {
-        // mainWindow.webContents.send('ping', 'whoooooooh!')
+    mainWindow.on('close', function (e) {
+        if (status == 0) {
+          if (mainWindow) {
+            e.preventDefault();
+            mainWindow.webContents.send('app-close');
+          }
+        }
     });
 });
 
-app.on('window-all-closed', function() {
-    if(process.platform !== 'darwin') {
-        app.quit();
+ipc.on('closed', _ => {
+    status = 1;
+    mainWindow = null;
+    if (process.platform !== 'darwin') {
+      app.quit();
     }
-});
+})
