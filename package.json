@@ -1,12 +1,12 @@
 {
   "name": "hana.tnd.electron",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "pack:win32": "electron-packager . NovelScraper --out=dist/platforms/win --platform=win32 --arch=ia32 --icon=\"A:/Github Repos/Translated-Novel-Downloader/assets/rsc/NovelScraper-0.9-Logo.ico\"",
-    "pack:win64": "electron-packager . NovelScraper --out=dist/platforms/win --platform=win32 --arch=x64 --icon=\"A:/Github Repos/Translated-Novel-Downloader/assets/rsc/NovelScraper-0.9-Logo.ico\"",
+    "pack:win32": "electron-packager . NovelScraper --out=dist/platforms/win --platform=win32 --arch=ia32 --icon=\"A:/Github Repos/Translated-Novel-Downloader/assets/rsc/NovelScraper-1.0-Logo.ico\"",
+    "pack:win64": "electron-packager . NovelScraper --out=dist/platforms/win --platform=win32 --arch=x64 --icon=\"A:/Github Repos/Translated-Novel-Downloader/assets/rsc/NovelScraper-1.0-Logo.ico\"",
     "build": "npm run pack:win32 && npm run pack:win64"
   },
   "author": "dr_nyt",
