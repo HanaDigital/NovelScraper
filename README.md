@@ -13,8 +13,8 @@
 2. Pick a source you want, from the sources tab. [www.novelplanet.com is recommended, but it is also slow in speed.]
 ![select_sources](https://user-images.githubusercontent.com/41040912/65813358-52894900-e1e5-11e9-85aa-3f34608d8032.png)
 
-3. After picking a source, paste a link of a novel from that source and it to your library! Eg: [https://boxnovel.com/novel/i-alone-level-up/]
-![add_to_library](https://user-images.githubusercontent.com/41040912/65813424-1a363a80-e1e6-11e9-9c98-2d6a1011ed8f.png)
+3. After picking a source, search for a novel or paste a link of a novel from that source and it to your library! Eg: https://boxnovel.com/novel/i-alone-level-up/
+![novelscraper-search-demo](https://user-images.githubusercontent.com/41040912/69083146-f3181e80-0a5a-11ea-8d86-516175cbca71.gif)
 
 4. Now go to the library tab, where you can download and update all your saved novels.
 ![library_download](https://user-images.githubusercontent.com/41040912/65813426-21f5df00-e1e6-11e9-91ee-45bb26cac1d3.png)
