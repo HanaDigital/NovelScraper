@@ -388,6 +388,10 @@ function getDownloadUpdate(updatePath, id, tracker, novelLink, totalChapters, fo
                 downloadTracker[tracker] = data;
 
                 console.log("Novel Status: " + data + '%');
+                if(data > 100) {
+                    data = data - 5;
+                    holder.getElementsByClassName('loaderBar')[0].style.background = 'orange';
+                }
                 if(holder) {
                     holder.getElementsByClassName('loaderBar')[0].style.width = data + '%';
                 }

@@ -177,6 +177,15 @@ function novelPlanetDisplaySearchedNovels(novel) {
         } else {
             novelPlanetNovelHolder(novelName, novelLink, novelCoverSrc, totalChapters);
         }
+    }).catch(function (err) {
+        console.log(err);
+        novelPlanetStatusImage.src = "assets/rsc/delete.svg";
+        novelPlanetStatusText.innerText = "Something went wrong!";
+
+        novelPlanetStatus.style.display = "block";
+        novelPlanetContent.style.display = "none";
+        var controlHolder = document.getElementById('novelplanet' + novelLink);
+        controlHolder.parentNode.removeChild(controlHolder);
     });
 
 }

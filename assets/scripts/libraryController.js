@@ -116,11 +116,12 @@ function removeFromLibrary(novelLink) {
 var writeCheck = false;
 
 function saveLibObj() {
-    id = setInterval(function() {saveLibObjToFile(id);}, 500);
+    let time = new Date().getTime();
+    id = setInterval(function() {saveLibObjToFile(id, time);}, 500);
     console.log("saving");
 }
 
-function saveLibObjToFile(id) {
+function saveLibObjToFile(id, time) {
     if(!writeCheck) {
         writeCheck = true;
         let json = JSON.stringify(libObj); //convert it back to json
@@ -137,6 +138,13 @@ function saveLibObjToFile(id) {
             clearInterval(id);
         }); // write it back
     } else {
+        let timeEnd = new Date().getTime();
+        console.log(timeEnd - time);
+        console.log(id);
+        if((timeEnd - time) > 5) {
+            console.log('ending');
+            clearInterval(id);
+        }
         console.log("waiting...");
     }
 
