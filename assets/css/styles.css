@@ -4,6 +4,30 @@ html {
   -webkit-user-select: none;
 }
 
+body #content .page {
+  display: none;
+}
+
+body #content #homePage {
+  display: block;
+}
+
+body #content #sourcesPage {
+  display: none;
+}
+
+body #content #novelPlanetPage {
+  display: none;
+}
+
+body #content #boxNovelPage {
+  display: none;
+}
+
+body #content #libraryPage {
+  display: none;
+}
+
 body {
   background-color: #0099ff;
   margin: 0;
@@ -121,7 +145,6 @@ body #content {
 }
 
 body #content .page {
-  display: none;
   position: absolute;
   height: calc(100% - 60px);
   width: calc(100%);
@@ -292,7 +315,6 @@ body #content .page .testBox li .square {
 }
 
 body #content #homePage {
-  display: block;
   padding: 0px;
 }
 
@@ -347,10 +369,6 @@ body #content #sourcesPage #sourcesList li .sourceHolder:hover {
 body #content #sourcesPage #sourcesList li .sourceHolderAnimate {
   -webkit-animation: scale-up-center 0.4s cubic-bezier(0.39, 0.575, 0.565, 1) both;
   animation: scale-up-center 0.4s cubic-bezier(0.39, 0.575, 0.565, 1) both;
-}
-
-body #content #libraryPage {
-  display: none;
 }
 
 body #content #libraryPage .headerPanel img {
@@ -421,6 +439,18 @@ body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHol
 body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder .novel-info {
   text-align: left;
   word-wrap: break-word;
+  padding-right: 30px;
+}
+
+body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder .novel-settings {
+  position: fixed;
+  top: 0px;
+  right: 5px;
+  margin-left: 5px;
+}
+
+body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder .novel-settings .novel-source {
+  width: 15px;
 }
 
 body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder .novel-control {

@@ -21,8 +21,13 @@ function searchLibrary(search) {
         if(libObj.novels[0] !== undefined) { 
             for(x in libObj.novels) {
                 if(libObj.novels[x]['novelName'].toLowerCase().includes(search.toLowerCase())) {
+                    if(libObj.novels[x]['source'] == "novelplanet") {
+                        var novelSourceIdentifier = "assets/rsc/NovelPlanet Logo.png";
+                    } else if(libObj.novels[x]['source'] == "boxnovel") {
+                        var novelSourceIdentifier = "assets/rsc/BoxNovel Logo.png";
+                    }
                     document.getElementById("libraryStatus").style.display = "none";
-                    addLibraryNovelHolder(x, libObj.novels[x]['novelName'], libObj.novels[x]['novelCoverSrc'], libObj.novels[x]['novelLink'], libObj.novels[x]['totalChapters'], libObj.novels[x]['source'])
+                    addLibraryNovelHolder(x, libObj.novels[x]['novelName'], libObj.novels[x]['novelCoverSrc'], libObj.novels[x]['novelLink'], libObj.novels[x]['totalChapters'], libObj.novels[x]['source'], novelSourceIdentifier);
                 }
             }
         } else {
@@ -39,19 +44,28 @@ function loadLibrary() {
 
     if(libObj.novels[0] !== undefined) { 
         for(x in libObj.novels) {
-            addLibraryNovelHolder(x, libObj.novels[x]['novelName'], libObj.novels[x]['novelCoverSrc'], libObj.novels[x]['novelLink'], libObj.novels[x]['totalChapters'], libObj.novels[x]['source'])
+
+            if(libObj.novels[x]['source'] == "novelplanet") {
+                var novelSourceIdentifier = "assets/rsc/NovelPlanet Logo.png";
+            } else if(libObj.novels[x]['source'] == "boxnovel") {
+                var novelSourceIdentifier = "assets/rsc/BoxNovel Logo.png";
+            }
+            addLibraryNovelHolder(x, libObj.novels[x]['novelName'], libObj.novels[x]['novelCoverSrc'], libObj.novels[x]['novelLink'], libObj.novels[x]['totalChapters'], libObj.novels[x]['source'], novelSourceIdentifier);
         }
     } else {
         document.getElementById("libraryStatus").style.display = "block";
     }
 }
 
-function addLibraryNovelHolder(id, novelName, novelCover, novelLink, totalChapters, novelSource) {
+function addLibraryNovelHolder(id, novelName, novelCover, novelLink, totalChapters, novelSource, novelSourceIdentifier) {
     novelHolder = "<li id=\"" + novelLink + "\">"
     novelHolder += "<div class=\"libraryNovelHolder\">"
     novelHolder += "<img class=\"novelCover\" src=\"" + novelCover + "\" onerror=\"this.src='assets/rsc/missing-image.png'\" border=\"0\" alt=\"\">"
     novelHolder += "<div class=\"novel-info\">"
     novelHolder += "<strong>" + novelName + "</strong>"
+    novelHolder += "</div>"
+    novelHolder += "<div class=\"novel-settings\">"
+    novelHolder += "<img class=\"novel-source\" src=\"" + novelSourceIdentifier + "\">"
     novelHolder += "</div>"
     novelHolder += "<div class=\"novel-control\">"
     novelHolder += "<button class=\"libraryDownloadButton\" type=\"button\">DOWNLOAD</button>"
@@ -117,7 +131,7 @@ var writeCheck = false;
 
 function saveLibObj() {
     let time = new Date().getTime();
-    id = setInterval(function() {saveLibObjToFile(id, time);}, 500);
+    var id = setInterval(function() {saveLibObjToFile(id, time);}, 500);
     console.log("saving");
 }
 
@@ -141,7 +155,7 @@ function saveLibObjToFile(id, time) {
         let timeEnd = new Date().getTime();
         console.log(timeEnd - time);
         console.log(id);
-        if((timeEnd - time) > 5) {
+        if((timeEnd - time) > 5000) {
             console.log('ending');
             clearInterval(id);
         }
