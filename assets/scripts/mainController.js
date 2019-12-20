@@ -22,7 +22,7 @@ ipc.on('app-close', _ => {
         if(err) {
             return console.log(err);
         }
-        console.log("Library Saved!");
+        console.log("Library saved before app close!");
     });
 
     ipc.send('closed');
@@ -32,13 +32,13 @@ ipc.on('app-close', _ => {
 var libObj = {"novels":[]};
 fs.access('library.json', fs.F_OK, (err) => {
     if (err) {
-        console.log("Generating new Library")
+        console.log("No Library found. Generating new Library!")
         let json = JSON.stringify(libObj); //convert it back to json
         fs.writeFile("library.json", json, function(err) {
             if(err) {
                 return console.log(err);
             }
-            console.log("File saved successfully!");
+            console.log("New Library generated successfully!");
         }); // write it back 
     }
     // file exists
@@ -207,7 +207,7 @@ async function downloadNovel(novelName, novelCoverSrc, novelLink, totalChapters,
     for(x in libObj.novels) {
         if(libObj.novels[x]['novelLink'] === novelLink) {
             if(libObj.novels[x]['status'] === "downloading") {
-                console.log('Already downloading!')
+                console.log('Already downloading novel: ' + novelName);
                 return;
             } else {
                 libObj.novels[x]['status'] = "downloading";
@@ -248,11 +248,11 @@ async function downloadNovel(novelName, novelCoverSrc, novelLink, totalChapters,
                     
                     var executablePath = 'assets\\modules\\download_manager.exe';
                     var parameters = [novelLink, folderPath, source, update];
-                    console.log(update);
+                    console.log('Update Status: ' + update);
 
                     setTimeout(function() {runPy(executablePath, parameters);}, 0);
                     downloadTracker.push(-1);
-                    var id = setInterval(function() {getDownloadUpdate(updatePath, id, downloadTrackerID, novelLink, totalChapters, folderPath);}, 500);
+                    var id = setInterval(function() {getDownloadUpdate(novelName, updatePath, id, downloadTrackerID, novelLink, totalChapters, folderPath);}, 500);
                     downloadTrackerID += 1;
                     for(x in libObj.novels) {
                         if(libObj.novels[x]['novelLink'] === novelLink) {
@@ -276,11 +276,11 @@ async function downloadNovel(novelName, novelCoverSrc, novelLink, totalChapters,
 function runPy(executablePath, parameters) {
     child(executablePath, parameters, function(err, data) {
         console.log(err)
-        console.log(data.toString());
+        // console.log(data.toString());
    });
 }
 
-function getDownloadUpdate(updatePath, id, tracker, novelLink, totalChapters, folderPath) {
+function getDownloadUpdate(novelName, updatePath, id, tracker, novelLink, totalChapters, folderPath) {
     var holder = document.getElementById(novelLink);
     fs.readFile(updatePath, 'utf8', function(err, data) {
         if (err){
@@ -290,7 +290,7 @@ function getDownloadUpdate(updatePath, id, tracker, novelLink, totalChapters, fo
             clearInterval(id);
         } else if(data === "END") {
             resetStatus(novelLink);
-            console.log('Ending..');
+            console.log(novelName + ' download complete!');
 
             holder.getElementsByClassName("libraryOpenFolderButton")[0].style.display = "block";
             holder.getElementsByClassName("libraryOpenFolderButton")[0].addEventListener('click', function() {shell.openItem(folderPath);});
@@ -387,7 +387,7 @@ function getDownloadUpdate(updatePath, id, tracker, novelLink, totalChapters, fo
             if(downloadTracker[tracker] !== data) {
                 downloadTracker[tracker] = data;
 
-                console.log("Novel Status: " + data + '%');
+                console.log(novelName + " Status: " + data + '%');
                 if(data > 100) {
                     data = data - 5;
                     holder.getElementsByClassName('loaderBar')[0].style.background = 'orange';
@@ -420,7 +420,7 @@ function cancelDownload(alertPath) {
         if(err){
             console.log(err);
         }
-        console.log('cancel issued!');
+        console.log('Download Cancel Issued!');
     });
 }
 

@@ -28,6 +28,8 @@ class BoxNovel():
                 chapter_links.append(chapter.find('a').get('href'))
             chapter_links.reverse()
 
+            total_chapters = len(chapter_links)
+
             print("Starting...")
 
             current_chapter = 1
@@ -58,7 +60,8 @@ class BoxNovel():
                 content += paras.prettify()
                 
                 epub.addChapter(chapter_head, current_chapter, content)
-                self.update_gui("%d" % current_chapter)
+                self.update_gui("%s" % int((int(current_chapter) / total_chapters) * 100))
+                print("%s" % int((int(current_chapter) / total_chapters) * 100))
                 current_chapter += 1
                 
                 if(self.get_alert() == "cancel"):

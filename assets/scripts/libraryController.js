@@ -106,7 +106,7 @@ function addLibraryNovelHolder(id, novelName, novelCover, novelLink, totalChapte
 async function writeToLibrary(novelName, imgSrc, novelLink, totalChapters, source) {
     for(x in libObj.novels) {
         if(libObj.novels[x]['novelLink'] === novelLink) {
-            console.log("Already Exists!");
+            console.log(novelName + " already exists!");
             return;
         }
     }
@@ -132,7 +132,7 @@ var writeCheck = false;
 function saveLibObj() {
     let time = new Date().getTime();
     var id = setInterval(function() {saveLibObjToFile(id, time);}, 500);
-    console.log("saving");
+    console.log("Saving Library");
 }
 
 function saveLibObjToFile(id, time) {
@@ -150,16 +150,15 @@ function saveLibObjToFile(id, time) {
             }
             writeCheck = false;
             clearInterval(id);
+            console.log("Library Saved!");
         }); // write it back
     } else {
         let timeEnd = new Date().getTime();
-        console.log(timeEnd - time);
-        console.log(id);
         if((timeEnd - time) > 5000) {
-            console.log('ending');
+            console.log('Thread ended without saving Library!');
             clearInterval(id);
         }
-        console.log("waiting...");
+        console.log("Thread waiting to save Library!");
     }
 
 }

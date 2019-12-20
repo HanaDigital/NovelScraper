@@ -8,24 +8,8 @@ body #content .page {
   display: none;
 }
 
-body #content #homePage {
-  display: block;
-}
-
-body #content #sourcesPage {
-  display: none;
-}
-
-body #content #novelPlanetPage {
-  display: none;
-}
-
-body #content #boxNovelPage {
-  display: none;
-}
-
 body #content #libraryPage {
-  display: none;
+  display: block;
 }
 
 body {
@@ -413,7 +397,6 @@ body #content #libraryPage #libraryContent #libraryNovelList li {
 }
 
 body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder {
-  cursor: pointer;
   width: 100%;
   height: 280px;
   margin-top: 10px;
@@ -450,11 +433,15 @@ body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHol
 }
 
 body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder .novel-settings .novel-source {
-  width: 15px;
+  width: 18px;
+}
+
+body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder .novel-settings .novel-cover-change {
+  cursor: pointer;
 }
 
 body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder .novel-control {
-  position: absolute;
+  position: fixed;
   left: 250px;
   bottom: 10px;
   right: 5px;
@@ -504,6 +491,27 @@ body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHol
 body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder:hover {
   -webkit-box-shadow: 0px 0px 20px 0px black;
           box-shadow: 0px 0px 20px 0px black;
+}
+
+body #content #libraryPage #libraryContent .novelCoverChangePrompt {
+  position: fixed;
+  z-index: 11;
+  top: 30px;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: black;
+  opacity: 0.5;
+}
+
+body #content #libraryPage #libraryContent .novelCoverChangePrompt .promptBox {
+  margin-top: 20%;
+  margin-left: 29%;
+  border-radius: 50px;
+  width: 50%;
+  height: 50px;
+  background-color: white;
+  opacity: 1;
 }
 
 /* Let's get this party started */

@@ -63,7 +63,7 @@ function boxNovelLoadURL(novelLink) {
       method: 'GET',
       url: novelLink,
     };
-    console.log('loading novel');
+    console.log('Loading Novel from link.');
   
     cloudscraper(options)
     .then(function (htmlString) {
@@ -121,13 +121,12 @@ function boxNovelLoadNovel(novelName) {
         method: 'GET',
         url: searchLink,
     };
-    console.log('loading novel');
+    console.log('Loading Novels.');
 
     cloudscraper(options)
     .then(function (htmlString) {
         var html = new DOMParser().parseFromString(htmlString, 'text/html');
         var novelList = html.getElementsByClassName('c-tabs-item__content');
-        console.log(novelList);
 
         if(novelList.length == 0) {
             boxNovelStatusImage.src = "assets/rsc/delete.svg";
@@ -170,7 +169,7 @@ function boxNovelDisplaySearchedNovels(novel) {
         method: 'GET',
         url: novelLink,
       };
-      console.log('loading novel');
+      console.log('Creating Novel Holders.');
     
       cloudscraper(options)
       .then(function (htmlString) {

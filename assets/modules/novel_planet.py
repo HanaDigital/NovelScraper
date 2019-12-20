@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-import cfscrape
+import cloudscraper
 from ebooklib import epub
 import string
 import sys
@@ -15,7 +15,7 @@ class NovelPlanet():
     def create_novel(self):
         try:
             print("Initializing...")
-            scrapper = cfscrape.create_scraper()
+            scrapper = cloudscraper.create_scraper()
             page = scrapper.get(self.novel_link)
             soup = BeautifulSoup(page.text, 'html.parser')
 
@@ -54,7 +54,7 @@ class NovelPlanet():
     def update_novel(self):
         try:
             print("Initializing...")
-            scrapper = cfscrape.create_scraper()
+            scrapper = cloudscraper.create_scraper()
             page = scrapper.get(self.novel_link)
             soup = BeautifulSoup(page.text, 'html.parser')
 
@@ -157,8 +157,8 @@ class NovelPlanet():
                 content += paras.prettify()
 
                 book.addChapter(chapter_head, current_chapter, content)
-                self.update_gui("%.2f" % ((int(current_chapter) / total_chapters) * 100))
-                print(current_chapter)
+                self.update_gui("%s" % int((int(current_chapter) / total_chapters) * 100))
+                print("%s" % int((int(current_chapter) / total_chapters) * 100))
                 current_chapter += 1
                 
                 if(self.get_alert() == "cancel"):
@@ -182,5 +182,3 @@ class NovelPlanet():
         alert = f.readline()
         f.close()
         return alert
-
-

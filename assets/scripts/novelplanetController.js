@@ -63,7 +63,7 @@ function novelPlanetLoadURL(novelLink) {
       method: 'GET',
       url: novelLink,
     };
-    console.log('loading novel');
+    console.log('Loading novel from link.');
   
     cloudscraper(options)
     .then(function (htmlString) {
@@ -116,13 +116,12 @@ function novelPlanetLoadNovel(novelName) {
         method: 'GET',
         url: searchLink,
     };
-    console.log('loading novel');
+    console.log('Loading Novels.');
 
     cloudscraper(options)
     .then(function (htmlString) {
         var html = new DOMParser().parseFromString(htmlString, 'text/html');
         var novelList = html.getElementsByTagName('article');
-        console.log(novelList);
 
         if(novelList.length == 0) {
             novelPlanetStatusImage.src = "assets/rsc/delete.svg";
@@ -169,10 +168,9 @@ function novelPlanetDisplaySearchedNovels(novel) {
     cloudscraper(options, function(error, response, novelHtmlString) {
         var novelHtml = new DOMParser().parseFromString(novelHtmlString, 'text/html');
         totalChapters = novelHtml.getElementsByClassName("rowChapter").length;
-        console.log(novelCoverSrc);
 
         if(novelCoverSrc.includes('/Uploads/') || novelCoverSrc.includes('/Content/') || novelCoverSrc.includes('/Novel/')) {
-            console.log('backup')
+            console.log(novelName + ' cover not found! Looking for backup images.')
             novelPlanetBackupCover(novelName, novelLink, totalChapters);
         } else {
             novelPlanetNovelHolder(novelName, novelLink, novelCoverSrc, totalChapters);
@@ -194,18 +192,23 @@ function novelPlanetBackupCover(novelName, novelLink, totalChapters)
 {
     var tempNovelURL = novelName.replace(/ /g, "+");
     tempNovelURL = 'https://www.novelupdates.com/?s=' + tempNovelURL + '&post_type=seriesplans';
-    request(tempNovelURL, function(error, response, html) {
-        if(!error && response.statusCode == 200) { 
-            let $ = cheerio.load(html);
-            var tempImgSrc = $('.search_img_nu').find('img').attr('src');
+    console.log(tempNovelURL);
 
-            novelPlanetCurrentNovelCoverSrc = tempImgSrc;
-            novelPlanetNovelHolder(novelName, novelLink, tempImgSrc, totalChapters);
-        } else {
-            console.log(error);
-            novelPlanetCurrentNovelCoverSrc = "https://i.imgur.com/zTqg4jX.png";
-            novelPlanetNovelHolder(novelName, novelLink, "https://i.imgur.com/zTqg4jX.png", totalChapters);
-        }
+    var options = {
+        method: 'GET',
+        url: tempNovelURL,
+    };
+    cloudscraper(options)
+    .then(function (htmlString) {
+        var html = new DOMParser().parseFromString(htmlString, 'text/html');
+        var tempImgSrc = html.getElementsByClassName('search_img_nu')[0].getElementsByTagName('img')[0].src;
+        console.log(tempImgSrc);
+        novelPlanetCurrentNovelCoverSrc = tempImgSrc;
+        novelPlanetNovelHolder(novelName, novelLink, tempImgSrc, totalChapters);
+    }).catch(function (err) {
+        console.log(err);
+        novelPlanetCurrentNovelCoverSrc = "https://i.imgur.com/zTqg4jX.png";
+        novelPlanetNovelHolder(novelName, novelLink, "https://i.imgur.com/zTqg4jX.png", totalChapters);
     });
 }
 
