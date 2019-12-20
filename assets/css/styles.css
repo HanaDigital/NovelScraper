@@ -8,7 +8,7 @@ body #content .page {
   display: none;
 }
 
-body #content #libraryPage {
+body #content #homePage {
   display: block;
 }
 
@@ -493,25 +493,50 @@ body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHol
           box-shadow: 0px 0px 20px 0px black;
 }
 
-body #content #libraryPage #libraryContent .novelCoverChangePrompt {
+body #content #libraryPage #libraryContent #novelCoverChangePrompt {
+  display: none;
   position: fixed;
   z-index: 11;
   top: 30px;
   right: 0;
   left: 0;
   bottom: 0;
-  background-color: black;
-  opacity: 0.5;
+  background-color: rgba(0, 0, 0, 0.43);
 }
 
-body #content #libraryPage #libraryContent .novelCoverChangePrompt .promptBox {
+body #content #libraryPage #libraryContent #novelCoverChangePrompt #promptBox {
   margin-top: 20%;
   margin-left: 29%;
   border-radius: 50px;
   width: 50%;
   height: 50px;
   background-color: white;
-  opacity: 1;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 80% auto;
+      grid-template-columns: 80% auto;
+}
+
+body #content #libraryPage #libraryContent #novelCoverChangePrompt #promptBox #novelCoverPathTextField {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  margin: auto;
+  font-size: 16px;
+  border: 0;
+  width: 95%;
+  height: 95%;
+}
+
+body #content #libraryPage #libraryContent #novelCoverChangePrompt #promptBox #novelCoverPathButton {
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  border: 0;
+  background-color: #0c2852;
+  color: white;
+  cursor: pointer;
 }
 
 /* Let's get this party started */

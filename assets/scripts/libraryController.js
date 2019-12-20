@@ -13,6 +13,34 @@ librarySearchField.addEventListener("keyup", function(event) {
     }
 });
 
+novelCoverChangePrompt = document.getElementById("novelCoverChangePrompt");
+promptBox = document.getElementById("promptBox");
+novelCoverPathTextField = document.getElementById("novelCoverPathTextField");
+novelCoverPathButton = document.getElementById("novelCoverPathButton");
+currentNovelForCoverChange = "";
+
+novelCoverChangePrompt.addEventListener('click', function(event) {
+    if(event.target == novelCoverChangePrompt) {
+        novelCoverChangePrompt.style.display = "none";
+    }
+    if(event.target == novelCoverPathButton) {
+        changeNovelCover();
+    }
+});
+
+function changeNovelCover() {
+    novelCoverChangePrompt.style.display = "none";
+    for(x in libObj.novels) {
+        if(libObj.novels[x]['novelLink'] == currentNovelForCoverChange) {
+            libObj.novels[x]['novelCoverSrc'] = novelCoverPathTextField.value;
+            novelCoverPathTextField.value = "";
+            break;
+        }
+    }
+    loadLibrary();
+    saveLibObj();
+}
+
 function searchLibrary(search) {
     if(search !== '' && search !== ' ') {
         libraryCancelSearch.style.display = "block";
@@ -66,6 +94,7 @@ function addLibraryNovelHolder(id, novelName, novelCover, novelLink, totalChapte
     novelHolder += "</div>"
     novelHolder += "<div class=\"novel-settings\">"
     novelHolder += "<img class=\"novel-source\" src=\"" + novelSourceIdentifier + "\">"
+    novelHolder += "<img class=\"novel-cover-change\" src=\"assets/rsc/change-cover.svg\">"
     novelHolder += "</div>"
     novelHolder += "<div class=\"novel-control\">"
     novelHolder += "<button class=\"libraryDownloadButton\" type=\"button\">DOWNLOAD</button>"
@@ -83,6 +112,9 @@ function addLibraryNovelHolder(id, novelName, novelCover, novelLink, totalChapte
     $('#libraryNovelList').append(novelHolder);
     
     let holder = document.getElementById(novelLink);
+
+    holder.getElementsByClassName("novel-cover-change")[0].addEventListener('click', function() {currentNovelForCoverChange = novelLink; novelCoverChangePrompt.style.display = "block";});
+
     holder.getElementsByClassName("libraryRemoveButton")[0].addEventListener('click', function() {removeFromLibrary(novelLink); loadLibrary();})
 
     if(libObj.novels[id]['downloaded'] === "true") {
