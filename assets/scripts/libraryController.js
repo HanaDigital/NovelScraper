@@ -13,6 +13,34 @@ librarySearchField.addEventListener("keyup", function(event) {
     }
 });
 
+novelCoverChangePrompt = document.getElementById("novelCoverChangePrompt");
+promptBox = document.getElementById("promptBox");
+novelCoverPathTextField = document.getElementById("novelCoverPathTextField");
+novelCoverPathButton = document.getElementById("novelCoverPathButton");
+currentNovelForCoverChange = "";
+
+novelCoverChangePrompt.addEventListener('click', function(event) {
+    if(event.target == novelCoverChangePrompt) {
+        novelCoverChangePrompt.style.display = "none";
+    }
+    if(event.target == novelCoverPathButton) {
+        changeNovelCover();
+    }
+});
+
+function changeNovelCover() {
+    novelCoverChangePrompt.style.display = "none";
+    for(x in libObj.novels) {
+        if(libObj.novels[x]['novelLink'] == currentNovelForCoverChange) {
+            libObj.novels[x]['novelCoverSrc'] = novelCoverPathTextField.value;
+            novelCoverPathTextField.value = "";
+            break;
+        }
+    }
+    loadLibrary();
+    saveLibObj();
+}
+
 function searchLibrary(search) {
     if(search !== '' && search !== ' ') {
         libraryCancelSearch.style.display = "block";
@@ -21,8 +49,13 @@ function searchLibrary(search) {
         if(libObj.novels[0] !== undefined) { 
             for(x in libObj.novels) {
                 if(libObj.novels[x]['novelName'].toLowerCase().includes(search.toLowerCase())) {
+                    if(libObj.novels[x]['source'] == "novelplanet") {
+                        var novelSourceIdentifier = "assets/rsc/NovelPlanet Logo.png";
+                    } else if(libObj.novels[x]['source'] == "boxnovel") {
+                        var novelSourceIdentifier = "assets/rsc/BoxNovel Logo.png";
+                    }
                     document.getElementById("libraryStatus").style.display = "none";
-                    addLibraryNovelHolder(x, libObj.novels[x]['novelName'], libObj.novels[x]['novelCoverSrc'], libObj.novels[x]['novelLink'], libObj.novels[x]['totalChapters'], libObj.novels[x]['source'])
+                    addLibraryNovelHolder(x, libObj.novels[x]['novelName'], libObj.novels[x]['latestChapterName'], libObj.novels[x]['novelCoverSrc'], libObj.novels[x]['novelLink'], libObj.novels[x]['totalChapters'], libObj.novels[x]['source'], novelSourceIdentifier);
                 }
             }
         } else {
@@ -39,19 +72,30 @@ function loadLibrary() {
 
     if(libObj.novels[0] !== undefined) { 
         for(x in libObj.novels) {
-            addLibraryNovelHolder(x, libObj.novels[x]['novelName'], libObj.novels[x]['novelCoverSrc'], libObj.novels[x]['novelLink'], libObj.novels[x]['totalChapters'], libObj.novels[x]['source'])
+
+            if(libObj.novels[x]['source'] == "novelplanet") {
+                var novelSourceIdentifier = "assets/rsc/NovelPlanet Logo.png";
+            } else if(libObj.novels[x]['source'] == "boxnovel") {
+                var novelSourceIdentifier = "assets/rsc/BoxNovel Logo.png";
+            }
+            addLibraryNovelHolder(x, libObj.novels[x]['novelName'], libObj.novels[x]['latestChapterName'], libObj.novels[x]['novelCoverSrc'], libObj.novels[x]['novelLink'], libObj.novels[x]['totalChapters'], libObj.novels[x]['source'], novelSourceIdentifier);
         }
     } else {
         document.getElementById("libraryStatus").style.display = "block";
     }
 }
 
-function addLibraryNovelHolder(id, novelName, novelCover, novelLink, totalChapters, novelSource) {
+function addLibraryNovelHolder(id, novelName, latestChapterName, novelCover, novelLink, totalChapters, novelSource, novelSourceIdentifier) {
     novelHolder = "<li id=\"" + novelLink + "\">"
     novelHolder += "<div class=\"libraryNovelHolder\">"
     novelHolder += "<img class=\"novelCover\" src=\"" + novelCover + "\" onerror=\"this.src='assets/rsc/missing-image.png'\" border=\"0\" alt=\"\">"
     novelHolder += "<div class=\"novel-info\">"
     novelHolder += "<strong>" + novelName + "</strong>"
+    novelHolder += "<p>" + latestChapterName + "</p>"
+    novelHolder += "</div>"
+    novelHolder += "<div class=\"novel-settings\">"
+    novelHolder += "<img class=\"novel-source\" src=\"" + novelSourceIdentifier + "\">"
+    novelHolder += "<img class=\"novel-cover-change\" src=\"assets/rsc/change-cover.svg\">"
     novelHolder += "</div>"
     novelHolder += "<div class=\"novel-control\">"
     novelHolder += "<button class=\"libraryDownloadButton\" type=\"button\">DOWNLOAD</button>"
@@ -69,7 +113,9 @@ function addLibraryNovelHolder(id, novelName, novelCover, novelLink, totalChapte
     $('#libraryNovelList').append(novelHolder);
     
     let holder = document.getElementById(novelLink);
-    holder.getElementsByClassName("libraryDownloadButton")[0].addEventListener('click', function() {downloadNovel(novelName, novelCover, novelLink, totalChapters, novelSource);})
+
+    holder.getElementsByClassName("novel-cover-change")[0].addEventListener('click', function() {currentNovelForCoverChange = novelLink; novelCoverChangePrompt.style.display = "block";});
+
     holder.getElementsByClassName("libraryRemoveButton")[0].addEventListener('click', function() {removeFromLibrary(novelLink); loadLibrary();})
 
     if(libObj.novels[id]['downloaded'] === "true") {
@@ -78,6 +124,9 @@ function addLibraryNovelHolder(id, novelName, novelCover, novelLink, totalChapte
 
         holder.getElementsByClassName('libraryDownloadButton')[0].innerHTML = "UPDATE";
         holder.getElementsByClassName('libraryDownloadButton')[0].style.background = '#0c2852';
+        holder.getElementsByClassName("libraryDownloadButton")[0].addEventListener('click', function() {downloadNovel(novelName, novelCover, novelLink, totalChapters, novelSource, "true");})
+    } else {
+        holder.getElementsByClassName("libraryDownloadButton")[0].addEventListener('click', function() {downloadNovel(novelName, novelCover, novelLink, totalChapters, novelSource, "false");})
     }
 
     if(libObj.novels[id]['status'] === "downloading") {
@@ -87,14 +136,14 @@ function addLibraryNovelHolder(id, novelName, novelCover, novelLink, totalChapte
     }
 }
 
-async function writeToLibrary(novelName, imgSrc, novelLink, totalChapters, source) {
+async function writeToLibrary(novelName, latestChapterName, imgSrc, novelLink, totalChapters, source) {
     for(x in libObj.novels) {
         if(libObj.novels[x]['novelLink'] === novelLink) {
-            console.log("Already Exists!");
+            console.log(novelName + " already exists!");
             return;
         }
     }
-    libObj.novels.push({'novelName': novelName, 'novelCoverSrc': imgSrc, 'novelLink': novelLink, 'totalChapters': totalChapters, 'source': source, 'status': 'none', 'downloaded': 'false', 'folderPath': 'none'}); //add some data
+    libObj.novels.push({'novelName': novelName, 'latestChapterName': latestChapterName, 'novelCoverSrc': imgSrc, 'novelLink': novelLink, 'totalChapters': totalChapters, 'source': source, 'status': 'none', 'downloaded': 'false', 'folderPath': 'none'}); //add some data
     saveLibObj();
 }
 
@@ -111,12 +160,38 @@ function removeFromLibrary(novelLink) {
     }
 }
 
+var writeCheck = false;
+
 function saveLibObj() {
-    let json = JSON.stringify(libObj); //convert it back to json
-    fs.writeFile("library.json", json, function(err) {
-        if(err) {
-            return console.log(err);
+    let time = new Date().getTime();
+    var id = setInterval(function() {saveLibObjToFile(id, time);}, 500);
+    console.log("Saving Library");
+}
+
+function saveLibObjToFile(id, time) {
+    if(!writeCheck) {
+        writeCheck = true;
+        let json = JSON.stringify(libObj); //convert it back to json
+        if(json.slice(-2,) === "}}") {
+            json = json.slice(0, -1);
         }
-        console.log("File saved successfully!");
-    }); // write it back 
+        fs.writeFile("library.json", json, function(err) {
+            if(err) {
+                return console.log(err);
+                writeCheck = false;
+                clearInterval(id);
+            }
+            writeCheck = false;
+            clearInterval(id);
+            console.log("Library Saved!");
+        }); // write it back
+    } else {
+        let timeEnd = new Date().getTime();
+        if((timeEnd - time) > 5000) {
+            console.log('Thread ended without saving Library!');
+            clearInterval(id);
+        }
+        console.log("Thread waiting to save Library!");
+    }
+
 }

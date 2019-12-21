@@ -9,19 +9,36 @@ const { shell } = require('electron');
 
 const { dialog } = require('electron').remote;
 
-const version = "0.9.1";
+const version = "0.9.3";
+
+const electron = require('electron');
+const ipc = electron.ipcRenderer;
+
+//App close handling
+ipc.on('app-close', _ => {
+    //do something here...
+    let json = JSON.stringify(libObj);  //convert it back to json
+    fs.writeFile("library.json", json, function(err) {
+        if(err) {
+            return console.log(err);
+        }
+        console.log("Library saved before app close!");
+    });
+
+    ipc.send('closed');
+});
 
 //Library Objects
 var libObj = {"novels":[]};
 fs.access('library.json', fs.F_OK, (err) => {
     if (err) {
-        console.log("Generating new Library")
+        console.log("No Library found. Generating new Library!")
         let json = JSON.stringify(libObj); //convert it back to json
         fs.writeFile("library.json", json, function(err) {
             if(err) {
                 return console.log(err);
             }
-            console.log("File saved successfully!");
+            console.log("New Library generated successfully!");
         }); // write it back 
     }
     // file exists
@@ -29,6 +46,9 @@ fs.access('library.json', fs.F_OK, (err) => {
         if (err){
             console.log(err);
         } else {
+            if(data.slice(-2,) === "}}") {
+                data = data.slice(0, -1);
+            }
             libObj = JSON.parse(data);
             for(x in libObj.novels) {
                 libObj.novels[x]['status'] = "none";
@@ -183,15 +203,14 @@ function hidePages()
     }
 }
 
-async function downloadNovel(novelName, novelCoverSrc, novelLink, totalChapters, source) {
+async function downloadNovel(novelName, novelCoverSrc, novelLink, totalChapters, source, update) {
     for(x in libObj.novels) {
         if(libObj.novels[x]['novelLink'] === novelLink) {
             if(libObj.novels[x]['status'] === "downloading") {
-                console.log('Already downloading!')
+                console.log('Already downloading novel: ' + novelName);
                 return;
             } else {
                 libObj.novels[x]['status'] = "downloading";
-                saveLibObj();
             }
             break;
         }
@@ -226,13 +245,36 @@ async function downloadNovel(novelName, novelCoverSrc, novelLink, totalChapters,
 
                     var out = fs.createWriteStream(folderPath + '/cover.png');
                     req.pipe(out);
+
+                    if(update == "true") {
+                        var options = {
+                            method: 'GET',
+                            url: novelLink,
+                        };
+                    
+                        cloudscraper(options, function(error, response, novelHtmlString) {
+                            var novelHtml = new DOMParser().parseFromString(novelHtmlString, 'text/html');
+                            latestChapterName = novelHtml.getElementsByClassName("rowChapter")[0].innerText.trim();
+                            document.getElementById('novelLink').getElementsByTagName('p')[0].innerText = latestChapterName;
+                            for(x in libObj.novels) {
+                                if(libObj.novels[x]['novelLink'] === novelLink) {
+                                    libObj.novels[x]['latestChapterName'] = latestChapterName;
+                                    break;
+                                }
+                            }
+                            saveLibObj();
+                        }).catch(function (err) {
+                            console.log(err);
+                        });
+                    }
                     
                     var executablePath = 'assets\\modules\\download_manager.exe';
-                    var parameters = [novelLink, folderPath, source];
+                    var parameters = [novelLink, folderPath, source, update];
+                    console.log('Update Status: ' + update);
 
                     setTimeout(function() {runPy(executablePath, parameters);}, 0);
                     downloadTracker.push(-1);
-                    var id = setInterval(function() {getDownloadUpdate(updatePath, id, downloadTrackerID, novelLink, totalChapters, folderPath);}, 500);
+                    var id = setInterval(function() {getDownloadUpdate(novelName, updatePath, id, downloadTrackerID, novelLink, totalChapters, folderPath);}, 500);
                     downloadTrackerID += 1;
                     for(x in libObj.novels) {
                         if(libObj.novels[x]['novelLink'] === novelLink) {
@@ -256,11 +298,11 @@ async function downloadNovel(novelName, novelCoverSrc, novelLink, totalChapters,
 function runPy(executablePath, parameters) {
     child(executablePath, parameters, function(err, data) {
         console.log(err)
-        console.log(data.toString());
+        // console.log(data.toString());
    });
 }
 
-function getDownloadUpdate(updatePath, id, tracker, novelLink, totalChapters, folderPath) {
+function getDownloadUpdate(novelName, updatePath, id, tracker, novelLink, totalChapters, folderPath) {
     var holder = document.getElementById(novelLink);
     fs.readFile(updatePath, 'utf8', function(err, data) {
         if (err){
@@ -270,7 +312,7 @@ function getDownloadUpdate(updatePath, id, tracker, novelLink, totalChapters, fo
             clearInterval(id);
         } else if(data === "END") {
             resetStatus(novelLink);
-            console.log('Ending..');
+            console.log(novelName + ' download complete!');
 
             holder.getElementsByClassName("libraryOpenFolderButton")[0].style.display = "block";
             holder.getElementsByClassName("libraryOpenFolderButton")[0].addEventListener('click', function() {shell.openItem(folderPath);});
@@ -316,6 +358,33 @@ function getDownloadUpdate(updatePath, id, tracker, novelLink, totalChapters, fo
             buttonDownloadState(holder, false);
             clearInterval(id);
         
+        } else if(data === "NO-UPDATE") {
+            resetStatus(novelLink);
+            let options = {
+                type: 'info',
+                buttons: ['Report', 'Ok'],
+                defaultId: 1,
+                title: 'No Update',
+                message: 'This novel is up-to-date',
+                detail: 'If this was unexpected then please open an issue on github.',
+              };
+            
+            dialog.showMessageBox(null, options, (response) => {
+                console.log(response);
+                if(response == 0) {
+                    shell.openExternal('https://github.com/dr-nyt/Translated-Novel-Downloader/issues')
+                }
+            });
+            
+            holder.getElementsByClassName('progressBar')[0].style.display = "none";
+            holder.getElementsByClassName('libraryDownloadButton')[0].innerHTML = "UPDATE";
+            holder.getElementsByClassName('libraryDownloadButton')[0].style.background = '#0c2852';
+            holder.getElementsByClassName('libraryCancelButton')[0].style.display = "none";
+
+            loadLibrary();
+
+            clearInterval(id);
+        
         } else if(data === "NODEJS") {
             resetStatus(novelLink);
             let options = {
@@ -338,12 +407,15 @@ function getDownloadUpdate(updatePath, id, tracker, novelLink, totalChapters, fo
 
         } else {
             if(downloadTracker[tracker] !== data) {
-                console.log("data : " + data);
                 downloadTracker[tracker] = data;
 
-                console.log(((data * 100) / totalChapters).toString() + '%');
+                console.log(novelName + " Status: " + data + '%');
+                if(data > 100) {
+                    data = data - 5;
+                    holder.getElementsByClassName('loaderBar')[0].style.background = 'orange';
+                }
                 if(holder) {
-                    holder.getElementsByClassName('loaderBar')[0].style.width = ((data * 100) / totalChapters).toString() + '%';
+                    holder.getElementsByClassName('loaderBar')[0].style.width = data + '%';
                 }
                 buttonDownloadState(holder, true);
             }
@@ -370,7 +442,7 @@ function cancelDownload(alertPath) {
         if(err){
             console.log(err);
         }
-        console.log('cancel issued!');
+        console.log('Download Cancel Issued!');
     });
 }
 

@@ -80,6 +80,8 @@
                     
                     <p class="statusText">UNDER CONSTRUCTION</p>
                 </div>
+
+                <!-- <webview id="webview" src="https://discord.gg/Wya4Dst"></webview> -->
             </div>
 
             <div id="sourcesPage" class="page"> 
@@ -116,7 +118,7 @@
     
             <div id="novelPlanetPage" class="page"> 
                 <div class="headerPanel">
-                    <input id="novelPlanetURLTextField" class="urlTextField" type="text" name="URL" placeholder="https://novelplanet.com/Novel/">
+                    <input id="novelPlanetURLTextField" class="urlTextField" type="text" name="URL" placeholder="Novel Name/Link">
                     <button id="novelPlanetFindURLButton" class="urlButton" type="button">FIND</button>
                 </div>
 
@@ -149,7 +151,7 @@
 
             <div id="boxNovelPage" class="page"> 
                 <div class="headerPanel">
-                    <input id="boxNovelURLTextField" class="urlTextField" type="text" name="URL" placeholder="https://boxnovel.com/novel/">
+                    <input id="boxNovelURLTextField" class="urlTextField" type="text" name="URL" placeholder="Novel Name/Link">
                     <button id="boxNovelFindURLButton" class="urlButton" type="button">FIND</button>
                 </div>
 
@@ -205,7 +207,12 @@
                             <div class="libraryNovelHolder">
                                 <img class="novelCover" src="assets/rsc/missing-image.png" onerror="this.src='assets/rsc/missing-image.png'" border="0" alt="">
                                 <div class="novel-info">
-                                    <strong>Tempest of the Stellar War</strong>
+                                    <strong>Tempest of the Stellar  dasdkjaiksfjd ijafsoik aoifjsfoik jasiofj aisfjai fjisjfiajs f ajsfkj War</strong>
+                                    <p>Chapter 1 Tempest of the Stellar  dasdkjaiksfjd ijafsoik aoifjsfoik jasiofj aisfjai fjisjfiajs f ajsfkj War</p>
+                                </div>
+                                <div class="novel-settings">
+                                    <img class="novel-source" src="assets/rsc/NovelPlanet Logo.png">
+                                    <img class="novel-cover-change" src="assets/rsc/change-cover.svg">
                                 </div>
                                 <div class="novel-control">
                                     <button class="libraryDownloadButton" type="button">DOWNLOAD</button>
@@ -219,6 +226,13 @@
                             </div>
                         </li>
                     </ul>
+
+                    <div id="novelCoverChangePrompt">
+                        <div id="promptBox">
+                            <input id="novelCoverPathTextField" type="text" name="novelCoverPath" placeholder="Novel Cover URL/Path">
+                            <button id="novelCoverPathButton" class="novelCoverButton" type="button">SAVE</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 

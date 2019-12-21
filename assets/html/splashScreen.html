@@ -4,7 +4,7 @@
         <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
     <style>
 
-        @keyframes yourAnimation{
+        @keyframes yourAnimation {
             0%{
                 transform: rotate(0) translateX(0px);
                 }
@@ -22,12 +22,14 @@
         html {
             background-color: white;
             font-family: 'Open Sans', sans-serif;
+            -webkit-user-select: none;
         }
         body {
             background-color: #0c2852;
             width: 700px;
             height: 500px;
             margin: 0;
+            -webkit-app-region: drag;
         }
 
         body center {
@@ -38,11 +40,25 @@
 
         body center h1 {
             margin: 0;
-            padding-top: 27%;
+            padding-top: 30px;
         }
 
         body center h1 span {
             color: rgb(0, 153, 255);
+        }
+        
+        body center img {
+            width: 230px;
+            margin-top: 70px;
+        }
+
+        body p {
+            font-family: sans-serif;
+            color: white;
+            margin: 0;
+            position: fixed;
+            bottom: 8px;
+            right: 10px;
         }
 
         .load {
@@ -64,114 +80,108 @@
         body,
         html,
         .wrapper {
-        width: 100%;
-        height: 100%;
+            width: 100%;
+            height: 100%;
         }
         .wrapper {
-        position: relative;
-        background: #e7f0f7;
+            position: relative;
+            background: #e7f0f7;
         }
         .progressbar {
-        display: block;
-        position: absolute;
-        z-index: 9;
-        top: 250px;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        margin: auto;
-        width: 300px;
-        height: 15px;
+            display: block;
+            position: absolute;
+            z-index: 9;
+            top: 100px;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+            width: 300px;
+            height: 15px;
         }
         .progressbar::before,
         .progressbar::after {
-        content: '';
-        display: block;
-        position: absolute;
-        z-index: 99;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 15px;
-        background-image: linear-gradient(90deg, #e91e63 0%, #e91e63 20%, #03a9f4 20%, #03a9f4 40%, #8bc34a 40%, #8bc34a 60%, #ffeb3b 60%, #ffeb3b 80%, #ff5722 80%, #ff5722 100%);
-        background-position: 0 0;
-        background-repeat: repeat-x;
-        -webkit-animation: movebar 5s linear infinite;
-                animation: movebar 5s linear infinite;
+            content: '';
+            display: block;
+            position: absolute;
+            z-index: 99;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            background-image: linear-gradient(90deg, #e91e63 0%, #e91e63 20%, #03a9f4 20%, #03a9f4 40%, #8bc34a 40%, #8bc34a 60%, #ffeb3b 60%, #ffeb3b 80%, #ff5722 80%, #ff5722 100%);
+            background-position: 0 0;
+            background-repeat: repeat-x;
+            -webkit-animation: movebar 5s linear infinite;
+            animation: movebar 5s linear infinite;
         }
         .progressbar::before {
-        box-shadow: 0 6px 10px 0 rgba(0,0,0,0.1);
+            box-shadow: 0 6px 10px 0 rgba(0,0,0,0.1);
         }
         .progressbar::after {
-        z-index: 9;
-        top: 6px;
-        -webkit-filter: blur(16px);
-                filter: blur(16px);
-        opacity: 0.7;
+            z-index: 9;
+            top: 6px;
+            -webkit-filter: blur(16px);
+            filter: blur(16px);
+            opacity: 0.7;
         }
         .stylization {
-        position: absolute;
-        z-index: 999;
-        height: 4px;
-        width: 90%;
-        left: 5%;
-        top: 6px;
-        opacity: 0.3;
+            position: absolute;
+            z-index: 999;
+            height: 4px;
+            width: 90%;
+            left: 5%;
+            top: 6px;
+            opacity: 0.3;
         }
         .stylization::before,
         .stylization::after {
-        content: '';
-        display: block;
-        position: absolute;
-        height: 4px;
-        top: 0;
-        border-radius: 2px;
+            content: '';
+            display: block;
+            position: absolute;
+            height: 4px;
+            top: 0;
+            border-radius: 2px;
         }
         .stylization::before {
-        background: #fff;
-        left: 0;
-        right: 10px;
+            background: #fff;
+            left: 0;
+            right: 10px;
         }
         .stylization::after {
-        width: 6px;
-        background: #fff;
-        right: 0;
+            width: 6px;
+            background: #fff;
+            right: 0;
         }
         @-webkit-keyframes movebar {
-        from {
-            background-position: 0 0;
-        }
-        to {
-            background-position: 400px 0;
-        }
+            from {
+                background-position: 0 0;
+            } to {
+                background-position: 400px 0;
+            }
         }
         @keyframes movebar {
-        from {
-            background-position: 0 0;
-        }
-        to {
-            background-position: 400px 0;
-        }
+            from {
+                background-position: 0 0;
+            } to {
+                background-position: 400px 0;
+            }
         }
     </style>
     <head></head>
     <body>
-        <!-- <center>
-            <img src="../rsc/newIcon-1.png" width="490" height="290"></img>
-        </center> -->
         <center>
+                <img src="../rsc/Logo.png">
                 <h1><span>Novel</span>Scraper</h1>
-                <!-- <div id="loader">
-                    <p id="load1" class="load">.</p>
-                    <p id="load2" class="load">.</p>
-                    <p id="load3" class="load">.</p>
-                </div> -->
+                
                 <div class="wrapper">
                     <div class="progressbar">
                       <div class="stylization"></div>
                     </div>
-                  </div>
+                </div>
         </center>
+
+        <p>v0.9.3</p>
     </body>
 </html>
