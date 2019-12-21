@@ -55,7 +55,7 @@ function searchLibrary(search) {
                         var novelSourceIdentifier = "assets/rsc/BoxNovel Logo.png";
                     }
                     document.getElementById("libraryStatus").style.display = "none";
-                    addLibraryNovelHolder(x, libObj.novels[x]['novelName'], libObj.novels[x]['novelCoverSrc'], libObj.novels[x]['novelLink'], libObj.novels[x]['totalChapters'], libObj.novels[x]['source'], novelSourceIdentifier);
+                    addLibraryNovelHolder(x, libObj.novels[x]['novelName'], libObj.novels[x]['latestChapterName'], libObj.novels[x]['novelCoverSrc'], libObj.novels[x]['novelLink'], libObj.novels[x]['totalChapters'], libObj.novels[x]['source'], novelSourceIdentifier);
                 }
             }
         } else {
@@ -78,19 +78,20 @@ function loadLibrary() {
             } else if(libObj.novels[x]['source'] == "boxnovel") {
                 var novelSourceIdentifier = "assets/rsc/BoxNovel Logo.png";
             }
-            addLibraryNovelHolder(x, libObj.novels[x]['novelName'], libObj.novels[x]['novelCoverSrc'], libObj.novels[x]['novelLink'], libObj.novels[x]['totalChapters'], libObj.novels[x]['source'], novelSourceIdentifier);
+            addLibraryNovelHolder(x, libObj.novels[x]['novelName'], libObj.novels[x]['latestChapterName'], libObj.novels[x]['novelCoverSrc'], libObj.novels[x]['novelLink'], libObj.novels[x]['totalChapters'], libObj.novels[x]['source'], novelSourceIdentifier);
         }
     } else {
         document.getElementById("libraryStatus").style.display = "block";
     }
 }
 
-function addLibraryNovelHolder(id, novelName, novelCover, novelLink, totalChapters, novelSource, novelSourceIdentifier) {
+function addLibraryNovelHolder(id, novelName, latestChapterName, novelCover, novelLink, totalChapters, novelSource, novelSourceIdentifier) {
     novelHolder = "<li id=\"" + novelLink + "\">"
     novelHolder += "<div class=\"libraryNovelHolder\">"
     novelHolder += "<img class=\"novelCover\" src=\"" + novelCover + "\" onerror=\"this.src='assets/rsc/missing-image.png'\" border=\"0\" alt=\"\">"
     novelHolder += "<div class=\"novel-info\">"
     novelHolder += "<strong>" + novelName + "</strong>"
+    novelHolder += "<p>" + latestChapterName + "</p>"
     novelHolder += "</div>"
     novelHolder += "<div class=\"novel-settings\">"
     novelHolder += "<img class=\"novel-source\" src=\"" + novelSourceIdentifier + "\">"
@@ -135,14 +136,14 @@ function addLibraryNovelHolder(id, novelName, novelCover, novelLink, totalChapte
     }
 }
 
-async function writeToLibrary(novelName, imgSrc, novelLink, totalChapters, source) {
+async function writeToLibrary(novelName, latestChapterName, imgSrc, novelLink, totalChapters, source) {
     for(x in libObj.novels) {
         if(libObj.novels[x]['novelLink'] === novelLink) {
             console.log(novelName + " already exists!");
             return;
         }
     }
-    libObj.novels.push({'novelName': novelName, 'novelCoverSrc': imgSrc, 'novelLink': novelLink, 'totalChapters': totalChapters, 'source': source, 'status': 'none', 'downloaded': 'false', 'folderPath': 'none'}); //add some data
+    libObj.novels.push({'novelName': novelName, 'latestChapterName': latestChapterName, 'novelCoverSrc': imgSrc, 'novelLink': novelLink, 'totalChapters': totalChapters, 'source': source, 'status': 'none', 'downloaded': 'false', 'folderPath': 'none'}); //add some data
     saveLibObj();
 }
 

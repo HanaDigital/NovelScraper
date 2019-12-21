@@ -78,13 +78,14 @@ function boxNovelLoadURL(novelLink) {
         }
         novelName = novelName.innerText.replace(/(\r\n|\n|\r)/gm,"").trim();
         var totalChapters = html.getElementsByClassName("wp-manga-chapter").length;
+        var latestChapterName = html.getElementsByClassName("wp-manga-chapter")[0].innerText.trim();
         
         boxNovelCurrentNovelName = novelName;
         boxNovelCurrentNovelLink = novelLink;
         boxNovelCurrentNovelCoverSrc = novelCoverSrc;
         boxNovelCurrentTotalChapters = totalChapters
 
-        boxNovelNovelHolder(novelName, novelLink, novelCoverSrc, totalChapters);
+        boxNovelNovelHolder(novelName, latestChapterName, novelLink, novelCoverSrc, totalChapters);
 
         boxNovelStatus.style.display = "none";
         boxNovelContent.style.display = "block";
@@ -157,6 +158,7 @@ function boxNovelLoadNovel(novelName) {
 
 function boxNovelDisplaySearchedNovels(novel) {
     var novelName;
+    var latestChapterName;
     var novelLink;
     var novelCoverSrc;
     var totalChapters;
@@ -176,9 +178,10 @@ function boxNovelDisplaySearchedNovels(novel) {
           var html = new DOMParser().parseFromString(htmlString, 'text/html');
   
           novelName = novelName.replace(/(\r\n|\n|\r)/gm,"").trim();
-          var totalChapters = html.getElementsByClassName("wp-manga-chapter").length;
+          totalChapters = html.getElementsByClassName("wp-manga-chapter").length;
+          latestChapterName = html.getElementsByClassName("wp-manga-chapter")[0].innerText.trim();
   
-          boxNovelNovelHolder(novelName, novelLink, novelCoverSrc, totalChapters);
+          boxNovelNovelHolder(novelName, latestChapterName, novelLink, novelCoverSrc, totalChapters);
   
           boxNovelStatus.style.display = "none";
           boxNovelContent.style.display = "block";
@@ -201,7 +204,7 @@ function boxNovelNovelHolderGenerator(novelLink, side) {
     holder += "<img class=\"novelCover\" src=\"assets/rsc/eclipse-loading-200px.gif\" onerror=\"this.src='assets/rsc/missing-image.png'\" border=\"0\" alt=\"\">";
     holder += "<div class=\"novelInfo\">";
     holder += "<strong>Loading...</strong>";
-    // holder += "<p>Please wait!</p>";
+    holder += "<p>Please wait!</p>";
     holder += "</div>";
     holder += "<div id=\"boxNovelNovelButtons\" class=\"novelButtons\">";
     holder += "<button class=\"novelAddButton\" type=\"button\">ADD TO LIBRARY</button>";
@@ -220,8 +223,9 @@ function boxNovelNovelHolder(novelName, novelLink, novelCoverSrc, totalChapters)
     var controlHolder = document.getElementById('boxnovel' + novelLink);
     controlHolder.getElementsByTagName('img')[0].src = novelCoverSrc;
     controlHolder.getElementsByTagName('strong')[0].innerText = novelName;
+    controlHolder.getElementsByTagName('p')[0].innerText = latestChapterName;
     controlHolder.getElementsByClassName('novelAddButton')[0].addEventListener('click', function() {
-        boxNovelAddToLib(controlHolder, novelName, novelLink, novelCoverSrc, totalChapters);
+        boxNovelAddToLib(controlHolder, latestChapterName, novelName, novelLink, novelCoverSrc, totalChapters);
     });
     controlHolder.getElementsByClassName('novelRemoveButton')[0].addEventListener('click', function() {
         boxNovelRemoveLibrary(controlHolder, novelLink);
@@ -231,7 +235,7 @@ function boxNovelNovelHolder(novelName, novelLink, novelCoverSrc, totalChapters)
 }
 
 function boxNovelAddToLib(holder, novelName, novelLink, novelCoverSrc, totalChapters) {
-    writeToLibrary(novelName, novelCoverSrc, novelLink, totalChapters, "boxnovel");
+    writeToLibrary(novelName, latestChapterName, novelCoverSrc, novelLink, totalChapters, "boxnovel");
     boxNovelLibButton(holder, false);
 }
 

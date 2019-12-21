@@ -71,6 +71,7 @@ function novelPlanetLoadURL(novelLink) {
 
         var novelCoverSrc = html.getElementsByClassName('post-previewInDetails')[0].getElementsByTagName('img')[0].src;
         var novelName = html.getElementsByClassName('post-contentDetails')[0].getElementsByTagName('p')[0].innerText.replace(/(\r\n|\n|\r)/gm,"");
+        var latestChapterName = html.getElementsByClassName("rowChapter")[0].innerText.trim();
         var totalChapters = html.getElementsByClassName("rowChapter").length;
 
         novelPlanetCurrentNovelName = novelName;
@@ -78,10 +79,10 @@ function novelPlanetLoadURL(novelLink) {
         novelPlanetCurrentTotalChapters = html.getElementsByClassName("rowChapter").length;
 
         if(novelCoverSrc.includes('/Uploads/') || novelCoverSrc.includes('/Content/') || novelCoverSrc.includes('/Novel/')) {
-            novelPlanetBackupCover(novelName, novelLink, totalChapters);
+            novelPlanetBackupCover(novelName, latestChapterName, novelLink, totalChapters);
         } else {
             novelPlanetCurrentNovelCoverSrc = novelCoverSrc;
-            novelPlanetNovelHolder(novelName, novelLink, novelCoverSrc, totalChapters);
+            novelPlanetNovelHolder(novelName, latestChapterName, novelLink, novelCoverSrc, totalChapters);
         }
     })
     .catch(function (err) {
@@ -152,6 +153,7 @@ function novelPlanetLoadNovel(novelName) {
 
 function novelPlanetDisplaySearchedNovels(novel) {
     var novelName;
+    var latestChapterName;
     var novelLink;
     var novelCoverSrc;
     var totalChapters;
@@ -168,12 +170,13 @@ function novelPlanetDisplaySearchedNovels(novel) {
     cloudscraper(options, function(error, response, novelHtmlString) {
         var novelHtml = new DOMParser().parseFromString(novelHtmlString, 'text/html');
         totalChapters = novelHtml.getElementsByClassName("rowChapter").length;
+        latestChapterName = novelHtml.getElementsByClassName("rowChapter")[0].innerText.trim();
 
         if(novelCoverSrc.includes('/Uploads/') || novelCoverSrc.includes('/Content/') || novelCoverSrc.includes('/Novel/')) {
             console.log(novelName + ' cover not found! Looking for backup images.')
-            novelPlanetBackupCover(novelName, novelLink, totalChapters);
+            novelPlanetBackupCover(novelName, latestChapterName, novelLink, totalChapters);
         } else {
-            novelPlanetNovelHolder(novelName, novelLink, novelCoverSrc, totalChapters);
+            novelPlanetNovelHolder(novelName, latestChapterName, novelLink, novelCoverSrc, totalChapters);
         }
     }).catch(function (err) {
         console.log(err);
@@ -188,7 +191,7 @@ function novelPlanetDisplaySearchedNovels(novel) {
 
 }
 
-function novelPlanetBackupCover(novelName, novelLink, totalChapters)
+function novelPlanetBackupCover(novelName, latestChapterName, novelLink, totalChapters)
 {
     var tempNovelURL = novelName.replace(/ /g, "+");
     tempNovelURL = 'https://www.novelupdates.com/?s=' + tempNovelURL + '&post_type=seriesplans';
@@ -204,11 +207,11 @@ function novelPlanetBackupCover(novelName, novelLink, totalChapters)
         var tempImgSrc = html.getElementsByClassName('search_img_nu')[0].getElementsByTagName('img')[0].src;
         console.log(tempImgSrc);
         novelPlanetCurrentNovelCoverSrc = tempImgSrc;
-        novelPlanetNovelHolder(novelName, novelLink, tempImgSrc, totalChapters);
+        novelPlanetNovelHolder(novelName, latestChapterName, novelLink, tempImgSrc, totalChapters);
     }).catch(function (err) {
         console.log(err);
         novelPlanetCurrentNovelCoverSrc = "https://i.imgur.com/zTqg4jX.png";
-        novelPlanetNovelHolder(novelName, novelLink, "https://i.imgur.com/zTqg4jX.png", totalChapters);
+        novelPlanetNovelHolder(novelName, latestChapterName, novelLink, "https://i.imgur.com/zTqg4jX.png", totalChapters);
     });
 }
 
@@ -217,7 +220,7 @@ function novelPlanetNovelHolderGenerator(novelLink, side) {
     holder += "<img class=\"novelCover\" src=\"assets/rsc/eclipse-loading-200px.gif\" onerror=\"this.src='assets/rsc/missing-image.png'\" border=\"0\" alt=\"\">";
     holder += "<div class=\"novelInfo\">";
     holder += "<strong>Loading...</strong>";
-    // holder += "<p>Please wait!</p>";
+    holder += "<p>Please wait!</p>";
     holder += "</div>";
     holder += "<div id=\"novelPlanetNovelButtons\" class=\"novelButtons\">";
     holder += "<button class=\"novelAddButton\" type=\"button\">ADD TO LIBRARY</button>";
@@ -232,12 +235,13 @@ function novelPlanetNovelHolderGenerator(novelLink, side) {
     }
 }
 
-function novelPlanetNovelHolder(novelName, novelLink, novelCoverSrc, totalChapters) {
+function novelPlanetNovelHolder(novelName, latestChapterName, novelLink, novelCoverSrc, totalChapters) {
     var controlHolder = document.getElementById('novelplanet' + novelLink);
     controlHolder.getElementsByTagName('img')[0].src = novelCoverSrc;
     controlHolder.getElementsByTagName('strong')[0].innerText = novelName;
+    controlHolder.getElementsByTagName('p')[0].innerText = latestChapterName
     controlHolder.getElementsByClassName('novelAddButton')[0].addEventListener('click', function() {
-        novelPlanetAddToLib(controlHolder, novelName, novelLink, novelCoverSrc, totalChapters);
+        novelPlanetAddToLib(controlHolder, novelName, latestChapterName, novelLink, novelCoverSrc, totalChapters);
     });
     controlHolder.getElementsByClassName('novelRemoveButton')[0].addEventListener('click', function() {
         novelPlanetRemoveLibrary(controlHolder, novelLink);
@@ -246,8 +250,8 @@ function novelPlanetNovelHolder(novelName, novelLink, novelCoverSrc, totalChapte
     refreshNovelPlanetPageData();
 }
 
-function novelPlanetAddToLib(holder, novelName, novelLink, novelCoverSrc, totalChapters) {
-    writeToLibrary(novelName, novelCoverSrc, novelLink, totalChapters, "novelplanet");
+function novelPlanetAddToLib(holder, novelName, latestChapterName, novelLink, novelCoverSrc, totalChapters) {
+    writeToLibrary(novelName, latestChapterName, novelCoverSrc, novelLink, totalChapters, "novelplanet");
     novelPlanetLibButton(holder, false);
 }
 

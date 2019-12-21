@@ -245,6 +245,28 @@ async function downloadNovel(novelName, novelCoverSrc, novelLink, totalChapters,
 
                     var out = fs.createWriteStream(folderPath + '/cover.png');
                     req.pipe(out);
+
+                    if(update == "true") {
+                        var options = {
+                            method: 'GET',
+                            url: novelLink,
+                        };
+                    
+                        cloudscraper(options, function(error, response, novelHtmlString) {
+                            var novelHtml = new DOMParser().parseFromString(novelHtmlString, 'text/html');
+                            latestChapterName = novelHtml.getElementsByClassName("rowChapter")[0].innerText.trim();
+                            document.getElementById('novelLink').getElementsByTagName('p')[0].innerText = latestChapterName;
+                            for(x in libObj.novels) {
+                                if(libObj.novels[x]['novelLink'] === novelLink) {
+                                    libObj.novels[x]['latestChapterName'] = latestChapterName;
+                                    break;
+                                }
+                            }
+                            saveLibObj();
+                        }).catch(function (err) {
+                            console.log(err);
+                        });
+                    }
                     
                     var executablePath = 'assets\\modules\\download_manager.exe';
                     var parameters = [novelLink, folderPath, source, update];

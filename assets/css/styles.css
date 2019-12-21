@@ -423,6 +423,11 @@ body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHol
   text-align: left;
   word-wrap: break-word;
   padding-right: 30px;
+  font-size: 20px;
+}
+
+body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder .novel-info p {
+  margin: 0;
 }
 
 body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder .novel-settings {
