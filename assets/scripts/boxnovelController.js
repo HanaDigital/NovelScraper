@@ -189,7 +189,7 @@ function boxNovelDisplaySearchedNovels(novel) {
       .catch(function (err) {
           console.log(err);
           boxNovelStatusImage.src = "assets/rsc/delete.svg";
-          boxNovelStatusText.innerText = "Invalid Link!";
+          boxNovelStatusText.innerText = "Something went wrong!";
   
           boxNovelStatus.style.display = "block";
           boxNovelContent.style.display = "none";
