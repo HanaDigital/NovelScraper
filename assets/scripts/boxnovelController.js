@@ -38,7 +38,7 @@ function boxNovelNovelFinder() {
         // boxNovelStatus.style.display = "block";
         // boxNovelContent.style.display = "none";
 
-    } else if(novelLink.includes('https://novelplanet.com/Novel/')) {
+    } else if(novelLink.includes('https://boxnovel.com/novel/')) {
         boxNovelLoadURL(novelLink);
 
     } else if(!novelLink.includes('https://')){
@@ -85,7 +85,7 @@ function boxNovelLoadURL(novelLink) {
         boxNovelCurrentNovelCoverSrc = novelCoverSrc;
         boxNovelCurrentTotalChapters = totalChapters
 
-        boxNovelNovelHolder(novelName, latestChapterName, novelLink, novelCoverSrc, totalChapters);
+        boxNovelNovelHolder(novelName, novelLink, latestChapterName, novelCoverSrc, totalChapters);
 
         boxNovelStatus.style.display = "none";
         boxNovelContent.style.display = "block";
@@ -137,7 +137,7 @@ function boxNovelLoadNovel(novelName) {
 
         Array.prototype.forEach.call(novelList, a => {
             // console.log(a);
-            boxNovelNovelHolderGenerator(a.getElementsByClassName('post-title')[0].getElementsByTagName('a')[0].href, 'append');
+            boxNovelNovelHolderGenerator(a.getElementsByClassName('post-title')[0].getElementsByTagName('a')[0].getAttribute('href'), 'append');
             setTimeout(function() { boxNovelDisplaySearchedNovels(a); }, 0);
         });
 
@@ -181,7 +181,7 @@ function boxNovelDisplaySearchedNovels(novel) {
           totalChapters = html.getElementsByClassName("wp-manga-chapter").length;
           latestChapterName = html.getElementsByClassName("wp-manga-chapter")[0].innerText.trim();
   
-          boxNovelNovelHolder(novelName, latestChapterName, novelLink, novelCoverSrc, totalChapters);
+          boxNovelNovelHolder(novelName, novelLink, latestChapterName, novelCoverSrc, totalChapters);
   
           boxNovelStatus.style.display = "none";
           boxNovelContent.style.display = "block";
@@ -219,7 +219,7 @@ function boxNovelNovelHolderGenerator(novelLink, side) {
     }
 }
 
-function boxNovelNovelHolder(novelName, novelLink, novelCoverSrc, totalChapters) {
+function boxNovelNovelHolder(novelName, novelLink, latestChapterName, novelCoverSrc, totalChapters) {
     var controlHolder = document.getElementById('boxnovel' + novelLink);
     controlHolder.getElementsByTagName('img')[0].src = novelCoverSrc;
     controlHolder.getElementsByTagName('strong')[0].innerText = novelName;
@@ -234,7 +234,7 @@ function boxNovelNovelHolder(novelName, novelLink, novelCoverSrc, totalChapters)
     refreshBoxNovelPageData();
 }
 
-function boxNovelAddToLib(holder, novelName, novelLink, novelCoverSrc, totalChapters) {
+function boxNovelAddToLib(holder, latestChapterName, novelName, novelLink, novelCoverSrc, totalChapters) {
     writeToLibrary(novelName, latestChapterName, novelCoverSrc, novelLink, totalChapters, "boxnovel");
     boxNovelLibButton(holder, false);
 }

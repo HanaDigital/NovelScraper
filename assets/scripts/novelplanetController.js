@@ -132,7 +132,7 @@ function novelPlanetLoadNovel(novelName) {
 
         Array.prototype.forEach.call(novelList, a => {
             // console.log(a);
-            novelPlanetNovelHolderGenerator('https://novelplanet.com' + a.getElementsByTagName('a')[0].href.replace('file:///A:', ''), 'append');
+            novelPlanetNovelHolderGenerator('https://novelplanet.com' + a.getElementsByTagName('a')[0].getAttribute('href'), 'append');
             setTimeout(function() { novelPlanetDisplaySearchedNovels(a); }, 0);
         });
 
@@ -159,7 +159,7 @@ function novelPlanetDisplaySearchedNovels(novel) {
     var totalChapters;
 
     novelName = novel.getElementsByClassName('title')[0].innerText;
-    novelLink = 'https://novelplanet.com' + novel.getElementsByTagName('a')[0].href.replace('file:///A:', '');
+    novelLink = 'https://novelplanet.com' + novel.getElementsByTagName('a')[0].getAttribute('href');
     novelCoverSrc = novel.getElementsByClassName('post-preview')[0].getElementsByTagName('img')[0].src;
 
     var options = {
