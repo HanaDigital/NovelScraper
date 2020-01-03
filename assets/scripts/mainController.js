@@ -59,40 +59,45 @@ fs.access('library.json', fs.F_OK, (err) => {
 });
 
 //Check for updates
-var options = {
-    method: 'GET',
-    url: 'https://pastebin.com/7HUqzRGT',
-};
+function checkForUpdates() {
+    var options = {
+        method: 'GET',
+        url: 'https://pastebin.com/7HUqzRGT',
+    };
 
-cloudscraper(options)
-.then(function (htmlString) {
-    var html = new DOMParser().parseFromString(htmlString, 'text/html');
-    var onlineVersion = html.getElementById('selectable').getElementsByClassName('de1')[0].innerText;
-    if(version !== onlineVersion) {
-        let options = {
-            type: 'info',
-            buttons: ['Update', 'Cancel'],
-            defaultId: 0,
-            title: 'Update',
-            message: 'Update Available',
-            detail: 'NovelScraper Version ' + onlineVersion + ' is available. Do you want to update?',
-          };
-        
-        dialog.showMessageBox(null, options, (response) => {
-            console.log(response);
-            if(response == 0) {
-                shell.openExternal('https://github.com/dr-nyt/Translated-Novel-Downloader/releases');
-            }
-        });
-    }
-})
-.catch(function (err) {
-    console.log(err);
-});
+    cloudscraper(options)
+    .then(function (htmlString) {
+        var html = new DOMParser().parseFromString(htmlString, 'text/html');
+        var onlineVersion = html.getElementById('selectable').getElementsByClassName('de1')[0].innerText;
+        if(version !== onlineVersion) {
+            let options = {
+                type: 'info',
+                buttons: ['Update', 'Cancel'],
+                defaultId: 0,
+                title: 'Update',
+                message: 'Update Available',
+                detail: 'NovelScraper Version ' + onlineVersion + ' is available. Do you want to update?',
+            };
+            
+            dialog.showMessageBox(null, options, (response) => {
+                console.log(response);
+                if(response == 0) {
+                    shell.openExternal('https://github.com/dr-nyt/Translated-Novel-Downloader/releases');
+                }
+            });
+        }
+    })
+    .catch(function (err) {
+        console.log(err);
+    });
+}
+
+checkForUpdates();
 
 // NAV BAR
 document.getElementById('close').addEventListener('click', closeWindow);
 document.getElementById('min').addEventListener('click', minWindow);
+document.getElementById('max').addEventListener('click', maxWindow);
 
 //MENU BAR
 var homeButton = document.getElementById('homeButton');
@@ -107,8 +112,8 @@ var boxNovelPage = document.getElementById('boxNovelHolder');
 var pages = document.getElementsByClassName("page");
 var menuButtons = document.getElementsByClassName("menuButton");
 
-var buttonHighlight = "rgb(5, 69, 121)";
-var menuBackground = "#0c2852";
+var buttonHighlight = "#2262c2";
+var menuBackground = "#123b79";
 
 // ADD EVENT-LISTENERS
 homeButton.addEventListener('click', loadHomePage);
@@ -133,6 +138,12 @@ function minWindow()
 {
     var window = remote.getCurrentWindow();
     window.minimize();
+}
+
+function maxWindow()
+{
+    var window = remote.getCurrentWindow();
+    window.maximize();
 }
 
 function loadHomePage()

@@ -13,7 +13,7 @@ body #content #homePage {
 }
 
 body {
-  background-color: #f0f0f0;
+  background-color: #fafafa;
   margin: 0;
 }
 
@@ -30,7 +30,6 @@ body #header {
   -webkit-app-region: drag;
   -webkit-box-shadow: inset 0px -5px 6px -6px black;
           box-shadow: inset 0px -5px 6px -6px black;
-  border-radius: 5% 5% 0 0;
 }
 
 body #header strong {
@@ -78,6 +77,10 @@ body #header nav ul li #min:hover {
   background: orange;
 }
 
+body #header nav ul li #max:hover {
+  background: #2c7af0;
+}
+
 body #header nav ul li #close:hover {
   background: red;
 }
@@ -88,7 +91,7 @@ body #vertical-menu {
   width: 70px;
   height: 100%;
   top: 30px;
-  background-color: #0c2852;
+  background-color: #123b79;
   border-right: 2px solid #8595af;
   -webkit-box-shadow: 4px -1px 6px -6px black;
           box-shadow: 4px -1px 6px -6px black;
@@ -107,11 +110,11 @@ body #vertical-menu a img {
 }
 
 body #vertical-menu a img:hover {
-  background-color: #0e3a5e;
+  background-color: #2c7af0;
 }
 
 body #vertical-menu #homeButton {
-  background-color: #054579;
+  background-color: #2262c2;
 }
 
 body #content {
@@ -121,7 +124,7 @@ body #content {
   bottom: 0;
   right: 0;
   padding-bottom: 10px;
-  background-color: #f0f0f0;
+  background-color: #fafafa;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   overflow: auto;
@@ -151,7 +154,7 @@ body #content .page .headerPanel {
   right: 0;
   left: 70px;
   top: 30px;
-  background-color: #0c2852;
+  background-color: #123b79;
   z-index: 8;
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -214,8 +217,8 @@ body #content .page .content .novelList .sourceNovelHolder {
   border-top: 1px solid #e5e9ec;
   border-left: 2px solid #8595af;
   border-right: 2px solid #8595af;
-  -webkit-box-shadow: -12px -12px 12px white, 9px 9px 9px rgba(0, 0, 0, 0.301);
-          box-shadow: -12px -12px 12px white, 9px 9px 9px rgba(0, 0, 0, 0.301);
+  -webkit-box-shadow: -12px -12px 12px white, 5px 5px 12px 1px rgba(0, 0, 0, 0.301);
+          box-shadow: -12px -12px 12px white, 5px 5px 12px 1px rgba(0, 0, 0, 0.301);
   margin-top: 30px;
 }
 
@@ -288,8 +291,8 @@ body #content .page .testBox li .square {
   cursor: pointer;
   width: 150px;
   height: 150px;
-  background-color: #f0f0f0;
-  border-radius: 5%;
+  background-color: #fafafa;
+  border-radius: 5px;
   text-align: center;
   color: black;
   border-top: 1px solid #e5e9ec;
@@ -304,6 +307,7 @@ body #content #homePage {
 }
 
 body #content #homePage #home-guide {
+  margin: auto;
   margin-top: 20px;
   height: 130px;
   display: -ms-grid;
@@ -314,12 +318,12 @@ body #content #homePage #home-guide {
 
 body #content #homePage #home-guide .blocks {
   cursor: pointer;
-  border-radius: 15px;
-  margin-left: 20px;
-  margin-right: 20px;
-  background-color: #f0f0f0;
-  -webkit-box-shadow: -12px -12px 12px white, 9px 9px 9px rgba(0, 0, 0, 0.301);
-          box-shadow: -12px -12px 12px white, 9px 9px 9px rgba(0, 0, 0, 0.301);
+  border-radius: 5px;
+  margin-left: 40px;
+  margin-right: 40px;
+  background-color: #fafafa;
+  -webkit-box-shadow: -12px -12px 12px white, 5px 5px 12px 1px rgba(0, 0, 0, 0.301);
+          box-shadow: -12px -12px 12px white, 5px 5px 12px 1px rgba(0, 0, 0, 0.301);
   text-align: center;
 }
 
@@ -358,33 +362,89 @@ body #content #homePage .divider {
   margin-bottom: 20px;
 }
 
-body #content #homePage table {
+body #content #homePage .responsive-table {
   width: 95%;
   margin: auto;
+  padding: 0;
 }
 
-body #content #homePage table tr .novel-ranks {
+body #content #homePage .responsive-table li {
+  border-radius: 5px;
+  padding: 25px 30px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+body #content #homePage .responsive-table .table-header {
+  background-color: #2262c2;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
   text-align: center;
 }
 
-body #content #homePage table tr .novel-names {
-  width: 80%;
+body #content #homePage .responsive-table .table-header h2 {
+  margin: auto;
+  color: white;
 }
 
-body #content #homePage table tr .novel-votes {
-  text-align: center;
+body #content #homePage .responsive-table .table-row {
+  cursor: pointer;
+  background-color: #ffffff;
+  -webkit-box-shadow: -12px -12px 12px white, 5px 5px 12px 1px rgba(0, 0, 0, 0.301);
+          box-shadow: -12px -12px 12px white, 5px 5px 12px 1px rgba(0, 0, 0, 0.301);
 }
 
-body #content #homePage table, body #content #homePage th, body #content #homePage td {
-  border: 1px solid #0c2852;
-  border-collapse: collapse;
+body #content #homePage .responsive-table .table-row:hover {
+  -webkit-box-shadow: inset 0px 0px 5px 0.5px rgba(0, 0, 0, 0.4);
+          box-shadow: inset 0px 0px 5px 0.5px rgba(0, 0, 0, 0.4);
 }
 
-body #content #homePage th, body #content #homePage td {
-  padding-top: 15px;
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-bottom: 15px;
+body #content #homePage .responsive-table .col-1 {
+  -ms-flex-preferred-size: 10%;
+      flex-basis: 10%;
+}
+
+body #content #homePage .responsive-table .col-2 {
+  -ms-flex-preferred-size: 80%;
+      flex-basis: 80%;
+}
+
+body #content #homePage .responsive-table .col-3 {
+  -ms-flex-preferred-size: 10%;
+      flex-basis: 10%;
+}
+
+@media all and (max-width: 767px) {
+  body #content #homePage .responsive-table .table-header {
+    display: none;
+  }
+  body #content #homePage .responsive-table li {
+    display: block;
+  }
+  body #content #homePage .responsive-table .col {
+    -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+  }
+  body #content #homePage .responsive-table .col {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    padding: 10px 0;
+  }
+  body #content #homePage .responsive-table .col:before {
+    color: #6C7A89;
+    padding-right: 10px;
+    content: attr(data-label);
+    -ms-flex-preferred-size: 50%;
+        flex-basis: 50%;
+    text-align: right;
+  }
 }
 
 body #content #sourcesPage #sourcesList {
@@ -405,12 +465,12 @@ body #content #sourcesPage #sourcesList li .sourceHolder {
   cursor: pointer;
   width: 150px;
   height: 175px;
-  background-color: #f0f0f0;
-  border-radius: 5%;
+  background-color: #fafafa;
+  border-radius: 5px;
   text-align: center;
   color: black;
-  -webkit-box-shadow: -12px -12px 12px white, 9px 9px 9px rgba(0, 0, 0, 0.301);
-          box-shadow: -12px -12px 12px white, 9px 9px 9px rgba(0, 0, 0, 0.301);
+  -webkit-box-shadow: -12px -12px 12px white, 5px 5px 12px 1px rgba(0, 0, 0, 0.301);
+          box-shadow: -12px -12px 12px white, 5px 5px 12px 1px rgba(0, 0, 0, 0.301);
 }
 
 body #content #sourcesPage #sourcesList li .sourceHolder img {
@@ -478,15 +538,15 @@ body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHol
   width: 100%;
   height: 280px;
   margin-top: 30px;
-  background-color: #f0f0f0;
+  background-color: #fafafa;
   text-align: center;
   color: black;
   border-top: 1px solid #e5e9ec;
   border-left: 2px solid #8595af;
   border-right: 2px solid #8595af;
   border-bottom: 1px solid #e5e9ec;
-  -webkit-box-shadow: -12px -12px 12px white, 9px 9px 9px rgba(0, 0, 0, 0.301);
-          box-shadow: -12px -12px 12px white, 9px 9px 9px rgba(0, 0, 0, 0.301);
+  -webkit-box-shadow: -12px -12px 12px white, 5px 5px 12px 1px rgba(0, 0, 0, 0.301);
+          box-shadow: -12px -12px 12px white, 5px 5px 12px 1px rgba(0, 0, 0, 0.301);
   position: relative;
   -webkit-animation: scale-up-center 0.4s cubic-bezier(0.39, 0.575, 0.565, 1) both;
   animation: scale-up-center 0.4s cubic-bezier(0.39, 0.575, 0.565, 1) both;
@@ -591,9 +651,9 @@ body #content #libraryPage #libraryContent #novelCoverChangePrompt {
 }
 
 body #content #libraryPage #libraryContent #novelCoverChangePrompt #promptBox {
+  margin: auto;
   margin-top: 20%;
-  margin-left: 29%;
-  border-radius: 50px;
+  border-radius: 5px;
   width: 50%;
   height: 50px;
   background-color: white;
@@ -617,8 +677,8 @@ body #content #libraryPage #libraryContent #novelCoverChangePrompt #promptBox #n
 }
 
 body #content #libraryPage #libraryContent #novelCoverChangePrompt #promptBox #novelCoverPathButton {
-  border-top-right-radius: 50px;
-  border-bottom-right-radius: 50px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
   border: 0;
   background-color: #0c2852;
   color: white;
