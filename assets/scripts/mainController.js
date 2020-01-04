@@ -104,6 +104,11 @@ var homeButton = document.getElementById('homeButton');
 var sourcesButton = document.getElementById('sourcesButton');
 var libraryButton = document.getElementById('libraryButton');
 
+//Home Page Blocks
+document.getElementById('feature-request').addEventListener('click', function(){shell.openExternal('https://github.com/dr-nyt/NovelScraper/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=%5BFeature+Request%5D');});
+document.getElementById('bug-report').addEventListener('click', function(){shell.openExternal('https://github.com/dr-nyt/NovelScraper/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBug+Report%5D');});
+document.getElementById('support-us').addEventListener('click', function(){shell.openExternal('https://discord.gg/pktZVwV');});
+
 //Sources
 var novelPlanetPage = document.getElementById('novelPlanetHolder');
 var boxNovelPage = document.getElementById('boxNovelHolder');
