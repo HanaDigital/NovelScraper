@@ -1,11 +1,13 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: "[Bug Report]"
+title: "[Bug Report] *Title*"
 labels: bug
 assignees: ''
 
 ---
+
+**Enter an appropriate Title above**
 
 **Please complete the following information):**
  - Operating System [OS]: 
