@@ -9,7 +9,7 @@ const { shell } = require('electron');
 
 const { dialog } = require('electron').remote;
 
-const version = "0.9.3";
+const version = "0.9.4";
 
 const electron = require('electron');
 const ipc = electron.ipcRenderer;
