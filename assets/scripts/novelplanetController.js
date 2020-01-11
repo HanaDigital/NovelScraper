@@ -4,6 +4,7 @@ var novelPlanetURLButton = document.getElementById('novelPlanetFindURLButton');
 novelPlanetURLBox.addEventListener('click', novelPlanetResetURL);
 novelPlanetURLButton.addEventListener('click', novelPlanetNovelFinder);
 
+var novelPlanetPage = document.getElementById('novelPlanetPage');
 var novelPlanetStatus = document.getElementById('novelPlanetStatus');
 var novelPlanetStatusImage = document.getElementById('novelPlanetStatus').getElementsByClassName('sourceStatusImage')[0];
 var novelPlanetStatusText = document.getElementById('novelPlanetStatus').getElementsByClassName('statusText')[0];
@@ -57,6 +58,7 @@ function novelPlanetLoadURL(novelLink) {
     novelPlanetNovelHolderGenerator(novelLink, 'prepend');
 
     novelPlanetStatus.style.display = "none";
+    novelPlanetPage.style.backgroundColor = "#fafafa";
     novelPlanetContent.style.display = "block";
 
     var options = {
@@ -137,6 +139,7 @@ function novelPlanetLoadNovel(novelName) {
         });
 
         novelPlanetStatus.style.display = "none";
+        novelPlanetPage.style.backgroundColor = "#fafafa";
         novelPlanetContent.style.display = "block";
         
     }).catch(function (err) {

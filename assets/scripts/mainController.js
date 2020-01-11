@@ -117,8 +117,8 @@ var boxNovelPage = document.getElementById('boxNovelHolder');
 var pages = document.getElementsByClassName("page");
 var menuButtons = document.getElementsByClassName("menuButton");
 
-var buttonHighlight = "#2262c2";
-var menuBackground = "#123b79";
+var menuBackground = "#033e63";
+var buttonHighlight = "#0671b3";
 
 // ADD EVENT-LISTENERS
 homeButton.addEventListener('click', loadHomePage);

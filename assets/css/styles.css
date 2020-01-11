@@ -22,7 +22,7 @@ body #header {
   position: fixed;
   width: 100%;
   height: 30px;
-  background-color: #313436;
+  background-color: #022d47;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: 70% auto;
@@ -78,7 +78,7 @@ body #header nav ul li #min:hover {
 }
 
 body #header nav ul li #max:hover {
-  background: #2c7af0;
+  background: #078fe4;
 }
 
 body #header nav ul li #close:hover {
@@ -91,7 +91,7 @@ body #vertical-menu {
   width: 70px;
   height: 100%;
   top: 30px;
-  background-color: #123b79;
+  background-color: #033e63;
   border-right: 2px solid #8595af;
   -webkit-box-shadow: 4px -1px 6px -6px black;
           box-shadow: 4px -1px 6px -6px black;
@@ -110,11 +110,11 @@ body #vertical-menu a img {
 }
 
 body #vertical-menu a img:hover {
-  background-color: #2c7af0;
+  background-color: #078fe4;
 }
 
 body #vertical-menu #homeButton {
-  background-color: #2262c2;
+  background-color: #0671b3;
 }
 
 body #content {
@@ -154,7 +154,7 @@ body #content .page .headerPanel {
   right: 0;
   left: 70px;
   top: 30px;
-  background-color: #123b79;
+  background-color: #033e63;
   z-index: 8;
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -179,7 +179,7 @@ body #content .page .headerPanel .urlButton {
   margin-right: 5px;
   margin-left: 5px;
   border: 1px solid #8595af;
-  background-color: #0c2852;
+  background-color: #033e63;
   color: white;
   cursor: pointer;
 }
@@ -381,7 +381,7 @@ body #content #homePage .responsive-table li {
 }
 
 body #content #homePage .responsive-table .table-header {
-  background-color: #2262c2;
+  background-color: #033e63;
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.03em;
@@ -493,6 +493,18 @@ body #content #sourcesPage #sourcesList li .sourceHolderAnimate {
   animation: scale-up-center 0.4s cubic-bezier(0.39, 0.575, 0.565, 1) both;
 }
 
+body #content #novelPlanetPage {
+  background-color: white;
+}
+
+body #content #boxNovelPage {
+  background-color: white;
+}
+
+body #content #libraryPage {
+  background-color: white;
+}
+
 body #content #libraryPage .headerPanel img {
   height: 30px;
   position: absolute;
@@ -593,13 +605,22 @@ body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHol
 }
 
 body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder .novel-control button {
+  cursor: pointer;
   height: 37px;
   margin-right: 5px;
   margin-left: 5px;
-  border: 1px solid #8595af;
+  border: 0;
+  border-radius: 3px;
   background-color: #0c2852;
   color: white;
   float: left;
+  -webkit-box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.5);
+          box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder .novel-control button:hover {
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 body #content #libraryPage #libraryContent #libraryNovelList li .libraryNovelHolder .novel-control .libraryRemoveButton {

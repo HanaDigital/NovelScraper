@@ -4,6 +4,7 @@ var boxNovelURLButton = document.getElementById('boxNovelFindURLButton');
 boxNovelURLBox.addEventListener('click', boxNovelResetURL);
 boxNovelURLButton.addEventListener('click', boxNovelNovelFinder);
 
+var boxNovelPage = document.getElementById('boxNovelPage');
 var boxNovelStatus = document.getElementById('boxNovelStatus');
 var boxNovelStatusImage = document.getElementById('boxNovelStatus').getElementsByClassName('sourceStatusImage')[0];
 var boxNovelStatusText = document.getElementById('boxNovelStatus').getElementsByClassName('statusText')[0];
@@ -57,6 +58,7 @@ function boxNovelLoadURL(novelLink) {
     boxNovelNovelHolderGenerator(novelLink, 'prepend');
 
     boxNovelStatus.style.display = "none";
+    boxNovelPage.style.backgroundColor = "#fafafa"
     boxNovelContent.style.display = "block";
 
     var options = {
@@ -88,6 +90,7 @@ function boxNovelLoadURL(novelLink) {
         boxNovelNovelHolder(novelName, novelLink, latestChapterName, novelCoverSrc, totalChapters);
 
         boxNovelStatus.style.display = "none";
+        boxNovelPage.style.backgroundColor = "#fafafa"
         boxNovelContent.style.display = "block";
     })
     .catch(function (err) {
@@ -142,6 +145,7 @@ function boxNovelLoadNovel(novelName) {
         });
 
         boxNovelStatus.style.display = "none";
+        boxNovelPage.style.backgroundColor = "#fafafa"
         boxNovelContent.style.display = "block";
         
     }).catch(function (err) {
@@ -184,6 +188,7 @@ function boxNovelDisplaySearchedNovels(novel) {
           boxNovelNovelHolder(novelName, novelLink, latestChapterName, novelCoverSrc, totalChapters);
   
           boxNovelStatus.style.display = "none";
+          boxNovelPage.style.backgroundColor = "#fafafa"
           boxNovelContent.style.display = "block";
       })
       .catch(function (err) {

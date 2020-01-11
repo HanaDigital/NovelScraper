@@ -1,9 +1,9 @@
-$header-background: rgb(49, 52, 54);
-$menu-background: #123b79;
-$menu-selected: #2262c2;
-$menu-hover: #2c7af0;
-$page-background: rgb(250, 250, 250);
-$content-background: rgb(250, 250, 250);
+$header-background: #022d47;
+$menu-background: #033e63;
+$menu-selected: #0671b3;
+$menu-hover: #078fe4;
+$page-background: #fafafa;
+$content-background: #fafafa;
 
 html {
     height: 100%;
@@ -183,7 +183,7 @@ body {
                     margin-right: 5px;
                     margin-left: 5px;
                     border: 1px solid #8595af;
-                    background-color: #0c2852;
+                    background-color: $menu-background;
                     color: white;
                     cursor: pointer;
                 }
@@ -382,7 +382,7 @@ body {
                 }
 
                 .table-header {
-                    background-color: $menu-selected;
+                    background-color: $menu-background;
                     font-size: 14px;
                     text-transform: uppercase;
                     letter-spacing: 0.03em;
@@ -501,11 +501,17 @@ body {
             }
         }
 
+        #novelPlanetPage {
+            background-color: white;
+        }
+
         #boxNovelPage {
             // display: block;
+            background-color: white;
         }
 
         #libraryPage {
+            background-color: white;
 
             .headerPanel {
 
@@ -610,13 +616,20 @@ body {
                                 right: 5px;
 
                                 button {
+                                    cursor: pointer;
                                     height: 37px;
                                     margin-right: 5px;
                                     margin-left: 5px;
-                                    border: 1px solid #8595af;
+                                    border: 0;
+                                    border-radius: 3px;
                                     background-color: #0c2852;
                                     color: white;
                                     float: left;
+                                    box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.5);
+                                }
+
+                                button:hover {
+                                    box-shadow: none;
                                 }
 
                                 .libraryRemoveButton {
