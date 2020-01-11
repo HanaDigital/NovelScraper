@@ -11,21 +11,15 @@
 1. Download and install the latest release from [here](https://github.com/dr-nyt/Translated-Novel-Downloader/releases). If you have already installed the app before, then installing again will update the app.
 
 2. Pick a source you want, from the sources tab. [www.novelplanet.com is recommended, but it is also slow in speed.]
-![select_sources](https://user-images.githubusercontent.com/41040912/65813358-52894900-e1e5-11e9-85aa-3f34608d8032.png)
+![select_sources](https://user-images.githubusercontent.com/41040912/72204947-d3b7d380-3496-11ea-893c-1f49c7654f95.png)
 
-3. After picking a source, search for a novel or paste a link of a novel from that source and it to your library! Eg: [https://boxnovel.com/novel/i-alone-level-up/]
-
-![novelscraper-search-demo](https://user-images.githubusercontent.com/41040912/69083146-f3181e80-0a5a-11ea-8d86-516175cbca71.gif)
+3. After picking a source, search for a novel name or paste a link of a novel from that source.
+![search_sources](https://user-images.githubusercontent.com/41040912/72204948-d74b5a80-3496-11ea-8f73-769b714a1c41.png)
 
 4. Now go to the library tab, where you can download and update all your saved novels.
-![library_download](https://user-images.githubusercontent.com/41040912/65813426-21f5df00-e1e6-11e9-91ee-45bb26cac1d3.png)
+![library_download](https://user-images.githubusercontent.com/41040912/72204952-de726880-3496-11ea-95a7-fb368672d1db.png)
 
-5. After downloading a novel, the app will give you an option to open the folder the novel is stored in.
-![open_folder](https://user-images.githubusercontent.com/41040912/65813450-71d4a600-e1e6-11e9-8a99-2e54dd60bf2d.png)
-
-6. To update your novels, just click download again and let it rip :D
-
-7. There are bound to be bugs and errors so please open an issue [here](https://github.com/dr-nyt/Translated-Novel-Downloader/issues/) if you find any.
+5. There are bound to be bugs and errors so please open an issue [here](https://github.com/dr-nyt/Translated-Novel-Downloader/issues/) if you find any.
 
 ### Alpha Build
 - Android App.
