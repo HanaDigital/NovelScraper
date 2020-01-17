@@ -2,8 +2,8 @@ $header-background: #022d47;
 $menu-background: #033e63;
 $menu-selected: #0671b3;
 $menu-hover: #078fe4;
-$page-background: #fafafa;
-$content-background: #fafafa;
+$page-background: #f1f1f1;
+$content-background: #f1f1f1;
 
 html {
     height: 100%;
@@ -220,7 +220,7 @@ body {
                         border-top: 1px solid #e5e9ec;
                         border-left: 2px solid #8595af;
                         border-right: 2px solid #8595af;
-                        box-shadow: -12px -12px 12px white,
+                        box-shadow: -5px -5px 12px white,
                                     5px 5px 12px 1px rgba(0, 0, 0, 0.301);
                         margin-top: 30px;
 
@@ -323,7 +323,7 @@ body {
                     margin-left: 40px;
                     margin-right: 40px;
                     background-color: $content-background;
-                    box-shadow: -12px -12px 12px white,
+                    box-shadow: -5px -5px 12px white,
                                 5px 5px 12px 1px rgba(0, 0, 0, 0.301);
                     text-align: center;
 
@@ -398,7 +398,7 @@ body {
                     cursor: pointer;
                     background-color: #ffffff;
                     // box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.1);
-                    box-shadow: -12px -12px 12px white,
+                    box-shadow: -5px -5px 12px white,
                                 5px 5px 12px 1px rgba(0, 0, 0, 0.301);
                 }
 
@@ -475,7 +475,7 @@ body {
                         border-radius: 5px;
                         text-align: center;
                         color: black;
-                        box-shadow: -12px -12px 12px white,
+                        box-shadow: -5px -5px 12px white,
                                     5px 5px 12px 1px rgba(0, 0, 0, 0.301);
 
                         img {
@@ -569,7 +569,7 @@ body {
                             border-left: 2px solid #8595af;
                             border-right: 2px solid #8595af;
                             border-bottom: 1px solid #e5e9ec;
-                            box-shadow: -12px -12px 12px white,
+                            box-shadow: -5px -5px 12px white,
                                         5px 5px 12px 1px rgba(0, 0, 0, 0.301);
                             position: relative;
 
