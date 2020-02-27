@@ -4,6 +4,7 @@ var novelPlanetURLButton = document.getElementById('novelPlanetFindURLButton');
 novelPlanetURLBox.addEventListener('click', novelPlanetResetURL);
 novelPlanetURLButton.addEventListener('click', novelPlanetNovelFinder);
 
+var novelPlanetPage = document.getElementById('novelPlanetPage');
 var novelPlanetStatus = document.getElementById('novelPlanetStatus');
 var novelPlanetStatusImage = document.getElementById('novelPlanetStatus').getElementsByClassName('sourceStatusImage')[0];
 var novelPlanetStatusText = document.getElementById('novelPlanetStatus').getElementsByClassName('statusText')[0];
@@ -57,6 +58,7 @@ function novelPlanetLoadURL(novelLink) {
     novelPlanetNovelHolderGenerator(novelLink, 'prepend');
 
     novelPlanetStatus.style.display = "none";
+    novelPlanetPage.style.backgroundColor = "#fafafa";
     novelPlanetContent.style.display = "block";
 
     var options = {
@@ -132,11 +134,12 @@ function novelPlanetLoadNovel(novelName) {
 
         Array.prototype.forEach.call(novelList, a => {
             // console.log(a);
-            novelPlanetNovelHolderGenerator('https://novelplanet.com' + a.getElementsByTagName('a')[0].href.replace('file:///A:', ''), 'append');
+            novelPlanetNovelHolderGenerator('https://novelplanet.com' + a.getElementsByTagName('a')[0].getAttribute('href'), 'append');
             setTimeout(function() { novelPlanetDisplaySearchedNovels(a); }, 0);
         });
 
         novelPlanetStatus.style.display = "none";
+        novelPlanetPage.style.backgroundColor = "#fafafa";
         novelPlanetContent.style.display = "block";
         
     }).catch(function (err) {
@@ -159,7 +162,7 @@ function novelPlanetDisplaySearchedNovels(novel) {
     var totalChapters;
 
     novelName = novel.getElementsByClassName('title')[0].innerText;
-    novelLink = 'https://novelplanet.com' + novel.getElementsByTagName('a')[0].href.replace('file:///A:', '');
+    novelLink = 'https://novelplanet.com' + novel.getElementsByTagName('a')[0].getAttribute('href');
     novelCoverSrc = novel.getElementsByClassName('post-preview')[0].getElementsByTagName('img')[0].src;
 
     var options = {

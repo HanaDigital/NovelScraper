@@ -1,5 +1,7 @@
-librarySearchField = document.getElementById('librarySearchField');
-libraryCancelSearch = document.getElementById('libraryCancelSearch');
+var libraryPage = document.getElementById('libraryPage');
+
+var librarySearchField = document.getElementById('librarySearchField');
+var libraryCancelSearch = document.getElementById('libraryCancelSearch');
 libraryCancelSearch.addEventListener('click', function() {
     librarySearchField.value = "";
     loadLibrary();
@@ -71,8 +73,9 @@ function loadLibrary() {
     libraryCancelSearch.style.display = "none";
 
     if(libObj.novels[0] !== undefined) { 
-        for(x in libObj.novels) {
+        libraryPage.style.backgroundColor = "#fafafa";
 
+        for(x in libObj.novels) {
             if(libObj.novels[x]['source'] == "novelplanet") {
                 var novelSourceIdentifier = "assets/rsc/NovelPlanet Logo.png";
             } else if(libObj.novels[x]['source'] == "boxnovel") {

@@ -1,9 +1,9 @@
-$header-background: rgb(49, 52, 54);
-$menu-background: #0c2852;
-$menu-selected: rgb(5, 69, 121);
-$menu-hover: rgb(14, 58, 94);
-$page-background: white;
-$content-background: rgb(255, 255, 255);
+$header-background: #022d47;
+$menu-background: #033e63;
+$menu-selected: #0671b3;
+$menu-hover: #078fe4;
+$page-background: #f1f1f1;
+$content-background: #f1f1f1;
 
 html {
     height: 100%;
@@ -37,7 +37,7 @@ body {
 }
 
 body {
-    background-color: rgb(0, 153, 255);
+    background-color: $page-background;
     margin: 0;
 
     #header {
@@ -50,8 +50,6 @@ body {
         grid-template-columns: 70% auto;
         -webkit-app-region: drag;
         box-shadow: inset 0px -5px 6px -6px black;
-
-        border-radius: 5% 5% 0 0;
     
         strong {
             display: flex;
@@ -85,6 +83,10 @@ body {
     
                     #min:hover {
                         background: orange;
+                    }
+
+                    #max:hover {
+                        background: $menu-hover;
                     }
     
                     #close:hover {
@@ -133,7 +135,7 @@ body {
         bottom: 0;
         right: 0;
         padding-bottom: 10px;
-        background-color: white;
+        background-color: $page-background;
         box-sizing: border-box;
         overflow: auto;
         font-family: 'Open Sans', sans-serif;
@@ -159,7 +161,7 @@ body {
                 right: 0;
                 left: 70px;
                 top: 30px;
-                background-color: #0c2852;
+                background-color: $menu-background;
                 z-index: 8;
                 align-items: center;
 
@@ -181,7 +183,7 @@ body {
                     margin-right: 5px;
                     margin-left: 5px;
                     border: 1px solid #8595af;
-                    background-color: #0c2852;
+                    background-color: $menu-background;
                     color: white;
                     cursor: pointer;
                 }
@@ -218,8 +220,9 @@ body {
                         border-top: 1px solid #e5e9ec;
                         border-left: 2px solid #8595af;
                         border-right: 2px solid #8595af;
-                        box-shadow: 0 8px 6px -6px black;
-                        margin-top: 10px;
+                        box-shadow: -5px -5px 12px white,
+                                    5px 5px 12px 1px rgba(0, 0, 0, 0.301);
+                        margin-top: 30px;
 
                         img {
                             width: 250px;
@@ -268,7 +271,8 @@ body {
                     }
 
                     .sourceNovelHolder:hover {
-                        box-shadow: 0px 0px 20px 0px black;
+                        box-shadow: none;
+                        background-color: white;
                     }
                 }
             }
@@ -290,7 +294,7 @@ body {
                         width: 150px;
                         height: 150px;
                         background-color: $content-background;
-                        border-radius: 5%;
+                        border-radius: 5px;
                         text-align: center;
                         color: black;
                         border-top: 1px solid #e5e9ec;
@@ -305,9 +309,147 @@ body {
         #homePage {
             padding: 0px;
 
-            #webview {
-                width: 100%;
-                height: 100%;
+            #home-guide {
+                margin: auto;
+                margin-top: 20px;
+                height: 130px;
+
+                display: grid;
+                grid-template-columns: 33% 33% 33%;
+
+                .blocks {
+                    cursor: pointer;
+                    border-radius: 5px;
+                    margin-left: 40px;
+                    margin-right: 40px;
+                    background-color: $content-background;
+                    box-shadow: -5px -5px 12px white,
+                                5px 5px 12px 1px rgba(0, 0, 0, 0.301);
+                    text-align: center;
+
+                    img {
+                        margin-top: 15px;
+                        width: 100px;
+                    }
+                    
+                    p {
+                        margin: 0;
+                    }
+                }
+
+                .blocks:hover {
+                    box-shadow: inset 0px 0px 5px 0.5px rgba(0, 0, 0, 0.400);
+                    background-color: white;
+                }
+
+                #bug-report {
+                    img {
+                        margin-top: 15px;
+                        width: 77px;
+                    }
+                }
+
+                #support-us {
+                    img {
+                        margin-top: 15px;
+                        width: 78px;
+                    }
+                }
+
+            }
+
+            .divider {
+                width: 80%;
+                height: 2px;
+                background-color: rgb(151, 151, 151);
+                border-radius: 80%;
+                margin: auto;
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+
+            .responsive-table {
+                width: 95%;
+                margin: auto;
+                padding: 0;
+                 
+                li {
+                    border-radius: 5px;
+                    padding: 25px 30px;
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 25px;
+                }
+
+                .table-header {
+                    background-color: $menu-background;
+                    font-size: 14px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.03em;
+                    text-align: center;
+
+                    h2 {
+                        margin: auto;
+                        color: white;
+                    }
+                }
+
+                .table-row {
+                    cursor: pointer;
+                    background-color: #ffffff;
+                    // box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.1);
+                    box-shadow: -5px -5px 12px white,
+                                5px 5px 12px 1px rgba(0, 0, 0, 0.301);
+                }
+
+                .table-row:hover {
+                    box-shadow: inset 0px 0px 5px 0.5px rgba(0, 0, 0, 0.400);
+                }
+
+                .col-1 {
+                    flex-basis: 10%;
+                    // text-align: center;
+                }
+
+                .col-2 {
+                    flex-basis: 80%;
+                    // text-align: center;
+                }
+
+                .col-3 {
+                    flex-basis: 10%;
+                    // text-align: center;
+                }
+                
+                @media all and (max-width: 767px) {
+                    .table-header {
+                        display: none;
+                    }
+
+                    .table-row{
+                    
+                    }
+
+                    li {
+                        display: block;
+                    }
+
+                    .col {
+                        flex-basis: 100%;
+                    }
+
+                    .col {
+                        display: flex;
+                        padding: 10px 0;
+                        &:before {
+                            color: #6C7A89;
+                            padding-right: 10px;
+                            content: attr(data-label);
+                            flex-basis: 50%;
+                            text-align: right;
+                        }
+                    }
+                }
             }
         }
 
@@ -316,27 +458,25 @@ body {
             #sourcesList {
                 padding: 0;
                 margin: 0;
-                margin-top: 10px;
-                margin-left: 10px;
+                margin-top: 20px;
+                margin-left: 20px;
                 list-style-type: none;
 
                 li {
                     font-size: 1.2rem;
                     float: left;
-                    margin-right: 20px;
+                    margin-right: 30px;
 
                     .sourceHolder {
                         cursor: pointer;
                         width: 150px;
                         height: 175px;
                         background-color: $content-background;
-                        border-radius: 5%;
+                        border-radius: 5px;
                         text-align: center;
                         color: black;
-                        border-top: 1px solid #e5e9ec;
-                        border-left: 2px solid #8595af;
-                        border-right: 2px solid #8595af;
-                        box-shadow: 0 8px 6px -6px black;
+                        box-shadow: -5px -5px 12px white,
+                                    5px 5px 12px 1px rgba(0, 0, 0, 0.301);
 
                         img {
                             width: 115px;
@@ -349,7 +489,8 @@ body {
                     }
 
                     .sourceHolder:hover {
-                        box-shadow: 0px 0px 20px 0px black;
+                        box-shadow: inset 0px 0px 5px 0.5px rgba(0, 0, 0, 0.400);
+                        background-color: white;
                     }
 
                     .sourceHolderAnimate {
@@ -360,11 +501,17 @@ body {
             }
         }
 
+        #novelPlanetPage {
+            background-color: white;
+        }
+
         #boxNovelPage {
             // display: block;
+            background-color: white;
         }
 
         #libraryPage {
+            background-color: white;
 
             .headerPanel {
 
@@ -414,7 +561,7 @@ body {
                             // cursor: pointer;
                             width: 100%;
                             height: 280px;
-                            margin-top: 10px;
+                            margin-top: 30px;
                             background-color: $content-background;
                             text-align: center;
                             color: black;
@@ -422,6 +569,8 @@ body {
                             border-left: 2px solid #8595af;
                             border-right: 2px solid #8595af;
                             border-bottom: 1px solid #e5e9ec;
+                            box-shadow: -5px -5px 12px white,
+                                        5px 5px 12px 1px rgba(0, 0, 0, 0.301);
                             position: relative;
 
                             -webkit-animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
@@ -467,13 +616,20 @@ body {
                                 right: 5px;
 
                                 button {
+                                    cursor: pointer;
                                     height: 37px;
                                     margin-right: 5px;
                                     margin-left: 5px;
-                                    border: 1px solid #8595af;
+                                    border: 0;
+                                    border-radius: 3px;
                                     background-color: #0c2852;
                                     color: white;
                                     float: left;
+                                    box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.5);
+                                }
+
+                                button:hover {
+                                    box-shadow: none;
                                 }
 
                                 .libraryRemoveButton {
@@ -511,7 +667,9 @@ body {
 
                         .libraryNovelHolder:hover {
                             // box-shadow: 0px 2px 6px 3px #b9c5d8;
-                            box-shadow: 0px 0px 20px 0px black;
+                            // box-shadow: 0px 0px 20px 0px black;
+                            box-shadow: none;
+                            background-color: white;
                         }
                     }
                 }
@@ -527,9 +685,9 @@ body {
                     background-color: rgba(0, 0, 0, 0.43);
 
                     #promptBox {
+                        margin: auto;
                         margin-top: 20%;
-                        margin-left: 29%;
-                        border-radius: 50px;
+                        border-radius: 5px;
                         width: 50%;
                         height: 50px;
                         background-color: white;
@@ -549,8 +707,8 @@ body {
                         }
 
                         #novelCoverPathButton {
-                            border-top-right-radius: 50px;
-                            border-bottom-right-radius: 50px;
+                            border-top-right-radius: 5px;
+                            border-bottom-right-radius: 5px;
                             border: 0;
                             background-color: #0c2852;
                             color: white;

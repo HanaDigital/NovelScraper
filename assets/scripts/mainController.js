@@ -9,7 +9,7 @@ const { shell } = require('electron');
 
 const { dialog } = require('electron').remote;
 
-const version = "0.9.3";
+const version = "0.9.4";
 
 const electron = require('electron');
 const ipc = electron.ipcRenderer;
@@ -59,45 +59,55 @@ fs.access('library.json', fs.F_OK, (err) => {
 });
 
 //Check for updates
-var options = {
-    method: 'GET',
-    url: 'https://pastebin.com/7HUqzRGT',
-};
+function checkForUpdates() {
+    var options = {
+        method: 'GET',
+        url: 'https://pastebin.com/7HUqzRGT',
+    };
 
-cloudscraper(options)
-.then(function (htmlString) {
-    var html = new DOMParser().parseFromString(htmlString, 'text/html');
-    var onlineVersion = html.getElementById('selectable').getElementsByClassName('de1')[0].innerText;
-    if(version !== onlineVersion) {
-        let options = {
-            type: 'info',
-            buttons: ['Update', 'Cancel'],
-            defaultId: 0,
-            title: 'Update',
-            message: 'Update Available',
-            detail: 'NovelScraper Version ' + onlineVersion + ' is available. Do you want to update?',
-          };
-        
-        dialog.showMessageBox(null, options, (response) => {
-            console.log(response);
-            if(response == 0) {
-                shell.openExternal('https://github.com/dr-nyt/Translated-Novel-Downloader/releases');
-            }
-        });
-    }
-})
-.catch(function (err) {
-    console.log(err);
-});
+    cloudscraper(options)
+    .then(function (htmlString) {
+        var html = new DOMParser().parseFromString(htmlString, 'text/html');
+        var onlineVersion = html.getElementById('selectable').getElementsByClassName('de1')[0].innerText;
+        if(version !== onlineVersion) {
+            let options = {
+                type: 'info',
+                buttons: ['Update', 'Cancel'],
+                defaultId: 0,
+                title: 'Update',
+                message: 'Update Available',
+                detail: 'NovelScraper Version ' + onlineVersion + ' is available. Do you want to update?',
+            };
+            
+            dialog.showMessageBox(null, options, (response) => {
+                console.log(response);
+                if(response == 0) {
+                    shell.openExternal('https://github.com/dr-nyt/Translated-Novel-Downloader/releases');
+                }
+            });
+        }
+    })
+    .catch(function (err) {
+        console.log(err);
+    });
+}
+
+checkForUpdates();
 
 // NAV BAR
 document.getElementById('close').addEventListener('click', closeWindow);
 document.getElementById('min').addEventListener('click', minWindow);
+document.getElementById('max').addEventListener('click', maxWindow);
 
 //MENU BAR
 var homeButton = document.getElementById('homeButton');
 var sourcesButton = document.getElementById('sourcesButton');
 var libraryButton = document.getElementById('libraryButton');
+
+//Home Page Blocks
+document.getElementById('feature-request').addEventListener('click', function(){shell.openExternal('https://github.com/dr-nyt/NovelScraper/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=%5BFeature+Request%5D');});
+document.getElementById('bug-report').addEventListener('click', function(){shell.openExternal('https://github.com/dr-nyt/NovelScraper/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBug+Report%5D');});
+document.getElementById('support-us').addEventListener('click', function(){shell.openExternal('https://discord.gg/pktZVwV');});
 
 //Sources
 var novelPlanetPage = document.getElementById('novelPlanetHolder');
@@ -107,8 +117,8 @@ var boxNovelPage = document.getElementById('boxNovelHolder');
 var pages = document.getElementsByClassName("page");
 var menuButtons = document.getElementsByClassName("menuButton");
 
-var buttonHighlight = "rgb(5, 69, 121)";
-var menuBackground = "#0c2852";
+var menuBackground = "#033e63";
+var buttonHighlight = "#0671b3";
 
 // ADD EVENT-LISTENERS
 homeButton.addEventListener('click', loadHomePage);
@@ -133,6 +143,12 @@ function minWindow()
 {
     var window = remote.getCurrentWindow();
     window.minimize();
+}
+
+function maxWindow()
+{
+    var window = remote.getCurrentWindow();
+    window.maximize();
 }
 
 function loadHomePage()

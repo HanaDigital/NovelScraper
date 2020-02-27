@@ -2,6 +2,8 @@ from ebooklib import epub
 import string
 import os
 import time
+from PIL import Image
+import io
 
 class EpubEngine():
     def __init__(self, novel_name, storage_path):
@@ -24,13 +26,24 @@ class EpubEngine():
     def addChapter(self, chapter_header, chapter_number, content):
         chap = epub.EpubHtml(title=chapter_header, file_name=f"Chapter_{chapter_number}.xhtml", lang="en")
 
-        content += "<p> </p>"
+        content += '<div id="propoganda">'
         content += "<p>This novel was downloaded using NovelScraper</p>"
         content += "<p>Support us or report issues by joining our discord: https://discord.gg/Wya4Dst</p>"
+        content += "</div>"
 
         chap.content = u'%s' % content
         self.chapters.append(chap)
     
+    def addImage(self, file_path, uid):
+        # load Image file
+        image = Image.open(file_path)
+        byte = io.BytesIO()
+        image.save(byte, 'jpeg')
+        byte_image = byte.getvalue()
+
+        image_item = epub.EpubItem(uid='image_' + uid, file_name='images/image_' + uid + '.jpeg', media_type='image/jpeg', content=byte_image)
+        self.book.add_item(image_item)
+        
     def createEpub(self):
         # Add each chapter object to the book
         for chap in self.chapters:
@@ -69,10 +82,21 @@ class EpubEngine():
         
 
 style = '''
+        * {
+            margin: 0
+            padding: 0
+        }
+
         @namespace epub "http://www.idpf.org/2007/ops";
         body {
             font-family: Cambria, Liberation Serif, Bitstream Vera Serif, Georgia, Times, Times New Roman, serif;
         }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+
         h2 {
              text-align: center;
              text-transform: uppercase;
@@ -92,6 +116,12 @@ style = '''
         }
         nav[epub|type~='toc'] > ol > li > ol > li {
                 margin-top: 0.3em;
+        }
+
+        #propoganda {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
         '''
 default_style = epub.EpubItem(uid="style_default", file_name="style/default.css", media_type="text/css", content=style)
