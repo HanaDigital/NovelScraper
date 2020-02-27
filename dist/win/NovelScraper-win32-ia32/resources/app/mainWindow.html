@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Meta-data -->
+        <meta name="dr_nyt" content="dr_nyt">
+
+        <!-- Styles -->
+        <link rel="stylesheet" href="./assets/css/styles.css">
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <!-- The window holder -->
+        <div id="header">
+            <strong><span>Novel</span>Scraper</strong>
+
+            <!-- Buttons to minimize, maximize and close window -->
+            <nav>
+                <ul>
+                    <li><img src="assets/rsc/minimize-icon.png" id="min"></li>
+                    <li><img src="assets/rsc/maximize-icon.png" id="max"></li>
+                    <li><img src="assets/rsc/close-icon.png" id="close"></li>
+                </ul>
+            </nav>
+        </div>
+
+
+        <div id="vertical-menu">
+
+            <!-- Home button -->
+            <a href="#" id="homeButton" class="menuButton">
+                <img 
+                    src="assets/rsc/home.png" 
+                    id="homeIcon" 
+                    border="0" 
+                    alt=""
+                />
+            </a>
+
+            <!-- Sources button -->
+            <a href="#" id="sourcesButton" class="menuButton">
+                <img 
+                    src="assets/rsc/sources.png"
+                    id="sourcesIcon"
+                    border="0" 
+                    alt=""
+                />
+            </a>
+
+            <!-- Library button -->
+            <a href="#" id="libraryButton" class="menuButton">
+                <img 
+                    src="assets/rsc/library.png" 
+                    id="libraryIcon"
+                    border="0" 
+                    alt=""/>
+            </a>
+        </div>
+
+        <div id="content">
+            
+            <!-- The pages itself -->
+            <div id="homePage" class="page"> 
+                <div class="headerPanel">
+                    <h1>Home</h1>
+                </div>
+
+                <!-- <div id="homeStatus" class="status">
+                    <img 
+                        class="statusImage"
+                        src="assets/rsc/icons8-construction-100.png"
+                        border="0"
+                        alt=""/>
+                    
+                    <p class="statusText">UNDER CONSTRUCTION</p>
+                </div> -->
+
+                <div id="home-guide">
+                    <div id="feature-request" class="blocks">
+                        <img src="assets/rsc/request-feature.png">
+                        <p>FEATURE REQUEST</p>
+                    </div>
+
+                    <div id="bug-report" class="blocks">
+                        <img src="assets/rsc/bug-report.svg">
+                        <p>REPORT A BUG</p>
+                    </div>
+
+                    <div id="support-us" class="blocks">
+                        <img src="assets/rsc/discord-logo.svg">
+                        <p>SUPPORT US</p>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <ul class="responsive-table">
+                    <li class="table-header">
+                        <h2>NOVEL RANKINGS</h2>
+                    </li>
+
+                    <li class="table-row">
+                        <div class="col col-1" data-label="Rank">#1</div>
+                        <div class="col col-2" data-label="Novel">Tales of Demons and Gods</div>
+                        <div class="col col-3" data-label="Votes">80</div>
+                    </li>
+
+                    <li class="table-row">
+                        <div class="col col-1" data-label="Rank">#2</div>
+                        <div class="col col-2" data-label="Novel">Martial God Asura</div>
+                        <div class="col col-3" data-label="Votes">68</div>
+                    </li>
+
+                    <li class="table-row">
+                        <div class="col col-1" data-label="Rank">#3</div>
+                        <div class="col col-2" data-label="Novel">Solo Leveling</div>
+                        <div class="col col-3" data-label="Votes">59</div>
+                    </li>
+                    
+                    <li class="table-row">
+                        <div class="col col-1" data-label="Rank">#4</div>
+                        <div class="col col-2" data-label="Novel">WORK IN PROGRESS</div>
+                        <div class="col col-3" data-label="Votes">0</div>
+                    </li>
+                </ul>
+
+            </div>
+
+            <div id="sourcesPage" class="page"> 
+                <div class="headerPanel">
+                    <h1>Sources</h1>
+                </div>
+
+                <ul id="sourcesList">
+                    <li>
+                        <div id="novelPlanetHolder" class="sourceHolder">
+                            <img 
+                                src="assets/rsc/NovelPlanet Logo.png" 
+                                id="novelPlanetIcon"
+                                border="0" 
+                                alt=""/>
+                            
+                            <p>NovelPlanet</p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div id="boxNovelHolder" class="sourceHolder">
+                            <img 
+                                src="assets/rsc/BoxNovel Logo.png" 
+                                id="boxNovelIcon"
+                                border="0" 
+                                alt=""/>
+                            
+                            <p>BoxNovel</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+    
+            <div id="novelPlanetPage" class="page"> 
+                <div class="headerPanel">
+                    <input id="novelPlanetURLTextField" class="urlTextField" type="text" name="URL" placeholder="Novel Name/Link">
+                    <button id="novelPlanetFindURLButton" class="urlButton" type="button">FIND</button>
+                </div>
+
+                <div id="novelPlanetStatus" class="status">
+                    <img 
+                        class="sourceStatusImage"
+                        src="assets/rsc/empty.gif"
+                        border="0"
+                        alt=""/>
+                    
+                    <p class="statusText">SO MUCH EMPTY</p>
+                </div>
+
+                <div id="novelPlanetContent" class="content">
+                    <ul id="novelPlanetNovelList" class="novelList">
+                        <!-- <li class="sourceNovelHolder">
+                            <img class="novelCover" src="assets/rsc/missing-image.png" onerror="this.src='assets/rsc/missing-image.png'" border="0" alt="">
+                            <div class="novelInfo">
+                                <strong>Loading...</strong>
+                                <p>Please wait!</p>
+                            </div>
+                            <div id="novelPlanetNovelButtons" class="novelButtons">
+                                <button id="novelPlanetAddLibButton" class="novelAddButton" type="button">ADD TO LIBRARY</button>
+                                <button id="novelPlanetRemoveLibButton" class="novelRemoveButton" type="button">REMOVE FROM LIBRARY</button>
+                            </div>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+
+            <div id="boxNovelPage" class="page"> 
+                <div class="headerPanel">
+                    <input id="boxNovelURLTextField" class="urlTextField" type="text" name="URL" placeholder="Novel Name/Link">
+                    <button id="boxNovelFindURLButton" class="urlButton" type="button">FIND</button>
+                </div>
+
+                <div id="boxNovelStatus" class="status">
+                    <img 
+                        class="sourceStatusImage"
+                        src="assets/rsc/empty.gif"
+                        border="0"
+                        alt=""/>
+                    
+                    <p class="statusText">SO MUCH EMPTY</p>
+                </div>
+
+                <div id="boxNovelContent" class="content">
+                    <ul id="boxNovelNovelList" class="novelList">
+                        <!-- <li class="sourceNovelHolder">
+                            <img class="novelCover" src="assets/rsc/missing-image.png" onerror="this.src='assets/rsc/missing-image.png'" border="0" alt="">
+                            <div class="novelInfo">
+                                <strong>Loading...</strong>
+                                <p>Please wait!</p>
+                            </div>
+                            <div id="boxNovelNovelButtons" class="novelButtons">
+                                <button id="boxNovelAddLibButton" class="novelButton" type="button">ADD TO LIBRARY</button>
+                                <button id="boxNovelRemoveLibButton" class="novelRemoveButton" type="button">REMOVE FROM LIBRARY</button>
+                            </div>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+
+            <div id="libraryPage" class="page">
+                <div class="headerPanel">
+                    <h1>Library</h1>
+
+                    <img src="assets/rsc/search.svg"/>
+                    <input id="librarySearchField" type="text" name="Search" placeholder="Search">
+                    <p id="libraryCancelSearch">x</p>
+                </div>
+            
+                <div id="libraryStatus" class="status">
+                    <img 
+                        class="sourceStatusImage"
+                        src="assets/rsc/empty.gif"
+                        border="0"
+                        alt=""/>
+                    
+                    <p class="statusText">SO MUCH EMPTY</p>
+                </div>
+
+                <div id="libraryContent">
+                    <ul id="libraryNovelList">
+                        <li id="0">
+                            <div class="libraryNovelHolder">
+                                <img class="novelCover" src="assets/rsc/missing-image.png" onerror="this.src='assets/rsc/missing-image.png'" border="0" alt="">
+                                <div class="novel-info">
+                                    <strong>Tempest of the Stellar  dasdkjaiksfjd ijafsoik aoifjsfoik jasiofj aisfjai fjisjfiajs f ajsfkj War</strong>
+                                    <p>Chapter 1 Tempest of the Stellar  dasdkjaiksfjd ijafsoik aoifjsfoik jasiofj aisfjai fjisjfiajs f ajsfkj War</p>
+                                </div>
+                                <div class="novel-settings">
+                                    <img class="novel-source" src="assets/rsc/NovelPlanet Logo.png">
+                                    <img class="novel-cover-change" src="assets/rsc/change-cover.svg">
+                                </div>
+                                <div class="novel-control">
+                                    <button class="libraryDownloadButton" type="button">DOWNLOAD</button>
+                                    <button class="libraryOpenFolderButton" type="button">OPEN FOLDER</button>
+                                    <button class="libraryRemoveButton" type="button">REMOVE FROM LIBRARY</button>
+
+                                    <div class="progressBar">
+                                        <div class="loaderBar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div id="novelCoverChangePrompt">
+                        <div id="promptBox">
+                            <input id="novelCoverPathTextField" type="text" name="novelCoverPath" placeholder="Novel Cover URL/Path">
+                            <button id="novelCoverPathButton" class="novelCoverButton" type="button">SAVE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </body>
+
+    <footer>
+        <!-- Scripts -->
+        <script src="./assets/scripts/mainController.js"></script>
+        <script src="./assets/scripts/novelplanetController.js"></script>
+        <script src="./assets/scripts/boxnovelController.js"></script>
+        <script src="./assets/scripts/libraryController.js"></script>
+    </footer>
+</html>

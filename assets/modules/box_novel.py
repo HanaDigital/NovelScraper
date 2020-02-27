@@ -49,14 +49,20 @@ class BoxNovel():
                 else:
                     content = ""
 
-                paras = soup.find(class_="cha-words")
+                paras = soup.find_all(class_="cha-words")
+                if(len(paras) == 2):
+                    paras = paras[1]
+                else:
+                    paras = soup.find(class_="cha-words")
+
                 if(paras == None):
                     paras = soup.find(class_="text-left")
 
                 #Remove ads
                 for div in paras('div'):
+                    print()
                     div.decompose()
-                
+
                 content += paras.prettify()
                 
                 epub.addChapter(chapter_head, current_chapter, content)

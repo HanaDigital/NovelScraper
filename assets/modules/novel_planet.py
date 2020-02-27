@@ -182,3 +182,6 @@ class NovelPlanet():
         alert = f.readline()
         f.close()
         return alert
+
+np = NovelPlanet("https://novelplanet.com/Novel/Soudana-Tashika-ni-Kawaii-Na", r"A:\Downloads\Novel-Library")
+np.create_novel();
