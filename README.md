@@ -1,7 +1,9 @@
 ### About
  *	Authors: dr_nyt
- *	Version: 0.9
- * You can support us by joining our discord group: https://discord.gg/Wya4Dst :heart:
+ *	Version: 0.9.5
+ * This is an educational project that lets you download translated novels from pirates sites like [www.novelplanet.com] and [www.boxnovel.com]. Although you can, but you should not use this app to illegally download content. The code base is meant for educational purposes only and anything you do with it is your responsibility.
+ * This app will only add websites that illegally provide content.
+  * You can support us by joining our discord group: https://discord.gg/Wya4Dst :heart:
 
 ### Features
 - Download any Translated Novel form www.novelplanet.com and www.boxnovel.com (for now) in .epub format.
