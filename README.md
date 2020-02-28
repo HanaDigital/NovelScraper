@@ -1,7 +1,9 @@
 ### About
  *	Authors: dr_nyt
- *	Version: 0.9
- * You can support us by joining our discord group: https://discord.gg/Wya4Dst :heart:
+ *	Version: 0.9.5
+ * This is an educational project that lets you download translated novels from pirates sites like [www.novelplanet.com] and [www.boxnovel.com]. Although you can, but you should not use this app to illegally download content. The code base is meant for educational purposes only and anything you do with it is your responsibility.
+ * This app will only add websites that illegally provide content.
+  * You can support us by joining our discord group: https://discord.gg/Wya4Dst :heart:
 
 ### Features
 - Download any Translated Novel form www.novelplanet.com and www.boxnovel.com (for now) in .epub format.
@@ -37,3 +39,4 @@
 
 ### License
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Novel Scraper</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://github.com/dr-nyt/Translated-Novel-Downloader" property="cc:attributionName" rel="cc:attributionURL">dr_nyt</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+This project is for educational purposes only and should not be used in any illegal activity.
