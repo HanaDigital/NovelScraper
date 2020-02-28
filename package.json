@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron .",
     "pack:win32": "electron-packager . NovelScraper --out=dist/win --platform=win32 --arch=ia32 --icon=\"A:/Desktop/Github Repos/NovelScraper/assets/rsc/NovelScraper-1.0-Logo.ico\"",
-    "pack:win64": "electron-packager . NovelScraper --out=dist/win --platform=win32 --arch=x64 --icon=\"A:/Github Repos/Translated-Novel-Downloader/assets/rsc/NovelScraper-1.0-Logo.ico\"",
+    "pack:win64": "electron-packager . NovelScraper --out=dist/win --platform=win32 --arch=x64 --icon=\"A:/Desktop/Github Repos/NovelScraper/assets/rsc/NovelScraper-1.0-Logo.ico\"",
     "build": "npm run pack:win32 && npm run pack:win64"
   },
   "author": "dr_nyt",
