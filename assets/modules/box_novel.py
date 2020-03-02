@@ -4,6 +4,7 @@ from ebooklib import epub
 import string
 import sys
 import os
+import logging
 
 from epub_engine import EpubEngine
 
@@ -39,15 +40,30 @@ class BoxNovel():
             print("Added Cover")
 
             for chapter_link in chapter_links:
+                print(current_chapter)
                 page = requests.get(chapter_link)
                 soup = BeautifulSoup(page.text, 'html.parser')
 
+                content = ""
                 chapter_head = soup.find(class_="cha-tit")
+
                 if(chapter_head != None):
-                    chapter_head = chapter_head.find("h3").get_text()
-                    content = f"<h2>{chapter_head}</h2>"
+                    if(chapter_head.find("h3") != None):
+                        chapter_head = chapter_head.find("h3").get_text()
+                        content = f"<h2>{chapter_head}</h2>"
+                        print(content)
+
+                    elif(chapter_head.find("h2") != None):
+                        chapter_head = chapter_head.find("h2").get_text()
+                        content = f"<h2>{chapter_head}</h2>"
+                        print(content)
+
+                    else:
+                        chapter_head = "Chapter Title Missing"
+                        print(chapter_head + " a")
                 else:
-                    content = ""
+                    chapter_head = "Chapter Title Missing"
+                    print(chapter_head + " b")
 
                 paras = soup.find_all(class_="cha-words")
                 if(len(paras) == 2):
@@ -58,9 +74,21 @@ class BoxNovel():
                 if(paras == None):
                     paras = soup.find(class_="text-left")
 
+                    if(paras.find("h3") != None):
+                        chapter_head = paras.find("h3").get_text()
+                        content = f"<h2>{chapter_head}</h2>"
+                        print(content)
+
+                    elif(paras.find("h2") != None):
+                        chapter_head = paras.find("h2").get_text()
+                        content = f"<h2>{chapter_head}</h2>"
+                        print(content)
+
+
                 #Remove ads
                 for div in paras('div'):
-                    print()
+                    if(div.get("class")):
+                        continue
                     div.decompose()
 
                 content += paras.prettify()
@@ -79,6 +107,7 @@ class BoxNovel():
 
         except Exception as e:
             print(e)
+            logging.exception("message")
             self.update_gui('ERROR')
 
     def update_gui(self, msg):
@@ -91,3 +120,11 @@ class BoxNovel():
         alert = f.readline()
         f.close()
         return alert
+
+# 0: "https://boxnovel.com/novel/paradise-of-demonic-gods/"
+# 1: "A:\Downloads/Novel-Library/Paradise of Demonic Gods"
+# 2: "boxnovel"
+# 3: "false"
+
+# bn = BoxNovel("https://boxnovel.com/novel/paradise-of-demonic-gods/", r"A:/Downloads/Novel-Library/Paradise of Demonic Gods")
+# bn.create_novel()
