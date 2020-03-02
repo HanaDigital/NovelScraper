@@ -9,7 +9,7 @@ const { shell } = require('electron');
 
 const { dialog } = require('electron').remote;
 
-const version = "0.9.5";
+const version = "0.9.6";
 
 const electron = require('electron');
 const ipc = electron.ipcRenderer;
@@ -312,6 +312,7 @@ async function downloadNovel(novelName, novelCoverSrc, novelLink, totalChapters,
 }
 
 function runPy(executablePath, parameters) {
+    console.log(parameters);
     child(executablePath, parameters, function(err, data) {
         console.log(err)
         // console.log(data.toString());

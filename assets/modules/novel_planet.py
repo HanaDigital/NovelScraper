@@ -4,6 +4,7 @@ from ebooklib import epub
 import string
 import sys
 import os
+import logging
 
 from epub_engine import EpubEngine
 
@@ -107,6 +108,7 @@ class NovelPlanet():
                 
                 chapter_head = re_soup.find('h2').get_text()
                 content = f"<h2>{chapter_head}</h2>"
+                print(content)
 
                 # Get all the paragraphs from the chapter
                 content += re_soup.find(id="divReadContent").prettify()
@@ -146,6 +148,8 @@ class NovelPlanet():
                 except:
                     chapter_head = f"Chapter {current_chapter}"
                     content = f"<h2>{current_chapter}</h2>"
+                
+                print(content)
 
                 # Get all the paragraphs from the chapter
                 paras = soup.find(id="divReadContent")
@@ -170,6 +174,7 @@ class NovelPlanet():
                 self.update_gui("NODEJS")
             else:
                 print(e)
+                logging.exception("message")
                 self.update_gui('ERROR')
 
     def update_gui(self, msg):
@@ -182,6 +187,3 @@ class NovelPlanet():
         alert = f.readline()
         f.close()
         return alert
-
-np = NovelPlanet("https://novelplanet.com/Novel/Soudana-Tashika-ni-Kawaii-Na", r"A:\Downloads\Novel-Library")
-np.create_novel();

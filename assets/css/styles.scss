@@ -2,8 +2,9 @@ $header-background: #022d47;
 $menu-background: #033e63;
 $menu-selected: #0671b3;
 $menu-hover: #078fe4;
-$page-background: #f1f1f1;
-$content-background: #f1f1f1;
+$page-background: rgb(250, 250, 250);
+$content-background: rgb(250, 250, 250);
+$content-shadow: #d2d2d2;
 
 html {
     height: 100%;
@@ -217,18 +218,18 @@ body {
                         position: relative;
                         width: 100%;
                         height: 300px;
-                        border-top: 1px solid #e5e9ec;
-                        border-left: 2px solid #8595af;
-                        border-right: 2px solid #8595af;
-                        box-shadow: -5px -5px 12px white,
-                                    5px 5px 12px 1px rgba(0, 0, 0, 0.301);
+                        background-color: $content-background;
+                        box-shadow: 0px 0px 12px 0px $content-shadow;
                         margin-top: 30px;
+                        border-radius: 5px;
 
                         img {
                             width: 250px;
                             height: 300px;
                             float: left;
                             margin-right: 5px;
+                            border-top-left-radius: 5px;
+                            border-bottom-left-radius: 5px;
                         }
 
                         .novelInfo {
@@ -254,6 +255,7 @@ body {
                                 color: white;
                                 float: left;
                                 cursor: pointer;
+                                border-radius: 5px;
                             }
         
                             .novelRemoveButton {
@@ -266,44 +268,45 @@ body {
                                 color: white;
                                 float: left;
                                 cursor: pointer;
+                                border-radius: 5px;
                             }
                         }
                     }
 
                     .sourceNovelHolder:hover {
                         box-shadow: none;
-                        background-color: white;
+                        // background-color: white;
                     }
                 }
             }
 
-            .testBox {
-                padding: 0;
-                margin: 0;
-                margin-top: 10px;
-                margin-left: 10px;
-                list-style-type: none;
+            // .testBox {
+            //     padding: 0;
+            //     margin: 0;
+            //     margin-top: 10px;
+            //     margin-left: 10px;
+            //     list-style-type: none;
 
-                li {
-                    font-size: 1.2rem;
-                    float: left;
-                    margin-right: 20px;
+            //     li {
+            //         font-size: 1.2rem;
+            //         float: left;
+            //         margin-right: 20px;
 
-                    .square {
-                        cursor: pointer;
-                        width: 150px;
-                        height: 150px;
-                        background-color: $content-background;
-                        border-radius: 5px;
-                        text-align: center;
-                        color: black;
-                        border-top: 1px solid #e5e9ec;
-                        border-left: 2px solid #8595af;
-                        border-right: 2px solid #8595af;
-                        box-shadow: 0 8px 6px -6px black;
-                    }
-                }
-            }
+            //         .square {
+            //             cursor: pointer;
+            //             width: 150px;
+            //             height: 150px;
+            //             background-color: $content-background;
+            //             border-radius: 5px;
+            //             text-align: center;
+            //             color: black;
+            //             border-top: 1px solid #e5e9ec;
+            //             border-left: 2px solid #8595af;
+            //             border-right: 2px solid #8595af;
+            //             box-shadow: 0 8px 6px -6px black;
+            //         }
+            //     }
+            // }
         }
 
         #homePage {
@@ -323,8 +326,9 @@ body {
                     margin-left: 40px;
                     margin-right: 40px;
                     background-color: $content-background;
-                    box-shadow: -5px -5px 12px white,
-                                5px 5px 12px 1px rgba(0, 0, 0, 0.301);
+                    // box-shadow: -5px -5px 12px white,
+                    //             5px 5px 12px 1px rgba(0, 0, 0, 0.301);
+                    box-shadow: 0px 0px 12px 0px $content-shadow;
                     text-align: center;
 
                     img {
@@ -338,8 +342,9 @@ body {
                 }
 
                 .blocks:hover {
-                    box-shadow: inset 0px 0px 5px 0.5px rgba(0, 0, 0, 0.400);
-                    background-color: white;
+                    // box-shadow: inset 0px 0px 5px 0.5px rgba(0, 0, 0, 0.400);
+                    box-shadow: none;
+                    // background-color: white;
                 }
 
                 #bug-report {
@@ -396,14 +401,16 @@ body {
 
                 .table-row {
                     cursor: pointer;
-                    background-color: #ffffff;
+                    background-color: $content-background;
                     // box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.1);
-                    box-shadow: -5px -5px 12px white,
-                                5px 5px 12px 1px rgba(0, 0, 0, 0.301);
+                    // box-shadow: -5px -5px 12px white,
+                    //             5px 5px 12px 1px rgba(0, 0, 0, 0.301);
+                    box-shadow: 0px 0px 12px 0px $content-shadow;
                 }
 
                 .table-row:hover {
-                    box-shadow: inset 0px 0px 5px 0.5px rgba(0, 0, 0, 0.400);
+                    // box-shadow: inset 0px 0px 5px 0.5px rgba(0, 0, 0, 0.400);
+                    box-shadow: none;
                 }
 
                 .col-1 {
@@ -475,8 +482,9 @@ body {
                         border-radius: 5px;
                         text-align: center;
                         color: black;
-                        box-shadow: -5px -5px 12px white,
-                                    5px 5px 12px 1px rgba(0, 0, 0, 0.301);
+                        // box-shadow: -5px -5px 12px white,
+                        //             5px 5px 12px 1px rgba(0, 0, 0, 0.301);
+                        box-shadow: 0px 0px 12px 0px $content-shadow;
 
                         img {
                             width: 115px;
@@ -489,8 +497,9 @@ body {
                     }
 
                     .sourceHolder:hover {
-                        box-shadow: inset 0px 0px 5px 0.5px rgba(0, 0, 0, 0.400);
-                        background-color: white;
+                        // box-shadow: inset 0px 0px 5px 0.5px rgba(0, 0, 0, 0.400);
+                        box-shadow: none;
+                        // background-color: white;
                     }
 
                     .sourceHolderAnimate {
@@ -502,16 +511,16 @@ body {
         }
 
         #novelPlanetPage {
-            background-color: white;
+            background-color: $page-background;
         }
 
         #boxNovelPage {
             // display: block;
-            background-color: white;
+            background-color: $page-background;
         }
 
         #libraryPage {
-            background-color: white;
+            background-color: $page-background;
 
             .headerPanel {
 
@@ -569,8 +578,8 @@ body {
                             // border-left: 2px solid #8595af;
                             // border-right: 2px solid #8595af;
                             // border-bottom: 1px solid #e5e9ec;
-                            box-shadow: -5px -5px 12px white,
-                                        5px 5px 12px 1px rgba(0, 0, 0, 0.301);
+                            box-shadow: 0px 0px 12px 0px $content-shadow;
+                            border-radius: 5px;
                             position: relative;
 
                             -webkit-animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
@@ -581,6 +590,8 @@ body {
                                 width: 240px;
                                 height: 280px;
                                 margin-right: 10px;
+                                border-top-left-radius: 5px;
+                                border-bottom-left-radius: 5px;
                             }
 
                             .novel-info {
@@ -621,7 +632,7 @@ body {
                                     margin-right: 5px;
                                     margin-left: 5px;
                                     border: 0;
-                                    border-radius: 3px;
+                                    border-radius: 5px;
                                     background-color: #0c2852;
                                     color: white;
                                     float: left;
@@ -669,7 +680,7 @@ body {
                             // box-shadow: 0px 2px 6px 3px #b9c5d8;
                             // box-shadow: 0px 0px 20px 0px black;
                             box-shadow: none;
-                            background-color: $page-background;
+                            // background-color: $page-background;
                         }
                     }
                 }
