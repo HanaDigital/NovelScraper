@@ -6,6 +6,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 const nconf = (<any>window).require("nconf");
 //Import fs for chapter management
 const fs = (<any>window).require('fs');
+const shellJS = (<any>window).require('shelljs');
 // Import rimraf for folder deletion
 const rimraf = (<any>window).require('rimraf');
 // Import Epub File Generator
@@ -49,6 +50,11 @@ export class LibraryService {
   async generateEpub(link, chapters) {
     let novel = this.getNovel(link);
     let novelFile = await this.generateFolderPath(novel, chapters);
+    if (!novelFile) {
+      console.log('Novel file name wasnt generated.');
+      return;
+    }
+    console.log(novelFile);
     let option = {
       title: novel.info.name, // *Required, title of the book.
       author: novel.info.author, // *Required, name of the author.
@@ -56,7 +62,7 @@ export class LibraryService {
       content: chapters
     };
     new epubGen(option, novelFile);
-    this.updateDownloaded(novel.info.link, true)
+    this.updateDownloaded(novel.info.link, true);
     return true;
   }
 
@@ -66,25 +72,16 @@ export class LibraryService {
     let novelFile = novelFolder + '\\' + novel.info.name.replace(/[/\\?%*:|"<>]/g, '') + '.epub';
     let chaptersFile = novelFolder + '\\' + "chapters.json"
 
-    // Create Library Folder if it doesnt already exist
-    await fs.mkdir(libraryFolder, function (err) {
-      if (err) {
-        console.log(err);
-      }
-      console.log('library folder created!');
-    });
-    // Create novel folder if it doesnt already exist
-    await fs.mkdir(novelFolder, function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
+    // Create Novel Folder if it doesnt already exist
+    shellJS.mkdir('-p', novelFolder);
+
     // Save novel chapters to a json file
     let chaptersObj = { chapters: chapters }
     let json = JSON.stringify(chaptersObj, null, 4);
     await fs.writeFile(chaptersFile, json, function (err) {
       if (err) {
-        return console.log(err);
+        console.log(err);
+        return;
       }
       console.log("Chapters Saved!");
     });

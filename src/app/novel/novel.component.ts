@@ -42,8 +42,7 @@ export class NovelComponent implements OnInit {
     private router: Router,
     public library: LibraryService,
     public novelplanetService: NovelplanetService,
-    private boxnovelService: BoxnovelService)
-    { }
+    private boxnovelService: BoxnovelService) { }
 
   // On init
   ngOnInit(): void {
@@ -113,17 +112,21 @@ export class NovelComponent implements OnInit {
       this.downloadID = this.library.addDownloadTracker(this.novel.info.link);
       this.downloading = true;
       this.novelplanetService.downloadNovel(this.novel.info.link, this.downloadID).then((saved) => {
-        this.novel.info.folderPath = this.library.getNovel(this.novel.info.link).info.folderPath;
-        this.downloading = false;
-        this.downloaded = true;
+        if (saved) {
+          this.novel.info.folderPath = this.library.getNovel(this.novel.info.link).info.folderPath;
+          this.downloading = false;
+          this.downloaded = true;
+        }
       });
     } else if (this.novel.info.source == 'boxnovel') {
       this.downloadID = this.library.addDownloadTracker(this.novel.info.link);
       this.downloading = true;
       this.boxnovelService.downloadNovel(this.novel.info.link, this.downloadID).then((saved) => {
-        this.novel.info.folderPath = this.library.getNovel(this.novel.info.link).info.folderPath;
-        this.downloading = false;
-        this.downloaded = true;
+        if (saved) {
+          this.novel.info.folderPath = this.library.getNovel(this.novel.info.link).info.folderPath;
+          this.downloading = false;
+          this.downloaded = true;
+        }
       });
     }
   }
@@ -133,7 +136,7 @@ export class NovelComponent implements OnInit {
   }
 
   changeNovelCover(val) {
-    if(val == "" || !this.inLibrary) {return;}
+    if (val == "" || !this.inLibrary) { return; }
     this.library.updateCover(this.novel.info.link, val);
     this.novel.info.cover = val;
   }

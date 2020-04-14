@@ -94,6 +94,7 @@
     "jquery": "3.4.1",
     "nconf": "0.10.0",
     "request": "2.88.2",
-    "rimraf": "3.0.2"
+    "rimraf": "3.0.2",
+    "shelljs": "0.8.3"
   }
 }
