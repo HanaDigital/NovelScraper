@@ -1,0 +1,5 @@
+[0405/153741.766:ERROR:file_io.cc(89)] ReadExactly: expected 36, observed 0
+[0409/012443.565:ERROR:process_info.cc(329)] VirtualQueryEx: Access is denied. (0x5)
+[0409/012443.566:ERROR:process_info.cc(556)] ReadMemoryInfo failed
+[0409/012443.566:ERROR:process_memory_win.cc(39)] Failed to initialize ProcessInfo.
+[0409/012443.566:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: An attempt was made to access an exiting process. (0xc000010a)

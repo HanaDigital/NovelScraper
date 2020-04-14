@@ -1,0 +1,119 @@
+@import "../assets/scss/global-variables";
+
+header {
+  width: 100%;
+  height: $header-height;
+
+  padding-left: 10px;
+  display: grid;
+  grid-template-columns: 80% auto;
+  -webkit-app-region: drag;
+
+  background-color: $header-background;
+  box-shadow: inset 0px -5px 12px -6px rgba(0, 0, 0, 0.26);
+
+  strong {
+    display: flex;
+    align-items: center;
+
+    color: white;
+    font-size: 0.8em;
+    font-weight: 1;
+
+    span {
+      color: $higlight-color;
+    }
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-self: right;
+    -webkit-app-region: no-drag;
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        height: 100%;
+        float: left;
+
+        div {
+          width: 12px;
+          height: 12px;
+          margin-right: 5px;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+      }
+
+      #min {
+        background: #a06800;
+      }
+      #min:hover {
+          background: orange;
+      }
+
+      #max {
+        background: #06629b;
+      }
+      #max:hover {
+          background: $higlight-color;
+      }
+
+      #close {
+        background: #a00000;
+      }
+      #close:hover {
+          background: red;
+      }
+    }
+  }
+}
+
+#vertical-menu {
+  position: fixed;
+  height: 100%;
+  width: $menu-width;
+  top: 30px;
+
+  background-color: $menu-background;
+
+  a {
+    background-color: $menu-background;
+    display: block;
+    width:70px;
+    height: 60px;
+    text-decoration: none;
+
+    img {
+        width: inherit;
+        height: inherit;
+    }
+
+    img:hover {
+      background: $menu-hover;
+    }
+  }
+
+  a:focus {
+    outline: none;
+  }
+
+  #homeButton {
+    background: $menu-selected;
+  }
+}
+
+#vertical-menu-shadow {
+  z-index: -1;
+  position: fixed;
+  height: 100%;
+  width: $menu-width;
+  top: 90px;
+
+  box-shadow: 5px 0px 12px -6px rgba(0, 0, 0, 0.301);
+}
+

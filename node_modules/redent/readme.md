@@ -30,19 +30,19 @@ Type: `string`
 
 #### count
 
-Type: `number`  
+Type: `number`<br>
 Default: `0`
 
 How many times you want `indent` repeated.
 
 #### indent
 
-Type: `string`  
+Type: `string`<br>
 Default: `' '`
 
-The string to use for the indent.
+String to use for the indent.
 
 
 ## License
 
-MIT © [Sindre Sorhus](http://sindresorhus.com)
+MIT © [Sindre Sorhus](https://sindresorhus.com)

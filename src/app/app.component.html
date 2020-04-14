@@ -1,0 +1,48 @@
+<!-- Nav bar to control the window -->
+<header>
+  <strong><span>NOVEL</span>SCRAPER</strong>
+  <nav>
+    <ul>
+      <li><div id="min" (click)="minWindow()"></div></li>
+      <li><div id="max" (click)="maxWindow()"></div></li>
+      <li><div id="close" (click)="closeWindow()"></div></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- Side Menu to switch pages -->
+<div id="vertical-menu">
+
+  <!-- Home button -->
+  <a routerLink="" id="homeButton" class="menuButton" (click)="loadHomePage()">
+      <img
+        src="assets/rsc/home.png"
+        id="homeIcon"
+        border="0"
+        alt=""
+      />
+  </a>
+
+  <!-- Sources button -->
+  <a routerLink="/sources" id="sourcesButton" class="menuButton" (click)="loadSourcesPage()">
+      <img
+        src="assets/rsc/sources.png"
+        id="sourcesIcon"
+        border="0"
+        alt=""
+      />
+  </a>
+
+  <!-- Library button -->
+  <a routerLink="/library" id="libraryButton" class="menuButton" (click)="loadLibraryPage()">
+      <img
+        src="assets/rsc/library.png"
+        id="libraryIcon"
+        border="0"
+        alt=""
+      />
+  </a>
+</div>
+<div id="vertical-menu-shadow"></div>
+
+<router-outlet></router-outlet>

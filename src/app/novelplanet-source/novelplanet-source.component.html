@@ -1,0 +1,27 @@
+<div class="page">
+  <div class="headerPanel">
+      <h1>NovelPlanet</h1>
+  </div>
+
+  <div class="content">
+    <form class="search" action="">
+      <input class="searchBox" name="searchBox" type="text" placeholder="SEARCH" [(ngModel)]="val">
+      <input class="searchButton" type="submit" name="submit" value="FIND" (click)="search(val)">
+    </form>
+
+    <div class="status">
+      <img [ngStyle]="{'display': novelplanetService.showEmpty ? 'block' : 'none'}" id="empty" src="assets/rsc/empty-icon.svg" alt="">
+      <img class="error" [ngStyle]="{'display': novelplanetService.showError ? 'block' : 'none'}" id="empty" src="assets/rsc/error-icon.png" alt="">
+      <h1 [ngStyle]="{'display': novelplanetService.showLoading ? 'block' : 'none'}" class="loading">LOADING</h1>
+    </div>
+
+    <div class="novelList" [ngStyle]="{'display': novelplanetService.showContent ? 'block' : 'none'}">
+        <div (click)='loadNovelPage(novel)' class="novelHolder" *ngFor="let novel of novelplanetService.localNovels; let i = index">
+            <img class="img" src="{{novel.info.cover}}" onerror="this.src='assets/rsc/missing-image.png';">
+            <div class="fade">
+                <p class="name">{{novel.info.name}}</p>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>

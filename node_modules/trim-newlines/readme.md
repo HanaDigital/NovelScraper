@@ -13,7 +13,7 @@ $ npm install --save trim-newlines
 ## Usage
 
 ```js
-var trimNewlines = require('trim-newlines');
+const trimNewlines = require('trim-newlines');
 
 trimNewlines('\nunicorn\r\n');
 //=> 'unicorn'
@@ -43,4 +43,4 @@ Trim from the end of a string.
 
 ## License
 
-MIT © [Sindre Sorhus](http://sindresorhus.com)
+MIT © [Sindre Sorhus](https://sindresorhus.com)

@@ -1,7 +1,5 @@
 'use strict';
-var stripIndent = require('strip-indent');
-var indentString = require('indent-string');
+const stripIndent = require('strip-indent');
+const indentString = require('indent-string');
 
-module.exports = function (str, count, indent) {
-	return indentString(stripIndent(str), indent || ' ', count || 0);
-};
+module.exports = (str, count, indent) => indentString(stripIndent(str), count || 0, indent);

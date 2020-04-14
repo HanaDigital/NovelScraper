@@ -15,9 +15,20 @@ $ npm install --save camelcase-keys
 ```js
 const camelcaseKeys = require('camelcase-keys');
 
+// Convert an object
 camelcaseKeys({'foo-bar': true});
 //=> {fooBar: true}
 
+// Convert an array of objects
+camelcaseKeys([{'foo-bar': true}, {'bar-foo': false}]);
+//=> [{fooBar: true}, {barFoo: false}]
+
+camelcaseKeys({'foo-bar': true, nested: {unicorn_rainbow: true}}, {deep: true});
+//=> {fooBar: true, nested: {unicornRainbow: true}}
+```
+
+```js
+const camelcaseKeys = require('camelcase-keys');
 
 const argv = require('minimist')(process.argv.slice(2));
 //=> {_: [], 'foo-bar': true}
@@ -33,22 +44,29 @@ camelcaseKeys(argv);
 
 #### input
 
-Type: `object`
+Type: `Object` `Object[]`
 
-Object to camelCase.
+Object or array of objects to camelCase.
 
 #### options
 
-Type: `object`
+Type: `Object`
 
 ##### exclude
 
-Type: `array`  
+Type: `string[]` `RegExp[]`<br>
 Default: `[]`
 
 Exclude keys from being camelCased.
 
+##### deep
+
+Type: `boolean`<br>
+Default: `false`
+
+Recurse nested objects and objects in arrays.
+
 
 ## License
 
-MIT © [Sindre Sorhus](http://sindresorhus.com)
+MIT © [Sindre Sorhus](https://sindresorhus.com)
