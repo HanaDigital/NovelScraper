@@ -25,10 +25,19 @@
 
 ![cover-change](https://user-images.githubusercontent.com/41040912/79237319-123aa100-7e7f-11ea-8884-39599ada076d.gif)
 
-5. There are bound to be bugs and errors so please open an issue [here](https://github.com/dr-nyt/Translated-Novel-Downloader/issues/) if you find any.
+6. There are bound to be bugs and errors so please open an issue [here](https://github.com/dr-nyt/Translated-Novel-Downloader/issues/) if you find any.
 
-### Alpha Build
-- Android App.
+### How to build
+- Download [NodeJS](https://nodejs.org/en/download/) and install it.
+- Download the source code for Version 1.0.0 from [here](https://github.com/dr-nyt/NovelScraper/archive/Version-1.0.0.zip) and unzip it.
+- Open Terminal and `cd` into the unzipped folder or type `cmd` in the path section of the unzipped folder and hit enter.
+![image](https://user-images.githubusercontent.com/41040912/79340555-863a7f00-7f3b-11ea-9c84-d157276cfc27.png)
+- Then type the following commands in the terminal:
+```
+npm i
+npm start
+```
+- Done! The app should start.
 
 ### Citation
 - Empty Box Icon: <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
