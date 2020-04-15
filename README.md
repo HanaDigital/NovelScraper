@@ -37,7 +37,8 @@
 npm i
 npm start
 ```
-- Done! The app should start.
+- The app should have started at this point, and if you want to reopen the app at a later date, just open a terminal in the same folder and type `npm start`.
+- Enjoy!
 
 ### Citation
 - Empty Box Icon: <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
