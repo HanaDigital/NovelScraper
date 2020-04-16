@@ -28,14 +28,14 @@
 6. There are bound to be bugs and errors so please open an issue [here](https://github.com/dr-nyt/Translated-Novel-Downloader/issues/) if you find any.
 
 ### How to build
-- Download [NodeJS](https://nodejs.org/en/download/) and install it.
-- Download the source code for Version 1.0.0 from [here](https://github.com/dr-nyt/NovelScraper/archive/Version-1.0.0.zip) and unzip it.
-- Open Terminal and `cd` into the unzipped folder or type `cmd` in the path section of the unzipped folder and hit enter.
+- Download [NodeJS](https://nodejs.org/en/download/) for your system and install it.
+- Download the source code for Version 1.0.0 from [here](https://github.com/dr-nyt/NovelScraper/archive/Version-1.0.0.zip) and unzip it into a folder.
+- Open a Terminal and `cd` into the unzipped folder or on Windows type `cmd` in the path section of the unzipped folder and hit enter:
 ![image](https://user-images.githubusercontent.com/41040912/79340555-863a7f00-7f3b-11ea-9c84-d157276cfc27.png)
 - Then type the following commands in the terminal:
 ```
-npm i
-npm start
+npm i                     <-- Installs everything needed to run the app.
+npm start                 <-- Runs the app itself.
 ```
 - The app should have started at this point, and if you want to reopen the app at a later date, just open a terminal in the same folder and type `npm start`.
 - Enjoy!
