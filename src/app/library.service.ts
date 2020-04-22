@@ -1,18 +1,22 @@
 import { Injectable } from '@angular/core';
-import { link } from 'fs';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+// import { link } from 'fs';
+// import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
+// const { fork } = (<any>window).require('child_process');
 // Import nconf for controlling library
-const nconf = (<any>window).require("nconf");
+import nconf from 'nconf';
+// const nconf = (<any>window).require('nconf');
 //Import fs for chapter management
 const fs = (<any>window).require('fs');
-const shellJS = (<any>window).require('shelljs');
+import shellJS from 'shelljs'
 // Import rimraf for folder deletion
-const rimraf = (<any>window).require('rimraf');
+// const rimraf = (<any>window).require('rimraf');
+import rimraf from 'rimraf';
 // Import Epub File Generator
 const epubGen = (<any>window).require('epub-gen');
+// import epubGen from 'epub-gen';
 // Import electron app module
-const { remote, shell } = (<any>window).require('electron');
+import { remote, shell } from 'electron';
 
 // declare electron
 declare var electron: any;
