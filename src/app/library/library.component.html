@@ -15,7 +15,7 @@
     </div>
 
     <div class="novelList" [ngStyle]="{'display': library.showContent ? 'block' : 'none'}">
-        <div (click)='loadNovelPage(novel)' class="novelHolder" *ngFor="let novel of library.libraryNovels; let i = index">
+        <div (click)='loadNovelPage(novel)' class="novelHolder" [ngStyle]="{'border': novel.state.downloaded ? '1px solid #5eff00' : 'none'}" *ngFor="let novel of library.libraryNovels; let i = index">
             <img class="img" src="{{novel.info.cover}}" onerror="this.src='assets/rsc/missing-image.png';">
             <div class="fade">
                 <p class="name">{{novel.info.name}}</p>

@@ -58,7 +58,8 @@
               <img src="assets/rsc/remove-icon.svg">
             </a>
             <a class="downloadButton" [className]="downloading ? 'progressBar' : ''" [ngStyle]="{'display': inLibrary ? 'block' : 'none'}" (click)="download()">
-              <img src="assets/rsc/download-icon.svg" [ngStyle]="{'display': downloading ? 'none' : 'inline'}">
+              <img src="assets/rsc/download-icon.svg" [ngStyle]="{'display': downloading || downloaded ? 'none' : 'inline'}">
+              <img src="assets/rsc/update-icon.svg" [ngStyle]="{'display': downloading || !downloaded ? 'none' : 'inline'}">
               <div class="downloadBar" [ngStyle]="{'display': downloading ? 'flex' : 'none', 'width': library.downloadTrackers[downloadID] ? library.downloadTrackers[downloadID].width : '0%'}">
                 <p>{{library.downloadTrackers[downloadID] ? library.downloadTrackers[downloadID].width : ''}}</p>
               </div>

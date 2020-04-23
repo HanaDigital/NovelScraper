@@ -2,19 +2,24 @@ import { Injectable } from '@angular/core';
 // import { link } from 'fs';
 // import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
-// const { fork } = (<any>window).require('child_process');
 // Import nconf for controlling library
 import nconf from 'nconf';
-// const nconf = (<any>window).require('nconf');
+
 //Import fs for chapter management
 const fs = (<any>window).require('fs');
 import shellJS from 'shelljs'
+
 // Import rimraf for folder deletion
-// const rimraf = (<any>window).require('rimraf');
 import rimraf from 'rimraf';
+
+const request = (<any>window).require('request');
 // Import Epub File Generator
-const epubGen = (<any>window).require('epub-gen');
+// const epubGen = (<any>window).require('epub-gen');
 // import epubGen from 'epub-gen';
+const epubGen = (<any>window).require('nodepub');
+
+const mime = (<any>window).require('mime');
+
 // Import electron app module
 import { remote, shell } from 'electron';
 
@@ -53,31 +58,70 @@ export class LibraryService {
 
   async generateEpub(link, chapters) {
     let novel = this.getNovel(link);
-    let novelFile = await this.generateFolderPath(novel, chapters);
-    if (!novelFile) {
+    let novelPath = await this.generateFolderPath(novel, chapters);
+    if (!novelPath) {
       console.log('Novel file name wasnt generated.');
       return;
     }
-    console.log(novelFile);
-    let option = {
-      title: novel.info.name, // *Required, title of the book.
-      author: novel.info.author, // *Required, name of the author.
-      cover: novel.info.cover, // Url or File path, both ok.
-      content: chapters
-    };
-    new epubGen(option, novelFile);
+
     this.updateDownloaded(novel.info.link, true);
+    // let option = {
+    //   title: novel.info.name, // *Required, title of the book.
+    //   author: novel.info.author, // *Required, name of the author.
+    //   cover: novel.info.cover, // Url or File path, both ok.
+    //   content: chapters
+    // };
+    // new epubGen(option, novelFile);
+
+    let metadata = {
+      id: '0000-0000-0001',
+      title: novel.info.name,
+      author: novel.info.author,
+      genre: novel.info.genre,
+      language: 'en',
+      description: 'dr-nyt\'s NovelScraper downloaded this novel from a pirate site.',
+      contents: 'Table of Contents',
+      images: []
+    };
+    var req = await request({
+      method: 'GET',
+      uri: novel.info.cover
+    });
+
+    var out = await fs.createWriteStream(novelPath[2]);
+    await req.pipe(out);
+
+    await req.on('end', () => {
+      let epub = epubGen.document(metadata, novelPath[2]);
+
+      for (let i = 0; i < chapters.length; i++) {
+        epub.addSection(chapters[i].title, chapters[i].data);
+      }
+
+      epub.writeEPUB(
+        function (e) { console.log("Error:", e); },
+        novelPath[0], novelPath[1],
+        function () { console.log("No errors.") }
+      );
+    });
     return true;
   }
 
   async generateFolderPath(novel, chapters) {
     let libraryFolder = this.downloadFolder + '\\' + "NovelScraper-Library";
     let novelFolder = libraryFolder + '\\' + novel.info.name.replace(/[/\\?%*:|"<>]/g, '');
-    let novelFile = novelFolder + '\\' + novel.info.name.replace(/[/\\?%*:|"<>]/g, '') + '.epub';
+    let novelFile = novel.info.name.replace(/[/\\?%*:|"<>]/g, '');
+    console.log(novelFolder, novelFile);
     let chaptersFile = novelFolder + '\\' + "chapters.json"
 
     // Create Novel Folder if it doesnt already exist
-    shellJS.mkdir('-p', novelFolder);
+    await shellJS.mkdir('-p', novelFolder);
+
+    let coverMediaType = mime.getType(novel.info.cover);
+    let coverExtension = mime.getExtension(coverMediaType);
+    let coverPath = novelFolder + '\\cover.' + coverExtension;
+
+    // await this.downloadFile(novel.info.cover , coverPath);
 
     // Save novel chapters to a json file
     let chaptersObj = { chapters: chapters }
@@ -91,7 +135,21 @@ export class LibraryService {
     });
 
     this.updateFolderPath(novel.info.link, novelFolder);
-    return novelFile;
+    return [novelFolder, novelFile, coverPath];
+  }
+
+  async downloadFile(file_url, targetPath) {
+    var req = await request({
+      method: 'GET',
+      uri: file_url
+    });
+
+    var out = await fs.createWriteStream(targetPath);
+    await req.pipe(out);
+
+    await req.on('end', function () {
+      console.log("Cover succesfully downloaded");
+    });
   }
 
   openLibraryFolder(folderPath) {
