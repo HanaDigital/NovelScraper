@@ -1,0 +1,13 @@
+<div class="page">
+  <div class="headerPanel">
+      <h1>SETTINGS</h1>
+  </div>
+
+  <div class="content">
+    <form class="settings" action="">
+      <label>DOWNLOAD FOLDER:</label>
+      <input class="settingInput" name="downloadFolder" type="text" placeholder="{{downloadFolder}}" [(ngModel)]="val">
+      <input class="settingButton" type="submit" name="downloadFolderSave" value="SAVE" (click)="saveDownloadFolder(val)">
+    </form>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+@import "../../assets/scss/global-variables";
+
+.settings {
+  width: 100%;
+  padding: 30px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin: auto;
+
+  label {
+    color: white;
+  }
+
+  .settingInput {
+    width: 90%;
+    height: 40px;
+    border: none;
+    margin-top: 10px;
+    padding: 9px;
+    font-size: 15px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    box-shadow: 5px 5px 12px -5px rgba(0, 0, 0, 0.541),
+                -5px -5px 12px -5px rgb(0, 71, 116);
+  }
+
+  .settingButton {
+    cursor: pointer;
+    width: 10%;
+    height: 40px;
+    border: none;
+    font-size: 15px;
+    background: $menu-selected;
+    color: white;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    box-shadow: 5px 5px 12px -5px rgba(0, 0, 0, 0.541),
+                0px -5px 12px -5px rgb(0, 71, 116);
+  }
+}

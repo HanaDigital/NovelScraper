@@ -1,0 +1,82 @@
+<div class="page">
+  <div class="headerPanel">
+    <h1>{{pageSource}}</h1>
+  </div>
+
+  <div id="coverChangeDialogue">
+    <div class="holder">
+      <input type="text" placeholder="Novel Cover URL" class="textBox"  [(ngModel)]="val">
+      <input type="button" value="SAVE" class="textButton" (click)="changeNovelCover(val)">
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="novelNav">
+      <img (click)="return()" src="assets/rsc/back-icon.svg" class="back">
+      <img class="changeCover" (click)="openCoverDialogue()" src="assets/rsc/change-cover.svg" [ngStyle]="{'display': inLibrary ? 'block' : 'none'}">
+    </div>
+
+    <div class="wrapper">
+      <div class="novelContainer">
+
+        <div class="novelCover">
+          <img src="{{novel.info.cover}}" onerror="this.src='assets/rsc/missing-image.png';">
+        </div>
+
+        <div class="novelInfo">
+          <h1>{{novel.info.name}}</h1>
+          <div class="infoHolder">
+            <p class="label">Latest Chapter:</p>
+            <p class="info extend">{{novel.info.latestChapter}}</p>
+          </div>
+          <div class="infoHolder alt">
+            <p class="label">Total Chapters:</p>
+            <p class="info">{{novel.info.totalChapters}}</p>
+          </div>
+          <div class="infoHolder">
+            <p class="label">Source:</p>
+            <p class="info">{{novel.info.source}}</p>
+          </div>
+          <div class="infoHolder alt">
+            <p class="label">Author(s):</p>
+            <p class="info extend">{{novel.info.author}}</p>
+          </div>
+          <div class="infoHolder">
+            <p class="label">Genre(s):</p>
+            <p class="info extend">{{novel.info.genre}}</p>
+          </div>
+          <div class="infoHolder alt">
+            <p class="label">Summary:</p>
+            <p class="info summary">{{novel.info.summary}}</p>
+          </div>
+
+          <div class="buttons">
+            <a class="add" [ngStyle]="{'display': inLibrary ? 'none' : 'block'}" (click)="addToLibrary()">
+              <img src="assets/rsc/add-icon.svg">
+            </a>
+            <a class="remove" [ngStyle]="{'display': inLibrary ? 'block' : 'none'}" (click)="removeFromLibrary()">
+              <img src="assets/rsc/remove-icon.svg">
+            </a>
+            <a class="downloadButton" [className]="downloading ? 'progressBar' : ''" [ngStyle]="{'display': inLibrary ? 'block' : 'none'}" (click)="download()">
+              <img src="assets/rsc/download-icon.svg" [ngStyle]="{'display': downloading || downloaded ? 'none' : 'inline'}">
+              <img src="assets/rsc/update-icon.svg" [ngStyle]="{'display': downloading || !downloaded ? 'none' : 'inline'}">
+              <div class="downloadBar" [ngStyle]="{'display': downloading ? 'flex' : 'none', 'width': library.downloadTrackers[downloadID] ? library.downloadTrackers[downloadID].width : '0%'}">
+                <p>{{library.downloadTrackers[downloadID] ? library.downloadTrackers[downloadID].width : ''}}</p>
+              </div>
+            </a>
+            <a class="cancelButton" [ngStyle]="{'display': downloading ? 'block' : 'none'}" (click)="cancelDownload()">
+              <img src="assets/rsc/cancel-icon.svg">
+            </a>
+            <a class="openFolder" [ngStyle]="{'display': downloaded ? 'block' : 'none'}" (click)="openFolder()">
+              <img src="assets/rsc/folder-icon.svg">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status">
+      <h1 [ngStyle]="{'display': showLoading ? 'block' : 'none'}" class="loading">LOADING</h1>
+      <p [ngStyle]="{'display': showNotice ? 'block' : 'none'}" class="notice">Built-In Reader Coming Soon!</p>
+    </div>
+</div>
