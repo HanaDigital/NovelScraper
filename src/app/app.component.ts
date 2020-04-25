@@ -20,6 +20,9 @@ export class AppComponent {
   public menuBackground: string;
   public buttonHighlight: string;
 
+  public version: string = "V1";
+  public updating: boolean = false;
+
   constructor(
     public electronService: ElectronService,
     private translate: TranslateService,
@@ -32,7 +35,6 @@ export class AppComponent {
     this.menuBackground = "#033e63";
     this.buttonHighlight = "linear-gradient(90deg, rgba(6,113,179,1) 0%, rgba(3,62,99,1) 100%)";
 
-
     // console.log('AppConfig', AppConfig);
 
     if (electronService.isElectron) {
@@ -43,6 +45,24 @@ export class AppComponent {
     } else {
       // console.log('Mode web');
     }
+
+    // Load Version Number
+    electronService.ipcRenderer.send('app_version');
+    electronService.ipcRenderer.on('app_version', (event, arg) => {
+      electronService.ipcRenderer.removeAllListeners('app_version');
+      console.log(arg.version);
+      this.version = 'V' + arg.version;
+    });
+
+    electronService.ipcRenderer.on('update_available', () => {
+      electronService.ipcRenderer.removeAllListeners('update_available');
+      this.updating = true;
+    });
+
+    electronService.ipcRenderer.on('update_downloaded', () => {
+      electronService.ipcRenderer.removeAllListeners('update_downloaded');
+      this.restartApp();
+    });
   }
 
   //UI Control
@@ -63,6 +83,13 @@ export class AppComponent {
       this.deselectButtons();
       this.menuButtons[2].style.background = this.buttonHighlight;
       this.library.loadNovels();
+  }
+
+  // Higlight the setting button and open the library page
+  loadSettingPage() {
+    this.deselectButtons();
+    this.menuButtons[3].style.background = this.buttonHighlight;
+    this.library.loadNovels();
   }
 
   // Deselect all menu buttons
@@ -86,5 +113,9 @@ export class AppComponent {
   // Close Window
   closeWindow() {
     remote.getCurrentWindow().close();
+  }
+
+  restartApp() {
+    this.electronService.ipcRenderer.send('restart_app');
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 // import { link } from 'fs';
 // import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { ElectronService } from './core/services';
 
 // Import nconf for controlling library
 import nconf from 'nconf';
@@ -45,12 +46,12 @@ export class LibraryService {
   // Keeps track of each novel being downloaded
   downloadTrackers: any = [];
 
-  constructor() {
+  constructor(public electronService: ElectronService) {
 
     // Handles when app is closed
-    electron.ipcRenderer.on('app-close', _ => {
+    electronService.ipcRenderer.on('app-close', _ => {
       this.save();
-      electron.ipcRenderer.send('closed');
+      electronService.ipcRenderer.send('closed');
     });
 
     this.generateLibrary();
@@ -241,6 +242,7 @@ export class LibraryService {
         return novel;
       }
     }
+    return undefined;
   }
 
   // Remove a novel from the library by their link
@@ -410,11 +412,21 @@ export class LibraryService {
   }
 
   async generateLibrary() {
-    // Check if library exists
+
+    // Check if downloadFolder is stored
+    if(localStorage.getItem("downloadFolder") != null) {
+      this.downloadFolder = localStorage.getItem("downloadFolder");
+    } else {
+      localStorage.setItem("downloadFolder", this.downloadFolder);
+    }
     let libraryFolder = this.downloadFolder + '\\' + "NovelScraper-Library";
+
     let libraryObj = { "novels": [] };
 
     await fs.mkdir(libraryFolder, (err) => {
+      if(err) {
+        return;
+      }
       console.log('library folder created!');
     });
 

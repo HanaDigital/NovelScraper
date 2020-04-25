@@ -2,6 +2,7 @@ import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 const ipc = require('electron').ipcMain;
+const { autoUpdater } = require('electron-updater');
 
 var status = 0;
 let win: BrowserWindow = null;
@@ -26,6 +27,10 @@ function createWindow(): BrowserWindow {
       nodeIntegration: true,
       allowRunningInsecureContent: (serve) ? true : false,
     },
+  });
+
+  win.once('ready-to-show', () => {
+    autoUpdater.checkForUpdatesAndNotify();
   });
 
   if (serve) {
@@ -94,3 +99,18 @@ ipc.on('closed', _ => {
     app.quit();
   }
 })
+
+ipc.on('app_version', (event) => {
+  event.sender.send('app_version', { version: app.getVersion() });
+});
+
+autoUpdater.on('update-available', () => {
+  win.webContents.send('update_available');
+});
+autoUpdater.on('update-downloaded', () => {
+  win.webContents.send('update_downloaded');
+});
+
+ipc.on('restart_app', () => {
+  autoUpdater.quitAndInstall();
+});

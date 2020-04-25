@@ -8,6 +8,7 @@ import { NovelplanetSourceComponent } from './novelplanet-source/novelplanet-sou
 import { BoxnovelSourceComponent } from './boxnovel-source/boxnovel-source.component';
 import { LibraryComponent } from './library/library.component';
 import { NovelComponent } from './novel/novel.component';
+import { SettingComponent } from './setting/setting.component';
 
 const routes: Routes = [
   { path: 'sources', component: SourcesComponent },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'boxnovelSource', component: BoxnovelSourceComponent },
   { path: 'novel', component: NovelComponent },
   { path: 'library', component: LibraryComponent },
+  { path: 'setting', component: SettingComponent },
   {
     path: '',
     redirectTo: 'home',

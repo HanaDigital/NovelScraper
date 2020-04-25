@@ -22,6 +22,7 @@ import { LibraryComponent } from './library/library.component';
 import { NovelplanetSourceComponent } from './novelplanet-source/novelplanet-source.component';
 import { BoxnovelSourceComponent } from './boxnovel-source/boxnovel-source.component';
 import { NovelComponent } from './novel/novel.component';
+import { SettingComponent } from './setting/setting.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -29,7 +30,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 }
 
 @NgModule({
-  declarations: [AppComponent, SourcesComponent, LibraryComponent, NovelplanetSourceComponent, BoxnovelSourceComponent, NovelComponent],
+  declarations: [AppComponent, SourcesComponent, LibraryComponent, NovelplanetSourceComponent, BoxnovelSourceComponent, NovelComponent, SettingComponent],
   imports: [
     BrowserModule,
     FormsModule,

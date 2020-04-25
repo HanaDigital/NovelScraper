@@ -69,7 +69,7 @@ export class NovelplanetService {
       let startIndex = 0;
 
       let novel = this.library.getNovel(link);
-      if(novel.state.downloaded) {
+      if (novel.state.downloaded) {
         console.log('Loading existing chapters...');
         let chapters = fs.readFileSync(novel.info.folderPath + '\\chapters.json');
         let chapterList = JSON.parse(chapters);
@@ -117,43 +117,76 @@ export class NovelplanetService {
   // Fetch novel from a link and store it in localNovels for display
   async fetchFromLink(link) {
     try {
-      let stringHtml = await this.getHtmlString(link);
-      let html = document.createElement('html');
-      html.innerHTML = stringHtml;
-      let imageSection = html.getElementsByClassName('post-previewInDetails')[0];
-      let infoSections = html.getElementsByClassName('post-contentDetails')[0].getElementsByTagName('p');
-      let chapters = html.getElementsByClassName('rowChapter');
-
-      let name = html.getElementsByClassName('title')[0].textContent;
-      let latestChapter = chapters[0].getElementsByTagName('a')[0].innerText.replace(/(\r\n|\n|\r)/gm, "");
-      let cover = imageSection.getElementsByTagName('img')[0].src;
-      if(cover.includes('/Uploads/') || cover.includes('/Content/') || cover.includes('/Novel/')) {
-        cover = this.missingCoverSrc;
-      }
-      let totalChapters = chapters.length;
-      let source = "novelplanet";
-      let author = "";
-      let genre = "";
-      let summary = "unknown";
-      try {
-        summary = html.getElementsByClassName('container')[0].getElementsByTagName('div')[0].getElementsByTagName('div')[3].textContent.replace(/(\r\n|\n|\r)/gm, "");
-      } catch (error) { console.log(error); }
-
-
-      for (let i = 0; i < infoSections.length; i++) {
-        try {
-          if (infoSections[i].getElementsByClassName('infoLabel')[0].textContent == "Author:") {
-            author = infoSections[i].getElementsByTagName('a')[0].textContent;
-          } else if (infoSections[i].getElementsByClassName('infoLabel')[0].textContent == "Genre:") {
-            genre = "";
-            for (let x = 0; x < infoSections[i].getElementsByTagName('a').length; x++) {
-              genre += infoSections[i].getElementsByTagName('a')[x].innerText + ', ';
-            }
-            genre = genre.slice(0, -2);
-          }
-        } catch (error) {
-          continue;
+      for(let novel of this.localNovels) {
+        if(novel.info.link == link) {
+          this.localNovels.splice( this.localNovels.indexOf(novel), 1 );
         }
+      }
+
+      let novel = this.library.getNovel(link);
+
+      let name = "";
+      let latestChapter = "";
+      let cover = "";
+      let totalChapters = 0;
+      let source = "novelplanet";
+      let author = "unknown";
+      let genre = "";
+      let summary = ""
+      let downloaded = false;
+      let inLibrary = false;
+
+      if (novel == undefined) {
+        let stringHtml = await this.getHtmlString(link);
+        let html = document.createElement('html');
+        html.innerHTML = stringHtml;
+        let imageSection = html.getElementsByClassName('post-previewInDetails')[0];
+        let infoSections = html.getElementsByClassName('post-contentDetails')[0].getElementsByTagName('p');
+        let chapters = html.getElementsByClassName('rowChapter');
+
+        name = html.getElementsByClassName('title')[0].textContent;
+        latestChapter = chapters[0].getElementsByTagName('a')[0].innerText.replace(/(\r\n|\n|\r)/gm, "");
+        cover = imageSection.getElementsByTagName('img')[0].src;
+        if (cover.includes('/Uploads/') || cover.includes('/Content/') || cover.includes('/Novel/')) {
+          cover = this.missingCoverSrc;
+        }
+        totalChapters = chapters.length;
+        source = "novelplanet";
+        author = "";
+        genre = "";
+        summary = "unknown";
+        try {
+          summary = html.getElementsByClassName('container')[0].getElementsByTagName('div')[0].getElementsByTagName('div')[3].textContent.replace(/(\r\n|\n|\r)/gm, "");
+        } catch (error) { console.log(error); }
+
+
+        for (let i = 0; i < infoSections.length; i++) {
+          try {
+            if (infoSections[i].getElementsByClassName('infoLabel')[0].textContent == "Author:") {
+              author = infoSections[i].getElementsByTagName('a')[0].textContent;
+            } else if (infoSections[i].getElementsByClassName('infoLabel')[0].textContent == "Genre:") {
+              genre = "";
+              for (let x = 0; x < infoSections[i].getElementsByTagName('a').length; x++) {
+                genre += infoSections[i].getElementsByTagName('a')[x].innerText + ', ';
+              }
+              genre = genre.slice(0, -2);
+            }
+          } catch (error) {
+            continue;
+          }
+        }
+      } else {
+        name = novel.info.name;
+        console.log(name + " in library!");
+        latestChapter = novel.info.latestChapter;
+        cover = novel.info.cover;
+        totalChapters = novel.info.totalChapters;
+        source = novel.info.source;
+        author = novel.info.author;
+        genre = novel.info.genre;
+        summary = novel.info.summary;
+        downloaded = novel.state.downloaded;
+        inLibrary = true;
       }
 
       this.localNovels.unshift({
@@ -169,7 +202,8 @@ export class NovelplanetService {
           summary: summary
         },
         state: {
-          downloaded: false
+          downloaded: downloaded,
+          inLibrary: inLibrary
         }
       });
       this.show('content');
@@ -182,7 +216,7 @@ export class NovelplanetService {
 
   // Fetch novels by name and store them in localNovels for display
   async fetchFromSearch(val) {
-    val = val.replace(' ', '%20')
+    val = encodeURI(val.replace(' ', '%20'));
     let searchLink = "https://novelplanet.com/NovelList?name=" + val;
 
     try {
@@ -198,33 +232,59 @@ export class NovelplanetService {
         return;
       }
 
-      let link = "";
-      let name = "";
-      let latestChapter = "";
-      let cover = "";
-      let totalChapters = "unknown";
-      let source = "novelplanet";
-      let author = "unknown";
-      let genre = "";
-      let summary = ""
-
       let genres;
       for (let i = novelList.length - 1; i >= 0; i--) {
+        let link = "";
+        let name = "";
+        let latestChapter = "";
+        let cover = "";
+        let totalChapters = "unknown";
+        let source = "novelplanet";
+        let author = "unknown";
+        let genre = "";
+        let summary = ""
+        let downloaded = false;
+        let inLibrary = false;
+
         link = 'https://novelplanet.com' + novelList[i].getElementsByClassName('title')[0].getAttribute('href');
-        name = novelList[i].getElementsByClassName('title')[0].textContent;
-        latestChapter = novelList[i].getElementsByClassName('post-content')[0].getElementsByTagName('div')[2].getElementsByTagName('a')[0].textContent;
-        cover = novelList[i].getElementsByClassName('post-preview')[0].getElementsByTagName('img')[0].src;
-        if(cover.includes('/Uploads/') || cover.includes('/Content/') || cover.includes('/Novel/')) {
-          cover = this.missingCoverSrc;
+
+        for(let novel of this.localNovels) {
+          if(novel.info.link == link) {
+            this.localNovels.splice( this.localNovels.indexOf(novel), 1 );
+          }
         }
-        console.log(cover);
-        genres = novelList[i].getElementsByClassName('post-content')[0].getElementsByTagName('div')[1].getElementsByTagName('a');
-        genre = "";
-        for (let x = 0; x < genres.length; x++) {
-          genre += genres[x].innerText + ', ';
+
+        let novel = this.library.getNovel(link);
+
+        if (novel == undefined) {
+          name = novelList[i].getElementsByClassName('title')[0].textContent;
+          latestChapter = novelList[i].getElementsByClassName('post-content')[0].getElementsByTagName('div')[2].getElementsByTagName('a')[0].textContent;
+          cover = novelList[i].getElementsByClassName('post-preview')[0].getElementsByTagName('img')[0].src;
+          if (cover.includes('/Uploads/') || cover.includes('/Content/') || cover.includes('/Novel/')) {
+            cover = this.missingCoverSrc;
+          }
+          console.log(cover);
+          genres = novelList[i].getElementsByClassName('post-content')[0].getElementsByTagName('div')[1].getElementsByTagName('a');
+          genre = "";
+          for (let x = 0; x < genres.length; x++) {
+            genre += genres[x].innerText + ', ';
+          }
+          genre = genre.slice(0, -2);
+          summary = novelList[i].getElementsByClassName('divDescriptionInList')[0].getAttribute('title');
+        } else {
+          name = novel.info.name;
+          console.log(name + " in library!");
+          latestChapter = novel.info.latestChapter;
+          cover = novel.info.cover;
+          totalChapters = novel.info.totalChapters;
+          source = novel.info.source;
+          author = novel.info.author;
+          genre = novel.info.genre;
+          summary = novel.info.summary;
+          downloaded = novel.state.downloaded;
+          inLibrary = true;
         }
-        genre = genre.slice(0, -2);
-        summary = novelList[i].getElementsByClassName('divDescriptionInList')[0].getAttribute('title');
+
         this.localNovels.unshift({
           info: {
             link: link,
@@ -238,7 +298,8 @@ export class NovelplanetService {
             summary: summary
           },
           state: {
-            downloaded: false
+            downloaded: downloaded,
+            inLibrary: inLibrary
           }
         });
       }
@@ -260,6 +321,22 @@ export class NovelplanetService {
       return novelHtmlString;
     });
     return stringHtml;
+  }
+
+  updateInLibrary(link) {
+    for (let novel of this.localNovels) {
+      if (novel.info.link == link) {
+        novel.state.inLibrary = true;
+      }
+    }
+  }
+
+  updateDownloaded(link) {
+    for (let novel of this.localNovels) {
+      if (novel.info.link == link) {
+        novel.state.downloaded = true;
+      }
+    }
   }
 
   // Utility function turns off other elements when one is shown

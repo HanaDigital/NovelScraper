@@ -116,6 +116,7 @@ export class NovelComponent implements OnInit {
           this.novel.info.folderPath = this.library.getNovel(this.novel.info.link).info.folderPath;
           this.downloading = false;
           this.downloaded = true;
+          this.novelplanetService.updateDownloaded(this.novel.info.link);
         }
       });
     } else if (this.novel.info.source == 'boxnovel') {
@@ -126,6 +127,7 @@ export class NovelComponent implements OnInit {
           this.novel.info.folderPath = this.library.getNovel(this.novel.info.link).info.folderPath;
           this.downloading = false;
           this.downloaded = true;
+          this.boxnovelService.updateDownloaded(this.novel.info.link);
         }
       });
     }
@@ -166,6 +168,12 @@ export class NovelComponent implements OnInit {
       this.novel.info.genre,
       this.novel.info.summary);
     this.inLibrary = true;
+
+    if(this.novel.info.source == 'novelplanet') {
+      this.novelplanetService.updateInLibrary(this.novel.info.link);
+    } else if(this.novel.info.source == 'boxnovel') {
+      this.boxnovelService.updateInLibrary(this.novel.info.link);
+    }
   }
 
   // Binded to the remove from library button

@@ -105,6 +105,14 @@ header {
   #homeButton {
     background: $menu-selected;
   }
+
+  #version {
+    text-align: center;
+    color: white;
+    position: fixed;
+    bottom: 5px;
+    width: $menu-width;
+  }
 }
 
 #vertical-menu-shadow {
@@ -115,5 +123,27 @@ header {
   top: 90px;
 
   box-shadow: 5px 0px 12px -6px rgba(0, 0, 0, 0.301);
+}
+
+#update {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.534);
+  display: flex;
+  align-content: center;
+
+  .dialogueBox {
+    background: $content-background;
+    width: 300px;
+    padding: 20px;
+    border-radius: 5px;
+    margin: auto;
+
+    p {
+      color: white;
+      text-align: center;
+    }
+  }
 }
 

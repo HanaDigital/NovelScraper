@@ -7,6 +7,10 @@
     "name": "dr_nyt",
     "email": "shehryar.dev@gmail.com"
   },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/dr-nyt/NovelScraper.git"
+  },
   "keywords": [
     "webscraper",
     "novel",
@@ -28,6 +32,7 @@
     "electron:local": "npm run build:prod && electron .",
     "electron:linux": "npm run build:prod && electron-builder build --linux",
     "electron:windows": "npm run build:prod && electron-builder build --windows",
+    "deploy:window": "npm run build:prod && electron-builder build --windows --publish always",
     "electron:mac": "npm run build:prod && electron-builder build --mac",
     "test": "ng test",
     "e2e": "npm run build:prod && cross-env TS_NODE_PROJECT='e2e/tsconfig.e2e.json' mocha --timeout 300000 --require ts-node/register e2e/**/*.e2e.ts",
@@ -90,6 +95,8 @@
   "dependencies": {
     "@angular/animations": "9.1.0",
     "cloudscraper": "4.6.0",
+    "electron-updater": "4.2.5",
+    "fs-extra": "9.0.0",
     "jquery": "3.4.1",
     "mime": "2.4.4",
     "nconf": "0.10.0",
