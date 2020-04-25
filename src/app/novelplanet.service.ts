@@ -323,18 +323,18 @@ export class NovelplanetService {
     return stringHtml;
   }
 
-  updateInLibrary(link) {
+  updateInLibrary(link, update) {
     for (let novel of this.localNovels) {
       if (novel.info.link == link) {
-        novel.state.inLibrary = true;
+        novel.state.inLibrary = update;
       }
     }
   }
 
-  updateDownloaded(link) {
+  updateDownloaded(link, update) {
     for (let novel of this.localNovels) {
       if (novel.info.link == link) {
-        novel.state.downloaded = true;
+        novel.state.downloaded = update;
       }
     }
   }

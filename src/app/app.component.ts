@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { ElectronService } from './core/services';
 import { TranslateService } from '@ngx-translate/core';
 import { AppConfig } from '../environments/environment';
@@ -7,6 +7,7 @@ import { RouterOutlet } from '@angular/router';
 
 // Import Library Service
 import { LibraryService } from './library.service';
+import { ngModuleJitUrl } from '@angular/compiler';
 
 const {remote} = require('electron');
 
@@ -20,13 +21,14 @@ export class AppComponent {
   public menuBackground: string;
   public buttonHighlight: string;
 
-  public version: string = "V1";
+  public version: string = "UPDATING";
   public updating: boolean = false;
 
   constructor(
     public electronService: ElectronService,
     private translate: TranslateService,
-    private library: LibraryService
+    private library: LibraryService,
+    private zone: NgZone
   ) {
     translate.setDefaultLang('en');
 
@@ -51,17 +53,24 @@ export class AppComponent {
     electronService.ipcRenderer.on('app_version', (event, arg) => {
       electronService.ipcRenderer.removeAllListeners('app_version');
       console.log(arg.version);
-      this.version = 'V' + arg.version;
+      zone.run(() => {
+        this.version = 'V' + arg.version;
+      });
     });
 
     electronService.ipcRenderer.on('update_available', () => {
       electronService.ipcRenderer.removeAllListeners('update_available');
-      this.updating = true;
+      console.log('updating...');
+      zone.run(() => {
+        this.updating = true;
+      });
     });
 
     electronService.ipcRenderer.on('update_downloaded', () => {
       electronService.ipcRenderer.removeAllListeners('update_downloaded');
-      this.restartApp();
+      zone.run(() => {
+        this.restartApp();
+      });
     });
   }
 

@@ -29,10 +29,6 @@ function createWindow(): BrowserWindow {
     },
   });
 
-  win.once('ready-to-show', () => {
-    autoUpdater.checkForUpdatesAndNotify();
-  });
-
   if (serve) {
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
@@ -58,7 +54,12 @@ function createWindow(): BrowserWindow {
         win.webContents.send('app-close');
       }
     }
-});
+  });
+
+  // win.once('ready-to-show', () => {
+  //   console.log('Checking for updates...');
+  //   autoUpdater.checkForUpdatesAndNotify();
+  // });
 
   return win;
 }
@@ -102,9 +103,12 @@ ipc.on('closed', _ => {
 
 ipc.on('app_version', (event) => {
   event.sender.send('app_version', { version: app.getVersion() });
+  console.log('Checking for updates...');
+  autoUpdater.checkForUpdatesAndNotify();
 });
 
 autoUpdater.on('update-available', () => {
+  console.log('Updating...');
   win.webContents.send('update_available');
 });
 autoUpdater.on('update-downloaded', () => {

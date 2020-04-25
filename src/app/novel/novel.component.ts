@@ -116,7 +116,7 @@ export class NovelComponent implements OnInit {
           this.novel.info.folderPath = this.library.getNovel(this.novel.info.link).info.folderPath;
           this.downloading = false;
           this.downloaded = true;
-          this.novelplanetService.updateDownloaded(this.novel.info.link);
+          this.novelplanetService.updateDownloaded(this.novel.info.link, true);
         }
       });
     } else if (this.novel.info.source == 'boxnovel') {
@@ -127,7 +127,7 @@ export class NovelComponent implements OnInit {
           this.novel.info.folderPath = this.library.getNovel(this.novel.info.link).info.folderPath;
           this.downloading = false;
           this.downloaded = true;
-          this.boxnovelService.updateDownloaded(this.novel.info.link);
+          this.boxnovelService.updateDownloaded(this.novel.info.link, true);
         }
       });
     }
@@ -170,9 +170,9 @@ export class NovelComponent implements OnInit {
     this.inLibrary = true;
 
     if(this.novel.info.source == 'novelplanet') {
-      this.novelplanetService.updateInLibrary(this.novel.info.link);
+      this.novelplanetService.updateInLibrary(this.novel.info.link, true);
     } else if(this.novel.info.source == 'boxnovel') {
-      this.boxnovelService.updateInLibrary(this.novel.info.link);
+      this.boxnovelService.updateInLibrary(this.novel.info.link, true);
     }
   }
 
@@ -181,6 +181,12 @@ export class NovelComponent implements OnInit {
     this.library.removeNovel(this.novel.info.link);
     this.inLibrary = false;
     this.downloaded = false;
+
+    if(this.novel.info.source == 'novelplanet') {
+      this.novelplanetService.updateInLibrary(this.novel.info.link, false);
+    } else if(this.novel.info.source == 'boxnovel') {
+      this.boxnovelService.updateInLibrary(this.novel.info.link, false);
+    }
   }
 
   // Keeps track of page to return to on back button
