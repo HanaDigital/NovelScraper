@@ -20,7 +20,7 @@ export class BoxnovelSourceComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  // Binded to novelplanet search bar
+  // Binded to boxnovel search bar
   search(val) {
     if(val == undefined || val == "") {
       return;

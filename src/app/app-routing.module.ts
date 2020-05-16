@@ -5,6 +5,7 @@ import { PageNotFoundComponent } from './shared/components';
 // Page routes
 import { SourcesComponent } from './sources/sources.component';
 import { NovelplanetSourceComponent } from './novelplanet-source/novelplanet-source.component';
+import { NovelfullSourceComponent } from './novelfull-source/novelfull-source.component';
 import { BoxnovelSourceComponent } from './boxnovel-source/boxnovel-source.component';
 import { LibraryComponent } from './library/library.component';
 import { NovelComponent } from './novel/novel.component';
@@ -13,6 +14,7 @@ import { SettingComponent } from './setting/setting.component';
 const routes: Routes = [
   { path: 'sources', component: SourcesComponent },
   { path: 'novelplanetSource', component: NovelplanetSourceComponent },
+  { path: 'novelfullSource', component: NovelfullSourceComponent },
   { path: 'boxnovelSource', component: BoxnovelSourceComponent },
   { path: 'novel', component: NovelComponent },
   { path: 'library', component: LibraryComponent },
