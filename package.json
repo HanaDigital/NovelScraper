@@ -8,8 +8,8 @@
     "email": "shehryar.dev@gmail.com"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/dr-nyt/NovelScraper.git"
+    "type": "git",
+    "url": "https://github.com/dr-nyt/NovelScraper.git"
   },
   "keywords": [
     "webscraper",
@@ -63,7 +63,7 @@
     "@typescript-eslint/parser": "2.20.0",
     "chai": "4.2.0",
     "codelyzer": "5.1.2",
-    "conventional-changelog-cli": "2.0.32",
+    "conventional-changelog-cli": "2.0.34",
     "core-js": "3.1.4",
     "cross-env": "7.0.0",
     "electron": "8.0.1",
@@ -94,10 +94,11 @@
   },
   "dependencies": {
     "@angular/animations": "9.1.0",
+    "@trodi/electron-splashscreen": "1.0.0",
     "cloudscraper": "4.6.0",
     "electron-updater": "4.2.5",
     "fs-extra": "9.0.0",
-    "jquery": "3.4.1",
+    "jquery": "3.5.1",
     "mime": "2.4.4",
     "nconf": "0.10.0",
     "nodepub": "2.2.0",
