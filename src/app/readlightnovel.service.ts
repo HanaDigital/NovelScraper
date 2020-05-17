@@ -10,7 +10,7 @@ const fs = (<any>window).require('fs');
 @Injectable({
   providedIn: 'root'
 })
-export class BoxnovelService {
+export class ReadlightnovelService {
 
   // Stores list of novels recently searched for (not in library)
   localNovels: any[] = [];
@@ -20,10 +20,10 @@ export class BoxnovelService {
   showLoading: boolean = false; // Show loading icon
   showContent: boolean = false; // Show localNovels
   showError: boolean = false;
+  showNotify: boolean = false;
 
   constructor(private ngZone: NgZone, private library: LibraryService) { }
 
-  // Downloads novel
   async downloadNovel(link, downloadID) {
     console.log('Building...');
 
@@ -33,30 +33,19 @@ export class BoxnovelService {
       let html = document.createElement('html');
       html.innerHTML = stringHtml;
 
-      let chapters = html.getElementsByClassName('wp-manga-chapter');
-
-      // Set summary in case it didnt exist before
-      let summary = "";
-      let summaryList = html.getElementsByClassName('summary__content')[0].getElementsByTagName('p');
-      try {
-        for (let i = 0; i < summaryList.length; i++) {
-          summary += summaryList[i].innerText.trim() + "\n";
-        }
-        this.library.updateSummary(link, summary);
-      } catch (error) {
-        summary = "unkown";
-        console.log(error);
-      }
-
       // Get chapter links and names
       let chapterLinks = [];
       let chapterNames = [];
-      for (let i = 0; i < chapters.length; i++) {
-        chapterLinks.push(chapters[i].getElementsByTagName('a')[0].getAttribute('href'));
-        chapterNames.push(chapters[i].getElementsByTagName('a')[0].innerText.trim().replace(/(\r\n|\n|\r)/gm, ""));
+      let chapterTabs = html.getElementsByClassName("tab-content")[0].getElementsByClassName("tab-pane");
+      for (let i = 0; i < chapterTabs.length; i++) {
+        if (chapterTabs[i].getElementsByTagName("li").length !== 0) {
+          let chapterHolders = chapterTabs[i].getElementsByTagName("li");
+          for(let x = 0; x < chapterHolders.length; x++) {
+            chapterLinks.push(chapterHolders[x].getElementsByTagName('a')[0].getAttribute('href'));
+            chapterNames.push(chapterHolders[x].innerText);
+          }
+        }
       }
-      chapterLinks.reverse();
-      chapterNames.reverse();
 
       // Update totalChapter defind in library
       this.library.updateTotalChapters(link, chapterLinks.length);
@@ -73,7 +62,7 @@ export class BoxnovelService {
           downloadedChapters = chapterList.chapters;
           startIndex = downloadedChapters.length;
         }
-      } catch(error) {
+      } catch (error) {
         console.log(error);
         console.log("Couldn't load update files. Starting download from start.");
       }
@@ -87,7 +76,7 @@ export class BoxnovelService {
 
         let stringHtml = await this.getHtmlString(chapterLinks[i]);
         let pageHtml = new DOMParser().parseFromString(stringHtml, 'text/html');
-        let chapterHtml = pageHtml.getElementsByClassName('entry-content')[0];
+        let chapterHtml = pageHtml.getElementsByClassName('desc')[0].getElementsByClassName("hidden")[0];
 
         let chapterTitle = chapterNames[i];
 
@@ -114,9 +103,9 @@ export class BoxnovelService {
   async fetchFromLink(link) {
     try {
       // Remove any duplicates of the novel
-      for(let novel of this.localNovels) {
-        if(novel.info.link == link) {
-          this.localNovels.splice( this.localNovels.indexOf(novel), 1 );
+      for (let novel of this.localNovels) {
+        if (novel.info.link == link) {
+          this.localNovels.splice(this.localNovels.indexOf(novel), 1);
         }
       }
 
@@ -126,31 +115,37 @@ export class BoxnovelService {
       let latestChapter = "";
       let cover = "";
       let totalChapters = 0;
-      let source = "boxnovel";
-      let author = "unknown";
+      let source = "readlightnovel";
+      let author = "";
       let genre = "";
       let summary = ""
       let downloaded = false;
       let inLibrary = false;
 
-      if (novel == undefined) {
+      if (novel === undefined) {
         let stringHtml = await this.getHtmlString(link);
         let html = document.createElement('html');
         html.innerHTML = stringHtml;
 
-        let title = html.getElementsByClassName('post-title')[0]
-        try { title.getElementsByTagName('span')[0].remove(); } catch (error) { }
-        name = title.textContent.trim();
-        latestChapter = html.getElementsByClassName('wp-manga-chapter')[0].getElementsByTagName('a')[0].innerText.trim();
-        cover = html.getElementsByClassName('summary_image')[0].getElementsByTagName('img')[0].src;
-        totalChapters = html.getElementsByClassName('wp-manga-chapter').length;
-        source = "boxnovel";
-        author = "";
-        genre = "";
-        summary = "";
+        name = html.getElementsByClassName("block-title")[0].getElementsByTagName("h1")[0].innerText;
+        try {
+          latestChapter = html.getElementsByClassName("novel-right")[0].getElementsByClassName("novel-detail-item")[5].getElementsByTagName("a")[0].innerText;
+        } catch (error) {
+          console.log(error);
+        }
+        cover = html.getElementsByClassName('novel-cover')[0].getElementsByTagName("img")[0].src;
+
+        let chapterTabs = html.getElementsByClassName("tab-content")[0].getElementsByClassName("tab-pane");
+        for (let i = 0; i < chapterTabs.length; i++) {
+          if (chapterTabs[i].getElementsByTagName("li").length !== 0) {
+            totalChapters += chapterTabs[i].getElementsByTagName("li").length;
+          }
+        }
+
+        source = "readlightnovel";
 
         // Get list of authors
-        let authorList = html.getElementsByClassName('author-content')[0].getElementsByTagName('a');
+        let authorList = html.getElementsByClassName("novel-left")[0].getElementsByClassName("novel-detail-item")[4].getElementsByTagName("li");
         try {
           for (let i = 0; i < authorList.length; i++) {
             author += authorList[i].innerText.trim() + ', ';
@@ -162,7 +157,7 @@ export class BoxnovelService {
         }
 
         // Get list of genres
-        let genreList = html.getElementsByClassName('genres-content')[0].getElementsByTagName('a');
+        let genreList = html.getElementsByClassName("novel-left")[0].getElementsByClassName("novel-detail-item")[1].getElementsByTagName("a");
         try {
           for (let i = 0; i < genreList.length; i++) {
             genre += genreList[i].innerText.trim() + ', ';
@@ -173,8 +168,8 @@ export class BoxnovelService {
           console.log(error);
         }
 
-        // Get all the summary <p> tags
-        let summaryList = html.getElementsByClassName('summary__content')[0].getElementsByTagName('p');
+        // Get list of summary
+        let summaryList = html.getElementsByClassName("novel-right")[0].getElementsByClassName("novel-detail-item")[0].getElementsByTagName("p");
         try {
           for (let i = 0; i < summaryList.length; i++) {
             summary += summaryList[i].innerText.trim() + "\n";
@@ -183,6 +178,7 @@ export class BoxnovelService {
           summary = "unkown";
           console.log(error);
         }
+
       } else {
         name = novel.info.name;
         console.log(name + " in library!");
@@ -229,120 +225,7 @@ export class BoxnovelService {
   }
 
   async fetchFromSearch(val) {
-    val = encodeURI(val.replace(/ /g, '+'));
-    let searchLink = "https://boxnovel.com/?s=" + val + "&post_type=wp-manga";
-
-    console.log(searchLink);
-
-    try {
-      let stringHtml = await this.getHtmlString(searchLink);
-
-      let html = document.createElement('html');
-      html.innerHTML = stringHtml;
-
-      let novelList = html.getElementsByClassName('c-tabs-item__content');
-
-      for (let i = novelList.length - 1; i >= 0; i--) {
-
-        let link = "";
-        let name = "";
-        let latestChapter = "";
-        let cover = "";
-        let totalChapters = "unknown";
-        let source = "novelplanet";
-        let author = "unknown";
-        let genre = "";
-        let summary = ""
-        let downloaded = false;
-        let inLibrary = false;
-
-        link = novelList[i].getElementsByClassName('post-title')[0].getElementsByTagName('a')[0].href;
-
-        for(let novel of this.localNovels) {
-          if(novel.info.link == link) {
-            this.localNovels.splice( this.localNovels.indexOf(novel), 1 );
-          }
-        }
-
-        let novel = this.library.getNovel(link);
-
-        if (novel == undefined) {
-          name = novelList[i].getElementsByClassName('post-title')[0].getElementsByTagName('a')[0].innerText.trim();
-          latestChapter = novelList[i].getElementsByClassName('chapter')[0].getElementsByTagName('a')[0].innerText.trim();
-          cover = novelList[i].getElementsByClassName('tab-thumb')[0].getElementsByTagName('img')[0].src;
-          totalChapters = "unknown";
-          source = "boxnovel";
-          author = "";
-          genre = "";
-          summary = "unkown";
-
-          // Get list of authors
-          let authorList = novelList[i].getElementsByClassName('summary-content')[1].getElementsByTagName('a');
-          try {
-            for (let i = 0; i < authorList.length; i++) {
-              author += authorList[i].innerText.trim() + ', ';
-            }
-            author = author.slice(0, -2);
-          } catch (error) {
-            author = "unkown";
-            console.log(error);
-          }
-
-          // Get list of genres
-          let genreList = novelList[i].getElementsByClassName('summary-content')[2].getElementsByTagName('a');
-          try {
-            for (let i = 0; i < genreList.length; i++) {
-              genre += genreList[i].innerText.trim() + ', ';
-            }
-            genre = genre.slice(0, -2);
-          } catch (error) {
-            genre = "unkown";
-            console.log(error);
-          }
-        } else {
-          name = novel.info.name;
-          console.log(name + " in library!");
-          latestChapter = novel.info.latestChapter;
-          cover = novel.info.cover;
-          totalChapters = novel.info.totalChapters;
-          source = novel.info.source;
-          author = novel.info.author;
-          genre = novel.info.genre;
-          summary = novel.info.summary;
-          downloaded = novel.state.downloaded;
-          inLibrary = true;
-        }
-
-        this.localNovels.unshift({
-          info: {
-            link: link,
-            name: name,
-            latestChapter: latestChapter,
-            cover: cover,
-            totalChapters: totalChapters,
-            source: source,
-            author: author,
-            genre: genre,
-            summary: summary
-          },
-          state: {
-            downloaded: downloaded,
-            inLibrary: inLibrary
-          }
-        });
-      }
-
-      this.ngZone.run(() => {
-        this.show('content');
-      });
-
-    } catch (error) {
-      this.ngZone.run(() => {
-        console.log(error);
-        this.show('error');
-        return;
-      });
-    }
+    this.show("notify");
   }
 
   // Utility function to get html from a link using selenium
@@ -381,21 +264,31 @@ export class BoxnovelService {
       this.showLoading = false;
       this.showContent = false;
       this.showError = false;
+      this.showNotify = false;
     } else if (section == 'loading') {
       this.showEmpty = false;
       this.showLoading = true;
       this.showContent = false;
       this.showError = false;
+      this.showNotify = false;
     } else if (section == 'content') {
       this.showEmpty = false;
       this.showLoading = false;
       this.showContent = true;
       this.showError = false;
+      this.showNotify = false;
     } else if (section == 'error') {
       this.showEmpty = false;
       this.showLoading = false;
       this.showContent = false;
       this.showError = true;
+      this.showNotify = false;
+    } else if (section == 'notify') {
+      this.showEmpty = false;
+      this.showLoading = false;
+      this.showContent = false;
+      this.showError = false;
+      this.showNotify = true;
     }
   }
 }

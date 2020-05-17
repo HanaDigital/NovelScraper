@@ -1,12 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 
 // Import Library Service
 import { LibraryService } from '../library.service';
 // Import Novelplanet Service
 import { NovelplanetService } from '../novelplanet.service';
+// Import Readlightnovel Service
+import { ReadlightnovelService } from '../readlightnovel.service';
 // Import BoxNovel Service
 import { BoxnovelService } from '../boxnovel.service';
+
+const { shell } = require('electron');
 
 import { ThrowStmt } from '@angular/compiler';
 
@@ -43,10 +47,13 @@ export class NovelComponent implements OnInit {
     private router: Router,
     public library: LibraryService,
     public novelplanetService: NovelplanetService,
-    private boxnovelService: BoxnovelService) { }
+    private boxnovelService: BoxnovelService,
+    public readlightnovelService: ReadlightnovelService,
+    private ngZone: NgZone) { }
 
   // On init
   ngOnInit(): void {
+    // document.getElementById("novel-website").addEventListener("click", this.openWebsite);
     this.coverChangeDialogue = document.getElementById("coverChangeDialogue");
     this.coverChangeDialogue.addEventListener('click', (event) => {
       if (event.target == this.coverChangeDialogue) {
@@ -54,7 +61,6 @@ export class NovelComponent implements OnInit {
       }
     });
 
-    this.inLibrary = true;
     // For testing purposes only
     if (this.novel === undefined) {
       this.novel = {
@@ -96,11 +102,13 @@ export class NovelComponent implements OnInit {
 
     // Set name of the page to whatever source loaded this page
     if (this.source == 'novelplanet') {
-      this.pageSource = 'NovelPlanet'
+      this.pageSource = 'NovelPlanet';
+    } else if (this.source == 'readlightnovel') {
+      this.pageSource = 'ReadLightNovel';
     } else if (this.source == 'boxnovel') {
-      this.pageSource = 'BoxNovel'
+      this.pageSource = 'BoxNovel';
     } else if (this.source == 'library') {
-      this.pageSource = 'Library'
+      this.pageSource = 'Library';
     } else {
       this.pageSource = 'Error: update novel.component.ts'
     }
@@ -114,10 +122,12 @@ export class NovelComponent implements OnInit {
       this.downloading = true;
       this.novelplanetService.downloadNovel(this.novel.info.link, this.downloadID).then((saved) => {
         if (saved) {
-          this.novel.info.folderPath = this.library.getNovel(this.novel.info.link).info.folderPath;
-          this.downloading = false;
-          this.downloaded = true;
-          this.novelplanetService.updateDownloaded(this.novel.info.link, true);
+          this.ngZone.run(() => {
+            this.novel.info.folderPath = this.library.getNovel(this.novel.info.link).info.folderPath;
+            this.downloading = false;
+            this.downloaded = true;
+            this.novelplanetService.updateDownloaded(this.novel.info.link, true);
+          });
         }
       });
     } else if (this.novel.info.source == 'boxnovel') {
@@ -125,10 +135,25 @@ export class NovelComponent implements OnInit {
       this.downloading = true;
       this.boxnovelService.downloadNovel(this.novel.info.link, this.downloadID).then((saved) => {
         if (saved) {
-          this.novel.info.folderPath = this.library.getNovel(this.novel.info.link).info.folderPath;
-          this.downloading = false;
-          this.downloaded = true;
-          this.boxnovelService.updateDownloaded(this.novel.info.link, true);
+          this.ngZone.run(() => {
+            this.novel.info.folderPath = this.library.getNovel(this.novel.info.link).info.folderPath;
+            this.downloading = false;
+            this.downloaded = true;
+            this.boxnovelService.updateDownloaded(this.novel.info.link, true);
+          });
+        }
+      });
+    } else if (this.novel.info.source == 'readlightnovel') {
+      this.downloadID = this.library.addDownloadTracker(this.novel.info.link);
+      this.downloading = true;
+      this.readlightnovelService.downloadNovel(this.novel.info.link, this.downloadID).then((saved) => {
+        if (saved) {
+          this.ngZone.run(() => {
+            this.novel.info.folderPath = this.library.getNovel(this.novel.info.link).info.folderPath;
+            this.downloading = false;
+            this.downloaded = true;
+            this.readlightnovelService.updateDownloaded(this.novel.info.link, true);
+          });
         }
       });
     }
@@ -156,6 +181,11 @@ export class NovelComponent implements OnInit {
     this.downloading = false;
   }
 
+  openWebsite() {
+    console.log(this.novel);
+    shell.openExternal(this.novel.info.link);
+  }
+
   // Binded to the add to library button
   addToLibrary() {
     this.library.addNovel(
@@ -174,6 +204,8 @@ export class NovelComponent implements OnInit {
       this.novelplanetService.updateInLibrary(this.novel.info.link, true);
     } else if (this.novel.info.source == 'boxnovel') {
       this.boxnovelService.updateInLibrary(this.novel.info.link, true);
+    } else if (this.novel.info.source == 'readlightnovel') {
+      this.readlightnovelService.updateInLibrary(this.novel.info.link, true);
     }
   }
 
@@ -195,6 +227,8 @@ export class NovelComponent implements OnInit {
       this.novelplanetService.updateInLibrary(this.novel.info.link, false);
     } else if (this.novel.info.source == 'boxnovel') {
       this.boxnovelService.updateInLibrary(this.novel.info.link, false);
+    } else if (this.novel.info.source == 'readlightnovel') {
+      this.readlightnovelService.updateInLibrary(this.novel.info.link, false);
     }
     this.showRemoveDialogue = false;
   }
@@ -204,6 +238,8 @@ export class NovelComponent implements OnInit {
     this.library.loadNovels();
     if (this.source == 'novelplanet') {
       this.router.navigateByUrl('/novelplanetSource');
+    } else if (this.source == 'readlightnovel') {
+      this.router.navigateByUrl('/readlightnovelSource');
     } else if (this.source == 'boxnovel') {
       this.router.navigateByUrl('/boxnovelSource');
     } else if (this.source == 'library') {
