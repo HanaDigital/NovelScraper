@@ -6,6 +6,8 @@ import { LibraryService } from '../library.service';
 // Import BoxNovel Service
 import { BoxnovelService } from '../boxnovel.service';
 
+const { shell } = require('electron');
+
 @Component({
   selector: 'app-boxnovel-source',
   templateUrl: './boxnovel-source.component.html',
@@ -18,9 +20,10 @@ export class BoxnovelSourceComponent implements OnInit {
   constructor(private router: Router, private library: LibraryService ,public boxnovelService: BoxnovelService) { }
 
   ngOnInit(): void {
+    document.getElementById("boxnovel-website").addEventListener("click", this.openWebsite);
   }
 
-  // Binded to novelplanet search bar
+  // Binded to boxnovel search bar
   search(val) {
     if(val == undefined || val == "") {
       return;
@@ -32,6 +35,10 @@ export class BoxnovelSourceComponent implements OnInit {
       this.boxnovelService.show('loading');
       this.boxnovelService.fetchFromSearch(val);
     }
+  }
+
+  openWebsite() {
+    shell.openExternal('https://boxnovel.com/')
   }
 
   // Load novelpage with the information of the novel clicked on

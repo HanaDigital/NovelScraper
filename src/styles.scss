@@ -34,6 +34,14 @@ html, body {
       font-size: 38px;
       color: white;
     }
+
+    .website {
+      cursor: pointer;
+      position: absolute;
+      right: 40px;
+      top: 45px;
+      width: 35px;
+    }
   }
 
   .content {
@@ -83,6 +91,7 @@ html, body {
       display: flex;
       align-items: center;
       justify-content: center;
+      text-align: center;
 
       img {
         width: 200px;
@@ -101,6 +110,10 @@ html, body {
         color: white;
         -webkit-animation: text-flicker-out-glow 2.5s ease-in-out infinite both;
 	                          animation: text-flicker-out-glow 2.5s ease-in-out infinite both;
+      }
+
+      .notify {
+        color: white;
       }
     }
 

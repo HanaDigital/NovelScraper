@@ -2,7 +2,7 @@
 
 .page {
 
-  #coverChangeDialogue {
+  .dialogue {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -52,6 +52,51 @@
     }
   }
 
+  #removeDialogue {
+    display: none;
+    color: white;
+    justify-content: center;
+    align-items: center;
+
+    .dialogueBox {
+      width: 30%;
+      background: $content-background;
+      padding: 1em;
+      margin-bottom: 1em;
+      border-radius: 5px;
+      text-align: center;
+
+      .warning {
+        color: rgb(255, 121, 121);
+        font-weight: bold;
+      }
+
+      .buttons {
+        margin-top: 1em;
+        display: flex;
+        justify-content: space-evenly;
+
+        input {
+          cursor: pointer;
+          width: 30%;
+          padding: 0.7em;
+          border-radius: 5px;
+          border: none;
+        }
+
+        .yesButton {
+          background: rgb(117, 39, 39);
+          color: white;
+        }
+
+        .noButton {
+          background: #0065a3;
+          color: white;
+        }
+      }
+    }
+  }
+
   .content {
 
     .novelNav {
@@ -70,6 +115,24 @@
         margin-top: 3px;
         float: right;
         cursor: pointer;
+      }
+    }
+
+    .deprecated {
+      display: none;
+      width: 100%;
+      padding: 5px;
+      padding-left: 30px;
+      padding-right: 30px;
+      margin-bottom: 0.7em;
+      p {
+        background: rgb(117, 39, 39);
+        padding: 1em;
+        color: white;
+
+        b {
+          color: yellow;
+        }
       }
     }
 

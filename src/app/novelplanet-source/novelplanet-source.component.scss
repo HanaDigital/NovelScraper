@@ -1,1 +1,13 @@
 @import "../../assets/scss/global-variables";
+
+.page {
+  color: white;
+
+  .status {
+    padding: 1em;
+
+    h1 {
+      color: rgb(255, 116, 116);
+    }
+  }
+}

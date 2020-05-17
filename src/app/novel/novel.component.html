@@ -1,12 +1,25 @@
 <div class="page">
   <div class="headerPanel">
     <h1>{{pageSource}}</h1>
+    <!-- <img src="../assets/rsc/internet.svg" alt="" id="novel-website" class="website"> -->
   </div>
 
-  <div id="coverChangeDialogue">
+  <div id="coverChangeDialogue" class="dialogue">
     <div class="holder">
       <input type="text" placeholder="Novel Cover URL" class="textBox"  [(ngModel)]="val">
       <input type="button" value="SAVE" class="textButton" (click)="changeNovelCover(val)">
+    </div>
+  </div>
+
+  <div id="removeDialogue" class="dialogue" [ngStyle]="{'display': showRemoveDialogue ? 'flex' : 'none'}">
+    <div class="dialogueBox">
+      <p>Are you sure you want to delete this novel?</p>
+      <p class="warning">Downloaded files will also be deleted!</p>
+
+      <div class="buttons">
+        <input class="yesButton" type="button" value="YES" (click)="deleteNovel()">
+        <input class="noButton" type="button" value="NO" (click)="closeRemoveDialogue()">
+      </div>
     </div>
   </div>
 
@@ -14,6 +27,10 @@
     <div class="novelNav">
       <img (click)="return()" src="assets/rsc/back-icon.svg" class="back">
       <img class="changeCover" (click)="openCoverDialogue()" src="assets/rsc/change-cover.svg" [ngStyle]="{'display': inLibrary ? 'block' : 'none'}">
+    </div>
+
+    <div class="deprecated" [ngStyle]="{'display': novel.info.source == 'novelplanet' ? 'block' : 'none'}">
+      <p>NovelPlanet has shutdown. Please switch to another source. <b>PRESSING THE DELETE BUTTON WILL ALSO DELETE THE FILES</b> so be carefull.</p>
     </div>
 
     <div class="wrapper">
@@ -57,7 +74,7 @@
             <a class="remove" [ngStyle]="{'display': inLibrary ? 'block' : 'none'}" (click)="removeFromLibrary()">
               <img src="assets/rsc/remove-icon.svg">
             </a>
-            <a class="downloadButton" [className]="downloading ? 'progressBar' : ''" [ngStyle]="{'display': inLibrary ? 'block' : 'none'}" (click)="download()">
+            <a class="downloadButton" [className]="downloading ? 'progressBar' : ''" [ngStyle]="{'display': inLibrary && novel.info.source != 'novelplanet' ? 'block' : 'none'}" (click)="download()">
               <img src="assets/rsc/download-icon.svg" [ngStyle]="{'display': downloading || downloaded ? 'none' : 'inline'}">
               <img src="assets/rsc/update-icon.svg" [ngStyle]="{'display': downloading || !downloaded ? 'none' : 'inline'}">
               <div class="downloadBar" [ngStyle]="{'display': downloading ? 'flex' : 'none', 'width': library.downloadTrackers[downloadID] ? library.downloadTrackers[downloadID].width : '0%'}">

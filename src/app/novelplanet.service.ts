@@ -95,7 +95,8 @@ export class NovelplanetService {
           ads[x].remove();
         }
 
-        let chapterBody = html.outerHTML;
+        let chapterBody = "<h3>" + chapterTitle + "</h3>";
+        chapterBody += html.outerHTML;
         chapterBody += "<br/><br/>"
         chapterBody += "<p>dr-nyt's NovelScraper scraped this novel from a pirate site.</p>"
         chapterBody += "<p>If you can, please support the author(s) of this novel: " + novel.info.author + "</p>"

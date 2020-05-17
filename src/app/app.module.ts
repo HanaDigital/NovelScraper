@@ -20,6 +20,7 @@ import { AppComponent } from './app.component';
 import { SourcesComponent } from './sources/sources.component';
 import { LibraryComponent } from './library/library.component';
 import { NovelplanetSourceComponent } from './novelplanet-source/novelplanet-source.component';
+import { ReadlightnovelSourceComponent } from './readlightnovel-source/readlightnovel-source.component';
 import { BoxnovelSourceComponent } from './boxnovel-source/boxnovel-source.component';
 import { NovelComponent } from './novel/novel.component';
 import { SettingComponent } from './setting/setting.component';
@@ -30,7 +31,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 }
 
 @NgModule({
-  declarations: [AppComponent, SourcesComponent, LibraryComponent, NovelplanetSourceComponent, BoxnovelSourceComponent, NovelComponent, SettingComponent],
+  declarations: [AppComponent, SourcesComponent, LibraryComponent, NovelplanetSourceComponent, BoxnovelSourceComponent, NovelComponent, SettingComponent, ReadlightnovelSourceComponent],
   imports: [
     BrowserModule,
     FormsModule,

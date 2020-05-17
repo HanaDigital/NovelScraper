@@ -4,10 +4,12 @@ import * as url from 'url';
 const ipc = require('electron').ipcMain;
 const { autoUpdater } = require('electron-updater');
 
+const Splashscreen = require('@trodi/electron-splashscreen');
+
 var status = 0;
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
-    serve = args.some(val => val === '--serve');
+  serve = args.some(val => val === '--serve');
 
 function createWindow(): BrowserWindow {
 
@@ -15,17 +17,44 @@ function createWindow(): BrowserWindow {
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
 
   // Create the browser window.
-  win = new BrowserWindow({
-    x: 0,
-    y: 0,
+  // win = new BrowserWindow({
+  //   x: 0,
+  //   y: 0,
+  //   width: 1060,
+  //   height: 600,
+  //   'minWidth': 1060,
+  //   'minHeight': 500,
+  //   frame: false,
+  //   webPreferences: {
+  //     nodeIntegration: true,
+  //     allowRunningInsecureContent: (serve) ? true : false,
+  //   },
+  // });
+
+  const windowOptions = {
     width: 1060,
     height: 600,
+    center: true,
     'minWidth': 1060,
     'minHeight': 500,
     frame: false,
     webPreferences: {
       nodeIntegration: true,
       allowRunningInsecureContent: (serve) ? true : false,
+    }
+  };
+
+  autoUpdater.checkForUpdatesAndNotify();
+
+  win = Splashscreen.initSplashScreen({
+    windowOpts: windowOptions,
+    templateUrl: path.join(__dirname, "splashScreen.html"),
+    delay: 0, // force show immediately since example will load fast
+    minVisible: 2000, // show for 1.5s so example is obvious
+    splashScreenOpts: {
+      height: 500,
+      width: 700,
+      transparent: true,
     },
   });
 
@@ -104,7 +133,6 @@ ipc.on('closed', _ => {
 ipc.on('app_version', (event) => {
   event.sender.send('app_version', { version: app.getVersion() });
   console.log('Checking for updates...');
-  autoUpdater.checkForUpdatesAndNotify();
 });
 
 autoUpdater.on('update-available', () => {
