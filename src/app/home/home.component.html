@@ -3,8 +3,21 @@
     <h1>Home</h1>
   </div>
 
-  <div class="status">
-    <h3>WORK IN PROGRESS</h3>
-    <p><- USE THE SOURCES AND LIBRARY TABS</p>
+  <div class="communityHolder">
+    <div class="buttonHolder" (click)="openStars()">
+      <img class="stars" src="assets/rsc/stars-icon.svg" alt="stars" />
+      <h2>Loving the app?</h2>
+      <p>Consider leaving a star on GitHub.</p>
+    </div>
+    <div class="buttonHolder" (click)="openDiscord()">
+      <img class="discord" src="assets/rsc/discord-icon.svg" alt="discord" />
+      <h2>Want to show support?</h2>
+      <p>Join us on discord.</p>
+    </div>
+    <div class="buttonHolder" (click)="openBug()">
+      <img class="bug" src="assets/rsc/bug-icon.svg" alt="bug" />
+      <h2>Found a bug?</h2>
+      <p>Report it on GitHub.</p>
+    </div>
   </div>
 </div>

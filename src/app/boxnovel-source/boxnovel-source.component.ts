@@ -38,7 +38,7 @@ export class BoxnovelSourceComponent implements OnInit {
   }
 
   openWebsite() {
-    shell.openExternal('https://boxnovel.com/')
+    shell.openExternal('https://boxnovel.com/');
   }
 
   // Load novelpage with the information of the novel clicked on
