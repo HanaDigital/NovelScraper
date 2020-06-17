@@ -2,6 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 
 // Import Library Service
 import { LibraryService } from './library.service';
+import { exception } from 'console';
 // import cloudscraper to bypass cloudflare
 const cloudscraper = (<any>window).require('cloudscraper');
 //Import fs for chapter management
@@ -36,13 +37,16 @@ export class ReadlightnovelService {
       // Get chapter links and names
       let chapterLinks = [];
       let chapterNames = [];
-      let chapterTabs = html.getElementsByClassName("tab-content")[0].getElementsByClassName("tab-pane");
-      for (let i = 0; i < chapterTabs.length; i++) {
-        if (chapterTabs[i].getElementsByTagName("li").length !== 0) {
-          let chapterHolders = chapterTabs[i].getElementsByTagName("li");
-          for(let x = 0; x < chapterHolders.length; x++) {
-            chapterLinks.push(chapterHolders[x].getElementsByTagName('a')[0].getAttribute('href'));
-            chapterNames.push(chapterHolders[x].innerText);
+      let chapterVolumes = html.getElementsByClassName("tab-content");
+      for (let s = 0; s < chapterVolumes.length; s++) {
+        let chapterTabs = chapterVolumes[s].getElementsByClassName("tab-pane");
+        for (let i = 0; i < chapterTabs.length; i++) {
+          if (chapterTabs[i].getElementsByTagName("li").length !== 0) {
+            let chapterHolders = chapterTabs[i].getElementsByTagName("li");
+            for (let x = 0; x < chapterHolders.length; x++) {
+              chapterLinks.push(chapterHolders[x].getElementsByTagName('a')[0].getAttribute('href'));
+              chapterNames.push(chapterHolders[x].innerText);
+            }
           }
         }
       }
@@ -73,22 +77,32 @@ export class ReadlightnovelService {
           console.log('Download canceled!')
           return false;
         }
+        // console.log(chapterLinks[i]);
+        try {
+          // let stringHtml = await this.getHtmlString("https://www.readlightnovel.org/overlord-ln/volume-8/chapter-");
+          let stringHtml = await this.getHtmlString(chapterLinks[i]);
+          let pageHtml = new DOMParser().parseFromString(stringHtml, 'text/html');
+          let chapterHtml = pageHtml.getElementsByClassName('desc')[0].getElementsByClassName("hidden")[0];
 
-        let stringHtml = await this.getHtmlString(chapterLinks[i]);
-        let pageHtml = new DOMParser().parseFromString(stringHtml, 'text/html');
-        let chapterHtml = pageHtml.getElementsByClassName('desc')[0].getElementsByClassName("hidden")[0];
+          let chapterTitle = chapterNames[i];
 
-        let chapterTitle = chapterNames[i];
+          let chapterBody = "<h3>" + chapterTitle + "</h3>";
+          chapterBody += chapterHtml.outerHTML;
+          chapterBody += "<br/><br/>"
+          chapterBody += "<p>dr-nyt's NovelScraper scraped this novel from a pirate site.</p>"
+          chapterBody += "<p>If you can, please support the author(s) of this novel: " + novel.info.author + "</p>"
+          downloadedChapters.push({ title: chapterTitle, data: chapterBody });
 
-        let chapterBody = "<h3>" + chapterTitle + "</h3>";
-        chapterBody += chapterHtml.outerHTML;
-        chapterBody += "<br/><br/>"
-        chapterBody += "<p>dr-nyt's NovelScraper scraped this novel from a pirate site.</p>"
-        chapterBody += "<p>If you can, please support the author(s) of this novel: " + novel.info.author + "</p>"
-        downloadedChapters.push({ title: chapterTitle, data: chapterBody });
-
-        let percentage = +(((i / chapterLinks.length) * 100).toFixed(2));
-        this.library.updateDownloadTracker(downloadID, percentage);
+          let percentage = +(((i / chapterLinks.length) * 100).toFixed(2));
+          this.library.updateDownloadTracker(downloadID, percentage);
+        } catch (error) {
+          console.log(error);
+          if (error.statusCode === 404) {
+            continue;
+          } else {
+            throw "Error while loading URL:" + chapterLinks[i];
+          }
+        }
       }
 
       this.library.cancelDownload(downloadID);

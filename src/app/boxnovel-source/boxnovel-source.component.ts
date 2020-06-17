@@ -17,7 +17,7 @@ export class BoxnovelSourceComponent implements OnInit {
 
   val: any;
 
-  constructor(private router: Router, private library: LibraryService ,public boxnovelService: BoxnovelService) { }
+  constructor(private router: Router, private library: LibraryService, public boxnovelService: BoxnovelService) { }
 
   ngOnInit(): void {
     document.getElementById("boxnovel-website").addEventListener("click", this.openWebsite);
@@ -25,9 +25,9 @@ export class BoxnovelSourceComponent implements OnInit {
 
   // Binded to boxnovel search bar
   search(val) {
-    if(val == undefined || val == "") {
+    if (val == undefined || val == "") {
       return;
-    } else if(val.toLowerCase().includes("boxnovel.com/novel/")) {
+    } else if (val.toLowerCase().includes("boxnovel.com/novel/")) {
       this.boxnovelService.show('loading');
       val = val.split('?')[0];
       this.boxnovelService.fetchFromLink(val);
@@ -38,7 +38,7 @@ export class BoxnovelSourceComponent implements OnInit {
   }
 
   openWebsite() {
-    shell.openExternal('https://boxnovel.com/')
+    shell.openExternal('https://boxnovel.com/');
   }
 
   // Load novelpage with the information of the novel clicked on

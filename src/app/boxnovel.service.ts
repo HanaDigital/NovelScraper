@@ -73,7 +73,7 @@ export class BoxnovelService {
           downloadedChapters = chapterList.chapters;
           startIndex = downloadedChapters.length;
         }
-      } catch(error) {
+      } catch (error) {
         console.log(error);
         console.log("Couldn't load update files. Starting download from start.");
       }
@@ -114,9 +114,9 @@ export class BoxnovelService {
   async fetchFromLink(link) {
     try {
       // Remove any duplicates of the novel
-      for(let novel of this.localNovels) {
-        if(novel.info.link == link) {
-          this.localNovels.splice( this.localNovels.indexOf(novel), 1 );
+      for (let novel of this.localNovels) {
+        if (novel.info.link == link) {
+          this.localNovels.splice(this.localNovels.indexOf(novel), 1);
         }
       }
 
@@ -128,8 +128,8 @@ export class BoxnovelService {
       let totalChapters = 0;
       let source = "boxnovel";
       let author = "unknown";
-      let genre = "";
-      let summary = ""
+      let genre = "unknown";
+      let summary = "unkknown"
       let downloaded = false;
       let inLibrary = false;
 
@@ -145,15 +145,12 @@ export class BoxnovelService {
         cover = html.getElementsByClassName('summary_image')[0].getElementsByTagName('img')[0].src;
         totalChapters = html.getElementsByClassName('wp-manga-chapter').length;
         source = "boxnovel";
-        author = "";
-        genre = "";
-        summary = "";
 
         // Get list of authors
         let authorList = html.getElementsByClassName('author-content')[0].getElementsByTagName('a');
         try {
           for (let i = 0; i < authorList.length; i++) {
-            author += authorList[i].innerText.trim() + ', ';
+            author = authorList[i].innerText.trim() + ', ';
           }
           author = author.slice(0, -2);
         } catch (error) {
@@ -165,7 +162,7 @@ export class BoxnovelService {
         let genreList = html.getElementsByClassName('genres-content')[0].getElementsByTagName('a');
         try {
           for (let i = 0; i < genreList.length; i++) {
-            genre += genreList[i].innerText.trim() + ', ';
+            genre = genreList[i].innerText.trim() + ', ';
           }
           genre = genre.slice(0, -2);
         } catch (error) {
@@ -177,7 +174,7 @@ export class BoxnovelService {
         let summaryList = html.getElementsByClassName('summary__content')[0].getElementsByTagName('p');
         try {
           for (let i = 0; i < summaryList.length; i++) {
-            summary += summaryList[i].innerText.trim() + "\n";
+            summary = summaryList[i].innerText.trim() + "\n";
           }
         } catch (error) {
           summary = "unkown";
@@ -196,6 +193,8 @@ export class BoxnovelService {
         downloaded = novel.state.downloaded;
         inLibrary = true;
       }
+
+
 
       this.localNovels.unshift({
         info: {
@@ -251,16 +250,16 @@ export class BoxnovelService {
         let totalChapters = "unknown";
         let source = "novelplanet";
         let author = "unknown";
-        let genre = "";
-        let summary = ""
+        let genre = "unknown";
+        let summary = "unknown"
         let downloaded = false;
         let inLibrary = false;
 
         link = novelList[i].getElementsByClassName('post-title')[0].getElementsByTagName('a')[0].href;
 
-        for(let novel of this.localNovels) {
-          if(novel.info.link == link) {
-            this.localNovels.splice( this.localNovels.indexOf(novel), 1 );
+        for (let novel of this.localNovels) {
+          if (novel.info.link == link) {
+            this.localNovels.splice(this.localNovels.indexOf(novel), 1);
           }
         }
 
@@ -270,33 +269,31 @@ export class BoxnovelService {
           name = novelList[i].getElementsByClassName('post-title')[0].getElementsByTagName('a')[0].innerText.trim();
           latestChapter = novelList[i].getElementsByClassName('chapter')[0].getElementsByTagName('a')[0].innerText.trim();
           cover = novelList[i].getElementsByClassName('tab-thumb')[0].getElementsByTagName('img')[0].src;
-          totalChapters = "unknown";
           source = "boxnovel";
-          author = "";
-          genre = "";
-          summary = "unkown";
 
           // Get list of authors
-          let authorList = novelList[i].getElementsByClassName('summary-content')[1].getElementsByTagName('a');
+          let authorList = novelList[i].getElementsByClassName('mg_author')[0].getElementsByTagName('a');
           try {
             for (let i = 0; i < authorList.length; i++) {
-              author += authorList[i].innerText.trim() + ', ';
+              author = authorList[i].innerText.trim() + ', ';
             }
             author = author.slice(0, -2);
           } catch (error) {
-            author = "unkown";
+            author = "unknown";
             console.log(error);
           }
 
           // Get list of genres
-          let genreList = novelList[i].getElementsByClassName('summary-content')[2].getElementsByTagName('a');
+          let genreList = novelList[i].getElementsByClassName('mg_genres')[0].getElementsByTagName('a');
           try {
             for (let i = 0; i < genreList.length; i++) {
-              genre += genreList[i].innerText.trim() + ', ';
+              genre = genreList[i].innerText.trim() + ', ';
             }
-            genre = genre.slice(0, -2);
+            if (genre !== "unknown") {
+              genre = genre.slice(0, -2);
+            }
           } catch (error) {
-            genre = "unkown";
+            genre = "unknown";
             console.log(error);
           }
         } else {

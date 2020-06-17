@@ -1,6 +1,6 @@
 {
   "name": "novelscraper",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "Educational app on how to web scrape novels from pirate sites.",
   "homepage": "https://github.com/dr-nyt/NovelScraper",
   "author": {
