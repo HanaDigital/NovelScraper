@@ -1,3 +1,7 @@
+![Download Count](https://img.shields.io/github/downloads/HanaDigital/NovelScraper/total.svg?style=for-the-badge)
+[![GitHub stars](https://img.shields.io/github/stars/HanaDigital/NovelScraper?style=for-the-badge)](https://github.com/HanaDigital/NovelScraper/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/HanaDigital/NovelScraper?style=for-the-badge)](https://github.com/HanaDigital/NovelScraper/network)
+[![GitHub issues](https://img.shields.io/github/issues/HanaDigital/NovelScraper?style=for-the-badge)](https://github.com/HanaDigital/NovelScraper/issues)
 ### About
  *	Authors: dr_nyt
  *	Version: 1.0.0
