@@ -5,7 +5,7 @@
 ### About
  *	Authors: dr_nyt
  *	Version: 1.0.0
- * This is an educational web scrapping project that lets you download translated novels from pirates sites like [www.novelplanet.com] and [www.boxnovel.com]. You should not use this app to illegally download content. The code base is meant for educational purposes only.
+ * This is an educational web scrapping project that lets you download translated novels from pirates sites like [www.readlightnovel.org] and [www.boxnovel.com]. You should not use this app to illegally download content. The code base is meant for educational purposes only.
  * This app will only scrape from website sources that illegally provide content.
   * You can support us by joining our discord group: https://discord.gg/Wya4Dst :heart:
 
@@ -24,10 +24,6 @@
 
 4. Add the novel you want to the library, and start downloading.
 ![image](https://user-images.githubusercontent.com/41040912/79236518-1adea780-7e7e-11ea-9b4b-686631e7fac8.png)
-
-5. Novelplanet blocks alot of novel covers from being downloaded, so you will have to manually add covers. Lucky for you, I've made it very easy:
-
-![cover-change](https://user-images.githubusercontent.com/41040912/79237319-123aa100-7e7f-11ea-8884-39599ada076d.gif)
 
 6. There are bound to be bugs and errors so please open an issue [here](https://github.com/dr-nyt/Translated-Novel-Downloader/issues/) if you find any.
 
