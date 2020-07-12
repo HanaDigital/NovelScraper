@@ -1,32 +1,96 @@
 <div class="page">
   <div class="headerPanel">
-      <h1>ReadLightNovel</h1>
-      <img src="../assets/rsc/internet.svg" alt="" id="readlightnovel-website" class="website">
+    <h1>ReadLightNovel</h1>
+    <img
+      src="../assets/rsc/internet.svg"
+      alt=""
+      id="readlightnovel-website"
+      class="website"
+    />
   </div>
 
   <div class="content">
     <form class="search" action="">
-      <input class="searchBox" name="searchBox" type="text" placeholder="SEARCH" [(ngModel)]="val">
-      <input class="searchButton" type="submit" name="submit" value="FIND" (click)="search(val)">
+      <input
+        class="searchBox"
+        name="searchBox"
+        type="text"
+        placeholder="SEARCH"
+        [(ngModel)]="val"
+      />
+      <input
+        class="searchButton"
+        type="submit"
+        name="submit"
+        value="FIND"
+        (click)="search(val)"
+      />
     </form>
 
     <div class="status">
-      <img id="empty" [ngStyle]="{'display': readlightnovelService.showEmpty ? 'block' : 'none'}" src="assets/rsc/empty-icon.svg" alt="">
-      <img class="error" [ngStyle]="{'display': readlightnovelService.showError ? 'block' : 'none'}" id="empty" src="assets/rsc/error-icon.png" alt="">
-      <h1 class="loading" [ngStyle]="{'display': readlightnovelService.showLoading ? 'block' : 'none'}">LOADING</h1>
-      <div class="notify" [ngStyle]="{'display': readlightnovelService.showNotify ? 'block' : 'none'}">
+      <img
+        id="empty"
+        [ngStyle]="{
+          display: readlightnovelService.showEmpty ? 'block' : 'none'
+        }"
+        src="assets/rsc/empty-icon.svg"
+        alt=""
+      />
+      <img
+        class="error"
+        [ngStyle]="{
+          display: readlightnovelService.showError ? 'block' : 'none'
+        }"
+        id="empty"
+        src="assets/rsc/error-icon.png"
+        alt=""
+      />
+      <h1
+        class="loading"
+        [ngStyle]="{
+          display: readlightnovelService.showLoading ? 'block' : 'none'
+        }"
+      >
+        LOADING
+      </h1>
+      <div
+        class="notify"
+        [ngStyle]="{
+          display: readlightnovelService.showNotify ? 'block' : 'none'
+        }"
+      >
         <h1>Novel search is not supported on this site.</h1>
-        <p>Please paste the link of the novel you want from www.readlightnovel.org</p>
+        <p>
+          Please paste the link of the novel you want from
+          www.readlightnovel.org
+        </p>
       </div>
     </div>
 
-    <div class="novelList" [ngStyle]="{'display': readlightnovelService.showContent ? 'block' : 'none'}">
-        <div (click)='loadNovelPage(novel)' class="novelHolder" [ngStyle]="{'border': novel.state.downloaded ? '1px solid #5eff00' : 'none'}" *ngFor="let novel of readlightnovelService.localNovels; let i = index">
-            <img class="img" src="{{novel.info.cover}}" [ngStyle]="{'opacity': novel.state.inLibrary ? '0.4' : '1'}" onerror="this.src='assets/rsc/missing-image.png';">
-            <div class="fade">
-                <p class="name">{{novel.info.name}}</p>
-            </div>
+    <div
+      class="novelList"
+      [ngStyle]="{
+        display: readlightnovelService.showContent ? 'block' : 'none'
+      }"
+    >
+      <div
+        (click)="loadNovelPage(novel)"
+        class="novelHolder"
+        [ngStyle]="{
+          border: novel.state.downloaded ? '1px solid #5eff00' : 'none'
+        }"
+        *ngFor="let novel of readlightnovelService.localNovels; let i = index"
+      >
+        <img
+          class="img"
+          src="{{ novel.info.cover }}"
+          [ngStyle]="{ opacity: novel.state.inLibrary ? '0.4' : '1' }"
+          onerror="this.src='assets/rsc/missing-image.png';"
+        />
+        <div class="fade">
+          <p class="name">{{ novel.info.name }}</p>
         </div>
+      </div>
     </div>
   </div>
 </div>
