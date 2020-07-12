@@ -2,18 +2,21 @@
 [![GitHub stars](https://img.shields.io/github/stars/HanaDigital/NovelScraper?style=for-the-badge)](https://github.com/HanaDigital/NovelScraper/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/HanaDigital/NovelScraper?style=for-the-badge)](https://github.com/HanaDigital/NovelScraper/network)
 [![GitHub issues](https://img.shields.io/github/issues/HanaDigital/NovelScraper?style=for-the-badge)](https://github.com/HanaDigital/NovelScraper/issues)
+
+# <[DOWNLOAD](https://github.com/dr-nyt/Translated-Novel-Downloader/releases)>
+
 ### About
  *	Authors: dr_nyt
  *	Version: 1.0.0
- * This is an educational web scrapping project that lets you download translated novels from pirates sites like [www.readlightnovel.org] and [www.boxnovel.com]. You should not use this app to illegally download content. The code base is meant for educational purposes only.
+ * Any app to download novels from pirates sites like [www.readlightnovel.org] and [www.boxnovel.com].
  * This app will only scrape from website sources that illegally provide content.
-  * You can support us by joining our discord group: https://discord.gg/Wya4Dst :heart:
+ * You can support us by joining our discord group: https://discord.gg/Wya4Dst :heart:
 
 ### Features
-- Download any Translated Novel form www.novelplanet.com and www.boxnovel.com (for now) in .epub format.
+- Download any Translated Novel form [www.readlightnovel.org] and www.boxnovel.com in .epub format.
 - Only supports the windows platform for now. Let me know on discord if you really want macOS/Linux support.
 
-### Usage
+### How To Use
 1. Download the latest release from [here](https://github.com/dr-nyt/Translated-Novel-Downloader/releases).
 
 2. Pick a source you want, from the sources tab.
@@ -29,15 +32,13 @@
 
 ### How to build
 - Download [NodeJS](https://nodejs.org/en/download/) for your system and install it.
-- Download the source code for Version 1.0.0 from [here](https://github.com/dr-nyt/NovelScraper/archive/Version-1.0.0.zip) and unzip it into a folder.
-- Open a Terminal and `cd` into the unzipped folder or on Windows type `cmd` in the path section of the unzipped folder and hit enter:
-![image](https://user-images.githubusercontent.com/41040912/79340555-863a7f00-7f3b-11ea-9c84-d157276cfc27.png)
-- Then type the following commands in the terminal:
+- Download the source code from the master branch.
+- Launch a termianl in the download folder.
 ```
 npm i                     <-- Installs everything needed to run the app.
 npm start                 <-- Runs the app itself.
 ```
-- The app should have started at this point, and if you want to reopen the app at a later date, just open a terminal in the same folder and type `npm start`.
+- If you want to reopen the app at a later date, just open a terminal in the same folder and type `npm start`.
 - Enjoy!
 
 ### Citation
