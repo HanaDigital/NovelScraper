@@ -88,6 +88,8 @@ export class ReadlightnovelService {
 
           let chapterBody = "<h3>" + chapterTitle + "</h3>";
           chapterBody += chapterHtml.outerHTML;
+          chapterBody = chapterBody.replace(/<br>/g, "<br/>");
+          console.log(chapterBody);
           chapterBody += "<br/><br/>"
           chapterBody += "<p>dr-nyt's NovelScraper scraped this novel from a pirate site.</p>"
           chapterBody += "<p>If you can, please support the author(s) of this novel: " + novel.info.author + "</p>"
