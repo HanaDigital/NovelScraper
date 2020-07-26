@@ -128,6 +128,8 @@ export class NovelComponent implements OnInit {
             this.downloaded = true;
             this.novelplanetService.updateDownloaded(this.novel.info.link, true);
           });
+        } else {
+          this.downloading = false;
         }
       });
     } else if (this.novel.info.source == 'boxnovel') {
@@ -141,6 +143,8 @@ export class NovelComponent implements OnInit {
             this.downloaded = true;
             this.boxnovelService.updateDownloaded(this.novel.info.link, true);
           });
+        } else {
+          this.downloading = false;
         }
       });
     } else if (this.novel.info.source == 'readlightnovel') {
@@ -154,6 +158,8 @@ export class NovelComponent implements OnInit {
             this.downloaded = true;
             this.readlightnovelService.updateDownloaded(this.novel.info.link, true);
           });
+        } else {
+          this.downloading = false;
         }
       });
     }

@@ -1,28 +1,76 @@
 <div class="page">
   <div class="headerPanel">
-      <h1>BoxNovel</h1>
-      <img src="../assets/rsc/internet.svg" alt="" id="boxnovel-website" class="website">
+    <h1>BoxNovel</h1>
+    <img
+      src="../assets/rsc/internet.svg"
+      alt=""
+      id="boxnovel-website"
+      class="website"
+    />
   </div>
 
   <div class="content">
     <form class="search" action="">
-      <input class="searchBox" name="searchBox" type="text" placeholder="SEARCH" [(ngModel)]="val">
-      <input class="searchButton" type="submit" name="submit" value="FIND" (click)="search(val)">
+      <input
+        class="searchBox"
+        name="searchBox"
+        type="text"
+        placeholder="SEARCH"
+        [(ngModel)]="val"
+      />
+      <input
+        class="searchButton"
+        type="submit"
+        name="submit"
+        value="FIND"
+        (click)="search(val)"
+      />
     </form>
 
     <div class="status">
-      <img [ngStyle]="{'display': boxnovelService.showEmpty ? 'block' : 'none'}" id="empty" src="assets/rsc/empty-icon.svg" alt="">
-      <img class="error" [ngStyle]="{'display': boxnovelService.showError ? 'block' : 'none'}" id="empty" src="assets/rsc/error-icon.png" alt="">
-      <h1 [ngStyle]="{'display': boxnovelService.showLoading ? 'block' : 'none'}" class="loading">LOADING</h1>
+      <img
+        [ngStyle]="{ display: boxnovelService.showEmpty ? 'block' : 'none' }"
+        id="empty"
+        src="assets/rsc/empty-icon.svg"
+        alt=""
+      />
+      <img
+        class="error"
+        [ngStyle]="{ display: boxnovelService.showError ? 'block' : 'none' }"
+        id="empty"
+        src="assets/rsc/error-icon.png"
+        alt=""
+      />
+      <h1
+        [ngStyle]="{ display: boxnovelService.showLoading ? 'block' : 'none' }"
+        class="loading"
+      >
+        LOADING
+      </h1>
     </div>
 
-    <div class="novelList" [ngStyle]="{'display': boxnovelService.showContent ? 'block' : 'none'}">
-        <div (click)='loadNovelPage(novel)' class="novelHolder" [ngStyle]="{'border': novel.state.downloaded ? '1px solid #5eff00' : 'none'}" *ngFor="let novel of boxnovelService.localNovels; let i = index">
-            <img class="img" src="{{novel.info.cover}}" [ngStyle]="{'opacity': novel.state.inLibrary ? '0.4' : '1'}" onerror="this.src='assets/rsc/missing-image.png';">
-            <div class="fade">
-                <p class="name">{{novel.info.name}}</p>
-            </div>
+    <div
+      class="novelList"
+      [ngStyle]="{ display: boxnovelService.showContent ? 'block' : 'none' }"
+    >
+      <div
+        (click)="loadNovelPage(novel)"
+        class="novelHolder"
+        [ngStyle]="{
+          border: novel.state.downloaded ? '1px solid #5eff00' : 'none'
+        }"
+        *ngFor="let novel of boxnovelService.localNovels; let i = index"
+      >
+        <img
+          class="img"
+          src="{{ novel.info.cover }}"
+          [ngStyle]="{ opacity: novel.state.inLibrary ? '0.4' : '1' }"
+          onerror="this.src='assets/rsc/missing-image.png';"
+        />
+        <div class="fade">
+          <p class="name">{{ novel.info.name }}</p>
         </div>
+      </div>
     </div>
   </div>
 </div>

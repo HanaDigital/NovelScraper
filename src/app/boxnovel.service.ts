@@ -93,8 +93,11 @@ export class BoxnovelService {
 
         let chapterBody = "<h3>" + chapterTitle + "</h3>";
         chapterBody += chapterHtml.outerHTML;
-        chapterBody = chapterBody.replace(/<br>/g, "<br/>");
-        console.log(chapterBody);
+        chapterBody = chapterBody.replace(/< *br *>/gi, "<br/>"); // Make sure all <br/> tags end correctly for xhtml
+        chapterBody = chapterBody.replace(/<br *\/ *br *>/gi, "");  // Remove any useless </br> tags
+        chapterBody = chapterBody.replace(/(<img("[^"]*"|[^\/">])*)>/gi, "$1/>"); // Make sure img tag ends correctly for xhtml
+
+        // Add propoganda
         chapterBody += "<br/><br/>"
         chapterBody += "<p>dr-nyt's NovelScraper scraped this novel from a pirate site.</p>"
         chapterBody += "<p>If you can, please support the author(s) of this novel: " + novel.info.author + "</p>"
@@ -110,6 +113,7 @@ export class BoxnovelService {
 
     } catch (error) {
       console.log(error);
+      return false;
     }
   }
 
