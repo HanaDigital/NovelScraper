@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { getSources } from '../templates/sources';
 
 @Component({
   selector: 'app-sources',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sources.component.scss']
 })
 export class SourcesComponent implements OnInit {
+
+  sourceList = getSources();
 
   constructor() { }
 

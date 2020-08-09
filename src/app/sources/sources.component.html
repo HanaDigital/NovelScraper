@@ -5,26 +5,25 @@
 
   <ul id="sourcesList">
     <li>
-      <div routerLink="/novelplanetSource" id="novelplanetSource" class="sourceHolder">
+      <div
+        routerLink="/novelplanetSource"
+        id="novelplanetSource"
+        class="sourceHolder"
+      >
         <div class="img-gradient"></div>
-        <img id="novelplanetIcon" src="assets/rsc/novelplanet-logo.png" />
+        <img
+          id="novelplanetIcon"
+          src="assets/rsc/sourceLogos/novelplanet-logo.png"
+        />
         <p>NovelPlanet</p>
       </div>
     </li>
 
-    <li>
-      <div routerLink="/readlightnovelSource" id="readlightnovelSource" class="sourceHolder">
+    <li *ngFor="let source of sourceList">
+      <div routerLink="{{ source.route }}" class="sourceHolder">
         <div class="img-gradient"></div>
-        <img id="readlightnovelIcon" src="assets/rsc/readlightnovel-logo.png" />
-        <p>ReadLightNovel</p>
-      </div>
-    </li>
-
-    <li>
-      <div routerLink="/boxnovelSource" id="boxNovelSource" class="sourceHolder">
-        <div class="img-gradient"></div>
-        <img id="boxNovelIcon" src="assets/rsc/boxnovel-logo.png" />
-        <p>BoxNovel</p>
+        <img [src]="'assets/rsc/sourceLogos/' + source.img" />
+        <p>{{ source.name }}</p>
       </div>
     </li>
   </ul>
