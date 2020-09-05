@@ -53,21 +53,21 @@ header {
         background: #a06800;
       }
       #min:hover {
-          background: orange;
+        background: orange;
       }
 
       #max {
         background: #06629b;
       }
       #max:hover {
-          background: $higlight-color;
+        background: $higlight-color;
       }
 
       #close {
         background: #a00000;
       }
       #close:hover {
-          background: red;
+        background: red;
       }
     }
   }
@@ -84,13 +84,13 @@ header {
   a {
     background-color: $menu-background;
     display: block;
-    width:70px;
+    width: 70px;
     height: 60px;
     text-decoration: none;
 
     img {
-        width: inherit;
-        height: inherit;
+      width: inherit;
+      height: inherit;
     }
 
     img:hover {
@@ -146,4 +146,3 @@ header {
     }
   }
 }
-

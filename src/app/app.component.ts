@@ -1,15 +1,11 @@
 import { Component, NgZone } from '@angular/core';
 import { ElectronService } from './core/services';
 import { TranslateService } from '@ngx-translate/core';
-import { AppConfig } from '../environments/environment';
-import { BrowserWindow } from 'electron';
-import { RouterOutlet } from '@angular/router';
 
 // Import Library Service
 import { LibraryService } from './library.service';
-import { ngModuleJitUrl } from '@angular/compiler';
 
-const {remote} = require('electron');
+const { remote } = require('electron');
 
 @Component({
   selector: 'app-root',
@@ -77,21 +73,21 @@ export class AppComponent {
   //UI Control
   // Higlight the home button and open the home page
   loadHomePage() {
-      this.deselectButtons();
-      this.menuButtons[0].style.background = this.buttonHighlight;
+    this.deselectButtons();
+    this.menuButtons[0].style.background = this.buttonHighlight;
   }
 
   // Higlight the sources button and open the sources page
   loadSourcesPage() {
-      this.deselectButtons();
-      this.menuButtons[1].style.background = this.buttonHighlight;
+    this.deselectButtons();
+    this.menuButtons[1].style.background = this.buttonHighlight;
   }
 
   // Higlight the library button and open the library page
   loadLibraryPage() {
-      this.deselectButtons();
-      this.menuButtons[2].style.background = this.buttonHighlight;
-      this.library.loadNovels();
+    this.deselectButtons();
+    this.menuButtons[2].style.background = this.buttonHighlight;
+    this.library.loadNovels();
   }
 
   // Higlight the setting button and open the library page
@@ -103,9 +99,9 @@ export class AppComponent {
 
   // Deselect all menu buttons
   deselectButtons() {
-      for(let i = 0; i < this.menuButtons.length; i++) {
-        this.menuButtons[i].style.background = this.menuBackground;
-      }
+    for (let i = 0; i < this.menuButtons.length; i++) {
+      this.menuButtons[i].style.background = this.menuBackground;
+    }
   }
 
   // Window Controls
