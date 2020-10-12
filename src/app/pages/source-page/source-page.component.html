@@ -1,0 +1,72 @@
+<div class="page">
+	<div class="pageHeader">
+		<h1 class="title">
+			<img class="back" src="assets/img/drop-arrow.svg" />
+			<img
+				class="backButton"
+				routerLink="/sources"
+				src="assets/img/back-arrow.svg"
+			/>
+			{{ source.name.toUpperCase() }}
+			<hr />
+		</h1>
+	</div>
+
+	<div class="pageContent">
+		<div class="mainWrapper">
+			<div class="pageController">
+				<form class="searchForm" (keydown)="submitSearch($event)">
+					<input
+						class="searchBar"
+						name="searchBar"
+						type="url"
+						placeholder="SEARCH"
+						[(ngModel)]="searchText"
+					/>
+					<img
+						class="searchIcon"
+						src="assets/img/search.svg"
+						(click)="search(searchText)"
+					/>
+				</form>
+
+				<div class="pageControllerButtons">
+					<img
+						src="assets/img/browser.svg"
+						(click)="openInBrowser()"
+					/>
+				</div>
+			</div>
+
+			<div class="header">
+				<p>NOVELS</p>
+				<div class="lineBreak"></div>
+			</div>
+
+			<div class="pageWrapper">
+				<div
+					class="sourceNovels"
+					*ngIf="service.sourceNovels.length > 0 && !loading"
+				>
+					<app-novel-card
+						*ngFor="let novel of service.sourceNovels"
+						[novel]="novel"
+						(click)="loadNovel(novel)"
+						[ngStyle]="{ opacity: novel.inLibrary ? '0.5' : '1' }"
+					>
+						<p>{{ novel.name }}</p>
+					</app-novel-card>
+				</div>
+				<div class="noSourceNovels" *ngIf="loading">
+					<p>LOADING</p>
+				</div>
+				<div
+					class="noSourceNovels"
+					*ngIf="service.sourceNovels.length === 0 && !loading"
+				>
+					SEARCH FOR NOVELS TO GET STARTED
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

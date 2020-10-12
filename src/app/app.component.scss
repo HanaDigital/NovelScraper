@@ -1,149 +1,147 @@
-@import "../assets/scss/global-variables";
+@import "assets/scss/global-variables";
 
-header {
-  width: 100%;
-  height: $header-height;
+nav {
+	width: 100%;
+	height: $navHeight;
+	-webkit-app-region: drag;
+	padding-left: $primaryMargin;
+	padding-right: $primaryMargin;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background: $primaryAccent;
+	font-size: 11px;
 
-  padding-left: 10px;
-  display: grid;
-  grid-template-columns: 80% auto;
-  -webkit-app-region: drag;
+	strong {
+		font-family: Montserrat-Bold;
+		font-weight: bold;
+		color: $secondaryAccent;
+		letter-spacing: 1.5px;
 
-  background-color: $header-background;
-  box-shadow: inset 0px -5px 12px -6px rgba(0, 0, 0, 0.26);
+		span {
+			color: white;
+		}
+	}
 
-  strong {
-    display: flex;
-    align-items: center;
+	.windowControls {
+		display: flex;
+		-webkit-app-region: no-drag;
 
-    color: white;
-    font-size: 0.8em;
-    font-weight: 1;
+		.control {
+			width: 11px;
+			height: 11px;
+			background: white;
+			border-radius: 50%;
+			margin-left: 4px;
+			cursor: pointer;
+		}
 
-    span {
-      color: $higlight-color;
-    }
-  }
+		.minimize {
+			background: #c6b737;
+		}
+		.maximize {
+			background: #38a0b7;
+		}
+		.exit {
+			background: #ce5555;
+		}
 
-  nav {
-    display: flex;
-    align-items: center;
-    justify-self: right;
-    -webkit-app-region: no-drag;
-
-    ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-
-      li {
-        height: 100%;
-        float: left;
-
-        div {
-          width: 12px;
-          height: 12px;
-          margin-right: 5px;
-          border-radius: 50%;
-          cursor: pointer;
-        }
-      }
-
-      #min {
-        background: #a06800;
-      }
-      #min:hover {
-          background: orange;
-      }
-
-      #max {
-        background: #06629b;
-      }
-      #max:hover {
-          background: $higlight-color;
-      }
-
-      #close {
-        background: #a00000;
-      }
-      #close:hover {
-          background: red;
-      }
-    }
-  }
+		.minimize:hover {
+			background: #ffed48;
+		}
+		.maximize:hover {
+			background: #51dfff;
+		}
+		.exit:hover {
+			background: #ff6969;
+		}
+	}
 }
 
-#vertical-menu {
-  position: fixed;
-  height: 100%;
-  width: $menu-width;
-  top: 30px;
-
-  background-color: $menu-background;
-
-  a {
-    background-color: $menu-background;
-    display: block;
-    width:70px;
-    height: 60px;
-    text-decoration: none;
-
-    img {
-        width: inherit;
-        height: inherit;
-    }
-
-    img:hover {
-      background: $menu-hover;
-    }
-  }
-
-  a:focus {
-    outline: none;
-  }
-
-  #homeButton {
-    background: $menu-selected;
-  }
-
-  #version {
-    text-align: center;
-    color: white;
-    position: fixed;
-    bottom: 5px;
-    width: $menu-width;
-  }
+html,
+body {
+	height: 100%;
+	margin: 0;
 }
 
-#vertical-menu-shadow {
-  z-index: -1;
-  position: fixed;
-  height: 100%;
-  width: $menu-width;
-  top: 90px;
+#sideMenu {
+	user-select: none;
+	position: fixed;
+	top: $navHeight;
+	left: 0;
+	width: $sideMenuWidth;
+	height: 100%;
+	background: $primaryBG;
+	box-shadow: $primaryShadow;
 
-  box-shadow: 5px 0px 12px -6px rgba(0, 0, 0, 0.301);
+	padding: $primaryMargin;
+	padding-left: 0;
+	padding-right: 0;
+
+	.title {
+		display: flex;
+		align-items: center;
+		padding-left: $primaryMargin;
+
+		img {
+			width: 35px;
+			margin-right: 5px;
+		}
+
+		.text {
+			letter-spacing: 1.5px;
+			font-size: 15px;
+			margin-top: 3px;
+		}
+	}
+
+	hr {
+		margin: $primaryMargin * 2 $primaryMargin;
+		border: none;
+		height: 1px;
+		background: $primaryColor;
+		opacity: 0.1;
+	}
+
+	.menuButtons {
+		width: 100%;
+		// margin-top: $primaryMargin * 4;
+
+		.button {
+			display: flex;
+			padding-left: $primaryMargin;
+			align-items: center;
+			margin-left: 3px;
+			cursor: pointer;
+			padding-top: $primaryMargin * 0.8;
+			padding-bottom: $primaryMargin * 0.8;
+
+			img {
+				width: 22px;
+				opacity: 0.5;
+				margin-right: 10px;
+			}
+
+			p {
+				font-size: 19px;
+				opacity: 0.5;
+			}
+		}
+
+		.button:hover {
+			border-right: solid 2px $secondaryAccent;
+			background: $primaryFade;
+		}
+
+		.active {
+			border-right: solid 2px $secondaryAccent;
+
+			img {
+				opacity: 1;
+			}
+			p {
+				opacity: 1;
+			}
+		}
+	}
 }
-
-#update {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.534);
-  display: flex;
-  align-content: center;
-
-  .dialogueBox {
-    background: $content-background;
-    width: 300px;
-    padding: 20px;
-    border-radius: 5px;
-    margin: auto;
-
-    p {
-      color: white;
-      text-align: center;
-    }
-  }
-}
-

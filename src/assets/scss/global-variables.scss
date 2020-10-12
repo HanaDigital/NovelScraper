@@ -1,17 +1,49 @@
-$header-background: #022d47;
-$menu-background: #033e63;
-$menu-selected: linear-gradient(90deg, #0671b3 0%, #033e63 100%);
-$menu-hover: linear-gradient(90deg, #078fe4 0%, #033e63 100%);
-$higlight-color: #009dff;
-$hint-color: #00263d;
-$page-background: #022d47;
-$content-background: #033e63;
-$content-background-alt: #014b79;
-$dark-content-shadow: #002338;
-$light-content-shadow: #003557;
+// Fonts
+@font-face {
+	font-family: Montserrat-Regular;
+	src: url(assets/fonts/Montserrat-Regular.ttf);
+}
 
-$header-height: 30px;
-$menu-width: 70px;
-$color: #005488;
+@font-face {
+	font-family: Montserrat-Bold;
+	src: url(assets/fonts/Montserrat-Bold.ttf);
+}
 
-$scrollbar-color: #005183;
+@font-face {
+	font-family: Sen;
+	src: url(assets/fonts/Sen-Regular.ttf);
+}
+
+@font-face {
+	font-family: Krub;
+	src: url(assets/fonts/Krub-Regular.ttf);
+}
+
+// Colors
+$primaryBG: #ffffff;
+$secondaryBG: #e5e5e5;
+
+$primaryAccent: #4b7288;
+$secondaryAccent: #7ab4d4;
+
+$primaryColor: #505050;
+
+$fadeText: #9d9d9d;
+
+$success: #61ba74;
+$warning: #ebe294;
+$error: #ba6161;
+
+$linkColor: #006eb8;
+
+$primaryFade: #4b72881a;
+
+$primaryShadow: 0px 0px 12px -5px #0000001a;
+
+$scrollbar-color: #7ab4d4;
+
+// Constraints
+$navHeight: 20px;
+$sideMenuWidth: 160px;
+
+$primaryMargin: 10px;

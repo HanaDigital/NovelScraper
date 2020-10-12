@@ -1,0 +1,67 @@
+@import "assets/scss/global-variables";
+
+.page {
+	.pageHeader {
+		.title {
+			.backButton:hover {
+				transform: rotate(90deg) scale(1.1);
+			}
+		}
+	}
+
+	.pageContent {
+		.mainWrapper {
+			.header {
+				padding: $primaryMargin;
+				padding-bottom: 0;
+			}
+
+			.pageWrapper {
+				height: calc(100% - 85px);
+			}
+
+			.sourceNovels {
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+				justify-content: center;
+			}
+
+			.noSourceNovels {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: calc(100% - 25px);
+
+				p {
+					font-family: Montserrat-Bold;
+					font-size: 20px;
+					font-weight: bold;
+					background: linear-gradient(
+						-45deg,
+						#7ab4d4,
+						#8cd7ff,
+						#44beff,
+						#00a2ff
+					);
+					-webkit-background-clip: text;
+					-webkit-text-fill-color: transparent;
+					background-size: 500% 500%;
+					animation: load 3s ease infinite;
+				}
+
+				@keyframes load {
+					0% {
+						background-position: 0% 50%;
+					}
+					50% {
+						background-position: 100% 50%;
+					}
+					100% {
+						background-position: 0% 50%;
+					}
+				}
+			}
+		}
+	}
+}

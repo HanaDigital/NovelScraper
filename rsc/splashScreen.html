@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<html>
+	<link
+		href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
+		rel="stylesheet"
+	/>
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+			box-sizing: border-box;
+			-webkit-app-region: drag;
+		}
+
+		body #bg {
+			position: fixed;
+			top: calc(-100%);
+			left: calc(-100%);
+			width: 300%;
+			height: 300%;
+			z-index: 1;
+			animation: sun 8s infinite 0s linear;
+		}
+
+		body .main {
+			z-index: 5;
+			position: fixed;
+			top: 0;
+			left: 0;
+			display: flex;
+			height: 100%;
+			width: 100%;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+		}
+
+		body #logo {
+			width: 230px;
+			height: 230px;
+			margin-bottom: 10px;
+		}
+
+		@keyframes sun {
+			from {
+				transform: rotate(0);
+			}
+			to {
+				transform: rotate(360deg);
+			}
+		}
+	</style>
+	<head></head>
+	<body>
+		<img id="bg" src="./sun.svg" />
+		<div class="main">
+			<img id="logo" src="./Icon.png" />
+		</div>
+	</body>
+</html>
