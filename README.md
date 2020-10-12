@@ -19,11 +19,11 @@
 <hr />
 
 ## TABLE OF CONTENTS
-1. [ABOUT]()
-2. [HOW TO USE]()
-3. [CONTRIBUTE]()
-4. [ATTRIBUTION]()
-5. [LICENSE]()
+1. [About]()
+2. [How to use]()
+3. [Contribute]()
+4. [Attribution]()
+5. [License]()
 
 ## ABOUT
 
@@ -52,5 +52,26 @@
 
 ## LICENSE
 
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Novel Scraper</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://github.com/dr-nyt/Translated-Novel-Downloader" property="cc:attributionName" rel="cc:attributionURL">dr_nyt</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
-This project is for educational purposes only and should not be used in any illegal activity.
+```
+MIT License
+
+Copyright (c) 2020 dr-nyt
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
