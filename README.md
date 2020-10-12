@@ -3,16 +3,25 @@
 </p>
 
 <p align="center">
-  	<img width="200" src="https://user-images.githubusercontent.com/41040912/95695097-80053100-0c46-11eb-8393-2f97d5f1e63c.png">
+  	<a href="https://github.com/HanaDigital/NovelScraper/releases"><img width="200" src="https://user-images.githubusercontent.com/41040912/95695097-80053100-0c46-11eb-8393-2f97d5f1e63c.png"></a>
+	<a href="https://github.com/HanaDigital/NovelScraper/releases"><img width="200" src="https://user-images.githubusercontent.com/41040912/95696675-218f8100-0c4d-11eb-82b9-cddddbe94758.png"></a>
 </p>
 
+<hr />
 
 <p align="center">
-	<a href="https://github.com/HanaDigital/NovelScraper/stargazers"><img width="200" src="https://img.shields.io/github/downloads/HanaDigital/NovelScraper/total.svg?style=for-the-badge"></a>
-  	<a href="https://github.com/HanaDigital/NovelScraper/stargazers"><img width="200" src="https://img.shields.io/github/stars/HanaDigital/NovelScraper?style=for-the-badge"></a>
-	<a href="https://github.com/HanaDigital/NovelScraper/stargazers"><img width="200" src="https://img.shields.io/github/forks/HanaDigital/NovelScraper?style=for-the-badge"></a>
-	<a href="https://github.com/HanaDigital/NovelScraper/stargazers"><img width="200" src="https://img.shields.io/github/issues/HanaDigital/NovelScraper?style=for-the-badge"></a>
+	<a href="https://github.com/HanaDigital/NovelScraper/releases"><img src="https://img.shields.io/github/downloads/HanaDigital/NovelScraper/total.svg?style=for-the-badge"></a>
+  	<a href="https://github.com/HanaDigital/NovelScraper/stargazers"><img src="https://img.shields.io/github/stars/HanaDigital/NovelScraper?style=for-the-badge"></a>
+	<a href="https://github.com/HanaDigital/NovelScraper/stargazers"><img src="https://img.shields.io/github/forks/HanaDigital/NovelScraper?style=for-the-badge"></a>
+	<a href="https://github.com/HanaDigital/NovelScraper/stargazers"><img src="https://img.shields.io/github/issues/HanaDigital/NovelScraper?style=for-the-badge"></a>
 </p>
+
+<hr />
+
+## TABLE OF CONTENTS
+1. About
+2. Features
+3. Usage
 
 ### About
 
