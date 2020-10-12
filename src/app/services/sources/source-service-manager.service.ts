@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { novelObj } from 'app/resources/types';
 import { BoxnovelService } from './boxnovel.service';
+import { ReadlightnovelService } from './readlightnovel-service.service';
 import { sourceService } from './sourceService';
 
 @Injectable({
@@ -10,11 +11,11 @@ export class SourceManagerService {
 
 	isChecking: boolean = false;
 
-	constructor(public boxnovelService: BoxnovelService) { }
+	constructor(public boxnovelService: BoxnovelService, public readlightnovelService: ReadlightnovelService) { }
 
 	getService(sourceName: string): sourceService {
 		if (sourceName === "BoxNovel") return this.boxnovelService;
-		else if (sourceName === "") return null;
+		else if (sourceName === "ReadLightNovel") return this.readlightnovelService;
 		else return undefined;
 	}
 

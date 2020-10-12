@@ -1,17 +1,13 @@
 import { Injectable } from '@angular/core';
-import { chapterObj, novelObj, update } from 'app/resources/types';
-import { access, constants, existsSync, readFileSync } from 'fs';
+import { chapterObj, novelObj } from 'app/resources/types';
 import { DatabaseService } from '../database.service';
 import { NovelFactoryService } from '../novel-factory.service';
 import { sourceService } from './sourceService';
-import * as path from 'path';
-
-const cloudscraper = (<any>window).require('cloudscraper');
 
 @Injectable({
 	providedIn: 'root'
 })
-export class BoxnovelService extends sourceService {
+export class ReadlightnovelService extends sourceService {
 
 	sourceNovels: novelObj[] = [];	// List of all the searched novels
 
@@ -44,78 +40,60 @@ export class BoxnovelService extends sourceService {
 			if (!updatingInfo) novel.inLibrary = false;	// Set as false to distinguish between novels already present
 			else novel.inLibrary = true;
 
-			// Name
-			const title = html.getElementsByClassName('post-title')[0]
-			try { title.getElementsByTagName('span')[0].remove(); } catch (error) { }
-			novel.name = title.textContent.trim();
+			//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
 
-			// LatestChapter
+			// FIXME: Name
+			novel.name = html.getElementsByClassName('title')[0].textContent;
+
+			// FIXME: LatestChapter
 			novel.latestChapter = html.getElementsByClassName('wp-manga-chapter')[0].getElementsByTagName('a')[0].innerText.trim();
 
-			// Cover
+			// FIXME: Cover
 			novel.cover = html.getElementsByClassName('summary_image')[0].getElementsByTagName('img')[0].src;
 
-			// TotalChapters
+			// FIXME: TotalChapters
 			novel.totalChapters = html.getElementsByClassName('wp-manga-chapter').length;
 
-			// Author(s)
-			let authorList = html.getElementsByClassName('author-content')[0].getElementsByTagName('a');
-			try {
-				let author = ""
-				for (let i = 0; i < authorList.length; i++) {
-					author += authorList[i].innerText.trim() + ', ';
-				}
-				novel.author = author.slice(0, -2);
-			} catch (error) {
-				novel.author = "unknown";
-				console.log(error);
-			}
+			// FIXME: Author(s)
+			novel.author = html.getElementsByClassName('author-content')[0].getElementsByTagName('a')[0].text;
 
-			// Genre(s)
-			let genreList = html.getElementsByClassName('genres-content')[0].getElementsByTagName('a');
-			try {
-				let genre = "";
-				for (let i = 0; i < genreList.length; i++) {
-					genre = genreList[i].innerText.trim() + ', ';
-				}
-				novel.genre = genre.slice(0, -2);
-			} catch (error) {
-				novel.genre = "unknown";
-				console.log(error);
-			}
+			// FIXME: Genre(s)
+			novel.genre = html.getElementsByClassName('genres-content')[0].getElementsByTagName('a')[0].text;
 
-			// Summary
-			let summaryList = html.getElementsByClassName('summary__content')[0].getElementsByTagName('p');
-			try {
-				let summary = ""
-				for (let i = 0; i < summaryList.length; i++) {
-					summary += summaryList[i].innerText.trim() + "\n";
-				}
-				novel.summary = summary;
-			} catch (error) {
-				novel.summary = "unknown";
-				console.log(error);
-			}
+			// FIXME: Summary
+			novel.summary = html.getElementsByClassName('summary__content')[0].getElementsByTagName('p')[0].textContent;
+
+			//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
 			this.pushOrUpdateNovel(novel, updatingInfo);
 		} catch (error) {
-			console.error(error);
+			console.log(error);
 		}
 
 		return novel;
 	}
 
 	async searchWithName(name: string, source: string): Promise<void> {
+
+		//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
+
+		// FIXME: Generate the search link from novel name
 		name = encodeURI(name.replace(/ /g, '+'));	// Replace spaces in novel name to a + for creating the search link
-		const searchLink = "https://boxnovel.com/?s=" + name + "&post_type=wp-manga";	// Search link that will find the novels of this name
+		const searchLink = "https://mysource.com/?s=" + name;	// Search link that will find the novels of this name
+
+		//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
 		const foundNovels: novelObj[] = [];	// Will store the novels found from this name
 
 		try {
 			const html = await this.getHtml(searchLink);
 			let novel: novelObj;
+			//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
 
+			// FIXME: Get the list of all search result elements
 			const novelList = html.getElementsByClassName('c-tabs-item__content');
+
+			//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
 			for (let i = 0; i < novelList.length; i++) {
 				// Link
@@ -137,52 +115,36 @@ export class BoxnovelService extends sourceService {
 				// Source
 				novel.source = source;
 
-				// Name
-				novel.name = novelList[i].getElementsByClassName('post-title')[0].getElementsByTagName('a')[0].innerText.trim();
+				//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
 
-				// Latest Chapter
-				novel.latestChapter = novelList[i].getElementsByClassName('chapter')[0].getElementsByTagName('a')[0].innerText.trim();
+				// FIXME: Name
+				novel.name = html.getElementsByClassName('title')[0].textContent;
 
-				// Total Chapters
-				novel.totalChapters = 0; // Total chapters don't show when searching for novels
+				// FIXME: LatestChapter
+				novel.latestChapter = html.getElementsByClassName('wp-manga-chapter')[0].getElementsByTagName('a')[0].innerText.trim();
 
-				// Cover
-				novel.cover = novelList[i].getElementsByClassName('tab-thumb')[0].getElementsByTagName('img')[0].src;
+				// FIXME: Cover
+				novel.cover = html.getElementsByClassName('summary_image')[0].getElementsByTagName('img')[0].src;
 
-				// Author(s)
-				const authorList = novelList[i].getElementsByClassName('mg_author')[0].getElementsByTagName('a');
-				try {
-					let author: string;
-					for (let i = 0; i < authorList.length; i++) {
-						author = authorList[i].innerText.trim() + ', ';
-					}
-					novel.author = author.slice(0, -2);
-				} catch (error) {
-					novel.author = "unknown";
-					console.error(error);
-				}
+				// FIXME: TotalChapters
+				novel.totalChapters = 0;	// If totalChapters is unknown, set it to 0 as it will not accept a string
 
-				// Genre(s)
-				let genreList = novelList[i].getElementsByClassName('mg_genres')[0].getElementsByTagName('a');
-				try {
-					let genre: string;
-					for (let i = 0; i < genreList.length; i++) {
-						genre = genreList[i].innerText.trim() + ', ';
-					}
-					novel.genre = genre.slice(0, -2);
-				} catch (error) {
-					novel.genre = "unknown";
-					console.log(error);
-				}
+				// FIXME: Author(s)
+				novel.author = "unknown";
 
-				// Summary
+				// FIXME: Genre(s)
+				novel.genre = "unknown";
+
+				// FIXME: Summary
 				novel.summary = "unknown";
+
+				//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
 				// Add the novel to the start of novel list
 				foundNovels.push(novel);
 			}
 		} catch (error) {
-			console.error(error)
+			console.log(error);
 		}
 
 		this.sourceNovels = [...foundNovels, ...this.sourceNovels];
@@ -194,17 +156,25 @@ export class BoxnovelService extends sourceService {
 		try {
 			const html = await this.getHtml(novel.link);
 
+			//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
+
+			// FIXME: Get the list of all chapter elements from the html
 			const chapters = html.getElementsByClassName('wp-manga-chapter');
 
-			// Get chapter links and names
+			// FIXME: For each element get the link to the chapter page and the name of the chapter
 			let chapterLinks = [];
 			let chapterNames = [];
 			for (let i = 0; i < chapters.length; i++) {
+				// FIXME: You will probably only need to update the lines below
 				chapterLinks.push(chapters[i].getElementsByTagName('a')[0].getAttribute('href'));
 				chapterNames.push(chapters[i].getElementsByTagName('a')[0].innerText.trim().replace(/(\r\n|\n|\r)/gm, ""));
 			}
+			// FIXME: In some cases the chapters are in descending order, we will reverse the lists to make them ascending
+			// FIXME: If your chapters are already in ascending order then remove the two lines below
 			chapterLinks.reverse();
 			chapterNames.reverse();
+
+			//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
 			const update = this.update(novel, chapterLinks.length);
 			if (update.startIndex === -1) {
@@ -227,17 +197,28 @@ export class BoxnovelService extends sourceService {
 				}
 
 				const html = await this.getHtml(chapterLinks[i]);
+
+				//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
+
+				// FIXME: you have the html of the chapter page
+				// Get the element that wraps all the paragraphs of the chapter
 				const chapterHtml = html.getElementsByClassName('entry-content')[0];
+
+				// FIXME: If the chapter element also has the title, you can remove it because we will be using the chapter names we got earlier
+				// You can remove the lines below if its not needed
 				try {
-					chapterHtml.getElementsByClassName("cha-tit")[0].remove();	// Remove h3 tag from chapter
+					chapterHtml.getElementsByClassName("chapter-title")[0].remove();	// Remove h3 tag from chapter
 				} catch (error) {
 					console.log("Missing 'cha-tit' class at chapter index " + i + "and chapter name " + chapterNames[i]);
 				}
+
+				//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
 				const chapterTitle = chapterNames[i];
 
 				let chapterBody = "<h3>" + chapterTitle + "</h3>";
 				chapterBody += chapterHtml.outerHTML;
+
 
 				const chapter = this.prepChapter(novel, downloadID, chapterTitle, chapterBody, i, chapterLinks.length);
 				downloadedChapters.push(chapter);

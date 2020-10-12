@@ -10,16 +10,16 @@ export class sourceService {
 
 	constructor(public database: DatabaseService,) { }
 
-	async searchWIthLink(link: string, source: string, updating: boolean): Promise<novelObj> { return {}; }
+	async searchWIthLink(link: string, source: string, updatingInfo: boolean): Promise<novelObj> { return {}; }
 
 	async searchWithName(name: string, source: string): Promise<void> { }
 
 	async download(novel: novelObj, downloadID: number): Promise<void> { }
 
-	update(novel: novelObj, chapters: HTMLCollectionOf<Element>): update {
-		if (chapters.length > novel.totalChapters) {
-			novel.totalChapters = chapters.length;
-			this.database.updateTotalChapters(novel.link, chapters.length);
+	update(novel: novelObj, numOfChapters: number): update {
+		if (numOfChapters > novel.totalChapters) {
+			novel.totalChapters = numOfChapters;
+			this.database.updateTotalChapters(novel.link, numOfChapters);
 		}
 
 		const updateFile = path.join(novel.folderPath, 'chapters.json');
@@ -34,7 +34,7 @@ export class sourceService {
 		const json: string = readFileSync(updateFile, 'utf8');
 		const updateChapters: chapterObj[] = JSON.parse(json);
 
-		if (chapters.length === novel.downloadedChapters) {
+		if (numOfChapters === novel.downloadedChapters) {
 			console.log("[SERVICE]: Already up to date!");
 			return { updateChapters: undefined, startIndex: -1 };
 		}

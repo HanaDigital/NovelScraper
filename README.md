@@ -7,7 +7,7 @@
 	<a href="https://github.com/HanaDigital/NovelScraper/releases"><img width="200" src="https://user-images.githubusercontent.com/41040912/95696675-218f8100-0c4d-11eb-82b9-cddddbe94758.png"></a>
 </p>
 
-<hr />
+---
 
 <p align="center">
 	<a href="https://hanadigital.github.io/grev/?user=hanadigital&repo=novelscraper"><img src="https://img.shields.io/github/downloads/HanaDigital/NovelScraper/total.svg?style=for-the-badge"></a>
@@ -16,34 +16,121 @@
 	<a href="https://github.com/HanaDigital/NovelScraper/stargazers"><img src="https://img.shields.io/github/issues/HanaDigital/NovelScraper?style=for-the-badge"></a>
 </p>
 
-<hr />
+---
 
 ## TABLE OF CONTENTS
-1. [About]()
-2. [How to use]()
-3. [Contribute]()
-4. [Attribution]()
-5. [License]()
+
+1. [About](#about)
+2. [Featrues](#features)
+3. [Contribute](#contribute)
+4. [Attribution](#attribution)
+5. [License](#license)
 
 ## ABOUT
-*Download translated web/light novels from a list of pirate sites.*
 
+_Download translated web/light novels from a list of pirate sites._  
 List of supported sites:
--	[BoxNovel]()
--	[ReadLightNovel]()
 
-Version: *2.0.0*
+-   [BoxNovel](https://boxnovel.com/)
+-   [ReadLightNovel](https://www.readlightnovel.org/)
+-   [~~NovelPlanet~~](https://novelplanet.com/) _offline_
 
-Author: *dr-nyt*
+Version: _2.0.0_  
+Author: _dr-nyt_
 
-## HOW TO USE 
+## FEATURES
 
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/41040912/95752018-74e6eb00-0cb0-11eb-8acb-2cc6fd790ffc.png">
+  	<img src="https://user-images.githubusercontent.com/41040912/95752022-76181800-0cb0-11eb-9e9c-2627334b0779.png">
+</p>
 
 ## CONTRIBUTE
 
+Contributing to this project is very straight forward. This is a step-by-step guide on how to add a source to the app.
+
+**Before getting started there are a few things that you need to be aware of:**
+
+-   You must have a good understanding of HTML, CSS & Javascript. Knowing how to scrape websites is a plus.
+-   You must also know how github works. I recommend using the [Github Desktop]() app for beginners.
+-   This app is built on [Electron]() and [Angular](). These are javascript frameworks.
+-   This app uses typescript, which is a superset of javascript.  
+    If you have a good understanding of javascript than this shouldn't be an issue. I recommend watching this [short video on typescript]().
+-   If you get stuck, feel free to ping me on [discord]().
+
+### Prerequisites
+
+-   Install [NodeJS]().
+-   Check the [Issues]() section on github to see if this source is requested.  
+    If it is, then leave a comment stating that you will work on this source.  
+    Otherwise, [create a new issue]() and state which source you will be working on.
+-   Fork this repository on [github](https://github.com/HanaDigital/NovelScraper).
+-   [OPTIONAL] I recommend using [VSCode]() as your IDE.  
+    If you use VScode, I suggest using the following extensions:
+
+    -   [Angular Essentials (Version 9)](https://marketplace.visualstudio.com/items?itemName=johnpapa.angular-essentials)
+    -   [Highlight](https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-highlight)
+
+-   Clone the forked repository on your machine, and open a terminal at that location.
+-   Run the following command to install all the dependencies:
+    ```bash
+    npm install
+    ```
+-   After all the dependencies install correctly, you can run the following to start the app in dev mode:
+    ```bash
+    npm start
+    ```
+
+_When in dev mode, the app will use a new dev library instead of the normal library_
+
+---
+
+### Add the Source
+
+**We will assume we are adding the source [boxnovel.com]() to show the process**
+
+-   Create a 150x150 png image for the source and save it in this directory `src/assets/img/sources/`.  
+    Boxnovel does not have a logo, so I used its initial letter to create a logo `src/assets/img/sources/boxnovel-logo.png`.  
+    Here are a few examples:
+
+<p align="center">
+	<img width="200" src="https://user-images.githubusercontent.com/41040912/95757580-600e5580-0cb8-11eb-9ee9-36500f3b94a5.png">
+  	<img width="200" src="https://user-images.githubusercontent.com/41040912/95757581-613f8280-0cb8-11eb-9488-9efb6997b86d.png">
+	<img width="200" src="https://user-images.githubusercontent.com/41040912/95757585-61d81900-0cb8-11eb-94f8-b1eaa8b7c1c5.png">
+  	<img width="200" src="https://user-images.githubusercontent.com/41040912/95757582-613f8280-0cb8-11eb-9753-d9b9a76f1aeb.png">
+</p>
+
+-   To add your source to the sourceList, open `src/app/resources/sourceList.ts` and add this line.
+
+    ```typescript
+    export const sources: sourcesList = [
+    	{ name: "ReadLightNovel", link: "https://www.readlightnovel.org", icon: "assets/img/sources/readlightnovel-logo.png" },
+    	...,
+    	/////////////////////////////////////////  THIS LINE  ///////////////////////////////////////////
+    	{ name: "BoxNovel", link: "https://boxnovel.com", icon: "assets/img/sources/boxnovel-logo.png" },
+    	/////////////////////////////////////////////////////////////////////////////////////////////////
+    ];
+    ```
+
+    -   `name`: Name of the source with every initial letter capitalized.
+    -   `link`: Link to the source website. Make sure the link does not end with the `/` character.
+    -   `icon`: This is the path to the icon you just added. The path will always start with `assets/img/sources/`.
+
+-   So far so good, the source should now appear in the sources page of the app!
+
+---
+
+### Create the Source Service
+
+_The Source Service we will now create will handle how to scrape the novels from a website._
+
+-   To create the service for a source we will run the following in the terminal.  
+    _Note, the name of the source needs to be lowercase in this command_
+    ```
+    ng g s boxnovel
+    ```
 
 ## ATTRIBUTION
-
 
 ## LICENSE
 
