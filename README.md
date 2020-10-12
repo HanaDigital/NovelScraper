@@ -1,7 +1,18 @@
-![Download Count](https://img.shields.io/github/downloads/HanaDigital/NovelScraper/total.svg?style=for-the-badge)
-[![GitHub stars](https://img.shields.io/github/stars/HanaDigital/NovelScraper?style=for-the-badge)](https://github.com/HanaDigital/NovelScraper/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/HanaDigital/NovelScraper?style=for-the-badge)](https://github.com/HanaDigital/NovelScraper/network)
-[![GitHub issues](https://img.shields.io/github/issues/HanaDigital/NovelScraper?style=for-the-badge)](https://github.com/HanaDigital/NovelScraper/issues)
+<p align="center">
+  	<img width="100%" src="https://user-images.githubusercontent.com/41040912/95695886-f5becc00-0c49-11eb-9f01-15d2b4e70b1c.png">
+</p>
+
+<p align="center">
+  	<img width="200" src="https://user-images.githubusercontent.com/41040912/95695097-80053100-0c46-11eb-8393-2f97d5f1e63c.png">
+</p>
+
+
+<p align="center">
+	<a href="https://github.com/HanaDigital/NovelScraper/stargazers"><img width="200" src="https://img.shields.io/github/downloads/HanaDigital/NovelScraper/total.svg?style=for-the-badge"></a>
+  	<a href="https://github.com/HanaDigital/NovelScraper/stargazers"><img width="200" src="https://img.shields.io/github/stars/HanaDigital/NovelScraper?style=for-the-badge"></a>
+	<a href="https://github.com/HanaDigital/NovelScraper/stargazers"><img width="200" src="https://img.shields.io/github/forks/HanaDigital/NovelScraper?style=for-the-badge"></a>
+	<a href="https://github.com/HanaDigital/NovelScraper/stargazers"><img width="200" src="https://img.shields.io/github/issues/HanaDigital/NovelScraper?style=for-the-badge"></a>
+</p>
 
 ### About
 
