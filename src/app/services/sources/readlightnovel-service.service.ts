@@ -9,8 +9,6 @@ import { sourceService } from './sourceService';
 })
 export class ReadlightnovelService extends sourceService {
 
-	sourceNovels: novelObj[] = [];	// List of all the searched novels
-
 	constructor(public database: DatabaseService, public novelFactory: NovelFactoryService) {
 		super(database);
 	}
@@ -57,7 +55,7 @@ export class ReadlightnovelService extends sourceService {
 			novel.cover = html.getElementsByClassName('novel-cover')[0].getElementsByTagName("img")[0].src;
 
 			// FIXME: TotalChapters
-			let chapterTabs = html.getElementsByClassName("tab-content")[0].getElementsByClassName("tab-pane");
+			const chapterTabs = html.getElementsByClassName("tab-content")[0].getElementsByClassName("tab-pane");
 			let totalChapters = 0;
 			for (let i = 0; i < chapterTabs.length; i++) {
 				if (chapterTabs[i].getElementsByTagName("li").length !== 0) {
@@ -68,7 +66,7 @@ export class ReadlightnovelService extends sourceService {
 
 			// FIXME: Author(s)
 			// Get list of authors
-			let authorList = html.getElementsByClassName("novel-left")[0].getElementsByClassName("novel-detail-item")[4].getElementsByTagName("li");
+			const authorList = html.getElementsByClassName("novel-left")[0].getElementsByClassName("novel-detail-item")[4].getElementsByTagName("li");
 			try {
 				let author = ""
 				for (let i = 0; i < authorList.length; i++) {
@@ -81,7 +79,7 @@ export class ReadlightnovelService extends sourceService {
 			}
 
 			// FIXME: Genre(s)
-			let genreList = html.getElementsByClassName("novel-left")[0].getElementsByClassName("novel-detail-item")[1].getElementsByTagName("a");
+			const genreList = html.getElementsByClassName("novel-left")[0].getElementsByClassName("novel-detail-item")[1].getElementsByTagName("a");
 			try {
 				let genre = "";
 				for (let i = 0; i < genreList.length; i++) {
@@ -94,7 +92,7 @@ export class ReadlightnovelService extends sourceService {
 			}
 
 			// FIXME: Summary
-			let summaryList = html.getElementsByClassName("novel-right")[0].getElementsByClassName("novel-detail-item")[0].getElementsByTagName("p");
+			const summaryList = html.getElementsByClassName("novel-right")[0].getElementsByClassName("novel-detail-item")[0].getElementsByTagName("p");
 			try {
 				let summary = "";
 				for (let i = 0; i < summaryList.length; i++) {
@@ -131,12 +129,12 @@ export class ReadlightnovelService extends sourceService {
 			// For each element get the link to the chapter page and the name of the chapter
 			let chapterLinks = [];
 			let chapterNames = [];
-			let chapterVolumes = html.getElementsByClassName("tab-content");
+			const chapterVolumes = html.getElementsByClassName("tab-content");
 			for (let s = 0; s < chapterVolumes.length; s++) {
-				let chapterTabs = chapterVolumes[s].getElementsByClassName("tab-pane");
+				const chapterTabs = chapterVolumes[s].getElementsByClassName("tab-pane");
 				for (let i = 0; i < chapterTabs.length; i++) {
 					if (chapterTabs[i].getElementsByTagName("li").length !== 0) {
-						let chapterHolders = chapterTabs[i].getElementsByTagName("li");
+						const chapterHolders = chapterTabs[i].getElementsByTagName("li");
 						for (let x = 0; x < chapterHolders.length; x++) {
 							chapterLinks.push(chapterHolders[x].getElementsByTagName('a')[0].getAttribute('href'));
 							chapterNames.push(chapterHolders[x].innerText);

@@ -1,19 +1,13 @@
 import { Injectable } from '@angular/core';
-import { chapterObj, novelObj, update } from 'app/resources/types';
-import { access, constants, existsSync, readFileSync } from 'fs';
+import { chapterObj, novelObj } from 'app/resources/types';
 import { DatabaseService } from '../database.service';
 import { NovelFactoryService } from '../novel-factory.service';
 import { sourceService } from './sourceService';
-import * as path from 'path';
-
-const cloudscraper = (<any>window).require('cloudscraper');
 
 @Injectable({
 	providedIn: 'root'
 })
 export class BoxnovelService extends sourceService {
-
-	sourceNovels: novelObj[] = [];	// List of all the searched novels
 
 	constructor(public database: DatabaseService, public novelFactory: NovelFactoryService) {
 		super(database);
@@ -46,7 +40,7 @@ export class BoxnovelService extends sourceService {
 
 			// Name
 			const title = html.getElementsByClassName('post-title')[0]
-			try { title.getElementsByTagName('span')[0].remove(); } catch (error) { }
+			try { title.getElementsByTagName('span')[0].remove(); } catch (error) { console.log(error) }
 			novel.name = title.textContent.trim();
 
 			// LatestChapter
@@ -59,7 +53,7 @@ export class BoxnovelService extends sourceService {
 			novel.totalChapters = html.getElementsByClassName('wp-manga-chapter').length;
 
 			// Author(s)
-			let authorList = html.getElementsByClassName('author-content')[0].getElementsByTagName('a');
+			const authorList = html.getElementsByClassName('author-content')[0].getElementsByTagName('a');
 			try {
 				let author = ""
 				for (let i = 0; i < authorList.length; i++) {
@@ -72,7 +66,7 @@ export class BoxnovelService extends sourceService {
 			}
 
 			// Genre(s)
-			let genreList = html.getElementsByClassName('genres-content')[0].getElementsByTagName('a');
+			const genreList = html.getElementsByClassName('genres-content')[0].getElementsByTagName('a');
 			try {
 				let genre = "";
 				for (let i = 0; i < genreList.length; i++) {
@@ -85,7 +79,7 @@ export class BoxnovelService extends sourceService {
 			}
 
 			// Summary
-			let summaryList = html.getElementsByClassName('summary__content')[0].getElementsByTagName('p');
+			const summaryList = html.getElementsByClassName('summary__content')[0].getElementsByTagName('p');
 			try {
 				let summary = ""
 				for (let i = 0; i < summaryList.length; i++) {

@@ -9,7 +9,7 @@ import { sourceService } from './sourceService';
 })
 export class SourceManagerService {
 
-	isChecking: boolean = false;
+	isChecking = false;
 
 	constructor(public boxnovelService: BoxnovelService, public readlightnovelService: ReadlightnovelService) { }
 
@@ -19,7 +19,7 @@ export class SourceManagerService {
 		else return undefined;
 	}
 
-	async checkForUpdates(novels: novelObj[]) {
+	async checkForUpdates(novels: novelObj[]): Promise<void> {
 		if (this.isChecking) return;
 		this.isChecking = true;
 		try {

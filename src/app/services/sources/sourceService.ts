@@ -69,10 +69,9 @@ export class sourceService {
 	}
 
 	async getHtml(link: string): Promise<HTMLHtmlElement> {
-		const stringHtml: string = await cloudscraper({ method: 'GET', url: link, },
-			(error, response, novelHtmlString) => {
-				return novelHtmlString;
-			});
+		const stringHtml: string = await cloudscraper({ method: 'GET', url: link, }, (error, response, novelHtmlString) => {
+			return novelHtmlString;
+		});
 
 		const html = document.createElement('html');
 		html.innerHTML = stringHtml;

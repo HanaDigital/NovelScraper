@@ -61,7 +61,7 @@ Contributing to this project is very straight forward. This is a step-by-step gu
 ### Prerequisites
 
 -   Install [NodeJS]().
--   Check the [Issues]() section on github to see if this source is requested.  
+-   Check the [Issues]() section on github to see if the source you want to add is requested.  
     If it is, then leave a comment stating that you will work on this source.  
     Otherwise, [create a new issue]() and state which source you will be working on.
 -   Fork this repository on [github](https://github.com/HanaDigital/NovelScraper).
@@ -122,12 +122,65 @@ _When in dev mode, the app will use a new dev library instead of the normal libr
 
 ### Create the Source Service
 
-_The Source Service we will now create will handle how to scrape the novels from a website._
+_The Source Service will handle how to scrape the novels from a source._
 
 -   To create the service for a source we will run the following in the terminal.  
-    _Note, the name of the source needs to be lowercase in this command_
+    _Note, you will only change the last part of this command and the name of the source needs to be lowercase_  
+    In my case, I will run:
+
+    ```javascript
+    ng g s services/sources/boxnovel
     ```
-    ng g s boxnovel
+
+    This will create a new file in `src/app/services/sources/` called `boxnovel.service.ts`.
+
+-   Now we need to let the app know that this new service exists.  
+    Open `src/app/services/sources/source-service-manager.service.ts`.
+    -   Import the service you just created at the top of the file. In my case, I will import:
+    ```typescript
+    import { BoxnovelService } from "./boxnovel.service";
+    ```
+    -   Add the import to the construct of the class so it can access it:
+    ```javascript
+    constructor(..., public boxnovelService: BoxnovelService) { }
+    ```
+    -   In the `getService()` function, add an `else if()` statement for your source:  
+        _Note, the `sourceName` must match the source name you added in the `sourceList`._
+        In my case I will add:
+        ```typescript
+        getService(sourceName: string): sourceService {
+        	...
+        	...
+        	else if (sourceName === "ReadLightNovel") return this.readlightnovelService;
+        	/////////////////////////////////////////  THIS LINE  ///////////////////////////////////////////
+        	else if(sourceName === "BoxNovel") return this.boxnovelService;
+        	/////////////////////////////////////////////////////////////////////////////////////////////////
+        	else return undefined;
+        }
+        ```
+-   Now the app should be able to recognize the source service you created.
+
+---
+
+### Implement the Source Service
+
+-   Open the source service you created. In my case: `src/app/services/sources/boxnovel.service.ts`
+-   Add these imports to the top of the file:
+    ```typescript
+    import { chapterObj, novelObj } from "app/resources/types";
+    import { DatabaseService } from "../database.service";
+    import { NovelFactoryService } from "../novel-factory.service";
+    import { sourceService } from "./sourceService";
+    ```
+-   You need to extend this class to gain more functionality:
+    ```typescript
+    export class BoxnovelService extends sourceService {
+    ```
+-   Change the constructor of the class so it looks like this:
+    ```javascript
+    constructor(public database: DatabaseService, public novelFactory: NovelFactoryService) {
+    	super(database);
+    }
     ```
 
 ## ATTRIBUTION
