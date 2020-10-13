@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { novelObj, sourcesList } from 'app/resources/types';
+import { novelObj } from 'app/resources/types';
 import { DatabaseService } from 'app/services/database.service';
 import { SourceManagerService } from 'app/services/sources/source-service-manager.service';
-import { sources } from '../../resources/sourceList';
 
 @Component({
 	selector: 'app-library-page',
@@ -12,19 +11,38 @@ import { sources } from '../../resources/sourceList';
 })
 export class LibraryPageComponent implements OnInit {
 
-	showDownloaded: boolean = true;
+	showDownloaded = true;
 
 	searchedNovels: novelObj[] = [];
-
 	searchText: string;
+	isSearch = false;
 
-	isSearch: boolean = false;
+	scrollTracker: NodeJS.Timeout;
+	currentScrollPos: number;
+	waitScroll = false;
 
 	constructor(public database: DatabaseService, private router: Router, public sourceManager: SourceManagerService) { }
 
-	ngOnInit(): void { }
+	ngOnInit(): void {
+		const scrollElement = document.getElementById("libraryPageWrapper");
+		if (this.database.scrollPos >= 0) {
+			this.currentScrollPos = this.database.scrollPos;
+			this.waitScroll = true;
+		}
 
-	loadNovel(novel: novelObj) {
+		this.scrollTracker = setInterval(() => {
+			const scrollPos = scrollElement.scrollTop;
+			if (this.waitScroll) {
+				scrollElement.scrollTop = this.currentScrollPos;
+				if (scrollElement.scrollTop === this.currentScrollPos) this.waitScroll = false;
+			} else if (scrollPos !== this.currentScrollPos) {
+				this.database.scrollPos = scrollPos;
+				this.currentScrollPos = scrollPos;
+			}
+		}, 500);
+	}
+
+	loadNovel(novel: novelObj): void {
 		for (const source of this.database.sources) {
 			if (novel.source === source.name) this.router.navigateByUrl('/novel', { state: { source: source, novel: novel, fromLibrary: true, fromHome: false } });
 		}
@@ -54,5 +72,9 @@ export class LibraryPageComponent implements OnInit {
 	submitSearch(event): void {
 		if (event.keyCode !== 13) return;
 		this.search(this.searchText);
+	}
+
+	ngOnDestroy(): void {
+		clearInterval(this.scrollTracker);
 	}
 }

@@ -17,7 +17,9 @@ export class SourcePageComponent implements OnInit {
 
 	searchText: string;
 
-	loading: boolean = false;
+	scrollTracker: NodeJS.Timeout;
+	currentScrollPos: number;
+	waitScroll = false;
 
 	constructor(private router: Router, private sourceManager: SourceManagerService) { }
 
@@ -29,6 +31,23 @@ export class SourcePageComponent implements OnInit {
 		};
 
 		this.service = this.sourceManager.getService(this.source.name);
+
+		const scrollElement = document.getElementById("sourcePageWrapper");
+		if (this.service.scrollPos >= 0) {
+			this.currentScrollPos = this.service.scrollPos;
+			this.waitScroll = true;
+		}
+
+		this.scrollTracker = setInterval(() => {
+			const scrollPos = scrollElement.scrollTop;
+			if (this.waitScroll) {
+				scrollElement.scrollTop = this.currentScrollPos;
+				if (scrollElement.scrollTop === this.currentScrollPos) this.waitScroll = false;
+			} else if (scrollPos !== this.currentScrollPos) {
+				this.service.scrollPos = scrollPos;
+				this.currentScrollPos = scrollPos;
+			}
+		}, 500);
 	}
 
 	submitSearch(event): void {
@@ -36,25 +55,28 @@ export class SourcePageComponent implements OnInit {
 		this.search(this.searchText);
 	}
 
-	search(value: string) {
+	search(value: string): void {
 		if (value == undefined || value == "") {
 			return;
 		} else if (value.toLowerCase().includes(this.source.link.toLowerCase())) {
-			this.loading = true;
-			this.service.searchWIthLink(value, this.source.name, false).then((novel) => this.loading = false);
+			this.service.searchWIthLink(value, this.source.name, false);
 		} else if (value.toLowerCase().includes('https://' || 'http://')) {
-			// TODO INVALID LINK
+			this.service.error = true;
+			this.service.errorMessage = "INVALID LINK";
 		} else {
-			this.loading = true;
-			this.service.searchWithName(value, this.source.name).then(() => this.loading = false);
+			this.service.searchWithName(value, this.source.name);
 		}
 	}
 
-	loadNovel(novel: novelObj) {
+	loadNovel(novel: novelObj): void {
 		this.router.navigateByUrl('/novel', { state: { source: this.source, novel: novel } });
 	}
 
-	openInBrowser() {
+	openInBrowser(): void {
 		shell.openExternal(this.source.link);
+	}
+
+	ngOnDestroy(): void {
+		clearInterval(this.scrollTracker);
 	}
 }

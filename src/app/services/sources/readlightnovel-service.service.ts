@@ -14,6 +14,9 @@ export class ReadlightnovelService extends sourceService {
 	}
 
 	async searchWIthLink(link: string, source: string, updatingInfo: boolean): Promise<novelObj> {
+		this.error = false;
+		this.searching = true;
+
 		let novel: novelObj = {};		// Declare novel object
 
 		// Check if the novel exists in the database
@@ -109,8 +112,10 @@ export class ReadlightnovelService extends sourceService {
 			this.pushOrUpdateNovel(novel, updatingInfo);
 		} catch (error) {
 			console.log(error);
+			this.error = true;
 		}
 
+		this.searching = false;
 		return novel;
 	}
 

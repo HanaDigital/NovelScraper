@@ -85,7 +85,7 @@ _When in dev mode, the app will use a new dev library instead of the normal libr
 
 ---
 
-### Add the Source
+### Adding a Source
 
 **We will assume we are adding the source [boxnovel.com]() to show the process**
 
@@ -120,7 +120,7 @@ _When in dev mode, the app will use a new dev library instead of the normal libr
 
 ---
 
-### Create the Source Service
+### Creating a Source Service
 
 _The Source Service will handle how to scrape the novels from a source._
 
@@ -162,7 +162,7 @@ _The Source Service will handle how to scrape the novels from a source._
 
 ---
 
-### Implement the Source Service
+### Implementing a Source Service
 
 -   Open the source service you created. In my case: `src/app/services/sources/boxnovel.service.ts`
 -   Add these imports to the top of the file:
@@ -182,6 +182,44 @@ _The Source Service will handle how to scrape the novels from a source._
     	super(database);
     }
     ```
+-   Now we just need to create three functions inside this class.
+
+    -   `searchWIthLink`: This function will search for a novel with a given link.
+    -   `searchWithName`: This function will search for a novel with a given name.
+    -   `download`: The function will download the novel chapters.
+
+    Your class should look something like this:
+
+    ```javascript
+    import { Injectable } from "@angular/core";
+    import { chapterObj, novelObj } from "app/resources/types";
+    import { DatabaseService } from "../database.service";
+    import { NovelFactoryService } from "../novel-factory.service";
+    import { sourceService } from "./sourceService";
+
+    @Injectable({
+    	providedIn: "root",
+    })
+    export class BoxnovelService extends sourceService {
+    	constructor(public database: DatabaseService, public novelFactory: NovelFactoryService) {
+    		super(database);
+    	}
+
+    	async searchWIthLink(link: string, source: string, updatingInfo: boolean): Promise<novelObj> {
+
+    	}
+
+    	async searchWithName(name: string, source: string): Promise<void> {
+
+    	}
+
+    	async download(novel: novelObj, downloadID: number): Promise<void> {
+
+    	}
+    }
+    ```
+
+-   Lastly we need to fill out these functions
 
 ## ATTRIBUTION
 

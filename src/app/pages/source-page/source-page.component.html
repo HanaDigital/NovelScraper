@@ -43,10 +43,28 @@
 				<div class="lineBreak"></div>
 			</div>
 
-			<div class="pageWrapper">
+			<div id="sourcePageWrapper" class="pageWrapper">
+				<div
+					class="error"
+					[ngStyle]="{
+						'min-height': service.error ? '100px' : '0px',
+						'margin-bottom': service.error ? '10px' : '0',
+						opacity: service.error ? '1' : '0'
+					}"
+				>
+					<p
+						[ngStyle]="{
+							opacity: service.error ? '1' : '0'
+						}"
+					>
+						{{ service.errorMessage }}
+					</p>
+				</div>
 				<div
 					class="sourceNovels"
-					*ngIf="service.sourceNovels.length > 0 && !loading"
+					*ngIf="
+						service.sourceNovels.length > 0 && !service.searching
+					"
 				>
 					<app-novel-card
 						*ngFor="let novel of service.sourceNovels"
@@ -57,12 +75,14 @@
 						<p>{{ novel.name }}</p>
 					</app-novel-card>
 				</div>
-				<div class="noSourceNovels" *ngIf="loading">
+				<div class="noSourceNovels" *ngIf="service.searching">
 					<p>LOADING</p>
 				</div>
 				<div
 					class="noSourceNovels"
-					*ngIf="service.sourceNovels.length === 0 && !loading"
+					*ngIf="
+						service.sourceNovels.length === 0 && !service.searching
+					"
 				>
 					SEARCH FOR NOVELS TO GET STARTED
 				</div>

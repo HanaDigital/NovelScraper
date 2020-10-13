@@ -14,6 +14,9 @@ export class BoxnovelService extends sourceService {
 	}
 
 	async searchWIthLink(link: string, source: string, updatingInfo: boolean): Promise<novelObj> {
+		this.error = false;
+		this.searching = true;
+
 		let novel: novelObj = {};		// Declare novel object
 
 		// Check if the novel exists in the database
@@ -94,12 +97,18 @@ export class BoxnovelService extends sourceService {
 			this.pushOrUpdateNovel(novel, updatingInfo);
 		} catch (error) {
 			console.error(error);
+			this.errorMessage = "ERROR FETCHING NOVEL";
+			this.error = true;
 		}
 
+		this.searching = false;
 		return novel;
 	}
 
 	async searchWithName(name: string, source: string): Promise<void> {
+		this.error = false;
+		this.searching = true;
+
 		name = encodeURI(name.replace(/ /g, '+'));	// Replace spaces in novel name to a + for creating the search link
 		const searchLink = "https://boxnovel.com/?s=" + name + "&post_type=wp-manga";	// Search link that will find the novels of this name
 
@@ -112,21 +121,10 @@ export class BoxnovelService extends sourceService {
 			const novelList = html.getElementsByClassName('c-tabs-item__content');
 
 			for (let i = 0; i < novelList.length; i++) {
+				novel = {};
+
 				// Link
-				const link = novelList[i].getElementsByClassName('post-title')[0].getElementsByTagName('a')[0].href;
-
-				// Check if novel is already in the searched novel list and remove it
-				this.sourceNovels = this.sourceNovels.filter(sourceNovel => sourceNovel.link !== link);
-
-				// Check if the novel exists in the database
-				novel = this.database.getNovel(link);
-				if (novel) {
-					foundNovels.push(novel);
-					continue;
-				} else {
-					novel = {};
-					novel.link = link;
-				}
+				novel.link = novelList[i].getElementsByClassName('post-title')[0].getElementsByTagName('a')[0].href;
 
 				// Source
 				novel.source = source;
@@ -157,7 +155,7 @@ export class BoxnovelService extends sourceService {
 				}
 
 				// Genre(s)
-				let genreList = novelList[i].getElementsByClassName('mg_genres')[0].getElementsByTagName('a');
+				const genreList = novelList[i].getElementsByClassName('mg_genres')[0].getElementsByTagName('a');
 				try {
 					let genre: string;
 					for (let i = 0; i < genreList.length; i++) {
@@ -172,13 +170,25 @@ export class BoxnovelService extends sourceService {
 				// Summary
 				novel.summary = "unknown";
 
-				// Add the novel to the start of novel list
-				foundNovels.push(novel);
+				// Check if novel is already in the searched novel list and remove it
+				this.sourceNovels = this.sourceNovels.filter(sourceNovel => sourceNovel.link !== novel.link);
+
+				// Check if the novel exists in the database
+				const libNovel = this.database.getNovel(novel.link);
+				if (libNovel) {
+					foundNovels.push(libNovel);
+					continue;
+				} else {
+					foundNovels.push(novel);
+				}
 			}
 		} catch (error) {
 			console.error(error)
+			this.errorMessage = "ERROR SEARCHING FOR NOVEL";
+			this.error = true;
 		}
 
+		this.searching = false;
 		this.sourceNovels = [...foundNovels, ...this.sourceNovels];
 	}
 

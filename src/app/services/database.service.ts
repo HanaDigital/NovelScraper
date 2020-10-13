@@ -14,7 +14,7 @@ import { AppConfig } from 'environments/environment';
 })
 export class DatabaseService {
 
-	loaded: boolean = false;
+	loaded = false;
 
 	appFolder = remote.app.getPath('userData');
 	libraryFolder = path.join(this.appFolder, 'library');
@@ -22,13 +22,15 @@ export class DatabaseService {
 
 	novels: novelObj[] = [];
 
-	updateNovels: number = 0;
-	downloadedNovels: number = 0;
+	updateNovels = 0;
+	downloadedNovels = 0;
 
 	downloadTrackers: downloadTracker[] = [];
 
 	sources: sourcesList = sources;
 	deprecatedSources: sourcesList = deprecatedSources;
+
+	scrollPos: number;
 
 	constructor() {
 		// Save the database when the app closes

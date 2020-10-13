@@ -96,21 +96,7 @@ export class ReadlightnovelService extends sourceService {
 			//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
 			for (let i = 0; i < novelList.length; i++) {
-				// Link
-				const link = novelList[i].getElementsByClassName('post-title')[0].getElementsByTagName('a')[0].href;
-
-				// Check if novel is already in the searched novel list and remove it
-				this.sourceNovels = this.sourceNovels.filter(sourceNovel => sourceNovel.link !== link);
-
-				// Check if the novel exists in the database
-				novel = this.database.getNovel(link);
-				if (novel) {
-					foundNovels.push(novel);
-					continue;
-				} else {
-					novel = {};
-					novel.link = link;
-				}
+				novel = {};
 
 				// Source
 				novel.source = source;
@@ -140,8 +126,20 @@ export class ReadlightnovelService extends sourceService {
 
 				//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
-				// Add the novel to the start of novel list
-				foundNovels.push(novel);
+				// Check if novel is already in the searched novel list and remove it
+				this.sourceNovels = this.sourceNovels.filter(sourceNovel => sourceNovel.link !== novel.link);
+
+				// Check if the novel exists in the database
+				const libNovel = this.database.getNovel(novel.link);
+				if (libNovel) {
+					foundNovels.push(libNovel);
+					continue;
+				} else {
+					foundNovels.push(novel);
+				}
+
+				// Source
+				novel.source = source;
 			}
 		} catch (error) {
 			console.log(error);

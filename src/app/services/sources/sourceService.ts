@@ -8,6 +8,12 @@ export class sourceService {
 
 	sourceNovels: novelObj[] = [];
 
+	searching = false;
+	error = false;
+	errorMessage = "";
+
+	scrollPos: number;
+
 	constructor(public database: DatabaseService,) { }
 
 	async searchWIthLink(link: string, source: string, updatingInfo: boolean): Promise<novelObj> { return {}; }
