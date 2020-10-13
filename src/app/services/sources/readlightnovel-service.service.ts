@@ -50,7 +50,7 @@ export class ReadlightnovelService extends sourceService {
 			try {
 				novel.latestChapter = html.getElementsByClassName('wp-manga-chapter')[0].getElementsByTagName('a')[0].innerText.trim();
 			} catch (error) {
-				novel.latestChapter = "unknown";
+				novel.latestChapter = "N/A";
 				console.log(error);
 			}
 
@@ -77,7 +77,7 @@ export class ReadlightnovelService extends sourceService {
 				}
 				novel.author = author.slice(0, -2);
 			} catch (error) {
-				novel.author = "unknown";
+				novel.author = "N/A";
 				console.log(error);
 			}
 
@@ -90,7 +90,7 @@ export class ReadlightnovelService extends sourceService {
 				}
 				novel.genre = genre.slice(0, -2);
 			} catch (error) {
-				novel.genre = "unknown";
+				novel.genre = "N/A";
 				console.log(error);
 			}
 
@@ -103,7 +103,7 @@ export class ReadlightnovelService extends sourceService {
 				}
 				novel.summary = summary;
 			} catch (error) {
-				novel.summary = "unknown";
+				novel.summary = "N/A";
 				console.log(error);
 			}
 

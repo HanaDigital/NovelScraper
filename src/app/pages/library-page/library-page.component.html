@@ -39,7 +39,11 @@
 				</div>
 			</div>
 
-			<div id="libraryPageWrapper" class="pageWrapper">
+			<div
+				id="libraryPageWrapper"
+				class="pageWrapper"
+				(scroll)="scroller($event)"
+			>
 				<div
 					class="checkingUpdates"
 					[ngStyle]="{

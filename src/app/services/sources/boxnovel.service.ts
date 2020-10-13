@@ -24,7 +24,7 @@ export class BoxnovelService extends sourceService {
 		if (novel && !updatingInfo) {
 			this.sourceNovels.unshift(novel);
 			return novel;
-		} else {
+		} else if (!updatingInfo) {
 			novel = {};
 		}
 
@@ -32,18 +32,17 @@ export class BoxnovelService extends sourceService {
 			const html = await this.getHtml(link);		// Get HTML from the link
 
 			// Link
-			novel.link = link;
+			if (!updatingInfo) novel.link = link;
 
 			// Source
-			novel.source = source;
+			if (!updatingInfo) novel.source = source;
 
 			// InLibrary
 			if (!updatingInfo) novel.inLibrary = false;	// Set as false to distinguish between novels already present
-			else novel.inLibrary = true;
 
 			// Name
 			const title = html.getElementsByClassName('post-title')[0]
-			try { title.getElementsByTagName('span')[0].remove(); } catch (error) { console.log(error) }
+			try { title.getElementsByTagName('span')[0].remove(); } catch (error) { console.log("[SERVICE]: Title span warning.") }
 			novel.name = title.textContent.trim();
 
 			// LatestChapter
@@ -64,7 +63,7 @@ export class BoxnovelService extends sourceService {
 				}
 				novel.author = author.slice(0, -2);
 			} catch (error) {
-				novel.author = "unknown";
+				novel.author = "N/A";
 				console.log(error);
 			}
 
@@ -77,7 +76,7 @@ export class BoxnovelService extends sourceService {
 				}
 				novel.genre = genre.slice(0, -2);
 			} catch (error) {
-				novel.genre = "unknown";
+				novel.genre = "N/A";
 				console.log(error);
 			}
 
@@ -90,10 +89,11 @@ export class BoxnovelService extends sourceService {
 				}
 				novel.summary = summary;
 			} catch (error) {
-				novel.summary = "unknown";
+				novel.summary = "N/A";
 				console.log(error);
 			}
 
+			console.log(novel, updatingInfo);
 			this.pushOrUpdateNovel(novel, updatingInfo);
 		} catch (error) {
 			console.error(error);
@@ -150,7 +150,7 @@ export class BoxnovelService extends sourceService {
 					}
 					novel.author = author.slice(0, -2);
 				} catch (error) {
-					novel.author = "unknown";
+					novel.author = "N/A";
 					console.error(error);
 				}
 
@@ -163,12 +163,12 @@ export class BoxnovelService extends sourceService {
 					}
 					novel.genre = genre.slice(0, -2);
 				} catch (error) {
-					novel.genre = "unknown";
+					novel.genre = "N/A";
 					console.log(error);
 				}
 
 				// Summary
-				novel.summary = "unknown";
+				novel.summary = "N/A";
 
 				// Check if novel is already in the searched novel list and remove it
 				this.sourceNovels = this.sourceNovels.filter(sourceNovel => sourceNovel.link !== novel.link);

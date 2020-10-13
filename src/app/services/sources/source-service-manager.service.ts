@@ -22,13 +22,13 @@ export class SourceManagerService {
 	async checkForUpdates(novels: novelObj[]): Promise<void> {
 		if (this.isChecking) return;
 		this.isChecking = true;
-		try {
-			for (const novel of novels) {
+		for (const novel of novels) {
+			try {
 				const service = this.getService(novel.source);
 				await service.searchWIthLink(novel.link, novel.source, true);
+			} catch (error) {
+				console.log(error);
 			}
-		} catch (error) {
-			console.log(error);
 		}
 		this.isChecking = false;
 	}

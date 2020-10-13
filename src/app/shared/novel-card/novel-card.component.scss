@@ -45,20 +45,32 @@
 		}
 	}
 
-	.notification {
+	.notifications {
 		position: absolute;
 		top: 5px;
 		right: 5px;
-		width: 25px;
-		height: 20px;
-		background: #00a2ff;
-		border-radius: 5px;
-		color: white;
 		display: flex;
-		justify-content: center;
+		justify-content: flex-end;
 		align-items: center;
-		font-size: 12px;
-		box-shadow: 0px 0px 12px -5px #00a2ff;
+
+		.notification {
+			width: 30px;
+			height: 20px;
+			margin-left: 5px;
+			background: #00a2ff;
+			box-shadow: 0px 0px 12px -5px #00a2ff;
+			border-radius: 5px;
+			color: white;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 12px;
+		}
+
+		.downloads {
+			background: #24a53e;
+			box-shadow: 0px 0px 12px -5px #24a53e;
+		}
 	}
 }
 

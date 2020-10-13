@@ -52,9 +52,9 @@ export class sourceService {
 		if (!updatingInfo) {
 			this.sourceNovels = this.sourceNovels.filter(sourceNovel => sourceNovel.link !== novel.link);
 			this.sourceNovels.unshift(novel);
-		} else if (novel.downloaded && novel.totalChapters > novel.downloadedChapters && novel.isUpdated) {
+		} else if (novel.totalChapters > novel.downloadedChapters) {
+			this.database.updateNovelObj(novel);
 			this.database.updateIsUpdated(novel.link, false);
-			novel.isUpdated = false;
 		}
 	}
 

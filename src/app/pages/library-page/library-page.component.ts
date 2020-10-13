@@ -31,15 +31,21 @@ export class LibraryPageComponent implements OnInit {
 		}
 
 		this.scrollTracker = setInterval(() => {
-			const scrollPos = scrollElement.scrollTop;
 			if (this.waitScroll) {
 				scrollElement.scrollTop = this.currentScrollPos;
 				if (scrollElement.scrollTop === this.currentScrollPos) this.waitScroll = false;
-			} else if (scrollPos !== this.currentScrollPos) {
-				this.database.scrollPos = scrollPos;
-				this.currentScrollPos = scrollPos;
+			} else {
+				clearInterval(this.scrollTracker);
 			}
-		}, 500);
+		}, 10);
+	}
+
+	scroller($event: Event): void {
+		const scrollPos = ($event.target as HTMLElement).scrollTop;
+		if (scrollPos !== this.currentScrollPos && !this.waitScroll) {
+			this.database.scrollPos = scrollPos;
+			this.currentScrollPos = scrollPos;
+		}
 	}
 
 	loadNovel(novel: novelObj): void {

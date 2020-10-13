@@ -9,7 +9,13 @@
 			<div class="in buttons" *ngIf="novel.inLibrary"></div>
 		</div> -->
 	</div>
-	<div class="notification" *ngIf="novel.isUpdated === false">
-		{{ novel.totalChapters - novel.downloadedChapters }}
+	<div class="notifications">
+		<div class="notification updates" *ngIf="novel.isUpdated === false">
+			{{ novel.totalChapters - novel.downloadedChapters }}
+		</div>
+
+		<div class="notification downloads" *ngIf="novel.downloaded === true">
+			{{ novel.downloadedChapters }}
+		</div>
 	</div>
 </div>

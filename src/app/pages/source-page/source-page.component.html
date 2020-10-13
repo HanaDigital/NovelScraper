@@ -43,7 +43,11 @@
 				<div class="lineBreak"></div>
 			</div>
 
-			<div id="sourcePageWrapper" class="pageWrapper">
+			<div
+				id="sourcePageWrapper"
+				class="pageWrapper"
+				(scroll)="scroller($event)"
+			>
 				<div
 					class="error"
 					[ngStyle]="{

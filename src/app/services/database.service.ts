@@ -6,7 +6,7 @@ import { sources, deprecatedSources } from '../resources/sourceList';
 import nconf from 'nconf';	// For storing library in a json file
 import { writeFile, access, constants, existsSync, mkdirSync } from 'fs';	// For all sorts of file management
 
-import { downloadTracker, libraryObj, newLibraryObj, novelFields, novelObj, novelUpdate, sourcesList } from '../resources/types';
+import { downloadTracker, newLibraryObj, novelObj, novelUpdate, sourcesList } from '../resources/types';
 import { AppConfig } from 'environments/environment';
 
 @Injectable({
@@ -182,12 +182,11 @@ export class DatabaseService {
 
 	// Remove a novel from the library
 	removeNovel(link: string): void {
-		for (let i = 0; i < this.novels.length; i++) {
-			if (this.novels[i].link === link) {
-				this.novels.splice(i, 1);
-				break;
-			}
-		}
+		this.novels = this.novels.filter(novel => {
+			if (novel.link !== link) return true;
+			else if (novel.downloaded) this.downloadedNovels--;
+			else if (!novel.isUpdated) this.updateNovels--;
+		});
 		this.set("novels", this.novels);
 	}
 
