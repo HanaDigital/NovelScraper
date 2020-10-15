@@ -6,6 +6,7 @@ const libraryFolder = path.join(remote.app.getPath("downloads"), "NovelScraper-L
 
 export const newLibraryObj: libraryObj = {
 	libraryFolder: libraryFolder,
+	compactMode: false,
 	novels: [],
 	settings: [],
 }
@@ -31,6 +32,7 @@ export type novelUpdate = string | number | boolean;
 
 export interface libraryObj {
 	libraryFolder: string,
+	compactMode: boolean,
 	novels: novelObj[],
 	settings?: { id: string, value: string }[],
 }
@@ -60,6 +62,7 @@ export interface chapterObj {
 	title: string,
 	data: string,
 	read?: boolean,
+	scroll?: number
 }
 
 // SOURCES
