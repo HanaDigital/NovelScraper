@@ -132,6 +132,13 @@ autoUpdater.on('update-not-available', (event) => {
 	console.log("NO DOWNLOAD");
 });
 
+autoUpdater.on('download-progress', (progressObj) => {
+	let log_message = "Download speed: " + progressObj.bytesPerSecond;
+	log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+	log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+	win.webContents.send('download_progress', log_message);
+})
+
 // Update has been downloaded
 autoUpdater.on('update-downloaded', () => {
 	win.webContents.send('update_downloaded');

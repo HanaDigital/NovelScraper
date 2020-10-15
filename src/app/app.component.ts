@@ -35,6 +35,10 @@ export class AppComponent {
 			});
 		});
 
+		ipcRenderer.on('download_progress', (event, arg) => {
+			console.log(arg);
+		});
+
 		ipcRenderer.on('update_downloaded', () => {
 			ipcRenderer.removeAllListeners('update_downloaded');
 			console.log("[APP]: Update downloaded!");
