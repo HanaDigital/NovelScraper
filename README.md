@@ -35,7 +35,7 @@ List of supported sites:
 -   [ReadLightNovel](https://www.readlightnovel.org/)
 -   [~~NovelPlanet~~](https://novelplanet.com/) _offline_
 
-Author: _dr-nyt_
+Author: _dr-nyt_  
 Version: _2.0.0_
 
 ## FEATURES
