@@ -118,20 +118,18 @@ ipc.on('app_version', (event) => {
 });
 
 // Download Update
-ipc.on('update-app', () => {
+ipc.on('update-app', (event) => {
 	autoUpdater.downloadUpdate();
 });
 
 // Update available
 autoUpdater.on('update-available', (event) => {
-	console.log(event);
 	win.webContents.send('update_available');
 });
 
 // Update is not available
 autoUpdater.on('update-not-available', (event) => {
-	console.log(event);
-	win.webContents.send('update_available');
+	console.log("NO DOWNLOAD");
 });
 
 // Update has been downloaded
