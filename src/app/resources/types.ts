@@ -60,6 +60,7 @@ export interface chapterObj {
 	title: string,
 	data: string,
 	read?: boolean,
+	scroll?: number
 }
 
 // SOURCES

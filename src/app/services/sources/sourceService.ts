@@ -71,7 +71,7 @@ export class sourceService {
 		this.database.updateDownloadTracker(downloadID, percentage);
 		console.log(percentage);
 
-		return { title: title, data: chapterBody, read: false }
+		return { title: title, data: chapterBody, read: false, scroll: 0 } as chapterObj;
 	}
 
 	async getHtml(link: string): Promise<HTMLHtmlElement> {
