@@ -118,21 +118,26 @@ ipc.on('app_version', (event) => {
 });
 
 // Download Update
-ipc.on('update-app', () => {
+ipc.on('update-app', (event) => {
 	autoUpdater.downloadUpdate();
 });
 
 // Update available
 autoUpdater.on('update-available', (event) => {
-	console.log(event);
 	win.webContents.send('update_available');
 });
 
 // Update is not available
 autoUpdater.on('update-not-available', (event) => {
-	console.log(event);
-	win.webContents.send('update_available');
+	console.log("NO DOWNLOAD");
 });
+
+autoUpdater.on('download-progress', (progressObj) => {
+	let log_message = "Download speed: " + progressObj.bytesPerSecond;
+	log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+	log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+	win.webContents.send('download_progress', log_message);
+})
 
 // Update has been downloaded
 autoUpdater.on('update-downloaded', () => {

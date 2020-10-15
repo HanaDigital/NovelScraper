@@ -29,13 +29,19 @@ export class AppComponent {
 
 		ipcRenderer.on('update_available', () => {
 			ipcRenderer.removeAllListeners('update_available');
+			console.log("[APP]: Update found!");
 			zone.run(() => {
 				this.isUpdate = true;
 			});
 		});
 
+		ipcRenderer.on('download_progress', (event, arg) => {
+			console.log(arg);
+		});
+
 		ipcRenderer.on('update_downloaded', () => {
 			ipcRenderer.removeAllListeners('update_downloaded');
+			console.log("[APP]: Update downloaded!");
 			zone.run(() => {
 				ipcRenderer.send('restart_app');
 			});
