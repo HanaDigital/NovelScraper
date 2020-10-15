@@ -32,14 +32,13 @@ export class ReadlightnovelService extends sourceService {
 			const html = await this.getHtml(link);		// Get HTML from the link
 
 			// Link
-			novel.link = link;
+			if (!updatingInfo) novel.link = link;
 
 			// Source
-			novel.source = source;
+			if (!updatingInfo) novel.source = source;
 
 			// InLibrary
 			if (!updatingInfo) novel.inLibrary = false;	// Set as false to distinguish between novels already present
-			else novel.inLibrary = true;
 
 			//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
 
@@ -112,6 +111,7 @@ export class ReadlightnovelService extends sourceService {
 			this.pushOrUpdateNovel(novel, updatingInfo);
 		} catch (error) {
 			console.log(error);
+			this.errorMessage = "ERROR FETCHING NOVEL";
 			this.error = true;
 		}
 
@@ -120,7 +120,8 @@ export class ReadlightnovelService extends sourceService {
 	}
 
 	async searchWithName(name: string, source: string): Promise<void> {
-		// Can't search with name for this source
+		this.errorMessage = "THIS SOURCE REQUIRES A DIRECT LINK TO THE NOVEL YOU WANT TO SEARCH";
+		this.error = true;
 	}
 
 	async download(novel: novelObj, downloadID: number): Promise<void> {

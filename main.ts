@@ -117,15 +117,24 @@ ipc.on('app_version', (event) => {
 	event.sender.send('app_version', { version: app.getVersion() });
 });
 
-ipc.on('update-app', (event) => {
+// Download Update
+ipc.on('update-app', () => {
 	autoUpdater.downloadUpdate();
 });
 
+// Update available
 autoUpdater.on('update-available', (event) => {
-	console.log('Updating...');
 	console.log(event);
 	win.webContents.send('update_available');
 });
+
+// Update is not available
+autoUpdater.on('update-not-available', (event) => {
+	console.log(event);
+	win.webContents.send('update_available');
+});
+
+// Update has been downloaded
 autoUpdater.on('update-downloaded', () => {
 	win.webContents.send('update_downloaded');
 });

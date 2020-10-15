@@ -13,6 +13,7 @@ src/**/*.js
 
 # dependencies
 /node_modules
+electron-builder.json
 
 # IDEs and editors
 /.idea

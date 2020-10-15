@@ -9,7 +9,8 @@ import { ipcRenderer, remote } from 'electron';
 })
 export class AppComponent {
 	version = "UPDATING";
-	updating = false;
+	isUpdate = false;
+	isUpdating = false;
 
 	menuButtons: HTMLCollectionOf<Element> = document.getElementsByClassName("button");
 
@@ -29,7 +30,7 @@ export class AppComponent {
 		ipcRenderer.on('update_available', () => {
 			ipcRenderer.removeAllListeners('update_available');
 			zone.run(() => {
-				this.updating = true;
+				this.isUpdate = true;
 			});
 		});
 
@@ -46,6 +47,15 @@ export class AppComponent {
 			this.menuButtons[i].classList.remove("active");
 			if (this.menuButtons[i].id === id) this.menuButtons[i].classList.add("active");
 		}
+	}
+
+	downloadUpdate(): void {
+		ipcRenderer.send('update-app');
+		this.isUpdating = true;
+	}
+
+	toggleUpdatePrompt(): void {
+		this.isUpdate = false;
 	}
 
 	// Minimize Window

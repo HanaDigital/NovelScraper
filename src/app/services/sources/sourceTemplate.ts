@@ -16,6 +16,9 @@ export class ReadlightnovelService extends sourceService {
 	}
 
 	async searchWIthLink(link: string, source: string, updatingInfo: boolean): Promise<novelObj> {
+		this.error = false;
+		this.searching = true;
+
 		let novel: novelObj = {};		// Declare novel object
 
 		// Check if the novel exists in the database
@@ -31,14 +34,13 @@ export class ReadlightnovelService extends sourceService {
 			const html = await this.getHtml(link);		// Get HTML from the link
 
 			// Link
-			novel.link = link;
+			if (!updatingInfo) novel.link = link;
 
 			// Source
-			novel.source = source;
+			if (!updatingInfo) novel.source = source;
 
 			// InLibrary
 			if (!updatingInfo) novel.inLibrary = false;	// Set as false to distinguish between novels already present
-			else novel.inLibrary = true;
 
 			//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
 
@@ -67,13 +69,18 @@ export class ReadlightnovelService extends sourceService {
 
 			this.pushOrUpdateNovel(novel, updatingInfo);
 		} catch (error) {
-			console.log(error);
+			console.error(error);
+			this.errorMessage = "ERROR FETCHING NOVEL";
+			this.error = true;
 		}
 
+		this.searching = false;
 		return novel;
 	}
 
 	async searchWithName(name: string, source: string): Promise<void> {
+		this.error = false;
+		this.searching = true;
 
 		//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
 
@@ -102,6 +109,9 @@ export class ReadlightnovelService extends sourceService {
 				novel.source = source;
 
 				//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
+
+				// FIXME: Link
+				novel.link = novelList[i].getElementsByClassName('post-title')[0].getElementsByTagName('a')[0].href;
 
 				// FIXME: Name
 				novel.name = html.getElementsByClassName('title')[0].textContent;
@@ -142,9 +152,12 @@ export class ReadlightnovelService extends sourceService {
 				novel.source = source;
 			}
 		} catch (error) {
-			console.log(error);
+			console.error(error)
+			this.errorMessage = "ERROR SEARCHING FOR NOVEL";
+			this.error = true;
 		}
 
+		this.searching = false;
 		this.sourceNovels = [...foundNovels, ...this.sourceNovels];
 	}
 
@@ -154,7 +167,7 @@ export class ReadlightnovelService extends sourceService {
 		try {
 			const html = await this.getHtml(novel.link);
 
-			//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
+			//////////////////////// [1] YOUR CODE STARTS HERE ///////////////////////////////
 
 			// FIXME: Get the list of all chapter elements from the html
 			const chapters = html.getElementsByClassName('wp-manga-chapter');
@@ -196,19 +209,11 @@ export class ReadlightnovelService extends sourceService {
 
 				const html = await this.getHtml(chapterLinks[i]);
 
-				//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
+				//////////////////////// [2] YOUR CODE STARTS HERE ///////////////////////////////
 
 				// FIXME: you have the html of the chapter page
 				// Get the element that wraps all the paragraphs of the chapter
 				const chapterHtml = html.getElementsByClassName('entry-content')[0];
-
-				// FIXME: If the chapter element also has the title, you can remove it because we will be using the chapter names we got earlier
-				// You can remove the lines below if its not needed
-				try {
-					chapterHtml.getElementsByClassName("chapter-title")[0].remove();	// Remove h3 tag from chapter
-				} catch (error) {
-					console.log("Missing 'cha-tit' class at chapter index " + i + "and chapter name " + chapterNames[i]);
-				}
 
 				//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
