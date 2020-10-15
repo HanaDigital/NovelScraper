@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?><svg
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	width="3000"
+	height="1337"
+	preserveAspectRatio="xMidYMid"
+	viewBox="0 0 3000 1337"
+	style="
+		z-index: 1;
+		margin-right: -2px;
+		display: block;
+		background-repeat-y: initial;
+		background-repeat-x: initial;
+		background-color: rgb(75, 114, 136);
+		animation-play-state: paused;
+	"
+>
+	<g transform="" style="animation-play-state: paused">
+		<g
+			transform="translate(1500 668.5)"
+			style="
+				transform: matrix(1, 0, 0, 1, 1500, 668.5);
+				animation-play-state: paused;
+			"
+		>
+			<g
+				transform="matrix(1,0,0,1,0,0)"
+				style="
+					transform: matrix(1, 0, 0, 1, 0, 0);
+					animation-play-state: paused;
+				"
+			>
+				<path
+					d="M0 0L2250 0 L1125.0000000000002 1948.557158514987 Z"
+					fill="#7ab4d4"
+					style="animation-play-state: paused"
+				></path>
+				<path
+					d="M0 0L-1124.9999999999995 1948.5571585149871 L-2250 2.755455298081545e-13 Z"
+					fill="#7ab4d4"
+					style="animation-play-state: paused"
+				></path>
+				<path
+					d="M0 0L-1125.000000000001 -1948.5571585149867 L1125.0000000000002 -1948.557158514987 Z"
+					fill="#7ab4d4"
+					style="animation-play-state: paused"
+				></path>
+				<circle
+					cx="0"
+					cy="0"
+					r="0"
+					fill="#7ab4d4"
+					style="animation-play-state: paused"
+				></circle>
+			</g>
+		</g>
+	</g>
+</svg>

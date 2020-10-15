@@ -1,52 +1,88 @@
-<!-- Nav bar to control the window -->
-<header>
-  <strong><span>NOVEL</span>SCRAPER</strong>
-  <nav>
-    <ul>
-      <li>
-        <div id="min" (click)="minWindow()"></div>
-      </li>
-      <li>
-        <div id="max" (click)="maxWindow()"></div>
-      </li>
-      <li>
-        <div id="close" (click)="closeWindow()"></div>
-      </li>
-    </ul>
-  </nav>
-</header>
+<nav>
+	<strong><span>HANA</span>DIGITAL</strong>
+	<div class="windowControls">
+		<div class="control minimize" (click)="minWindow()"></div>
+		<div class="control maximize" (click)="maxWindow()"></div>
+		<div class="control exit" (click)="closeWindow()"></div>
+	</div>
+</nav>
 
-<!-- Side Menu to switch pages -->
-<div id="vertical-menu">
+<div id="sideMenu">
+	<div class="title">
+		<img src="assets/img/side-menu/icon.svg" draggable="false" />
+		<div class="text">
+			<p>NOVEL</p>
+			<p>SCRAPER</p>
+		</div>
+	</div>
 
-  <!-- Home button -->
-  <a routerLink="" id="homeButton" class="menuButton" (click)="loadHomePage()">
-    <img src="assets/rsc/home.png" id="homeIcon" border="0" alt="" />
-  </a>
+	<hr />
 
-  <!-- Sources button -->
-  <a routerLink="/sources" id="sourcesButton" class="menuButton" (click)="loadSourcesPage()">
-    <img src="assets/rsc/sources.png" id="sourcesIcon" border="0" alt="" />
-  </a>
+	<div class="menuContent">
+		<div class="menuButtons">
+			<div
+				routerLink=""
+				id="home"
+				class="button active"
+				(click)="loadPage('home')"
+			>
+				<img src="assets/img/side-menu/Home.svg" draggable="false" />
+				<p>HOME</p>
+			</div>
 
-  <!-- Library button -->
-  <a routerLink="/library" id="libraryButton" class="menuButton" (click)="loadLibraryPage()">
-    <img src="assets/rsc/library.png" id="libraryIcon" border="0" alt="" />
-  </a>
+			<div
+				routerLink="/sources"
+				id="sources"
+				class="button"
+				(click)="loadPage('sources')"
+			>
+				<img src="assets/img/side-menu/Source.svg" draggable="false" />
+				<p>SOURCES</p>
+			</div>
 
-  <!-- Setting button -->
-  <a routerLink="/setting" id="settingButton" class="menuButton" (click)="loadSettingPage()">
-    <img src="assets/rsc/settings.png" id="libraryIcon" border="0" alt="" />
-  </a>
+			<div
+				routerLink="/library"
+				id="library"
+				class="button"
+				(click)="loadPage('library')"
+			>
+				<img src="assets/img/side-menu/Library.svg" draggable="false" />
+				<p>LIBRARY</p>
+			</div>
+		</div>
 
-  <p id="version">{{version}}</p>
+		<p id="version">{{ version }}</p>
+	</div>
 </div>
-<div id="vertical-menu-shadow"></div>
 
-<div id="update" [ngStyle]="{'display': updating ? 'flex' : 'none'}">
-  <div class="dialogueBox">
-    <p>UPDATING</p>
-  </div>
+<div id="update" *ngIf="isUpdate">
+	<div class="updatePrompt">
+		<div
+			class="promptWrapper"
+			[ngStyle]="{
+				opacity: isUpdating ? '0' : '1',
+				display: isUpdating ? 'none' : 'block'
+			}"
+		>
+			<p>AN UPDATE IS AVAILABLE. DO YOU WANT TO UPDATE NOW?</p>
+			<span>THE APP WILL RESTART AFTER UPDATING.</span>
+			<div class="buttons">
+				<button class="yes ans" (click)="downloadUpdate()">YES</button>
+				<button class="no ans" (click)="toggleUpdatePrompt()">
+					NO
+				</button>
+			</div>
+		</div>
+
+		<div
+			class="updating"
+			[ngStyle]="{
+				opacity: isUpdating ? '1' : '0',
+				display: isUpdating ? 'block' : 'none'
+			}"
+		>
+			UPDATING
+		</div>
+	</div>
 </div>
-
 <router-outlet></router-outlet>

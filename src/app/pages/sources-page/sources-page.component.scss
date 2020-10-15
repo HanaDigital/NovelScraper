@@ -1,0 +1,26 @@
+@import "assets/scss/global-variables";
+
+.page {
+	.pageContent {
+		.mainWrapper {
+			display: flex;
+			flex-direction: column;
+
+			.pageWrapper {
+				padding-top: 0;
+			}
+
+			.sourcesContainer {
+				margin-bottom: 20px;
+				display: flex;
+				flex-direction: column;
+				font-size: 12px;
+
+				.sourceHolder {
+					display: flex;
+					flex-wrap: wrap;
+				}
+			}
+		}
+	}
+}

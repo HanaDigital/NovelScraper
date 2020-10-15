@@ -1,0 +1,159 @@
+<div class="page">
+	<div class="pageHeader">
+		<h1 class="title">
+			LIBRARY
+			<hr />
+		</h1>
+	</div>
+
+	<div class="pageContent">
+		<div class="mainWrapper">
+			<div class="pageController">
+				<form class="searchForm" (keydown)="submitSearch($event)">
+					<input
+						class="searchBar"
+						name="searchBar"
+						type="url"
+						placeholder="SEARCH"
+						[(ngModel)]="searchText"
+					/>
+					<img
+						class="searchIcon"
+						src="assets/img/search.svg"
+						(click)="search(searchText)"
+						*ngIf="!isSearch"
+					/>
+					<img
+						class="searchIcon"
+						src="assets/img/cross.svg"
+						(click)="cancelSearch()"
+						*ngIf="isSearch"
+					/>
+				</form>
+
+				<div class="pageControllerButtons">
+					<button class="updateButton" (click)="checkForUpdates()">
+						<img src="assets/img/refresh-white.svg" />
+						UPDATE
+					</button>
+				</div>
+			</div>
+
+			<div
+				id="libraryPageWrapper"
+				class="pageWrapper"
+				(scroll)="scroller($event)"
+			>
+				<div
+					class="checkingUpdates"
+					[ngStyle]="{
+						'min-height': sourceManager.isChecking
+							? '100px'
+							: '0px',
+						'margin-bottom': sourceManager.isChecking
+							? '10px'
+							: '0',
+						opacity: sourceManager.isChecking ? '1' : '0'
+					}"
+				>
+					<p
+						[ngStyle]="{
+							opacity: sourceManager.isChecking ? '1' : '0'
+						}"
+					>
+						CHECKING FOR UPDATES
+					</p>
+				</div>
+				<div class="library librarySection" *ngIf="!isSearch">
+					<div class="header" (click)="toggleDownloaded()">
+						<p>DOWNLOADED</p>
+						<div class="lineBreak"></div>
+					</div>
+					<div class="downloadedNovels novelsContainer">
+						<div
+							class="novelsHolder"
+							*ngIf="
+								database.downloadedNovels > 0;
+								else noDownloadedNovels
+							"
+						>
+							<app-novel-card
+								*ngFor="let novel of database.novels"
+								[novel]="novel"
+								[ngStyle]="{
+									display: novel.downloaded ? 'block' : 'none'
+								}"
+								(click)="loadNovel(novel)"
+							>
+								<p>{{ novel.name }}</p>
+							</app-novel-card>
+						</div>
+						<ng-template #noDownloadedNovels>
+							<div class="noDownloads message">
+								NO DOWNLOADED NOVELS FOUND.
+							</div>
+						</ng-template>
+					</div>
+
+					<div class="header">
+						<p>SAVED</p>
+						<div class="lineBreak"></div>
+					</div>
+					<div class="savedNovels novelsContainer">
+						<div
+							class="novelsHolder"
+							*ngIf="
+								database.novels.length > 0 &&
+									database.novels.length !==
+										database.downloadedNovels;
+								else noSavedNovels
+							"
+						>
+							<app-novel-card
+								*ngFor="let novel of database.novels"
+								[novel]="novel"
+								[ngStyle]="{
+									display: novel.downloaded ? 'none' : 'block'
+								}"
+								(click)="loadNovel(novel)"
+							>
+								<p>{{ novel.name }}</p>
+							</app-novel-card>
+						</div>
+						<ng-template #noSavedNovels>
+							<div class="noSaved message">
+								NO SAVED NOVELS FOUND.
+							</div>
+						</ng-template>
+					</div>
+				</div>
+				<div class="search librarySection" *ngIf="isSearch">
+					<div class="header">
+						<p>SEARCH</p>
+						<div class="lineBreak"></div>
+					</div>
+					<div class="savedNovels novelsContainer">
+						<div
+							class="novelsHolder"
+							*ngIf="
+								searchedNovels.length > 0;
+								else noSavedNovels
+							"
+						>
+							<app-novel-card
+								*ngFor="let novel of searchedNovels"
+								[novel]="novel"
+								(click)="loadNovel(novel)"
+							>
+								<p>{{ novel.name }}</p>
+							</app-novel-card>
+						</div>
+						<ng-template #noSavedNovels>
+							<div class="noSaved message">NO NOVELS FOUND.</div>
+						</ng-template>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,148 +1,144 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 const ipc = require('electron').ipcMain;
-const { autoUpdater } = require('electron-updater');
-
+import { autoUpdater } from 'electron-updater';
+autoUpdater.autoDownload = false;
 const Splashscreen = require('@trodi/electron-splashscreen');
 
-var status = 0;
+let status = 0;
+
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
-  serve = args.some(val => val === '--serve');
+	serve = args.some(val => val === '--serve');
 
 function createWindow(): BrowserWindow {
 
-  const electronScreen = screen;
-  const size = electronScreen.getPrimaryDisplay().workAreaSize;
+	// Create the browser window.
+	const windowOptions = {
+		width: 1090,
+		height: 650,
+		center: true,
+		'minWidth': 1090,
+		'minHeight': 650,
+		frame: false,
+		webPreferences: {
+			enableRemoteModule: true,
+			nodeIntegration: true,
+			allowRunningInsecureContent: (serve) ? true : false,
+		}
+	};
 
-  // Create the browser window.
-  // win = new BrowserWindow({
-  //   x: 0,
-  //   y: 0,
-  //   width: 1060,
-  //   height: 600,
-  //   'minWidth': 1060,
-  //   'minHeight': 500,
-  //   frame: false,
-  //   webPreferences: {
-  //     nodeIntegration: true,
-  //     allowRunningInsecureContent: (serve) ? true : false,
-  //   },
-  // });
+	autoUpdater.checkForUpdates();
 
-  const windowOptions = {
-    width: 1060,
-    height: 600,
-    center: true,
-    'minWidth': 1060,
-    'minHeight': 500,
-    frame: false,
-    webPreferences: {
-      nodeIntegration: true,
-      allowRunningInsecureContent: (serve) ? true : false,
-    }
-  };
+	win = Splashscreen.initSplashScreen({
+		windowOpts: windowOptions,
+		templateUrl: path.join(__dirname, "rsc/splashScreen.html"),
+		delay: 0, // force show immediately since example will load fast
+		minVisible: 2000, // show for 1.5s so example is obvious
+		splashScreenOpts: {
+			height: 500,
+			width: 700,
+			transparent: true,
+		}
+	});
 
-  autoUpdater.checkForUpdatesAndNotify();
+	if (serve) {
 
-  win = Splashscreen.initSplashScreen({
-    windowOpts: windowOptions,
-    templateUrl: path.join(__dirname, "splashScreen.html"),
-    delay: 0, // force show immediately since example will load fast
-    minVisible: 2000, // show for 1.5s so example is obvious
-    splashScreenOpts: {
-      height: 500,
-      width: 700,
-      transparent: true,
-    },
-  });
+		win.webContents.openDevTools();
 
-  if (serve) {
-    require('electron-reload')(__dirname, {
-      electron: require(`${__dirname}/node_modules/electron`)
-    });
-    win.loadURL('http://localhost:4200');
-  } else {
-    win.loadURL(url.format({
-      pathname: path.join(__dirname, 'dist/index.html'),
-      protocol: 'file:',
-      slashes: true
-    }));
-  }
+		require('electron-reload')(__dirname, {
+			electron: require(`${__dirname}/node_modules/electron`)
+		});
+		win.loadURL('http://localhost:4200');
 
-  if (serve) {
-    win.webContents.openDevTools();
-  }
+	} else {
+		win.loadURL(url.format({
+			pathname: path.join(__dirname, 'dist/index.html'),
+			protocol: 'file:',
+			slashes: true
+		}));
+	}
 
-  // Emitted when the window is closing.
-  win.on('close', function (e) {
-    if (status == 0) {
-      if (win) {
-        e.preventDefault();
-        win.webContents.send('app-close');
-      }
-    }
-  });
+	// Emitted when the window is closed.
+	win.on('close', function (e) {
+		if (status == 0) {
+			if (win) {
+				e.preventDefault();
+				win.webContents.send('app-close');
+			}
+		}
+	});
 
-  // win.once('ready-to-show', () => {
-  //   console.log('Checking for updates...');
-  //   autoUpdater.checkForUpdatesAndNotify();
-  // });
-
-  return win;
+	return win;
 }
 
 try {
 
-  // This method will be called when Electron has finished
-  // initialization and is ready to create browser windows.
-  // Some APIs can only be used after this event occurs.
-  app.on('ready', createWindow);
+	app.allowRendererProcessReuse = false;
 
-  // Quit when all windows are closed.
-  app.on('window-all-closed', () => {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
-      app.quit();
-    }
-  });
+	// This method will be called when Electron has finished
+	// initialization and is ready to create browser windows.
+	// Some APIs can only be used after this event occurs.
+	// Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
+	app.on('ready', createWindow);
 
-  app.on('activate', () => {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (win === null) {
-      createWindow();
-    }
-  });
+	// Quit when all windows are closed.
+	app.on('window-all-closed', () => {
+		// On OS X it is common for applications and their menu bar
+		// to stay active until the user quits explicitly with Cmd + Q
+		if (process.platform !== 'darwin') {
+			app.quit();
+		}
+	});
+
+	app.on('activate', () => {
+		// On OS X it's common to re-create a window in the app when the
+		// dock icon is clicked and there are no other windows open.
+		if (win === null) {
+			createWindow();
+		}
+	});
 
 } catch (e) {
-  // Catch Error
-  // throw e;
+	// Catch Error
+	// throw e;
 }
 
 ipc.on('closed', _ => {
-  status = 1;
-  win = null;
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+	status = 1;
+	win = null;
+	if (process.platform !== 'darwin') {
+		app.quit();
+	}
 })
 
 ipc.on('app_version', (event) => {
-  event.sender.send('app_version', { version: app.getVersion() });
-  console.log('Checking for updates...');
+	event.sender.send('app_version', { version: app.getVersion() });
 });
 
-autoUpdater.on('update-available', () => {
-  console.log('Updating...');
-  win.webContents.send('update_available');
+// Download Update
+ipc.on('update-app', () => {
+	autoUpdater.downloadUpdate();
 });
+
+// Update available
+autoUpdater.on('update-available', (event) => {
+	console.log(event);
+	win.webContents.send('update_available');
+});
+
+// Update is not available
+autoUpdater.on('update-not-available', (event) => {
+	console.log(event);
+	win.webContents.send('update_available');
+});
+
+// Update has been downloaded
 autoUpdater.on('update-downloaded', () => {
-  win.webContents.send('update_downloaded');
+	win.webContents.send('update_downloaded');
 });
 
 ipc.on('restart_app', () => {
-  autoUpdater.quitAndInstall();
+	autoUpdater.quitAndInstall();
 });

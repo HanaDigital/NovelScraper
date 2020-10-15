@@ -1,0 +1,21 @@
+<div class="novelCard">
+	<img src="{{ novel.cover }}" />
+	<div class="novelName">
+		{{ name }}
+		<!-- <div class="novelButtons">
+			<div class="add buttons" *ngIf="!novel.inLibrary">
+				<img src="assets/img/add.svg" />
+			</div>
+			<div class="in buttons" *ngIf="novel.inLibrary"></div>
+		</div> -->
+	</div>
+	<div class="notifications">
+		<div class="notification updates" *ngIf="novel.isUpdated === false">
+			{{ novel.totalChapters - novel.downloadedChapters }}
+		</div>
+
+		<div class="notification downloads" *ngIf="novel.downloaded === true">
+			{{ novel.downloadedChapters }}
+		</div>
+	</div>
+</div>
