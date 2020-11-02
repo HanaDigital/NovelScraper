@@ -25,9 +25,9 @@ export class SourcePageComponent implements OnInit {
 
 	ngOnInit(): void {
 		if (!this.source) this.source = {
-			name: "BoxNovel",
-			link: "https://boxnovel.com",
-			icon: "assets/img/sources/boxnovel-logo.png"
+			name: "NovelFull",
+			link: "https://novelfull.com",
+			icon: "assets/img/sources/novelfull-logo.png"
 		};
 
 		this.service = this.sourceManager.getService(this.source.name);
