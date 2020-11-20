@@ -49,7 +49,8 @@ export class NovelfullService extends sourceService {
 			novel.latestChapter = html.getElementsByClassName('l-chapter')[0].getElementsByTagName('a')[0].title;
 
 			// FIXME: Cover
-			novel.cover = html.getElementsByClassName('book')[0].getElementsByTagName('img')[0].src.replace('localhost:4200', 'novelfull.com');
+			novel.cover = "https://novelfull.com" + html.getElementsByClassName('book')[0].getElementsByTagName('img')[0].getAttribute('src');
+			console.log(novel.cover)
 
 			// FIXME: TotalChapters
 			const lastPage = parseInt(html.getElementsByClassName('pagination')[0].getElementsByClassName('last')[0].getElementsByTagName('a')[0].getAttribute('data-page'));
@@ -128,7 +129,8 @@ export class NovelfullService extends sourceService {
 				//////////////////////// [3] YOUR CODE STARTS HERE ///////////////////////////////
 				console.log(novelList[i])
 				// FIXME: Link
-				novel.link = novelList[i].getElementsByClassName('truyen-title')[0].getElementsByTagName('a')[0].href.replace(/http:\/\/localhost:\d+/g, 'https://novelfull.com');
+				novel.link = "https://novelfull.com" + novelList[i].getElementsByClassName('truyen-title')[0].getElementsByTagName('a')[0].getAttribute('href');
+				console.log(novel.link)
 
 				// FIXME: Name
 				novel.name = novelList[i].getElementsByClassName('truyen-title')[0].getElementsByTagName('a')[0].innerText;
@@ -137,8 +139,7 @@ export class NovelfullService extends sourceService {
 				novel.latestChapter = novelList[i].getElementsByClassName('chapter-text')[0].textContent;
 
 				// FIXME: Cover
-				novel.cover = novelList[i].getElementsByTagName('img')[0].src.replace('localhost:4200', 'novelfull.com');
-				console.log(novel.cover);
+				novel.cover = "https://novelfull.com/" + novelList[i].getElementsByTagName('img')[0].getAttribute('src');
 
 				// FIXME: TotalChapters
 				novel.totalChapters = 0;	// If totalChapters is unknown, set it to 0 as it will not accept a string
