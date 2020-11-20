@@ -14,6 +14,8 @@ export class AppComponent {
 
 	menuButtons: HTMLCollectionOf<Element> = document.getElementsByClassName("button");
 
+	updateData: any;
+
 	constructor(zone: NgZone) {
 		console.log('Production: ', AppConfig.production);
 
@@ -36,7 +38,7 @@ export class AppComponent {
 		});
 
 		ipcRenderer.on('download_progress', (event, arg) => {
-			console.log(arg);
+			this.updateData = arg;
 		});
 
 		ipcRenderer.on('update_downloaded', () => {
@@ -61,7 +63,7 @@ export class AppComponent {
 	}
 
 	toggleUpdatePrompt(): void {
-		this.isUpdate = false;
+		this.isUpdate = !this.isUpdate;
 	}
 
 	// Minimize Window

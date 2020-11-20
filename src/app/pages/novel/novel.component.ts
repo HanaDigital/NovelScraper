@@ -21,13 +21,13 @@ export class NovelComponent implements OnInit {
 	fromHome: boolean = history.state.fromHome
 	fromLibrary: boolean = history.state.fromLibrary
 
-	progress: number = 0;
+	progress = 0;
 
 	downloadID: number;
 	checkDownload: NodeJS.Timeout;
 
-	showModal: boolean = false;
-	loading: boolean = false;
+	showModal = false;
+	loading = false;
 
 	constructor(private router: Router, public database: DatabaseService, public sourceManager: SourceManagerService) {
 		if (!this.source) this.source = {
@@ -76,6 +76,7 @@ export class NovelComponent implements OnInit {
 
 	addToLibrary(): void {
 		this.novel = this.database.addNovel(this.novel);
+		this.refresh();
 	}
 
 	download(): void {

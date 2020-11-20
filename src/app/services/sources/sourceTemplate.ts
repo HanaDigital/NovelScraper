@@ -26,7 +26,7 @@ export class ReadlightnovelService extends sourceService {
 		if (novel && !updatingInfo) {
 			this.sourceNovels.unshift(novel);
 			return novel;
-		} else {
+		} else if (!updatingInfo) {
 			novel = {};
 		}
 

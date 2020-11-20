@@ -24,7 +24,7 @@ export class NovelfullService extends sourceService {
 		if (novel && !updatingInfo) {
 			this.sourceNovels.unshift(novel);
 			return novel;
-		} else {
+		} else if (!updatingInfo) {
 			novel = {};
 		}
 
@@ -52,7 +52,11 @@ export class NovelfullService extends sourceService {
 			novel.cover = html.getElementsByClassName('book')[0].getElementsByTagName('img')[0].src.replace('localhost:4200', 'novelfull.com');
 
 			// FIXME: TotalChapters
-			novel.totalChapters = 0;
+			const lastPage = parseInt(html.getElementsByClassName('pagination')[0].getElementsByClassName('last')[0].getElementsByTagName('a')[0].getAttribute('data-page'));
+			let totalChapters = lastPage * 50;
+			const lastPageHtml = await this.getHtml(link + "?page=" + (lastPage + 1) + "&per-page=50");
+			totalChapters += lastPageHtml.getElementsByClassName('row')[1].getElementsByTagName('li').length;
+			novel.totalChapters = totalChapters;
 
 			// FIXME: Author(s)
 			novel.author = html.getElementsByClassName('info')[0].getElementsByTagName('a')[0].text;
@@ -77,7 +81,6 @@ export class NovelfullService extends sourceService {
 				novel.summary = "N/A";
 				console.log(error);
 			}
-			console.log(novel.summary);
 
 			//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
@@ -125,7 +128,7 @@ export class NovelfullService extends sourceService {
 				//////////////////////// [3] YOUR CODE STARTS HERE ///////////////////////////////
 				console.log(novelList[i])
 				// FIXME: Link
-				novel.link = novelList[i].getElementsByClassName('truyen-title')[0].getElementsByTagName('a')[0].href;
+				novel.link = novelList[i].getElementsByClassName('truyen-title')[0].getElementsByTagName('a')[0].href.replace(/http:\/\/localhost:\d+/g, 'https://novelfull.com');
 
 				// FIXME: Name
 				novel.name = novelList[i].getElementsByClassName('truyen-title')[0].getElementsByTagName('a')[0].innerText;
@@ -177,6 +180,73 @@ export class NovelfullService extends sourceService {
 	}
 
 	async download(novel: novelObj, downloadID: number): Promise<void> {
+		let downloadedChapters: chapterObj[] = [];	// List of download chapters
 
+		try {
+			const html = await this.getHtml(novel.link);
+
+			//////////////////////// [1] YOUR CODE STARTS HERE ///////////////////////////////
+
+			let chapterLinks = [];
+			let chapterNames = [];
+			const lastPage = parseInt(html.getElementsByClassName('pagination')[0].getElementsByClassName('last')[0].getElementsByTagName('a')[0].getAttribute('data-page')) + 1;
+			for (let i = 1; i <= lastPage; i++) {
+				const currentPageHtml = await this.getHtml(novel.link + "?page=" + i + "&per-page=50");
+				const chapters = currentPageHtml.getElementsByClassName('row')[1].getElementsByTagName('li');
+				for (let x = 0; x < chapters.length; x++) {
+					chapterLinks.push(chapters[x].getElementsByTagName('a')[0].href.replace(/http:\/\/localhost:\d+/g, 'https://novelfull.com'));
+					chapterNames.push(chapters[x].getElementsByTagName('a')[0].title);
+				}
+			}
+
+			//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
+
+			const update = this.update(novel, chapterLinks.length);
+			if (update.startIndex === -1) {
+				this.database.cancelDownload(downloadID);
+				this.database.updateDownloading(novel.link, false);
+				return;
+			}
+			else if (update.startIndex !== 0) {
+				downloadedChapters = update.updateChapters;
+				chapterLinks = chapterLinks.slice(update.startIndex);
+				chapterNames = chapterNames.slice(update.startIndex);
+			}
+
+			// Download each chapter at a time
+			for (let i = 0; i < chapterLinks.length; i++) {
+				if (this.database.isCanceled(downloadID)) {
+					this.database.updateDownloading(novel.link, false);
+					console.log('Download canceled!')
+					return;
+				}
+
+				const html = await this.getHtml(chapterLinks[i]);
+
+				//////////////////////// [2] YOUR CODE STARTS HERE ///////////////////////////////
+
+				// FIXME: you have the html of the chapter page
+				// Get the element that wraps all the paragraphs of the chapter
+				const chapterHtml = html.getElementsByClassName('chapter-c')[0];
+
+				//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
+
+				const chapterTitle = chapterNames[i];
+
+				let chapterBody = "<h3>" + chapterTitle + "</h3>";
+				chapterBody += chapterHtml.outerHTML;
+
+
+				const chapter = this.prepChapter(novel, downloadID, chapterTitle, chapterBody, i, chapterLinks.length);
+				downloadedChapters.push(chapter);
+			}
+
+			this.novelFactory.generateEpub(novel, downloadedChapters, downloadID);
+
+		} catch (error) {
+			this.database.cancelDownload(downloadID);
+			this.database.updateDownloading(novel.link, false);
+			console.error(error);
+		}
 	}
 }

@@ -133,10 +133,16 @@ autoUpdater.on('update-not-available', (event) => {
 });
 
 autoUpdater.on('download-progress', (progressObj) => {
-	let log_message = "Download speed: " + progressObj.bytesPerSecond;
-	log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-	log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-	win.webContents.send('download_progress', log_message);
+	const downloadSpeed = Math.round((progressObj.bytesPerSecond / 1024) * 100) / 100;
+	const downloadPercentage = progressObj.percent;
+	const downloadTransferred = progressObj.transferred;
+	const downloadTotal = progressObj.total;
+	win.webContents.send('download_progress', {
+		downloadSpeed: downloadSpeed,
+		downloadPercentage: downloadPercentage,
+		downloadTransferred: downloadTransferred,
+		downloadTotal: downloadTotal
+	});
 })
 
 // Update has been downloaded
