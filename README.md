@@ -240,9 +240,9 @@ _The Source Service will handle how to scrape the novels from a source._
     	if (novel && !updatingInfo) {
     		this.sourceNovels.unshift(novel);
     		return novel;
-    	} else {
-    		novel = {};
-    	}
+    	} else if (!updatingInfo) {
+			novel = {};
+		}
 
     	try {
     		const html = await this.getHtml(link);		// Get HTML from the link
