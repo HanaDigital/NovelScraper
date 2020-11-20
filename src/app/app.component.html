@@ -81,7 +81,7 @@
 				display: isUpdating ? 'block' : 'none'
 			}"
 		>
-			<h3>{{ updateData.downloadPercentage }}%</h3>
+			<h3>{{ updateData.downloadPercentage + "%" || "UPDATING" }}</h3>
 			<div
 				class="updatingBar"
 				[ngStyle]="{

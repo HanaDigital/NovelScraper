@@ -38,7 +38,10 @@ export class AppComponent {
 		});
 
 		ipcRenderer.on('download_progress', (event, arg) => {
-			this.updateData = arg;
+			zone.run(() => {
+				this.updateData = arg;
+				console.log(arg);
+			});
 		});
 
 		ipcRenderer.on('update_downloaded', () => {
