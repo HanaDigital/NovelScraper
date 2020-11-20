@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
-import { chapterObj, novelObj } from 'app/resources/types';
-import { DatabaseService } from '../database.service';
-import { NovelFactoryService } from '../novel-factory.service';
-import { sourceService } from './sourceService';
+import { chapterObj, novelObj } from "app/resources/types";
+import { DatabaseService } from "../database.service";
+import { NovelFactoryService } from "../novel-factory.service";
+import { sourceService } from "./sourceService";
 
 @Injectable({
 	providedIn: 'root'
 })
-export class ReadlightnovelService extends sourceService {
-
-	sourceNovels: novelObj[] = [];	// List of all the searched novels
+export class NovelfullService extends sourceService {
 
 	constructor(public database: DatabaseService, public novelFactory: NovelFactoryService) {
 		super(database);
@@ -48,22 +46,41 @@ export class ReadlightnovelService extends sourceService {
 			novel.name = html.getElementsByClassName('title')[0].textContent;
 
 			// FIXME: LatestChapter
-			novel.latestChapter = html.getElementsByClassName('wp-manga-chapter')[0].getElementsByTagName('a')[0].innerText.trim();
+			novel.latestChapter = html.getElementsByClassName('l-chapter')[0].getElementsByTagName('a')[0].title;
 
 			// FIXME: Cover
-			novel.cover = html.getElementsByClassName('summary_image')[0].getElementsByTagName('img')[0].src;
+			novel.cover = html.getElementsByClassName('book')[0].getElementsByTagName('img')[0].src.replace('localhost:4200', 'novelfull.com');
 
 			// FIXME: TotalChapters
-			novel.totalChapters = html.getElementsByClassName('wp-manga-chapter').length;
+			const lastPage = parseInt(html.getElementsByClassName('pagination')[0].getElementsByClassName('last')[0].getElementsByTagName('a')[0].getAttribute('data-page'));
+			let totalChapters = lastPage * 50;
+			const lastPageHtml = await this.getHtml(link + "?page=" + (lastPage + 1) + "&per-page=50");
+			totalChapters += lastPageHtml.getElementsByClassName('row')[1].getElementsByTagName('li').length;
+			novel.totalChapters = totalChapters;
 
 			// FIXME: Author(s)
-			novel.author = html.getElementsByClassName('author-content')[0].getElementsByTagName('a')[0].text;
+			novel.author = html.getElementsByClassName('info')[0].getElementsByTagName('a')[0].text;
 
 			// FIXME: Genre(s)
-			novel.genre = html.getElementsByClassName('genres-content')[0].getElementsByTagName('a')[0].text;
+			const genres = html.getElementsByClassName('info')[0].getElementsByTagName('div')[1].getElementsByTagName('a');
+			let genre = "";
+			for (let i = 0; i < genres.length; i++) {
+				genre += genres[i].innerText + ", ";
+			}
+			novel.genre = genre.slice(0, -2);
 
 			// FIXME: Summary
-			novel.summary = html.getElementsByClassName('summary__content')[0].getElementsByTagName('p')[0].textContent;
+			const summaryList = html.getElementsByClassName('desc-text')[0].getElementsByTagName('p');
+			try {
+				let summary = ""
+				for (let i = 0; i < summaryList.length; i++) {
+					summary += summaryList[i].innerText.trim() + "\n";
+				}
+				novel.summary = summary;
+			} catch (error) {
+				novel.summary = "N/A";
+				console.log(error);
+			}
 
 			//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
@@ -82,11 +99,11 @@ export class ReadlightnovelService extends sourceService {
 		this.error = false;
 		this.searching = true;
 
-		//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
+		//////////////////////// [1] YOUR CODE STARTS HERE ///////////////////////////////
 
 		// FIXME: Generate the search link from novel name
 		name = encodeURI(name.replace(/ /g, '+'));	// Replace spaces in novel name to a + for creating the search link
-		const searchLink = "https://mysource.com/?s=" + name;	// Search link that will find the novels of this name
+		const searchLink = "https://novelfull.com/search?keyword=" + name;	// Search link that will find the novels of this name
 
 		//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
@@ -95,10 +112,10 @@ export class ReadlightnovelService extends sourceService {
 		try {
 			const html = await this.getHtml(searchLink);
 			let novel: novelObj;
-			//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
+			//////////////////////// [2] YOUR CODE STARTS HERE ///////////////////////////////
 
 			// FIXME: Get the list of all search result elements
-			const novelList = html.getElementsByClassName('c-tabs-item__content');
+			const novelList = html.getElementsByClassName('list-truyen')[0].getElementsByClassName('row');
 
 			//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
@@ -108,25 +125,26 @@ export class ReadlightnovelService extends sourceService {
 				// Source
 				novel.source = source;
 
-				//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
-
+				//////////////////////// [3] YOUR CODE STARTS HERE ///////////////////////////////
+				console.log(novelList[i])
 				// FIXME: Link
-				novel.link = novelList[i].getElementsByClassName('post-title')[0].getElementsByTagName('a')[0].href;
+				novel.link = novelList[i].getElementsByClassName('truyen-title')[0].getElementsByTagName('a')[0].href.replace(/http:\/\/localhost:\d+/g, 'https://novelfull.com');
 
 				// FIXME: Name
-				novel.name = html.getElementsByClassName('title')[0].textContent;
+				novel.name = novelList[i].getElementsByClassName('truyen-title')[0].getElementsByTagName('a')[0].innerText;
 
 				// FIXME: LatestChapter
-				novel.latestChapter = html.getElementsByClassName('wp-manga-chapter')[0].getElementsByTagName('a')[0].innerText.trim();
+				novel.latestChapter = novelList[i].getElementsByClassName('chapter-text')[0].textContent;
 
 				// FIXME: Cover
-				novel.cover = html.getElementsByClassName('summary_image')[0].getElementsByTagName('img')[0].src;
+				novel.cover = novelList[i].getElementsByTagName('img')[0].src.replace('localhost:4200', 'novelfull.com');
+				console.log(novel.cover);
 
 				// FIXME: TotalChapters
 				novel.totalChapters = 0;	// If totalChapters is unknown, set it to 0 as it will not accept a string
 
 				// FIXME: Author(s)
-				novel.author = "unknown";
+				novel.author = novelList[i].getElementsByClassName("author")[0].textContent;
 
 				// FIXME: Genre(s)
 				novel.genre = "unknown";
@@ -169,21 +187,17 @@ export class ReadlightnovelService extends sourceService {
 
 			//////////////////////// [1] YOUR CODE STARTS HERE ///////////////////////////////
 
-			// FIXME: Get the list of all chapter elements from the html
-			const chapters = html.getElementsByClassName('wp-manga-chapter');
-
-			// FIXME: For each element get the link to the chapter page and the name of the chapter
 			let chapterLinks = [];
 			let chapterNames = [];
-			for (let i = 0; i < chapters.length; i++) {
-				// FIXME: You will probably only need to update the lines below
-				chapterLinks.push(chapters[i].getElementsByTagName('a')[0].getAttribute('href'));
-				chapterNames.push(chapters[i].getElementsByTagName('a')[0].innerText.trim().replace(/(\r\n|\n|\r)/gm, ""));
+			const lastPage = parseInt(html.getElementsByClassName('pagination')[0].getElementsByClassName('last')[0].getElementsByTagName('a')[0].getAttribute('data-page')) + 1;
+			for (let i = 1; i <= lastPage; i++) {
+				const currentPageHtml = await this.getHtml(novel.link + "?page=" + i + "&per-page=50");
+				const chapters = currentPageHtml.getElementsByClassName('row')[1].getElementsByTagName('li');
+				for (let x = 0; x < chapters.length; x++) {
+					chapterLinks.push(chapters[x].getElementsByTagName('a')[0].href.replace(/http:\/\/localhost:\d+/g, 'https://novelfull.com'));
+					chapterNames.push(chapters[x].getElementsByTagName('a')[0].title);
+				}
 			}
-			// FIXME: In some cases the chapters are in descending order, we will reverse the lists to make them ascending
-			// FIXME: If your chapters are already in ascending order then remove the two lines below
-			chapterLinks.reverse();
-			chapterNames.reverse();
 
 			//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
@@ -213,7 +227,7 @@ export class ReadlightnovelService extends sourceService {
 
 				// FIXME: you have the html of the chapter page
 				// Get the element that wraps all the paragraphs of the chapter
-				const chapterHtml = html.getElementsByClassName('entry-content')[0];
+				const chapterHtml = html.getElementsByClassName('chapter-c')[0];
 
 				//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 

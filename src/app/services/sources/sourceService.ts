@@ -49,6 +49,7 @@ export class sourceService {
 	}
 
 	pushOrUpdateNovel(novel: novelObj, updatingInfo: boolean): void {
+		if (!novel.downloadedChapters) novel.downloadedChapters = 0;
 		if (!updatingInfo) {
 			this.sourceNovels = this.sourceNovels.filter(sourceNovel => sourceNovel.link !== novel.link);
 			this.sourceNovels.unshift(novel);

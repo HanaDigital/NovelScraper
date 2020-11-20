@@ -81,7 +81,21 @@
 				display: isUpdating ? 'block' : 'none'
 			}"
 		>
-			UPDATING
+			<h3>{{ updateData.downloadPercentage }}%</h3>
+			<div
+				class="updatingBar"
+				[ngStyle]="{
+					width: updateData.downloadPercentage + '%'
+				}"
+			></div>
+		</div>
+		<div class="downloadInfo">
+			<p>
+				{{ updateData.downloadSpeed }} Kb/s - ({{
+					updateData.downloadTransferred
+				}}
+				/ {{ updateData.downloadTotal }})
+			</p>
 		</div>
 	</div>
 </div>
