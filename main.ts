@@ -134,7 +134,7 @@ autoUpdater.on('update-not-available', (event) => {
 
 autoUpdater.on('download-progress', (progressObj) => {
 	const downloadSpeed = Math.round((progressObj.bytesPerSecond / 1024) * 100) / 100;
-	const downloadPercentage = progressObj.percent;
+	const downloadPercentage = progressObj.percent.toFixed(2);
 	const downloadTransferred = progressObj.transferred;
 	const downloadTotal = progressObj.total;
 	win.webContents.send('download_progress', {
