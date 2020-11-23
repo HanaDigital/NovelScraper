@@ -1,6 +1,6 @@
 {
-	"name": "novelscraper",
-	"version": "2.0.2",
+	"name": "NovelScraper",
+	"version": "2.0.3",
 	"description": "App for downloading novels from pirate sites.",
 	"homepage": "https://github.com/HanaDigital/NovelScraper",
 	"author": {

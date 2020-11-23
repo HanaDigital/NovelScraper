@@ -195,7 +195,7 @@ export class NovelfullService extends sourceService {
 				const currentPageHtml = await this.getHtml(novel.link + "?page=" + i + "&per-page=50");
 				const chapters = currentPageHtml.getElementsByClassName('row')[1].getElementsByTagName('li');
 				for (let x = 0; x < chapters.length; x++) {
-					chapterLinks.push(chapters[x].getElementsByTagName('a')[0].href.replace(/http:\/\/localhost:\d+/g, 'https://novelfull.com'));
+					chapterLinks.push("https://novelfull.com" + chapters[x].getElementsByTagName('a')[0].getAttribute('href'));
 					chapterNames.push(chapters[x].getElementsByTagName('a')[0].title);
 				}
 			}
