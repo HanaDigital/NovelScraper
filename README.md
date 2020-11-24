@@ -48,7 +48,7 @@ Version: _2.0.0_
 
 ## CONTRIBUTE
 
-Contributing to this project is very straight forward. This is a step-by-step guide on how to add a source to the app.
+Contributing to this project is very straight forward. There is a step-by-step guide on how to add a source to the app.
 
 You can find the contribution guide [here](https://github.com/HanaDigital/NovelScraper/wiki/Contribution-Guide).
 
