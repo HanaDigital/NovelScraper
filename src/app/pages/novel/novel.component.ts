@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { novelObj, sourceObj } from 'app/resources/types';
+import { chapterObj, novelObj, sourceObj } from 'app/resources/types';
 import { DatabaseService } from 'app/services/database.service';
 import { BoxnovelService } from 'app/services/sources/boxnovel.service';
 import { SourceManagerService } from 'app/services/sources/source-service-manager.service';
 import { sourceService } from 'app/services/sources/sourceService';
 import { shell } from 'electron';
+import { readFileSync } from 'fs';
 
 @Component({
 	selector: 'app-novel',
@@ -16,10 +17,11 @@ export class NovelComponent implements OnInit {
 
 	source: sourceObj = history.state.source;
 	novel: novelObj = history.state.novel;
+	chapters: chapterObj;
 	service: sourceService = history.state.service;
 
-	fromHome: boolean = history.state.fromHome
-	fromLibrary: boolean = history.state.fromLibrary
+	fromHome: boolean = history.state.fromHome;
+	fromLibrary: boolean = history.state.fromLibrary;
 
 	progress = 0;
 
@@ -31,22 +33,31 @@ export class NovelComponent implements OnInit {
 
 	constructor(private router: Router, public database: DatabaseService, public sourceManager: SourceManagerService) {
 		if (!this.source) this.source = {
-			name: "BoxNovel",
-			link: "https://boxnovel.com",
-			icon: "assets/img/sources/boxnovel-logo.png"
+			name: "NovelFull",
+			link: "https://novelfull.com",
+			icon: "assets/img/sources/novelfull-logo.png"
 		};
 		if (!this.novel) this.novel = {
-			author: "Baby Piggie, 猪宝宝萌萌哒 Baby Piggie, 猪宝宝萌萌哒 Baby Piggie, 猪宝宝萌萌哒 Baby Piggie, 猪宝宝萌萌哒 Baby Piggie, 猪宝宝萌萌哒 Baby Piggie, 猪宝宝萌萌哒 Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years ",
-			cover: "https://boxnovel.com/wp-content/uploads/2018/10/My-Youth-Began-With-Him-193x278.jpg",
-			genre: "Romance",
-			latestChapter: "Chapter 3644 - Birthday Banquet 14 Chapter 3644 - Birthday Banquet 14 Chapter 3644 - Birthday Banquet 14",
-			totalChapters: 300,
-			link: "https://boxnovel.com/novel/my-youth-began-with-him-webnovel/",
-			name: "My Youth Began With Him-Webnovel My Youth Began With Him-Webnovel My Youth Began With Him-Webnovel My Youth Began With Him-Webnovel My Youth Began With Him-Webnovel My Youth Began With Him-Webnovel My Youth Began With Him-Webnovel",
-			source: "BoxNovel",
-			summary: "Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years Seven years ",
-			inLibrary: true,
+			source: "NovelFull",
+			link: "https://novelfull.com/tales-of-demons-and-gods.html",
+			name: "Tales of Demons and Gods",
+			latestChapter: "Chapter 494 - Divine Items",
+			cover: "https://novelfull.com/uploads/thumbs/tales-of-demons-and-gods-fceee0fee0-2239c49aee6b961904acf173b7e4602a.jpg",
+			totalChapters: 494,
+			author: "Mad Snail",
+			genre: "Fantasy, Xuanhuan, Action, Adventure, Comedy, Harem, Martial Arts, Romance",
+			summary: "Killed by a Sage Emperor and reborn as his 13 year old self, Nie Li was given a second chance at life. A second chance to change everything and save his loved ones and his beloved city. He shall once again battle with the Sage Emperor to avenge his death and those of his beloved . With the vast knowledge of hundred years of life he accumulated in his previous life, wielding the strongest demon spirits, he shall reach the pinnacle of Martial Arts.\nEnmities of the past will be settled in this new lifetime. “Since I’m back, then in this lifetime, I shall become the King of the Gods that dominate everything. Let everything else tremble beneath my feet!”\n",
+			downloadedChapters: 494,
+			folderPath: "A:\\Downloads\\NovelScraper-Library\\Tales of Demons and Gods",
 			downloading: false,
+			downloaded: true,
+			isUpdated: true,
+			inLibrary: true,
+			state: []
+		}
+
+		if (this.novel.downloaded) {
+			this.chapters = JSON.parse(readFileSync(this.novel.folderPath + "\\chapters.json").toString());
 		}
 	}
 
