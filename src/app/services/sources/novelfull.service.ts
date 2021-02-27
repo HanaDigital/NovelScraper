@@ -1,26 +1,32 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 import { chapterObj, novelObj } from "app/resources/types";
 import { DatabaseService } from "../database.service";
 import { NovelFactoryService } from "../novel-factory.service";
 import { sourceService } from "./sourceService";
 
 @Injectable({
-	providedIn: 'root'
+	providedIn: "root",
 })
 export class NovelfullService extends sourceService {
-
-	constructor(public database: DatabaseService, public novelFactory: NovelFactoryService) {
+	constructor(
+		public database: DatabaseService,
+		public novelFactory: NovelFactoryService
+	) {
 		super(database);
 	}
 
-	async searchWIthLink(link: string, source: string, updatingInfo: boolean): Promise<novelObj> {
+	async searchWIthLink(
+		link: string,
+		source: string,
+		updatingInfo: boolean
+	): Promise<novelObj> {
 		this.error = false;
 		this.searching = true;
 
-		let novel: novelObj = {};		// Declare novel object
+		let novel: novelObj = {}; // Declare novel object
 
 		// Check if the novel exists in the database
-		novel = this.database.getNovel(link)
+		novel = this.database.getNovel(link);
 		if (novel && !updatingInfo) {
 			this.sourceNovels.unshift(novel);
 			return novel;
@@ -29,7 +35,7 @@ export class NovelfullService extends sourceService {
 		}
 
 		try {
-			const html = await this.getHtml(link);		// Get HTML from the link
+			const html = await this.getHtml(link); // Get HTML from the link
 
 			// Link
 			if (!updatingInfo) novel.link = link;
@@ -38,32 +44,54 @@ export class NovelfullService extends sourceService {
 			if (!updatingInfo) novel.source = source;
 
 			// InLibrary
-			if (!updatingInfo) novel.inLibrary = false;	// Set as false to distinguish between novels already present
+			if (!updatingInfo) novel.inLibrary = false; // Set as false to distinguish between novels already present
 
 			//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
 
 			// FIXME: Name
-			novel.name = html.getElementsByClassName('title')[0].textContent;
+			novel.name = html.getElementsByClassName("title")[0].textContent;
 
 			// FIXME: LatestChapter
-			novel.latestChapter = html.getElementsByClassName('l-chapter')[0].getElementsByTagName('a')[0].title;
+			novel.latestChapter = html
+				.getElementsByClassName("l-chapter")[0]
+				.getElementsByTagName("a")[0].title;
 
 			// FIXME: Cover
-			novel.cover = "https://novelfull.com" + html.getElementsByClassName('book')[0].getElementsByTagName('img')[0].getAttribute('src');
-			console.log(novel.cover)
+			novel.cover =
+				"https://novelfull.com" +
+				html
+					.getElementsByClassName("book")[0]
+					.getElementsByTagName("img")[0]
+					.getAttribute("src");
+			console.log(novel.cover);
 
 			// FIXME: TotalChapters
-			const lastPage = parseInt(html.getElementsByClassName('pagination')[0].getElementsByClassName('last')[0].getElementsByTagName('a')[0].getAttribute('data-page'));
+			const lastPage = parseInt(
+				html
+					.getElementsByClassName("pagination")[0]
+					.getElementsByClassName("last")[0]
+					.getElementsByTagName("a")[0]
+					.getAttribute("data-page")
+			);
 			let totalChapters = lastPage * 50;
-			const lastPageHtml = await this.getHtml(link + "?page=" + (lastPage + 1) + "&per-page=50");
-			totalChapters += lastPageHtml.getElementsByClassName('row')[1].getElementsByTagName('li').length;
+			const lastPageHtml = await this.getHtml(
+				link + "?page=" + (lastPage + 1) + "&per-page=50"
+			);
+			totalChapters += lastPageHtml
+				.getElementsByClassName("row")[1]
+				.getElementsByTagName("li").length;
 			novel.totalChapters = totalChapters;
 
 			// FIXME: Author(s)
-			novel.author = html.getElementsByClassName('info')[0].getElementsByTagName('a')[0].text;
+			novel.author = html
+				.getElementsByClassName("info")[0]
+				.getElementsByTagName("a")[0].text;
 
 			// FIXME: Genre(s)
-			const genres = html.getElementsByClassName('info')[0].getElementsByTagName('div')[1].getElementsByTagName('a');
+			const genres = html
+				.getElementsByClassName("info")[0]
+				.getElementsByTagName("div")[1]
+				.getElementsByTagName("a");
 			let genre = "";
 			for (let i = 0; i < genres.length; i++) {
 				genre += genres[i].innerText + ", ";
@@ -71,9 +99,11 @@ export class NovelfullService extends sourceService {
 			novel.genre = genre.slice(0, -2);
 
 			// FIXME: Summary
-			const summaryList = html.getElementsByClassName('desc-text')[0].getElementsByTagName('p');
+			const summaryList = html
+				.getElementsByClassName("desc-text")[0]
+				.getElementsByTagName("p");
 			try {
-				let summary = ""
+				let summary = "";
 				for (let i = 0; i < summaryList.length; i++) {
 					summary += summaryList[i].innerText.trim() + "\n";
 				}
@@ -103,12 +133,12 @@ export class NovelfullService extends sourceService {
 		//////////////////////// [1] YOUR CODE STARTS HERE ///////////////////////////////
 
 		// FIXME: Generate the search link from novel name
-		name = encodeURI(name.replace(/ /g, '+'));	// Replace spaces in novel name to a + for creating the search link
-		const searchLink = "https://novelfull.com/search?keyword=" + name;	// Search link that will find the novels of this name
+		name = encodeURI(name.replace(/ /g, "+")); // Replace spaces in novel name to a + for creating the search link
+		const searchLink = "https://novelfull.com/search?keyword=" + name; // Search link that will find the novels of this name
 
 		//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
-		const foundNovels: novelObj[] = [];	// Will store the novels found from this name
+		const foundNovels: novelObj[] = []; // Will store the novels found from this name
 
 		try {
 			const html = await this.getHtml(searchLink);
@@ -116,7 +146,9 @@ export class NovelfullService extends sourceService {
 			//////////////////////// [2] YOUR CODE STARTS HERE ///////////////////////////////
 
 			// FIXME: Get the list of all search result elements
-			const novelList = html.getElementsByClassName('list-truyen')[0].getElementsByClassName('row');
+			const novelList = html
+				.getElementsByClassName("list-truyen")[0]
+				.getElementsByClassName("row");
 
 			//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
@@ -127,25 +159,40 @@ export class NovelfullService extends sourceService {
 				novel.source = source;
 
 				//////////////////////// [3] YOUR CODE STARTS HERE ///////////////////////////////
-				console.log(novelList[i])
+				console.log(novelList[i]);
 				// FIXME: Link
-				novel.link = "https://novelfull.com" + novelList[i].getElementsByClassName('truyen-title')[0].getElementsByTagName('a')[0].getAttribute('href');
-				console.log(novel.link)
+				novel.link =
+					"https://novelfull.com" +
+					novelList[i]
+						.getElementsByClassName("truyen-title")[0]
+						.getElementsByTagName("a")[0]
+						.getAttribute("href");
+				console.log(novel.link);
 
 				// FIXME: Name
-				novel.name = novelList[i].getElementsByClassName('truyen-title')[0].getElementsByTagName('a')[0].innerText;
+				novel.name = novelList[i]
+					.getElementsByClassName("truyen-title")[0]
+					.getElementsByTagName("a")[0].innerText;
 
 				// FIXME: LatestChapter
-				novel.latestChapter = novelList[i].getElementsByClassName('chapter-text')[0].textContent;
+				novel.latestChapter = novelList[i].getElementsByClassName(
+					"chapter-text"
+				)[0].textContent;
 
 				// FIXME: Cover
-				novel.cover = "https://novelfull.com/" + novelList[i].getElementsByTagName('img')[0].getAttribute('src');
+				novel.cover =
+					"https://novelfull.com/" +
+					novelList[i]
+						.getElementsByTagName("img")[0]
+						.getAttribute("src");
 
 				// FIXME: TotalChapters
-				novel.totalChapters = 0;	// If totalChapters is unknown, set it to 0 as it will not accept a string
+				novel.totalChapters = 0; // If totalChapters is unknown, set it to 0 as it will not accept a string
 
 				// FIXME: Author(s)
-				novel.author = novelList[i].getElementsByClassName("author")[0].textContent;
+				novel.author = novelList[i].getElementsByClassName(
+					"author"
+				)[0].textContent;
 
 				// FIXME: Genre(s)
 				novel.genre = "unknown";
@@ -156,7 +203,9 @@ export class NovelfullService extends sourceService {
 				//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
 				// Check if novel is already in the searched novel list and remove it
-				this.sourceNovels = this.sourceNovels.filter(sourceNovel => sourceNovel.link !== novel.link);
+				this.sourceNovels = this.sourceNovels.filter(
+					(sourceNovel) => sourceNovel.link !== novel.link
+				);
 
 				// Check if the novel exists in the database
 				const libNovel = this.database.getNovel(novel.link);
@@ -171,7 +220,7 @@ export class NovelfullService extends sourceService {
 				novel.source = source;
 			}
 		} catch (error) {
-			console.error(error)
+			console.error(error);
 			this.errorMessage = "ERROR SEARCHING FOR NOVEL";
 			this.error = true;
 		}
@@ -181,7 +230,7 @@ export class NovelfullService extends sourceService {
 	}
 
 	async download(novel: novelObj, downloadID: number): Promise<void> {
-		let downloadedChapters: chapterObj[] = [];	// List of download chapters
+		let downloadedChapters: chapterObj[] = []; // List of download chapters
 
 		try {
 			const html = await this.getHtml(novel.link);
@@ -190,13 +239,31 @@ export class NovelfullService extends sourceService {
 
 			let chapterLinks = [];
 			let chapterNames = [];
-			const lastPage = parseInt(html.getElementsByClassName('pagination')[0].getElementsByClassName('last')[0].getElementsByTagName('a')[0].getAttribute('data-page')) + 1;
+			const lastPage =
+				parseInt(
+					html
+						.getElementsByClassName("pagination")[0]
+						.getElementsByClassName("last")[0]
+						.getElementsByTagName("a")[0]
+						.getAttribute("data-page")
+				) + 1;
 			for (let i = 1; i <= lastPage; i++) {
-				const currentPageHtml = await this.getHtml(novel.link + "?page=" + i + "&per-page=50");
-				const chapters = currentPageHtml.getElementsByClassName('row')[1].getElementsByTagName('li');
+				const currentPageHtml = await this.getHtml(
+					novel.link + "?page=" + i + "&per-page=50"
+				);
+				const chapters = currentPageHtml
+					.getElementsByClassName("row")[1]
+					.getElementsByTagName("li");
 				for (let x = 0; x < chapters.length; x++) {
-					chapterLinks.push("https://novelfull.com" + chapters[x].getElementsByTagName('a')[0].getAttribute('href'));
-					chapterNames.push(chapters[x].getElementsByTagName('a')[0].title);
+					chapterLinks.push(
+						"https://novelfull.com" +
+							chapters[x]
+								.getElementsByTagName("a")[0]
+								.getAttribute("href")
+					);
+					chapterNames.push(
+						chapters[x].getElementsByTagName("a")[0].title
+					);
 				}
 			}
 
@@ -207,8 +274,7 @@ export class NovelfullService extends sourceService {
 				this.database.cancelDownload(downloadID);
 				this.database.updateDownloading(novel.link, false);
 				return;
-			}
-			else if (update.startIndex !== 0) {
+			} else if (update.startIndex !== 0) {
 				downloadedChapters = update.updateChapters;
 				chapterLinks = chapterLinks.slice(update.startIndex);
 				chapterNames = chapterNames.slice(update.startIndex);
@@ -218,7 +284,7 @@ export class NovelfullService extends sourceService {
 			for (let i = 0; i < chapterLinks.length; i++) {
 				if (this.database.isCanceled(downloadID)) {
 					this.database.updateDownloading(novel.link, false);
-					console.log('Download canceled!')
+					console.log("Download canceled!");
 					return;
 				}
 
@@ -228,7 +294,7 @@ export class NovelfullService extends sourceService {
 
 				// FIXME: you have the html of the chapter page
 				// Get the element that wraps all the paragraphs of the chapter
-				const chapterHtml = html.getElementsByClassName('chapter-c')[0];
+				const chapterHtml = html.getElementsByClassName("chapter-c")[0];
 
 				//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
@@ -237,13 +303,30 @@ export class NovelfullService extends sourceService {
 				let chapterBody = "<h3>" + chapterTitle + "</h3>";
 				chapterBody += chapterHtml.outerHTML;
 
+				chapterBody = chapterBody.replace(
+					/\(adsbygoogle = window.adsbygoogle \|\| \[\]\).push\({}\);/g,
+					""
+				);
+				chapterBody = chapterBody.replace(/<script.*><\/script>/g, "");
+				chapterBody = chapterBody.replace(/<ins.*<\/ins>/g, "");
+				console.log(chapterBody);
 
-				const chapter = this.prepChapter(novel, downloadID, chapterTitle, chapterBody, i, chapterLinks.length);
+				const chapter = this.prepChapter(
+					novel,
+					downloadID,
+					chapterTitle,
+					chapterBody,
+					i,
+					chapterLinks.length
+				);
 				downloadedChapters.push(chapter);
 			}
 
-			this.novelFactory.generateEpub(novel, downloadedChapters, downloadID);
-
+			this.novelFactory.generateEpub(
+				novel,
+				downloadedChapters,
+				downloadID
+			);
 		} catch (error) {
 			this.database.cancelDownload(downloadID);
 			this.database.updateDownloading(novel.link, false);
