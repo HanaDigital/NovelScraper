@@ -2,7 +2,11 @@
 	<div class="pageHeader">
 		<h1 class="title">
 			<img class="back" src="assets/img/drop-arrow.svg" />
-			<img class="backButton" src="assets/img/back-arrow.svg" (click)="goBack()" />
+			<img
+				class="backButton"
+				src="assets/img/back-arrow.svg"
+				(click)="goBack()"
+			/>
 			{{ source.name.toUpperCase() }}
 			<hr />
 		</h1>
@@ -12,30 +16,59 @@
 		<div class="mainWrapper">
 			<div class="pageWrapper">
 				<div class="novelPageController">
-					<div class="progressBar" [ngStyle]="{
+					<div
+						class="progressBar"
+						[ngStyle]="{
 							width: novel.downloading ? '275px' : '0px'
-						}">
+						}"
+					>
 						<div class="progress">
 							{{ database.getPercentage(downloadID) }}
 						</div>
-						<div class="bar" [ngStyle]="{
+						<div
+							class="bar"
+							[ngStyle]="{
 								width: database.getPercentage(downloadID)
-							}"></div>
+							}"
+						></div>
 					</div>
 
 					<div class="add" *ngIf="!novel.inLibrary">
-						<img src="assets/img/add.svg" (click)="addToLibrary()" />
+						<img
+							src="assets/img/add.svg"
+							(click)="addToLibrary()"
+						/>
 					</div>
 					<div class="in" *ngIf="novel.inLibrary">
-						<img src="assets/img/browser-white.svg" (click)="openInBrowser()" />
-						<img src="assets/img/refresh-white.svg" (click)="refresh()" />
-						<img src="assets/img/delete.svg" (click)="toggleDeleteModal()" />
-						<img src="assets/img/folder.svg" (click)="openFolder()" *ngIf="novel.downloaded" />
-						<img src="assets/img/update.svg" *ngIf="novel.downloaded && !novel.downloading"
-							(click)="download()" />
-						<img src="assets/img/cancel.svg" *ngIf="novel.downloading" (click)="cancelDownload()" />
-						<img src="assets/img/download.svg" *ngIf="!novel.downloaded && !novel.downloading"
-							(click)="download()" />
+						<img
+							src="assets/img/browser.svg"
+							(click)="openInBrowser()"
+						/>
+						<img
+							src="assets/img/delete.svg"
+							(click)="toggleDeleteModal()"
+						/>
+						<img src="assets/img/refresh.svg" (click)="refresh()" />
+						<img
+							src="assets/img/folder.svg"
+							(click)="openFolder()"
+							*ngIf="novel.downloaded"
+						/>
+						<img
+							src="assets/img/update.svg"
+							*ngIf="novel.downloaded && !novel.downloading"
+							(click)="download()"
+						/>
+						<img
+							src="assets/img/cancel.svg"
+							*ngIf="novel.downloading"
+							(click)="cancelDownload()"
+						/>
+						<img
+							src="assets/img/download.svg"
+							*ngIf="!novel.downloaded && !novel.downloading"
+							(click)="download()"
+						/>
 					</div>
 				</div>
 
@@ -50,14 +83,22 @@
 							<h4>LATEST CHAPTER</h4>
 							<span>{{ novel.latestChapter }}</span>
 						</div>
-						<div class="infoBox totalChapters" *ngIf="!novel.downloaded">
+						<div
+							class="infoBox totalChapters"
+							*ngIf="!novel.downloaded"
+						>
 							<h4>TOTAL CHAPTERS</h4>
 							<span>{{ novel.totalChapters }}</span>
 						</div>
-						<div class="infoBox totalChapters" *ngIf="novel.downloaded">
+						<div
+							class="infoBox totalChapters"
+							*ngIf="novel.downloaded"
+						>
 							<h4>DOWNLOADED</h4>
-							<span>{{ novel.downloadedChapters }} /
-								{{ novel.totalChapters }}</span>
+							<span
+								>{{ novel.downloadedChapters }} /
+								{{ novel.totalChapters }}</span
+							>
 						</div>
 						<div class="infoBox source">
 							<h4>SOURCE</h4>
@@ -79,13 +120,6 @@
 				</div>
 
 				<div class="loadingInfo" *ngIf="loading">LOADING</div>
-
-				<div class="chapters" *ngIf="novel.downloaded">
-					<h2>CHAPTERS</h2>
-					<div class="chap" *ngFor="let chapter of chapters">
-						<p>{{chapter.title}}</p>
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>

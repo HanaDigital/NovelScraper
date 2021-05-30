@@ -8,10 +8,8 @@
 				flex-direction: row;
 				justify-content: space-between;
 				align-items: center;
+				height: 30px;
 				margin-bottom: 10px;
-				background: $secondaryAccent;
-				border-radius: 3px;
-				padding: 0.5em;
 
 				.progressBar {
 					height: 100%;
@@ -122,17 +120,15 @@
 				border-radius: 5px;
 				opacity: 0.3;
 
-				background: linear-gradient(-45deg,
-						#74ccbc,
-						rgb(140, 255, 240),
-						#44beff,
-						#00a2ff);
+				background: linear-gradient(
+					-45deg,
+					#74ccbc,
+					rgb(140, 255, 240),
+					#44beff,
+					#00a2ff
+				);
 				background-size: 400% 400%;
 				animation: load 5s ease infinite;
-			}
-
-			.chapters {
-				margin-top: 2em;
 			}
 		}
 	}
