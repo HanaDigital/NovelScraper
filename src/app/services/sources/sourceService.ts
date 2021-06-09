@@ -13,7 +13,7 @@ export class sourceService {
 
 	scrollPos: number;
 
-	constructor(public database: DatabaseService) {}
+	constructor(public database: DatabaseService) { }
 
 	async searchWIthLink(
 		link: string,
@@ -23,9 +23,9 @@ export class sourceService {
 		return {};
 	}
 
-	async searchWithName(name: string, source: string): Promise<void> {}
+	async searchWithName(name: string, source: string): Promise<void> { }
 
-	async download(novel: novelObj, downloadID: number): Promise<void> {}
+	async download(novel: novelObj, downloadID: number): Promise<void> { }
 
 	update(novel: novelObj, numOfChapters: number): update {
 		if (numOfChapters > novel.totalChapters) {
@@ -90,7 +90,8 @@ export class sourceService {
 
 		const percentage = ((currentPos / destPos) * 100).toFixed(2);
 		this.database.updateDownloadTracker(downloadID, percentage);
-		console.log(percentage);
+
+		console.log(`Downloaded chapter ${currentPos}`)
 
 		return {
 			title: title,

@@ -20,7 +20,7 @@ export class NovelFactoryService {
 		"NovelScraper-Library"
 	);
 
-	constructor(public database: DatabaseService) {}
+	constructor(public database: DatabaseService) { }
 
 	async generateEpub(
 		novel: novelObj,
@@ -33,7 +33,7 @@ export class NovelFactoryService {
 		await shellJS.mkdir("-p", novelFolder);
 
 		// Save chapters in a json file and set the novel as download
-		await this.saveChapters(novel, chapters, novelFolder);
+		await this.saveChapters(novel, chapters);
 
 		// Download the cover and get its path
 		const coverPath = await this.downloadCover(novel.cover, novelFolder);
@@ -72,9 +72,12 @@ export class NovelFactoryService {
 	// Save chapters to a json file so we don't re-download when updating
 	async saveChapters(
 		novel: novelObj,
-		chapters: chapterObj[],
-		novelFolder: string
+		chapters: chapterObj[]
 	): Promise<void> {
+		// Create the folder for storing the novel files
+		const novelFolder = novel.folderPath;
+		await shellJS.mkdir("-p", novelFolder);
+
 		const chaptersFile = path.join(novelFolder, "chapters.json");
 		const json = JSON.stringify(chapters, null, 4);
 		writeFile(chaptersFile, json, (err) => {
