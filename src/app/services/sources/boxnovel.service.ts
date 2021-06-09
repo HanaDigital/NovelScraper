@@ -272,50 +272,62 @@ export class BoxnovelService extends sourceService {
 				chapterNames = chapterNames.slice(update.startIndex);
 			}
 
-			// Download each chapter at a time
-			for (let i = 0; i < chapterLinks.length; i++) {
-				if (this.database.isCanceled(downloadID)) {
-					this.database.updateDownloading(novel.link, false);
-					console.log("Download canceled!");
-					return;
-				}
+			const totalLength = downloadedChapters.length + chapterLinks.length;
+			let canceled = false;
 
-				const html = await this.getHtml(chapterLinks[i]);
-				const chapterHtml = html.getElementsByClassName(
-					"entry-content"
-				)[0];
-				try {
-					chapterHtml.getElementsByClassName("cha-tit")[0].remove(); // Remove h3 tag from chapter
-				} catch (error) {
-					console.log(
-						"Missing 'cha-tit' class at chapter index " +
+			try {
+				// Download each chapter at a time
+				for (let i = 0; i < chapterLinks.length; i++) {
+					if (this.database.isCanceled(downloadID)) {
+						this.database.updateDownloading(novel.link, false);
+						console.log("Download canceled!");
+						canceled = true;
+						return;
+					}
+
+					const html = await this.getHtml(chapterLinks[i]);
+					const chapterHtml = html.getElementsByClassName(
+						"entry-content"
+					)[0];
+					try {
+						chapterHtml.getElementsByClassName("cha-tit")[0].remove(); // Remove h3 tag from chapter
+					} catch (error) {
+						console.log(
+							"Missing 'cha-tit' class at chapter index " +
 							i +
 							"and chapter name " +
 							chapterNames[i]
-					);
+						);
+					}
+
+					const chapterTitle = chapterNames[i];
+
+					let chapterBody = "<h3>" + chapterTitle + "</h3>";
+					chapterBody += chapterHtml.outerHTML;
+
+					const chapter = this.prepChapter(novel, downloadID, chapterTitle, chapterBody, downloadedChapters.length, totalLength);
+					downloadedChapters.push(chapter);
 				}
 
-				const chapterTitle = chapterNames[i];
-
-				let chapterBody = "<h3>" + chapterTitle + "</h3>";
-				chapterBody += chapterHtml.outerHTML;
-
-				const chapter = this.prepChapter(
-					novel,
-					downloadID,
-					chapterTitle,
-					chapterBody,
-					i,
-					chapterLinks.length
-				);
-				downloadedChapters.push(chapter);
+				if (!canceled) this.novelFactory.generateEpub(novel, downloadedChapters, downloadID);
+			} catch (error) {
+				canceled = true;
+				console.error("Error downloading the complete novel. Retry.");
+				console.error(error);
 			}
 
-			this.novelFactory.generateEpub(
-				novel,
-				downloadedChapters,
-				downloadID
-			);
+			if (canceled) {
+				this.novelFactory.saveChapters(
+					novel,
+					downloadedChapters
+				);
+				this.database.cancelDownload(downloadID);
+				this.database.updateDownloading(novel.link, false);
+				this.database.updateDownloadedChapters(novel.link, downloadedChapters.length);
+				this.database.updateDownloaded(novel.link, true);
+				this.database.updateIsUpdated(novel.link, false);
+			}
+
 		} catch (error) {
 			this.database.cancelDownload(downloadID);
 			this.database.updateDownloading(novel.link, false);
