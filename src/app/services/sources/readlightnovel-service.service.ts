@@ -170,13 +170,23 @@ export class ReadlightnovelService extends sourceService {
 				// Download each chapter at a time
 				for (let i = 0; i < chapterLinks.length; i++) {
 					if (this.database.isCanceled(downloadID)) {
-						this.database.updateDownloading(novel.link, false);
 						console.log('Download canceled!');
 						canceled = true;
 						break;
 					}
 
-					const html = await this.getHtml(chapterLinks[i]);
+					let html = null;
+					try {
+						html = await this.getHtml(chapterLinks[i]);
+					} catch (error) {
+						if (error.statusCode == 404) {
+							novel.totalChapters -= 1
+							this.database.updateTotalChapters(novel.link, novel.totalChapters);
+							continue;
+						}
+						canceled = true;
+						break;
+					}
 
 					//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
 
