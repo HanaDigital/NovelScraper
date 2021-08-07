@@ -37,7 +37,7 @@ List of supported sites:
 -   [~~NovelPlanet~~](https://novelplanet.com/) _offline_
 
 Author: _dr-nyt_  
-Version: _2.0.0_
+Version: _2.0.5_
 
 ## FEATURES
 
