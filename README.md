@@ -28,7 +28,7 @@
 
 ## ABOUT
 
-_Download translated web/light novels from a list of pirate sites._  
+_Download and update translated web/light novels from a list of sites._  
 List of supported sites:
 
 -	[NovelFull](https://novelfull.com/)
