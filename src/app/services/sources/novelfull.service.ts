@@ -98,6 +98,12 @@ export class NovelfullService extends sourceService {
 			}
 			novel.genre = genre.slice(0, -2);
 
+			// defaulting if none is found.
+			if (novel.genre == null || novel.genre == "")
+			{
+				novel.genre = "unknown"
+			}
+
 			// FIXME: Summary
 			const summaryList = html
 				.getElementsByClassName("desc-text")[0]
@@ -111,6 +117,12 @@ export class NovelfullService extends sourceService {
 			} catch (error) {
 				novel.summary = "N/A";
 				console.log(error);
+			}
+
+			// defaulting if none is found.
+			if (novel.summary == null || novel.summary == "")
+			{
+				novel.summary = "unknown"
 			}
 
 			//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////

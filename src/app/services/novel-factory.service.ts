@@ -38,6 +38,20 @@ export class NovelFactoryService {
 		// Download the cover and get its path
 		const coverPath = await this.downloadCover(novel.cover, novelFolder);
 
+		// If the novel doesnt have a genre we default "Unknown"; empty or null will crash the epub creation
+		if (novel.genre == null || novel.genre == "")
+		{
+			novel.genre = 'unknown'
+		}
+
+		// If the novel doesnt have a author we default "Unknown"; empty or null will crash the epub creation
+		if (novel.author == null || novel.author == "")
+		{
+			novel.author = 'unknown'
+		}
+		console.log("Creating Epub with metadata");
+		console.log(novel)
+
 		// Set some meta data for the epub file
 		const metadata = {
 			id: "0000-0000-0001",
