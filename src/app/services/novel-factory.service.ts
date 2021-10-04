@@ -47,6 +47,7 @@ export class NovelFactoryService {
 		{
 			novel.author = 'Unkown'
 		}
+		console.log("Creating Epub with metadata");
 		console.log(novel)
 		// Set some meta data for the epub file
 		const metadata = {
@@ -68,7 +69,6 @@ export class NovelFactoryService {
 		const epub = epubGen.document(metadata);
 		for (const chapter of chapters)
 			epub.addSection(chapter.title, chapter.data);
-		console.log("starting writing")
 		setTimeout(async () => {
 			await epub.writeEPUB(novelFolder, novelFile);
 
