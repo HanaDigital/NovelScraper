@@ -38,6 +38,16 @@ export class NovelFactoryService {
 		// Download the cover and get its path
 		const coverPath = await this.downloadCover(novel.cover, novelFolder);
 
+		if (novel.genre == null || novel.genre == "")
+		{
+			novel.genre = 'Unkown'
+		}
+
+		if (novel.author == null || novel.author == "")
+		{
+			novel.author = 'Unkown'
+		}
+		console.log(novel)
 		// Set some meta data for the epub file
 		const metadata = {
 			id: "0000-0000-0001",
@@ -58,7 +68,7 @@ export class NovelFactoryService {
 		const epub = epubGen.document(metadata);
 		for (const chapter of chapters)
 			epub.addSection(chapter.title, chapter.data);
-
+		console.log("starting writing")
 		setTimeout(async () => {
 			await epub.writeEPUB(novelFolder, novelFile);
 
