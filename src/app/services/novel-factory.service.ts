@@ -42,13 +42,13 @@ export class NovelFactoryService {
 		// If the novel doesnt have a genre we default "Unknown"; empty or null will crash the epub creation
 		if (novel.genre == null || novel.genre == "")
 		{
-			novel.genre = 'Unkown'
+			novel.genre = 'unknown'
 		}
 
 		// If the novel doesnt have a author we default "Unknown"; empty or null will crash the epub creation
 		if (novel.author == null || novel.author == "")
 		{
-			novel.author = 'Unkown'
+			novel.author = 'unknown'
 		}
 		console.log("Creating Epub with metadata");
 		console.log(novel)
