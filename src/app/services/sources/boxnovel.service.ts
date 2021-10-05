@@ -35,10 +35,19 @@ export class BoxnovelService extends sourceService {
 		}
 
 		try {
+
+
 			const html = await this.getHtml(link); // Get HTML from the link
 
 			// Link
 			if (!updatingInfo) novel.link = link;
+
+			//boxnovel uses some lower level ajax call now to store the chapters.
+			if (!updatingInfo || novel.chapter_link == null) novel.chapter_link = link + (link.slice(-1) == '/' ? "":"/") + "ajax/chapters/";
+
+			const chapters = await this.postHtml(novel.chapter_link) // we get the subpage listing all the chapters.
+
+
 
 			// Source
 			if (!updatingInfo) novel.source = source;
@@ -56,7 +65,7 @@ export class BoxnovelService extends sourceService {
 			novel.name = title.textContent.trim();
 
 			// LatestChapter
-			novel.latestChapter = html
+			novel.latestChapter = chapters
 				.getElementsByClassName("wp-manga-chapter")[0]
 				.getElementsByTagName("a")[0]
 				.innerText.trim();
@@ -67,7 +76,7 @@ export class BoxnovelService extends sourceService {
 				.getElementsByTagName("img")[0].src;
 
 			// TotalChapters
-			novel.totalChapters = html.getElementsByClassName(
+			novel.totalChapters = chapters.getElementsByClassName(
 				"wp-manga-chapter"
 			).length;
 
@@ -153,6 +162,8 @@ export class BoxnovelService extends sourceService {
 				novel.link = novelList[i]
 					.getElementsByClassName("post-title")[0]
 					.getElementsByTagName("a")[0].href;
+
+				novel.chapter_link = novel.link + (novel.link.slice(-1) == '/' ? "":"/") + "ajax/chapters/";
 
 				// Source
 				novel.source = source;
@@ -240,7 +251,9 @@ export class BoxnovelService extends sourceService {
 		try {
 			const html = await this.getHtml(novel.link);
 
-			const chapters = html.getElementsByClassName("wp-manga-chapter");
+			const chapter_html = await this.postHtml(novel.chapter_link) // we get the subpage listing all the chapters.
+
+			const chapters = chapter_html.getElementsByClassName("wp-manga-chapter");
 
 			// Get chapter links and names
 			let chapterLinks = [];
