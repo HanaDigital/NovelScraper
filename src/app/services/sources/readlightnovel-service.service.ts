@@ -47,7 +47,11 @@ export class ReadlightnovelService extends sourceService {
 
 			// LatestChapter
 			try {
-				novel.latestChapter = html.getElementsByClassName('wp-manga-chapter')[0].getElementsByTagName('a')[0].innerText.trim();
+				const chapters_section = html.getElementsByClassName('tab-content')[0].getElementsByClassName("tab-pane")
+				const latest_chapter_section = chapters_section[chapters_section.length -2 ].getElementsByTagName('a') // latest element is always empty.
+				const latest_chapter = latest_chapter_section[latest_chapter_section.length -1 ]
+
+				novel.latestChapter = latest_chapter.innerText.trim();
 			} catch (error) {
 				novel.latestChapter = "N/A";
 				console.log(error);
