@@ -90,13 +90,16 @@ export class NovelfullService extends sourceService {
 			// FIXME: Genre(s)
 			const genres = html
 				.getElementsByClassName("info")[0]
-				.getElementsByTagName("div")[1]
+				.getElementsByTagName("div")[2]
 				.getElementsByTagName("a");
 			let genre = "";
 			for (let i = 0; i < genres.length; i++) {
 				genre += genres[i].innerText + ", ";
 			}
 			novel.genre = genre.slice(0, -2);
+
+			// defaulting if none is found.
+			if (!novel.genre) novel.genre = "Unknown"
 
 			// FIXME: Summary
 			const summaryList = html
@@ -112,6 +115,9 @@ export class NovelfullService extends sourceService {
 				novel.summary = "N/A";
 				console.log(error);
 			}
+
+			// defaulting if none is found.
+			if (!novel.summary) novel.summary = "Unknown"
 
 			//////////////////////// YOUR CODE ENDS HERE /////////////////////////////////
 
@@ -314,7 +320,6 @@ export class NovelfullService extends sourceService {
 					);
 					chapterBody = chapterBody.replace(/<script.*><\/script>/g, "");
 					chapterBody = chapterBody.replace(/<ins.*<\/ins>/g, "");
-					console.log(chapterBody);
 
 					const chapter = this.prepChapter(novel, downloadID, chapterTitle, chapterBody, downloadedChapters.length, totalLength);
 					downloadedChapters.push(chapter);
