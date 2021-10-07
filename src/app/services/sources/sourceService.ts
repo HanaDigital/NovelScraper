@@ -103,7 +103,21 @@ export class sourceService {
 
 	async getHtml(link: string): Promise<HTMLHtmlElement> {
 		const stringHtml: string = await cloudscraper(
-			{ method: "GET", url: link },
+			{ method: "GET", url: link, rejectUnauthorized: false },
+			(error, response, novelHtmlString) => {
+				return novelHtmlString;
+			}
+		);
+
+		const html = document.createElement("html");
+		html.innerHTML = stringHtml;
+		return html;
+	}
+
+
+	async postHtml(link: string): Promise<HTMLHtmlElement> {
+		const stringHtml: string = await cloudscraper(
+			{ method: "POST", url: link, rejectUnauthorized: false },
 			(error, response, novelHtmlString) => {
 				return novelHtmlString;
 			}

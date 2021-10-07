@@ -47,7 +47,11 @@ export class ReadlightnovelService extends sourceService {
 
 			// LatestChapter
 			try {
-				novel.latestChapter = html.getElementsByClassName('wp-manga-chapter')[0].getElementsByTagName('a')[0].innerText.trim();
+				const chapters_section = html.getElementsByClassName('tab-content')[0].getElementsByClassName("tab-pane")
+				const latest_chapter_section = chapters_section[chapters_section.length - 2].getElementsByTagName('a') // latest element is always empty.
+				const latest_chapter = latest_chapter_section[latest_chapter_section.length - 1]
+
+				novel.latestChapter = latest_chapter.innerText.trim();
 			} catch (error) {
 				novel.latestChapter = "N/A";
 				console.log(error);
@@ -170,13 +174,23 @@ export class ReadlightnovelService extends sourceService {
 				// Download each chapter at a time
 				for (let i = 0; i < chapterLinks.length; i++) {
 					if (this.database.isCanceled(downloadID)) {
-						this.database.updateDownloading(novel.link, false);
 						console.log('Download canceled!');
 						canceled = true;
 						break;
 					}
 
-					const html = await this.getHtml(chapterLinks[i]);
+					let html = null;
+					try {
+						html = await this.getHtml(chapterLinks[i]);
+					} catch (error) {
+						if (error.statusCode == 404) {
+							novel.totalChapters -= 1
+							this.database.updateTotalChapters(novel.link, novel.totalChapters);
+							continue;
+						}
+						canceled = true;
+						break;
+					}
 
 					//////////////////////// YOUR CODE STARTS HERE ///////////////////////////////
 
