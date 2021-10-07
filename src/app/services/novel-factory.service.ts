@@ -9,6 +9,7 @@ const epubGen = require("nodepub");
 import mime from "mime";
 import { writeFileSync, createWriteStream, writeFile } from "fs";
 import request from "request";
+import { async } from "@angular/core/testing";
 
 @Injectable({
 	providedIn: "root",
@@ -38,15 +39,13 @@ export class NovelFactoryService {
 		// Download the cover and get its path
 		const coverPath = await this.downloadCover(novel.cover, novelFolder);
 
-		// If the novel doesnt have a genre we default "Unknown"; empty or null will crash the epub creation
-		if (novel.genre == null || novel.genre == "")
-		{
+		// If the novel doesn't have a genre we default "Unknown"; empty or null will crash the epub creation
+		if (novel.genre == null || novel.genre == "") {
 			novel.genre = 'unknown'
 		}
 
 		// If the novel doesnt have a author we default "Unknown"; empty or null will crash the epub creation
-		if (novel.author == null || novel.author == "")
-		{
+		if (novel.author == null || novel.author == "") {
 			novel.author = 'unknown'
 		}
 		console.log("Creating Epub with metadata");
@@ -73,13 +72,14 @@ export class NovelFactoryService {
 		for (const chapter of chapters)
 			epub.addSection(chapter.title, chapter.data);
 
-		setTimeout(async () => {
-			await epub.writeEPUB(novelFolder, novelFile);
-
-			this.database.updateDownloading(novel.link, false);
-			this.database.updateDownloaded(novel.link, true);
-			this.database.updateIsUpdated(novel.link, true);
-			this.database.setDownloaded(downloadID);
+		setTimeout(() => {
+			(async () => {
+				await epub.writeEPUB(novelFolder, novelFile);
+				this.database.updateDownloading(novel.link, false);
+				this.database.updateDownloaded(novel.link, true);
+				this.database.updateIsUpdated(novel.link, true);
+				this.database.setDownloaded(downloadID);
+			})();
 		}, 2000);
 	}
 

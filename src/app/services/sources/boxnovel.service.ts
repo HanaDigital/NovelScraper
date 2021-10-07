@@ -43,9 +43,9 @@ export class BoxnovelService extends sourceService {
 			if (!updatingInfo) novel.link = link;
 
 			//boxnovel uses some lower level ajax call now to store the chapters.
-			if (!updatingInfo || novel.chapter_link == null) novel.chapter_link = link + (link.slice(-1) == '/' ? "":"/") + "ajax/chapters/";
+			const chapter_link = link + (link.slice(-1) == '/' ? "" : "/") + "ajax/chapters/";
 
-			const chapters = await this.postHtml(novel.chapter_link) // we get the subpage listing all the chapters.
+			const chapters = await this.postHtml(chapter_link) // we get the subpage listing all the chapters.
 
 
 
@@ -65,10 +65,15 @@ export class BoxnovelService extends sourceService {
 			novel.name = title.textContent.trim();
 
 			// LatestChapter
-			novel.latestChapter = chapters
-				.getElementsByClassName("wp-manga-chapter")[0]
-				.getElementsByTagName("a")[0]
-				.innerText.trim();
+			try {
+				novel.latestChapter = chapters
+					.getElementsByClassName("wp-manga-chapter")[0]
+					.getElementsByTagName("a")[0]
+					.innerText.trim();
+			} catch (error) {
+				console.log("Unknown find latest chapter");
+				novel.latestChapter = "Unknown"
+			}
 
 			// Cover
 			novel.cover = html
@@ -163,8 +168,6 @@ export class BoxnovelService extends sourceService {
 					.getElementsByClassName("post-title")[0]
 					.getElementsByTagName("a")[0].href;
 
-				novel.chapter_link = novel.link + (novel.link.slice(-1) == '/' ? "":"/") + "ajax/chapters/";
-
 				// Source
 				novel.source = source;
 
@@ -249,9 +252,8 @@ export class BoxnovelService extends sourceService {
 		let downloadedChapters: chapterObj[] = []; // List of download chapters
 
 		try {
-			const html = await this.getHtml(novel.link);
-
-			const chapter_html = await this.postHtml(novel.chapter_link) // we get the subpage listing all the chapters.
+			const chapter_link = novel.link + (novel.link.slice(-1) == '/' ? "" : "/") + "ajax/chapters/"
+			const chapter_html = await this.postHtml(chapter_link) // we get the sub-page listing all the chapters.
 
 			const chapters = chapter_html.getElementsByClassName("wp-manga-chapter");
 

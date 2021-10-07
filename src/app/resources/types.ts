@@ -39,7 +39,6 @@ export interface libraryObj {
 
 export interface novelObj {
 	link?: string,
-	chapter_link?: string,
 	name?: string,
 	latestChapter?: string,
 	cover?: string,
