@@ -28,16 +28,16 @@
 
 ## ABOUT
 
-_Download and update translated web/light novels from a list of sites._  
-List of supported sites:
-
+Download and update translated web/light novels from a list of sites.  
+List of supported sites:  
 -	[NovelFull](https://novelfull.com/)
 -   [BoxNovel](https://boxnovel.com/)
 -   [ReadLightNovel](https://www.readlightnovel.org/)
 -   [~~NovelPlanet~~](https://novelplanet.com/) _offline_
 
-Author: _dr-nyt_  
-Version: _2.0.5_
+Author: [@dr-nyt](https://github.com/dr-nyt)  
+Contributors: [@webdagger](https://github.com/webdagger), [@jiskim](https://github.com/jiskim)  
+Version: 2.0.6  
 
 ## FEATURES
 
