@@ -8,7 +8,7 @@ const Splashscreen = require('@trodi/electron-splashscreen');
 
 let status = 0;
 
-let win: BrowserWindow = null;
+let win: BrowserWindow | null = null;
 const args = process.argv.slice(1),
 	serve = args.some(val => val === '--serve');
 
@@ -41,10 +41,9 @@ function createWindow(): BrowserWindow {
 			width: 700,
 			transparent: true,
 		}
-	});
+	}) as BrowserWindow;
 
 	if (serve) {
-
 		win.webContents.openDevTools();
 
 		require('electron-reload')(__dirname, {
@@ -124,7 +123,7 @@ ipc.on('update-app', (event) => {
 
 // Update available
 autoUpdater.on('update-available', (event) => {
-	win.webContents.send('update_available');
+	win?.webContents.send('update_available');
 });
 
 // Update is not available
@@ -137,7 +136,7 @@ autoUpdater.on('download-progress', (progressObj) => {
 	const downloadPercentage = progressObj.percent.toFixed(2);
 	const downloadTransferred = progressObj.transferred;
 	const downloadTotal = progressObj.total;
-	win.webContents.send('download_progress', {
+	win?.webContents.send('download_progress', {
 		downloadSpeed: downloadSpeed,
 		downloadPercentage: downloadPercentage,
 		downloadTransferred: downloadTransferred,
@@ -147,7 +146,7 @@ autoUpdater.on('download-progress', (progressObj) => {
 
 // Update has been downloaded
 autoUpdater.on('update-downloaded', () => {
-	win.webContents.send('update_downloaded');
+	win?.webContents.send('update_downloaded');
 });
 
 ipc.on('restart_app', () => {
