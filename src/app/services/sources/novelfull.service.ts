@@ -327,7 +327,6 @@ export class NovelfullService extends sourceService {
 
 					const chapter = this.prepChapter(novel, downloadID, chapterTitle, chapterBody, downloadedChapters.length, totalLength);
 					downloadedChapters.push(chapter);
-					return;
 				}
 
 				if (!canceled) this.novelFactory.generateEpub(novel, downloadedChapters, downloadID);
