@@ -77,8 +77,8 @@ export class sourceService {
 		currentPos: number,
 		destPos: number
 	): chapterObj {
-		chapterBody = chapterBody.replace(/<script.*<\/script>/gi, ""); // Remove any script tags usually used with ads (Security+)
-		chapterBody = chapterBody.replace(/<iframe.*<\/iframe>/gi, ""); // Remove any iframes usually used with ads
+		chapterBody = chapterBody.replace(/<script.*?<\/script>/gi, ""); // Remove any script tags usually used with ads (Security+)
+		chapterBody = chapterBody.replace(/<iframe.*?<\/iframe>/gi, ""); // Remove any iframes usually used with ads
 		chapterBody = chapterBody.replace(/< *br *>/gi, "<br/>"); // Make sure all <br/> tags end correctly for xhtml
 		chapterBody = chapterBody.replace(/<br *\/ *br *>/gi, ""); // Remove any useless </br> tags
 		chapterBody = chapterBody.replace(

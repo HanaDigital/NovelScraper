@@ -31,13 +31,13 @@
 _Download translated web/light novels from a list of pirate sites._  
 List of supported sites:
 
--	[NovelFull](https://novelfull.com/)
+-   [NovelFull](https://novelfull.com/)
 -   [BoxNovel](https://boxnovel.com/)
 -   [ReadLightNovel](https://www.readlightnovel.org/)
 -   [~~NovelPlanet~~](https://novelplanet.com/) _offline_
 
 Author: _dr-nyt_  
-Version: _2.0.0_
+Version: _2.0.7_
 
 ## FEATURES
 
