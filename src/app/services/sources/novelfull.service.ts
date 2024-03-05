@@ -318,11 +318,16 @@ export class NovelfullService extends sourceService {
 						/\(adsbygoogle = window.adsbygoogle \|\| \[\]\).push\({}\);/g,
 						""
 					);
-					chapterBody = chapterBody.replace(/<script.*><\/script>/g, "");
-					chapterBody = chapterBody.replace(/<ins.*<\/ins>/g, "");
+					chapterBody = chapterBody.replace(/<script.*?<\/script>/g, "");
+					chapterBody = chapterBody.replace(/<ins.*?<\/ins>/g, "");
+					chapterBody = chapterBody.replace(/id=".*?"/g, "");
+					chapterBody = chapterBody.replace(/class=".*?"/g, "");
+					chapterBody = chapterBody.replace(/style=".*?"/g, "");
+					chapterBody = chapterBody.replace(/data-.*?=".*?"/g, "");
 
 					const chapter = this.prepChapter(novel, downloadID, chapterTitle, chapterBody, downloadedChapters.length, totalLength);
 					downloadedChapters.push(chapter);
+					return;
 				}
 
 				if (!canceled) this.novelFactory.generateEpub(novel, downloadedChapters, downloadID);
