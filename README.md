@@ -31,8 +31,7 @@
 
 Download and update translated web/light novels from a list of sites.  
 List of supported sites:  
--	  [NovelFull](https://novelfull.com/)
-
+-	[NovelFull](https://novelfull.com/)
 -   [BoxNovel](https://boxnovel.com/)
 -   [ReadLightNovel](https://www.readlightnovel.org/)
 -   [~~NovelPlanet~~](https://novelplanet.com/) _offline_
