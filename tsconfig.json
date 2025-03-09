@@ -1,18 +1,40 @@
-/*
-	This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
-	It is not intended to be used to perform a compilation.
-
-	To learn more about this file see: https://angular.io/config/solution-tsconfig.
-*/
 {
-	"files": [],
+	"compilerOptions": {
+		"target": "ES2020",
+		"useDefineForClassFields": true,
+		"lib": [
+			"ES2020",
+			"DOM",
+			"DOM.Iterable"
+		],
+		"module": "ESNext",
+		"skipLibCheck": true,
+		/* Bundler mode */
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noEmit": true,
+		"jsx": "react-jsx",
+		/* Linting */
+		"strict": true,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"noFallthroughCasesInSwitch": true,
+		/* ShadeCN */
+		"baseUrl": ".",
+		"paths": {
+			"@/*": [
+				"./src/*"
+			]
+		}
+	},
+	"include": [
+		"src"
+	],
 	"references": [
 		{
-			"path": "./src/tsconfig.app.json"
-		},
-		{
-			"path": "./src/tsconfig.spec.json"
+			"path": "./tsconfig.node.json"
 		}
-	],
-	"allowSyntheticDefaultImports": true
+	]
 }

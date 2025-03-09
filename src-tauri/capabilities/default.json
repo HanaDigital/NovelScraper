@@ -1,0 +1,39 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Capability for the main window",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default",
+    "shell:allow-open",
+    "store:default",
+    "fs:default",
+    "fs:allow-write-text-file",
+    "fs:allow-write-file",
+    "fs:allow-appdata-read-recursive",
+    "fs:allow-appdata-write-recursive",
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        {
+          "path": "$DOCUMENT"
+        },
+        {
+          "path": "$DOCUMENT/**"
+        },
+        {
+          "path": "$DOWNLOAD"
+        },
+        {
+          "path": "$DOWNLOAD/**"
+        }
+      ]
+    },
+    "dialog:default",
+    "shell:default",
+    "opener:default",
+    "opener:default"
+  ]
+}

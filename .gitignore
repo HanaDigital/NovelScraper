@@ -1,51 +1,24 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# compiled output
-/dist
-/tmp
-/out-tsc
-/app-builds
-/release
-main.js
-src/**/*.js
-!src/karma.conf.js
-*.js.map
+node_modules
+dist
+dist-ssr
+*.local
 
-# dependencies
-/node_modules
-electron-builder.json
-
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# IDE - VSCode
+# Editor directories and files
 .vscode/*
-.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
 !.vscode/extensions.json
-
-# misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-testem.log
-/typings
-package-lock.json
-
-# e2e
-/e2e/*.js
-!/e2e/protractor.conf.js
-/e2e/*.map
-
-# System Files
+.idea
 .DS_Store
-Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
