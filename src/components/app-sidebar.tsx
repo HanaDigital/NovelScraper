@@ -100,7 +100,7 @@ export function AppSidebar() {
 				</SidebarGroup>
 			</SidebarContent>
 			<SidebarFooter className="flex flex-col items-end gap-4">
-				{!newVersion &&
+				{newVersion &&
 					<SidebarMenu>
 						<SidebarMenuItem className="flex gap-2 justify-center items-center shadow-lg shadow-green-900">
 							<SidebarMenuButton size="lg" className="!bg-card border border-green-900" onClick={handleInstallUpdate} disabled={isUpdating}>
