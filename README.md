@@ -3,8 +3,9 @@
 </p>
 
 <p align="center">
-  	<a href="https://github.com/HanaDigital/NovelScraper/releases"><img width="200" src="https://user-images.githubusercontent.com/41040912/95695097-80053100-0c46-11eb-8393-2f97d5f1e63c.png"></a>
-	<a href="https://github.com/HanaDigital/NovelScraper/releases"><img width="200" src="https://user-images.githubusercontent.com/41040912/95696675-218f8100-0c4d-11eb-82b9-cddddbe94758.png"></a>
+  	<a href="https://github.com/HanaDigital/NovelScraper/releases"><img width="200" src="https://user-images.githubusercontent.com/41040912/95695097-80053100-0c46-11eb-8393-2f97d5f1e63c.png" alt="Windows"></a>
+	<a href="https://github.com/HanaDigital/NovelScraper/releases"><img width="200" src="https://github.com/user-attachments/assets/569b3f75-2642-4ece-a6d9-fbb0b8c73149" alt="MacOS"></a>
+	<a href="https://github.com/HanaDigital/NovelScraper/releases"><img width="200" src="https://user-images.githubusercontent.com/41040912/95696675-218f8100-0c4d-11eb-82b9-cddddbe94758.png" alt="Linux"></a>
 </p>
 
 ---
@@ -29,16 +30,14 @@
 ## ABOUT
 
 
-Download and update translated web/light novels from a list of sites.  
-List of supported sites:  
+Download and update translated web/light novels from a list of sites.
+List of supported sites:
 -	[NovelFull](https://novelfull.com/)
--   [BoxNovel](https://boxnovel.com/)
--   [ReadLightNovel](https://www.readlightnovel.org/)
--   [~~NovelPlanet~~](https://novelplanet.com/) _offline_
+-   [NovelBin](https://novelbin.com/)
 
-Author: [@dr-nyt](https://github.com/dr-nyt)  
-Contributors: [@webdagger](https://github.com/webdagger), [@jiskim](https://github.com/jiskim)  
-Version: 2.0.7  
+Author: [@dr-nyt](https://github.com/dr-nyt)
+Contributors: [@webdagger](https://github.com/webdagger), [@jiskim](https://github.com/jiskim)
+Version: 3.0.5
 
 ## FEATURES
 
