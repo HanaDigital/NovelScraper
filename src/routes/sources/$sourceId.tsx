@@ -3,6 +3,7 @@ import { CloudflareResolverStatus } from "@/components/cloudflare-resolver"
 import Page from '@/components/page'
 import SearchBar from "@/components/search-bar"
 import { Badge } from "@/components/ui/badge"
+import { getUnCachedFileSrc } from "@/lib/library/library"
 import { SourceIDsT, SOURCES } from '@/lib/sources/sources'
 import { NovelSource } from "@/lib/sources/template"
 import { NovelT } from "@/lib/sources/types"
@@ -61,9 +62,9 @@ function RouteComponent() {
 
 	const handleClear = () => {
 		setNoSearchResultsFor(undefined);
-		// setSearchHistory((state) => {
-		// 	state[sourceId as SourceIDsT] = [];
-		// });
+		setSearchHistory((state) => {
+			state[sourceId as SourceIDsT] = [];
+		});
 	}
 
 	if (!source) return <></>
@@ -81,23 +82,26 @@ function RouteComponent() {
 			</div>
 
 			<CardGridUI>
-				{searchHistory[sourceId as SourceIDsT].map((novel) => (
-					<CardUI
+				{searchHistory[sourceId as SourceIDsT].map((novel) => {
+					let coverSrc = novel.coverURL ?? novel.thumbnailURL ?? "";
+					if (novel.isInLibrary && novel.localCoverPath) coverSrc = getUnCachedFileSrc(novel.localCoverPath);
+
+					return <CardUI
 						key={novel.id}
 						href={`/novel?fromRoute=${location.pathname}`}
-						imageURL={novel.coverURL ?? novel.thumbnailURL ?? ""}
+						imageURL={coverSrc}
 						title={novel.title}
 						subTitle={novel.authors.join(', ')}
 						badges={[
 							novel.isInLibrary ?
-								<Badge className="absolute top-3 left-3 z-10 text-green-900 p-0">
+								<Badge className="text-green-900 p-0">
 									<BookmarkSolid width={20} />
 								</Badge>
 								: null,
 						]}
 						onClick={() => setActiveNovel(novel)}
 					/>
-				))}
+				})}
 			</CardGridUI>
 		</Page>
 	)

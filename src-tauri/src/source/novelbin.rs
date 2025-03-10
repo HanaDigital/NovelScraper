@@ -35,9 +35,13 @@ pub async fn download_novel_chapters(
         }
 
         let chapters_batch = &mut chapters[batch_start..batch_end];
-        let chapter_html_futures = chapters_batch
-            .iter()
-            .map(|chapter| super::fetch_html(&chapter.url, &novel_data.cf_headers));
+        let chapter_html_futures = chapters_batch.iter().map(|chapter| {
+            super::fetch_html(
+                &chapter.url,
+                &novel_data.cf_headers,
+                super::types::FetchType::GET,
+            )
+        });
 
         let chapter_html_vec = join_all(chapter_html_futures).await;
         for i in 0..chapter_html_vec.len() {
@@ -71,6 +75,7 @@ async fn get_chapter_urls(novel_data: &NovelData) -> Vec<super::Chapter> {
             novel_data.source_url, novel_id
         ),
         &novel_data.cf_headers,
+        super::types::FetchType::GET,
     )
     .await
     .unwrap();

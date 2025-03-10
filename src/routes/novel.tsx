@@ -17,6 +17,7 @@ import { Progress } from "@/components/ui/progress";
 import { TinyP } from "@/components/typography";
 import { revealItemInDir, openUrl } from '@tauri-apps/plugin-opener';
 import MissingImageBanner from "@/assets/ui/missing-image-banner.jpg";
+import { CloudflareResolverStatus } from "@/components/cloudflare-resolver";
 
 export const Route = createFileRoute('/novel')({
 	component: RouteComponent,
@@ -36,10 +37,10 @@ function RouteComponent() {
 
 	useEffect(() => {
 		loadNovelMetadata();
-	}, []);
+	}, [activeNovel]);
 
 	useEffect(() => {
-		if (!activeNovel) return;
+		if (!activeNovel || !libraryState.novels[activeNovel.id]) return;
 		updateState(libraryState.novels[activeNovel.id], false);
 	}, [libraryState.novels[activeNovel?.id ?? ""]]);
 
@@ -232,6 +233,7 @@ function RouteComponent() {
 	if (!novel || isLoading) return <Loader />
 	return (
 		<Page>
+			{SOURCES[novel.source].cloudflareProtected && <CloudflareResolverStatus />}
 			<div className="flex justify-between items-center">
 				<div className="flex gap-2">
 					{!novel.isInLibrary && <TooltipUI content="Add to Library" side="bottom" sideOffset={8}>
@@ -307,6 +309,8 @@ function RouteComponent() {
 					<div>{novel.status}</div>
 					<b>Rating</b>
 					<div>{novel.rating}</div>
+					<b>Source</b>
+					<div>{SOURCES[novel.source].name}</div>
 				</div>
 			</div>
 			{/* <h1>{novel.title}</h1> */}

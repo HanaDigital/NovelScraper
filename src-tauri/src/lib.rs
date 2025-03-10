@@ -68,9 +68,13 @@ async fn download_novel_chapters(
     }
 }
 
-#[tauri::command]
-async fn fetch_html(url: &str, headers: Option<HashMap<String, String>>) -> Result<String, String> {
-    source::fetch_html(url, &headers).await
+#[tauri::command(rename_all = "snake_case")]
+async fn fetch_html(
+    url: &str,
+    headers: Option<HashMap<String, String>>,
+    fetch_type: source::types::FetchType,
+) -> Result<String, String> {
+    source::fetch_html(url, &headers, fetch_type).await
 }
 
 #[tauri::command]

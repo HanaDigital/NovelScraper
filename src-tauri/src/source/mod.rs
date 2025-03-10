@@ -8,7 +8,7 @@ use isahc::{prelude::*, Request};
 use regex::Regex;
 use std::sync::Mutex;
 use tauri::{AppHandle, State};
-use types::{Chapter, DownloadStatus, NovelData};
+use types::{Chapter, DownloadStatus, FetchType, NovelData};
 
 use crate::AppState;
 
@@ -28,8 +28,13 @@ pub async fn download_novel_chapters(
 pub async fn fetch_html(
     url: &str,
     headers: &Option<HashMap<String, String>>,
+    fetch_type: FetchType,
 ) -> Result<String, String> {
-    let mut req_builder = Request::get(url);
+    let mut req_builder = if fetch_type == FetchType::GET {
+        Request::get(url)
+    } else {
+        Request::post(url)
+    };
     // println!("!!!URL & HEADERS: {}\n{:?}", url, headers);
     if headers.is_some() {
         for (key, value) in headers.as_ref().unwrap() {
@@ -59,6 +64,7 @@ pub async fn fetch_image(
     headers: &Option<HashMap<String, String>>,
 ) -> Result<Vec<u8>, String> {
     let mut req_builder = Request::get(url);
+
     if headers.is_some() {
         for (key, value) in headers.as_ref().unwrap() {
             req_builder = req_builder.header(key, value);
