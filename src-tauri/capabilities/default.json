@@ -7,6 +7,7 @@
   ],
   "permissions": [
     "core:default",
+    "core:window:allow-destroy",
     "shell:allow-open",
     "store:default",
     "fs:default",
@@ -33,7 +34,6 @@
     },
     "dialog:default",
     "shell:default",
-    "opener:default",
     "opener:default"
   ]
 }

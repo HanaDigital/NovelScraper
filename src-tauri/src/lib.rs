@@ -91,6 +91,11 @@ fn start_cloudflare_resolver(app: AppHandle, port: usize) -> bool {
     return docker::start_cloudflare_resolver(&app, port);
 }
 
+#[tauri::command]
+fn stop_cloudflare_resolver(app: AppHandle) -> bool {
+    return docker::stop_cloudflare_resolver(&app);
+}
+
 #[derive(Default)]
 struct AppState {
     novel_status: HashMap<String, source::types::DownloadStatus>,
@@ -159,6 +164,7 @@ pub fn run() {
             update_novel_download_status,
             check_docker_status,
             start_cloudflare_resolver,
+            stop_cloudflare_resolver,
             check_for_update,
             install_update
         ])

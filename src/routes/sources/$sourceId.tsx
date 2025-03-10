@@ -1,4 +1,5 @@
 import { CardUI, CardGridUI } from "@/components/card"
+import { CloudflareResolverStatus } from "@/components/cloudflare-resolver"
 import Page from '@/components/page'
 import SearchBar from "@/components/search-bar"
 import { Badge } from "@/components/ui/badge"
@@ -68,6 +69,7 @@ function RouteComponent() {
 	if (!source) return <></>
 	return (
 		<Page>
+			{source.cloudflareProtected && <CloudflareResolverStatus />}
 			<SearchBar
 				handleSearch={handleSearch}
 				handleClear={handleClear}
