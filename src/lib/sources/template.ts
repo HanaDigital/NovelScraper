@@ -70,9 +70,9 @@ export class NovelSource {
 		});
 	}
 
-	async fetchHTML(url: string): Promise<string> {
+	async fetchHTML(url: string, fetch_type: "GET" | "POST" = "GET"): Promise<string> {
 		await this.loadCFHeaders();
-		return await invoke<string>('fetch_html', { url, headers: this.cfHeaders });
+		return await invoke<string>('fetch_html', { url, headers: this.cfHeaders, fetch_type });
 	}
 
 	async fetchImage(url: string): Promise<ArrayBuffer> {
@@ -82,8 +82,13 @@ export class NovelSource {
 
 	private async loadCFHeaders() {
 		if (this.cloudflareProtected) {
-			this.cfHeaders = await getCloudflareHeaders(this.url);
-			this.cfHeadersLastFetchedAt = new Date();
+			if (!this.cfHeaders || this.cfHeadersLastFetchedAt && new Date().getTime() - this.cfHeadersLastFetchedAt.getTime() > 1000 * 60 * 60) {
+				console.log("Fetching cloudflare headers...");
+				this.cfHeaders = await getCloudflareHeaders(this.url);
+				this.cfHeadersLastFetchedAt = new Date();
+			} else {
+				console.log("Using cached cloudflare headers...");
+			}
 		}
 	}
 }

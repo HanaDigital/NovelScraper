@@ -68,9 +68,13 @@ async fn download_novel_chapters(
     }
 }
 
-#[tauri::command]
-async fn fetch_html(url: &str, headers: Option<HashMap<String, String>>) -> Result<String, String> {
-    source::fetch_html(url, &headers).await
+#[tauri::command(rename_all = "snake_case")]
+async fn fetch_html(
+    url: &str,
+    headers: Option<HashMap<String, String>>,
+    fetch_type: source::types::FetchType,
+) -> Result<String, String> {
+    source::fetch_html(url, &headers, fetch_type).await
 }
 
 #[tauri::command]
@@ -83,12 +87,19 @@ async fn fetch_image(
 
 #[tauri::command]
 fn check_docker_status(app: AppHandle) -> bool {
-    return docker::check_docker_status(&app);
+    let is_started = docker::check_docker_status(&app);
+    return is_started;
 }
 
 #[tauri::command]
 fn start_cloudflare_resolver(app: AppHandle, port: usize) -> bool {
-    return docker::start_cloudflare_resolver(&app, port);
+    let is_started = docker::start_cloudflare_resolver(&app, port);
+    return is_started;
+}
+
+#[tauri::command]
+fn stop_cloudflare_resolver(app: AppHandle) -> bool {
+    return docker::stop_cloudflare_resolver(&app);
 }
 
 #[derive(Default)]
@@ -159,6 +170,7 @@ pub fn run() {
             update_novel_download_status,
             check_docker_status,
             start_cloudflare_resolver,
+            stop_cloudflare_resolver,
             check_for_update,
             install_update
         ])

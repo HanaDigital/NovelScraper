@@ -1,11 +1,13 @@
 import { CardUI, CardGridUI } from "@/components/card"
+import { CloudflareResolverStatus } from "@/components/cloudflare-resolver"
 import Page from '@/components/page'
 import SearchBar from "@/components/search-bar"
 import { Badge } from "@/components/ui/badge"
+import { getUnCachedFileSrc } from "@/lib/library/library"
 import { SourceIDsT, SOURCES } from '@/lib/sources/sources'
 import { NovelSource } from "@/lib/sources/template"
 import { NovelT } from "@/lib/sources/types"
-import { activeNovelAtom, libraryStateAtom, searchHistoryAtom } from "@/lib/store"
+import { activeNovelAtom, dockerAtom, libraryStateAtom, searchHistoryAtom } from "@/lib/store"
 import { BookmarkSolid } from "@mynaui/icons-react"
 import { createFileRoute, useLocation } from '@tanstack/react-router'
 import { message } from "@tauri-apps/plugin-dialog"
@@ -26,6 +28,7 @@ function RouteComponent() {
 	const [searchHistory, setSearchHistory] = useAtom(searchHistoryAtom);
 	const libraryState = useAtomValue(libraryStateAtom);
 	const setActiveNovel = useSetAtom(activeNovelAtom);
+	const docker = useAtomValue(dockerAtom);
 
 	useEffect(() => {
 		setSource(SOURCES[sourceId as SourceIDsT]);
@@ -68,10 +71,12 @@ function RouteComponent() {
 	if (!source) return <></>
 	return (
 		<Page>
+			{source.cloudflareProtected && <CloudflareResolverStatus />}
 			<SearchBar
 				handleSearch={handleSearch}
 				handleClear={handleClear}
-				disabled={isSearching}
+				loading={isSearching}
+				disabled={source.cloudflareProtected && (!docker.engineStatus || !docker.cfResolverStatus)}
 			/>
 
 			<div className={`border p-2 px-3 rounded-md bg-yellow-300 text-yellow-900 font-medium overflow-hidden transition-all ${noSearchResultsFor ? "" : "h-0 !p-0 border-none -mt-5"}`}>
@@ -79,23 +84,27 @@ function RouteComponent() {
 			</div>
 
 			<CardGridUI>
-				{searchHistory[sourceId as SourceIDsT].map((novel) => (
-					<CardUI
+				{searchHistory[sourceId as SourceIDsT].map((novel) => {
+					let coverSrc = novel.coverURL ?? novel.thumbnailURL ?? "";
+					if (source.cloudflareProtected) coverSrc = "asset://localhost:3000/test.jpg";
+					if (novel.isInLibrary && novel.localCoverPath) coverSrc = getUnCachedFileSrc(novel.localCoverPath);
+
+					return <CardUI
 						key={novel.id}
 						href={`/novel?fromRoute=${location.pathname}`}
-						imageURL={novel.coverURL ?? novel.thumbnailURL ?? ""}
+						imageURL={coverSrc}
 						title={novel.title}
 						subTitle={novel.authors.join(', ')}
 						badges={[
 							novel.isInLibrary ?
-								<Badge className="absolute top-3 left-3 z-10 text-green-900 p-0">
+								<Badge className="text-green-900 p-0">
 									<BookmarkSolid width={20} />
 								</Badge>
 								: null,
 						]}
 						onClick={() => setActiveNovel(novel)}
 					/>
-				))}
+				})}
 			</CardGridUI>
 		</Page>
 	)

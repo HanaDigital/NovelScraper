@@ -8,11 +8,13 @@ import { openUrl } from "@tauri-apps/plugin-opener";
 import DiscordLogo from "@/assets/ui/discord-logo.svg";
 import { BugIcon } from "lucide-react";
 import { CardGridUI, CardUI, NovelUpdatingBadge, RemainingChaptersBadge } from "@/components/card";
-import { useAtom, useAtomValue, useSetAtom } from "jotai/react";
+import { useAtom, useSetAtom } from "jotai/react";
 import { activeNovelAtom, libraryStateAtom } from "@/lib/store";
 import { fetchMetadataForNovels, getUnCachedFileSrc } from "@/lib/library/library";
 import { TooltipUI } from "@/components/tooltip";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { NovelT } from "@/lib/sources/types";
 
 export const Route = createFileRoute('/')({
 	component: RouteComponent,
@@ -21,6 +23,14 @@ export const Route = createFileRoute('/')({
 function RouteComponent() {
 	const [libraryState, setLibraryState] = useAtom(libraryStateAtom);
 	const setActiveNovel = useSetAtom(activeNovelAtom);
+
+	const [novelUpdates, setNovelUpdates] = useState<NovelT[]>([]);
+
+	useEffect(() => {
+		setNovelUpdates(Object.values(libraryState.novels)
+			.filter((novel) => (novel.totalChapters || 0) > novel.downloadedChapters)
+			.sort((a, b) => new Date(b.updatedChaptersAt || "").getTime() - new Date(a.updatedChaptersAt || "").getTime()))
+	}, [libraryState.novels])
 
 	const handleCheckForUpdates = async () => {
 		try {
@@ -44,7 +54,7 @@ function RouteComponent() {
 	}
 
 	return (
-		<Page>
+		<Page className="h-full">
 			<div className="flex gap-4 max-w-5xl">
 				<HomeCard
 					icon={<StarSolid className="text-yellow-400" />}
@@ -66,38 +76,36 @@ function RouteComponent() {
 				/>
 			</div>
 
-			<div className="flex justify-between">
-				<H4 className="mt-2">Recent Updates</H4>
+			<div className="flex items-center justify-between gap-2">
+				<H4 className="-mt-1">Recent Updates</H4>
+				<hr className="flex-1" />
 				<TooltipUI content="Check for updates" side="bottom" sideOffset={8}>
 					<Button size="icon" variant="secondary" onClick={handleCheckForUpdates}><RefreshSolid /></Button>
 				</TooltipUI>
 			</div>
 
-			{!Object.values(libraryState.novels).length &&
-				<P className="flex justify-center gap-1 text-gray-500">You are all caught up! <SmileGhostSolid /></P>
+			{!novelUpdates.length &&
+				<P className="flex items-center justify-center gap-1 text-gray-500 h-full">You are all caught up! <SmileGhostSolid /></P>
 			}
 			<CardGridUI>
-				{Object.values(libraryState.novels)
-					.filter((novel) => (novel.totalChapters || 0) > novel.downloadedChapters)
-					.sort((a, b) => new Date(b.updatedChaptersAt || "").getTime() - new Date(a.updatedChaptersAt || "").getTime())
-					.map((novel) => {
-						let coverSrc = novel.coverURL ?? novel.thumbnailURL ?? "";
-						if (novel.localCoverPath) coverSrc = getUnCachedFileSrc(novel.localCoverPath);
-						const remainingChapters = (novel.totalChapters || 0) - novel.downloadedChapters;
+				{novelUpdates.map((novel) => {
+					let coverSrc = novel.coverURL ?? novel.thumbnailURL ?? "";
+					if (novel.localCoverPath) coverSrc = getUnCachedFileSrc(novel.localCoverPath);
+					const remainingChapters = (novel.totalChapters || 0) - novel.downloadedChapters;
 
-						return <CardUI
-							key={novel.id}
-							href={`/novel?fromRoute=${location.pathname}`}
-							imageURL={coverSrc}
-							title={novel.title}
-							subTitle={novel.authors.join(', ')}
-							onClick={() => setActiveNovel(novel)}
-							badges={[
-								NovelUpdatingBadge({ isUpdating: novel.isUpdating }),
-								RemainingChaptersBadge({ remainingChapters }),
-							]}
-						/>
-					})}
+					return <CardUI
+						key={novel.id}
+						href={`/novel?fromRoute=${location.pathname}`}
+						imageURL={coverSrc}
+						title={novel.title}
+						subTitle={novel.authors.join(', ')}
+						onClick={() => setActiveNovel(novel)}
+						badges={[
+							NovelUpdatingBadge({ isUpdating: novel.isUpdating }),
+							RemainingChaptersBadge({ remainingChapters }),
+						]}
+					/>
+				})}
 			</CardGridUI>
 		</Page>
 	);

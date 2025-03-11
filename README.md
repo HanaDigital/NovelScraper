@@ -34,10 +34,11 @@ Download and update translated web/light novels from a list of sites.
 List of supported sites:
 -	[NovelFull](https://novelfull.com/)
 -   [NovelBin](https://novelbin.com/)
+-   [Novgo](https://novgo.co)
 
-Author: [@dr-nyt](https://github.com/dr-nyt)
+Author: [@dr-nyt](https://github.com/dr-nyt)  
 Contributors: [@webdagger](https://github.com/webdagger), [@jiskim](https://github.com/jiskim)
-Version: 3.0.6
+Version: 3.0.7
 
 ## FEATURES
 
@@ -45,14 +46,6 @@ Version: 3.0.6
 	<img src="https://user-images.githubusercontent.com/41040912/95752018-74e6eb00-0cb0-11eb-8acb-2cc6fd790ffc.png">
   	<img src="https://user-images.githubusercontent.com/41040912/95752022-76181800-0cb0-11eb-9e9c-2627334b0779.png">
 </p>
-
-## CONTRIBUTE
-
-Contributing to this project is very straight forward. There is a step-by-step guide on how to add a source to the app.
-
-You can find the contribution guide [here](https://github.com/HanaDigital/NovelScraper/wiki/Contribution-Guide).
-
-## ATTRIBUTION
 
 ## LICENSE
 
