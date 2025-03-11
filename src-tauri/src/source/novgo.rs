@@ -105,7 +105,7 @@ fn get_chapter_content(chapter: &mut super::Chapter, chapter_html: &str) {
     let chapter_content_node = document
         .select_first(".c-blog-post .entry-content .reading-content .text-left")
         .unwrap();
-    let mut chapter_content_html =
+    let chapter_content_html =
         super::clean_chapter_html(&mut chapter_content_node.as_node().to_string());
 
     chapter.content = Some(chapter_content_html);
