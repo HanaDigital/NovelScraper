@@ -4,7 +4,6 @@ use super::is_novel_download_cancelled;
 use super::types::{Chapter, DownloadData, NovelData};
 use futures::future::join_all;
 use kuchikiki::traits::*;
-use regex::Regex;
 use std::time::Duration;
 use std::{cmp::min, thread, vec};
 use tauri::{AppHandle, Emitter};
@@ -67,14 +66,10 @@ pub async fn download_novel_chapters(
 }
 
 async fn get_chapter_urls(novel_data: &NovelData) -> Vec<super::Chapter> {
-    let novel_id = novel_data.novel_url.split("/").last().unwrap();
     let page_html = super::fetch_html(
-        &format!(
-            "{}/ajax/chapter-archive?novelId={}",
-            novel_data.source_url, novel_id
-        ),
+        &format!("{}ajax/chapters", novel_data.novel_url),
         &novel_data.cf_headers,
-        super::types::FetchType::GET,
+        super::types::FetchType::POST,
     )
     .await
     .unwrap();
@@ -82,12 +77,12 @@ async fn get_chapter_urls(novel_data: &NovelData) -> Vec<super::Chapter> {
 
     let mut chapters: Vec<super::Chapter> = vec![];
     document
-        .select("ul.list-chapter li")
+        .select("li.wp-manga-chapter a")
         .unwrap()
+        .rev()
         .for_each(|chapter_elem| {
-            let chapter_link_elem = chapter_elem.as_node().select("a").unwrap().next().unwrap();
-            let title = chapter_link_elem.text_contents().trim().to_string();
-            let url = chapter_link_elem
+            let title = chapter_elem.text_contents().trim().to_string();
+            let url = chapter_elem
                 .attributes
                 .borrow()
                 .get("href")
@@ -107,26 +102,11 @@ async fn get_chapter_urls(novel_data: &NovelData) -> Vec<super::Chapter> {
 fn get_chapter_content(chapter: &mut super::Chapter, chapter_html: &str) {
     let document = kuchikiki::parse_html().one(chapter_html);
 
-    let chapter_content_node = document.select_first("#chr-content").unwrap();
-    let mut chapter_content_html =
+    let chapter_content_node = document
+        .select_first(".c-blog-post .entry-content .reading-content .text-left")
+        .unwrap();
+    let chapter_content_html =
         super::clean_chapter_html(&mut chapter_content_node.as_node().to_string());
-
-    let chapter_title = document
-        .select_first("#chapter .chr-title")
-        .unwrap()
-        .text_contents()
-        .trim()
-        .to_string();
-    if !chapter_title.is_empty() {
-        chapter_content_html = format!("<h1>{}</h1>", chapter_title) + &chapter_content_html;
-    }
-
-    let ad_re = Regex::new(r#"<div class="PUBFUTURE">.*?</div>"#).unwrap();
-    chapter_content_html = ad_re.replace_all(&chapter_content_html, "").to_string();
-    let schedule_re = Regex::new(r#"<div class="schedule-text">.*?</div>"#).unwrap();
-    chapter_content_html = schedule_re
-        .replace_all(&chapter_content_html, "")
-        .to_string();
 
     chapter.content = Some(chapter_content_html);
 }

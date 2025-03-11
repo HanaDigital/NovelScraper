@@ -13,7 +13,7 @@ export function TooltipUI({ children, content, side, sideOffset, className = "" 
 	return (
 		<TooltipProvider delayDuration={200}>
 			<Tooltip>
-				<TooltipTrigger>{children}</TooltipTrigger>
+				<TooltipTrigger asChild>{children}</TooltipTrigger>
 				<TooltipContent
 					className={`bg-background border shadow-lg text-gray-500 font-medium ${className}`}
 					side={side} sideOffset={sideOffset}

@@ -1,7 +1,7 @@
 {
 	"name": "novelscraper",
 	"private": true,
-	"version": "3.0.6",
+	"version": "3.0.7",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
@@ -21,6 +21,7 @@
 		"@tauri-apps/plugin-dialog": "~2",
 		"@tauri-apps/plugin-fs": "~2",
 		"@tauri-apps/plugin-opener": "^2.2.6",
+		"@tauri-apps/plugin-os": "~2",
 		"@tauri-apps/plugin-shell": "^2.0.1",
 		"@tauri-apps/plugin-store": "~2",
 		"@tauri-apps/plugin-updater": "~2",

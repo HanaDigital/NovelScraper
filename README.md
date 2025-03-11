@@ -38,7 +38,7 @@ List of supported sites:
 
 Author: [@dr-nyt](https://github.com/dr-nyt)
 Contributors: [@webdagger](https://github.com/webdagger), [@jiskim](https://github.com/jiskim)
-Version: 3.0.6
+Version: 3.0.7
 
 ## FEATURES
 

@@ -37,3 +37,9 @@ pub struct DownloadData {
     pub downloaded_chapters_count: usize,
     pub downloaded_chapters: Option<Vec<Chapter>>,
 }
+
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+pub enum FetchType {
+    GET,
+    POST,
+}
