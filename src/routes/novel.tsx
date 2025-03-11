@@ -113,7 +113,6 @@ function RouteComponent() {
 	const handleDownload = async () => {
 		if (
 			!novel
-			|| novel.totalChapters === novel.downloadedChapters
 			|| !novel.isInLibrary
 			|| isDownloading
 			|| novelDownloadStatus?.status === "Downloading"
