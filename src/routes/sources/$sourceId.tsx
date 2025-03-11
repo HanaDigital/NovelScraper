@@ -63,9 +63,9 @@ function RouteComponent() {
 
 	const handleClear = () => {
 		setNoSearchResultsFor(undefined);
-		setSearchHistory((state) => {
-			state[sourceId as SourceIDsT] = [];
-		});
+		// setSearchHistory((state) => {
+		// 	state[sourceId as SourceIDsT] = [];
+		// });
 	}
 
 	if (!source) return <></>

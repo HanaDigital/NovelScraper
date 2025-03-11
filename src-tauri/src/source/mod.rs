@@ -1,5 +1,6 @@
 pub mod novelbin;
 pub mod novelfull;
+pub mod novgo;
 pub mod types;
 
 use std::collections::HashMap;
@@ -21,6 +22,8 @@ pub async fn download_novel_chapters(
         return novelfull::download_novel_chapters(app, state, novel_data).await;
     } else if novel_data.source_id == "novelbin" {
         return novelbin::download_novel_chapters(app, state, novel_data).await;
+    } else if novel_data.source_id == "novgo" {
+        return novgo::download_novel_chapters(app, state, novel_data).await;
     }
     Err(format!("Source {} not found", novel_data.source_id))
 }

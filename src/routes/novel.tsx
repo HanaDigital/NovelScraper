@@ -282,7 +282,7 @@ function RouteComponent() {
 					<div className="flex flex-col gap-1 w-72">
 						<div className="flex justify-between">
 							<TinyP>{novelDownloadStatus.status}</TinyP>
-							<TinyP>{novelDownloadStatus.downloaded_chapters_count}</TinyP>
+							<TinyP>{novelDownloadStatus.downloaded_chapters_count} / {novel.totalChapters}</TinyP>
 						</div>
 						<Progress value={((novelDownloadStatus?.downloaded_chapters_count || 0) / (novel.totalChapters || 1)) * 100} content="Downloading" />
 					</div>

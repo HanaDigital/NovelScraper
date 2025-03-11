@@ -148,10 +148,12 @@ export function CloudflareResolverStatus() {
 			>
 				<SmallP className="leading-6 font-normal">This source uses Cloudflare to guard against bots. To access this source, you must install Docker to bypass Cloudflare.</SmallP>
 				<SmallP className="leading-6 font-normal text-red-500">Be sure to run the Docker app after installing.</SmallP>
-				<Button onClick={handleOpenDockerURL}>
-					<ExternalLink />
-					Download
-				</Button>
+				<DialogClose asChild>
+					<Button onClick={handleOpenDockerURL}>
+						<ExternalLink />
+						Download
+					</Button>
+				</DialogClose>
 			</DialogUI>
 		</div>
 	)
