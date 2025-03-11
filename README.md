@@ -47,14 +47,6 @@ Version: 3.0.7
   	<img src="https://user-images.githubusercontent.com/41040912/95752022-76181800-0cb0-11eb-9e9c-2627334b0779.png">
 </p>
 
-## CONTRIBUTE
-
-Contributing to this project is very straight forward. There is a step-by-step guide on how to add a source to the app.
-
-You can find the contribution guide [here](https://github.com/HanaDigital/NovelScraper/wiki/Contribution-Guide).
-
-## ATTRIBUTION
-
 ## LICENSE
 
 ```
