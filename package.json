@@ -1,7 +1,7 @@
 {
 	"name": "novelscraper",
 	"private": true,
-	"version": "3.0.8",
+	"version": "3.0.9",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
@@ -52,6 +52,6 @@
 		"postcss": "^8.4.49",
 		"tailwindcss": "^3.4.15",
 		"typescript": "^5.8.2",
-		"vite": "^5.3.1"
+		"vite": "^5.4.12"
 	}
 }
