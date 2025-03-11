@@ -35,7 +35,6 @@ function RootComponent() {
 				const isClosed = await invoke<boolean>("stop_cloudflare_resolver");
 			} catch (err) {
 				console.error(err);
-				event.preventDefault();
 			}
 		});
 

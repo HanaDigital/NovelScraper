@@ -86,19 +86,17 @@ async fn fetch_image(
 }
 
 #[tauri::command]
-fn check_docker_status(app: AppHandle) -> bool {
-    let is_started = docker::check_docker_status(&app);
-    return is_started;
+fn check_docker_status(app: AppHandle) -> Result<bool, String> {
+    return docker::check_docker_status(&app);
 }
 
 #[tauri::command]
-fn start_cloudflare_resolver(app: AppHandle, port: usize) -> bool {
-    let is_started = docker::start_cloudflare_resolver(&app, port);
-    return is_started;
+fn start_cloudflare_resolver(app: AppHandle, port: usize) -> Result<bool, String> {
+    return docker::start_cloudflare_resolver(&app, port);
 }
 
 #[tauri::command]
-fn stop_cloudflare_resolver(app: AppHandle) -> bool {
+fn stop_cloudflare_resolver(app: AppHandle) -> Result<bool, String> {
     return docker::stop_cloudflare_resolver(&app);
 }
 
@@ -151,6 +149,7 @@ async fn install_update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<(
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    let _ = fix_path_env::fix();
     tauri::Builder::default()
         .setup(|app| {
             app.manage(Mutex::new(AppState::default()));

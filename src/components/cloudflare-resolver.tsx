@@ -7,7 +7,7 @@ import { appStateAtom, dockerAtom } from "@/lib/store";
 import { Button } from "./ui/button";
 import { TooltipUI } from "./tooltip";
 import DialogUI from "./dialog";
-import { CodeP, P, SmallP } from "./typography";
+import { SmallP } from "./typography";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { DialogClose } from "@radix-ui/react-dialog";
 
@@ -29,10 +29,9 @@ export function CloudflareResolverStatus() {
 	const initCloudflareResolver = async () => {
 		setIsDockerInitializing(true);
 		await new Promise((resolve) => setTimeout(resolve, 500));
-		const dStatus = await handleCheckDockerStatus();
-		const cfStatus = await handleStartCloudflareResolver();
+		const status = await handleCheckDockerStatus() && await handleStartCloudflareResolver();
 		setIsDockerInitializing(false);
-		return dStatus && cfStatus
+		return status;
 	}
 
 	const handleCheckDockerStatus = async () => {
@@ -75,6 +74,7 @@ export function CloudflareResolverStatus() {
 			setDocker(d => { d.cfResolverStatus = !isClosed });
 		} catch (e) {
 			console.error(e);
+			await initCloudflareResolver();
 		}
 		setIsLoadingCloudflareResolver(false);
 	}
