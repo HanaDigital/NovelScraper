@@ -1,4 +1,7 @@
+use std::{thread::sleep, time::Duration};
+
 use tauri::AppHandle;
+use tauri_plugin_os::arch;
 use tauri_plugin_shell::ShellExt;
 
 pub fn check_docker_status(app: &AppHandle) -> bool {
@@ -30,20 +33,6 @@ pub fn start_cloudflare_resolver(app: &AppHandle, port: usize) -> bool {
     let shell = app.shell();
     let start_cmd = ["start", "novelscraper-cloudflare-resolver"];
 
-    let port_link = format!("{port}:3000");
-    let run_cmd = [
-        "run",
-        "-d",
-        "--name",
-        "novelscraper-cloudflare-resolver",
-        "-p",
-        port_link.as_str(),
-        "-e",
-        "browserLimit=20",
-        "-e",
-        "timeOut=60000",
-        "zfcsoftware/cf-clearance-scraper:latest",
-    ];
     match tauri::async_runtime::block_on(async move {
         shell.command("docker").args(start_cmd).output().await
     }) {
@@ -61,6 +50,27 @@ pub fn start_cloudflare_resolver(app: &AppHandle, port: usize) -> bool {
             return false;
         }
     }
+
+    let image = if arch() == "aarch64" {
+        sleep(Duration::from_secs(1));
+        "drnyt/cf-clearance-scraper-arm64:latest"
+    } else {
+        "zfcsoftware/cf-clearance-scraper:latest"
+    };
+    let port_link = format!("{port}:3000");
+    let run_cmd = [
+        "run",
+        "-d",
+        "--name",
+        "novelscraper-cloudflare-resolver",
+        "-p",
+        port_link.as_str(),
+        "-e",
+        "browserLimit=20",
+        "-e",
+        "timeOut=60000",
+        image,
+    ];
 
     match tauri::async_runtime::block_on(async move {
         shell.command("docker").args(run_cmd).output().await

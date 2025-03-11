@@ -87,12 +87,14 @@ async fn fetch_image(
 
 #[tauri::command]
 fn check_docker_status(app: AppHandle) -> bool {
-    return docker::check_docker_status(&app);
+    let is_started = docker::check_docker_status(&app);
+    return is_started;
 }
 
 #[tauri::command]
 fn start_cloudflare_resolver(app: AppHandle, port: usize) -> bool {
-    return docker::start_cloudflare_resolver(&app, port);
+    let is_started = docker::start_cloudflare_resolver(&app, port);
+    return is_started;
 }
 
 #[tauri::command]

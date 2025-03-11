@@ -2,7 +2,7 @@ import Loader from "@/components/loader";
 import Page from "@/components/page";
 import { SourceIDsT, SOURCES } from "@/lib/sources/sources";
 import { DownloadDataT, NovelT } from "@/lib/sources/types";
-import { activeNovelAtom, appStateAtom, downloadStatusAtom, libraryStateAtom, searchHistoryAtom } from "@/lib/store";
+import { activeNovelAtom, appStateAtom, dockerAtom, downloadStatusAtom, libraryStateAtom, searchHistoryAtom } from "@/lib/store";
 import { createFileRoute } from '@tanstack/react-router'
 import { useAtom, useAtomValue, useSetAtom } from "jotai/react";
 import { useEffect, useState } from "react";
@@ -34,10 +34,17 @@ function RouteComponent() {
 	const appState = useAtomValue(appStateAtom);
 	const [downloadStatus, setDownloadStatus] = useAtom(downloadStatusAtom);
 	const [isDownloading, setIsDownloading] = useState(false);
+	const docker = useAtomValue(dockerAtom);
+	const [cfReady, setCFReady] = useState(true);
 
 	useEffect(() => {
 		loadNovelMetadata();
 	}, [activeNovel]);
+
+	useEffect(() => {
+		if (!novel) return;
+		setCFReady(SOURCES[novel.source].cloudflareProtected ? (docker.engineStatus && docker.cfResolverStatus) : true);
+	}, [novel, docker]);
 
 	useEffect(() => {
 		if (!activeNovel || !libraryState.novels[activeNovel.id]) return;
@@ -55,13 +62,17 @@ function RouteComponent() {
 			if (!activeNovel) return;
 			setNovel(undefined);
 			let _novel = activeNovel;
+
 			if (!_novel.isMetadataLoaded || forceFetch) _novel = await fetchMetadata(_novel);
 
 			if (_novel.localCoverPath) {
 				setCoverSrc(getUnCachedFileSrc(_novel.localCoverPath));
+			} else if (SOURCES[_novel.source].cloudflareProtected && !_novel.isInLibrary) {
+				setCoverSrc("asset://localhost:3000/test.jpg")
 			} else {
 				setCoverSrc(_novel.coverURL ?? _novel.thumbnailURL);
 			}
+
 
 			updateState(_novel, false);
 		} catch (e) {
@@ -237,7 +248,7 @@ function RouteComponent() {
 			<div className="flex justify-between items-center">
 				<div className="flex gap-2">
 					{!novel.isInLibrary && <TooltipUI content="Add to Library" side="bottom" sideOffset={8}>
-						<Button size="icon" onClick={handleAddToLibrary}><BookmarkPlusSolid /></Button>
+						<Button size="icon" onClick={handleAddToLibrary} disabled={!cfReady}><BookmarkPlusSolid /></Button>
 					</TooltipUI>}
 					{novel.isInLibrary && <TooltipUI content="Remove from Library" side="bottom" sideOffset={8}>
 						<Button size="icon" variant="destructive" onClick={handleRemoveFromLibrary} disabled={
@@ -246,7 +257,7 @@ function RouteComponent() {
 						}><BookmarkMinusSolid /></Button>
 					</TooltipUI>}
 					<TooltipUI content="Refresh Metadata" side="bottom" sideOffset={8}>
-						<Button size="icon" variant="secondary" onClick={() => loadNovelMetadata(true)} disabled={novel.isUpdating}><RefreshSolid /></Button>
+						<Button size="icon" variant="secondary" onClick={() => loadNovelMetadata(true)} disabled={novel.isUpdating || !cfReady}><RefreshSolid /></Button>
 					</TooltipUI>
 					<TooltipUI content="Open in Browser" side="bottom" sideOffset={8}>
 						<Button size="icon" variant="outline" onClick={handleOpenInBrowser}><ExternalLink /></Button>
@@ -256,7 +267,7 @@ function RouteComponent() {
 					</TooltipUI>
 					{(novel.isInLibrary && novelDownloadStatus?.status !== "Downloading") &&
 						<TooltipUI content="Download" side="bottom" sideOffset={8}>
-							<Button className="!p-0" size="icon" onClick={handleDownload} disabled={isDownloading}><DownloadSolid /></Button>
+							<Button className="!p-0" size="icon" onClick={handleDownload} disabled={isDownloading || !cfReady}><DownloadSolid /></Button>
 						</TooltipUI>}
 					{(novel.isInLibrary && novelDownloadStatus?.status === "Downloading") &&
 						<TooltipUI content="Cancel Download" side="bottom" sideOffset={8}>

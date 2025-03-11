@@ -39,20 +39,6 @@ function RootComponent() {
 			}
 		});
 
-		return () => {
-			unlisten.then(off => off());
-		}
-	}, []);
-
-	useEffect(() => {
-		if (!appInitialized || !appStore) return;
-		appStore.set(appState.key, appState);
-	}, [appInitialized, appStore, appState]);
-
-	useEffect(() => {
-		if (!appInitialized || !appStore) return;
-		appStore.set(libraryState.key, libraryState);
-
 		const downloadStatusListenerP = listen<DownloadDataT>("download-status", (event) => {
 			const data = event.payload;
 
@@ -73,8 +59,19 @@ function RootComponent() {
 		});
 
 		return () => {
+			unlisten.then(off => off());
 			downloadStatusListenerP.then((unsub) => unsub());
 		}
+	}, []);
+
+	useEffect(() => {
+		if (!appInitialized || !appStore) return;
+		appStore.set(appState.key, appState);
+	}, [appInitialized, appStore, appState]);
+
+	useEffect(() => {
+		if (!appInitialized || !appStore) return;
+		appStore.set(libraryState.key, libraryState);
 	}, [appInitialized, appStore, libraryState]);
 
 	useEffect(() => {

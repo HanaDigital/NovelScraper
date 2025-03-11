@@ -84,7 +84,6 @@ export class Novgo extends NovelSource {
 				break;
 			}
 		}
-		console.log("!!!C-PAGE:", $(".c-page .description-summary"));
 		const description = $(".c-page .description-summary .summary__content").text().trim();
 
 		const chaptersHTML = await this.fetchHTML(`${novel.url}ajax/chapters`, "POST");

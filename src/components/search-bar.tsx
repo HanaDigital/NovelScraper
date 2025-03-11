@@ -7,10 +7,11 @@ type SearchBarProps = {
 	handleSearch: (query: string) => void;
 	handleClear: () => void;
 	showClear?: boolean;
+	loading?: boolean;
 	disabled?: boolean;
 	searchOnType?: boolean;
 }
-export default function SearchBar({ handleSearch, handleClear, showClear = false, disabled = false, searchOnType }: SearchBarProps) {
+export default function SearchBar({ handleSearch, handleClear, showClear = false, loading = false, disabled = false, searchOnType }: SearchBarProps) {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [searched, setSearched] = useState(false);
 
@@ -38,10 +39,10 @@ export default function SearchBar({ handleSearch, handleClear, showClear = false
 					}}
 					type="text"
 					placeholder='Search'
-					disabled={disabled}
+					disabled={disabled || loading}
 				/>
-				<Button className={`h-full absolute right-0 top-0 disabled:bg-muted disabled:text-foreground`} onClick={() => handleSearch(searchQuery)} disabled={disabled}>
-					{disabled ? <CircleDashed className="animate-spin" /> : <Search />}
+				<Button className={`h-full absolute right-0 top-0 disabled:bg-muted disabled:text-foreground`} onClick={() => handleSearch(searchQuery)} disabled={loading || disabled}>
+					{loading ? <CircleDashed className="animate-spin" /> : <Search />}
 				</Button>
 			</div>
 			<div className={`overflow-hidden transition-all ${(showClear || searched) ? "w-max pr-2 ml-2" : "w-0"}`}>
@@ -52,7 +53,7 @@ export default function SearchBar({ handleSearch, handleClear, showClear = false
 						setSearched(false);
 						handleClear();
 					}}
-					disabled={disabled}
+					disabled={disabled || loading}
 				>
 					<X />
 				</Button>
