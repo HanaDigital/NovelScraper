@@ -102,11 +102,11 @@ export function AppSidebar() {
 			<SidebarFooter className="flex flex-col items-end gap-4">
 				{newVersion &&
 					<SidebarMenu>
-						<SidebarMenuItem className="flex gap-2 justify-center items-center shadow-lg shadow-green-900">
+						<SidebarMenuItem className="flex gap-2 justify-center items-center shadow-lg shadow-green-600 animate-pulse">
 							<SidebarMenuButton size="lg" className="!bg-card border border-green-900" onClick={handleInstallUpdate} disabled={isUpdating}>
 								{isUpdating
 									? <CircleNotch className="!size-7 animate-spin" />
-									: <DownloadSolid className={`!size-7 ${!open && "!size-6 ml-[0.15rem]"}`} />
+									: <DownloadSolid className={`!size-7 transition-all ${!open && "!size-4 ml-[0.41rem]"}`} />
 								}
 								<div className="flex-1 text-sm leading-tight flex-col gap-1">
 									<P className="truncate">New Update</P>
