@@ -34,6 +34,7 @@ Download and update translated web/light novels from a list of sites.
 List of supported sites:
 -	[NovelFull](https://novelfull.com/)
 -   [NovelBin](https://novelbin.com/)
+-   [Novgo](https://novgo.co)
 
 Author: [@dr-nyt](https://github.com/dr-nyt)
 Contributors: [@webdagger](https://github.com/webdagger), [@jiskim](https://github.com/jiskim)
