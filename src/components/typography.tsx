@@ -99,3 +99,11 @@ export function MutedP({ children, className }: TypographyProps) {
         </p>
     )
 }
+
+export function CodeP({ children, className }: TypographyProps) {
+    return (
+        <code className={`px-1 py-1 bg-gray-800 rounded-md ${className}`}>
+            {children}
+        </code>
+    )
+}

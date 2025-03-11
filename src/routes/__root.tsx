@@ -11,7 +11,8 @@ import * as path from '@tauri-apps/api/path';
 import { createLibraryDir, saveNovelChapters } from '@/lib/library/library';
 import { listen } from "@tauri-apps/api/event";
 import { DownloadDataT } from "@/lib/sources/types";
-import { message } from "@tauri-apps/plugin-dialog";
+import { getCurrentWindow } from "@tauri-apps/api/window";
+import { invoke } from "@tauri-apps/api/core";
 
 export const Route = createRootRoute({
 	component: RootComponent,
@@ -28,16 +29,15 @@ function RootComponent() {
 
 	useEffect(() => {
 		loadStore();
-	}, []);
 
-	useEffect(() => {
-		if (!appInitialized || !appStore) return;
-		appStore.set(appState.key, appState);
-	}, [appInitialized, appStore, appState]);
-
-	useEffect(() => {
-		if (!appInitialized || !appStore) return;
-		appStore.set(libraryState.key, libraryState);
+		const unlisten = getCurrentWindow().onCloseRequested(async (event) => {
+			try {
+				const isClosed = await invoke<boolean>("stop_cloudflare_resolver");
+			} catch (err) {
+				console.error(err);
+				event.preventDefault();
+			}
+		});
 
 		const downloadStatusListenerP = listen<DownloadDataT>("download-status", (event) => {
 			const data = event.payload;
@@ -59,8 +59,19 @@ function RootComponent() {
 		});
 
 		return () => {
+			unlisten.then(off => off());
 			downloadStatusListenerP.then((unsub) => unsub());
 		}
+	}, []);
+
+	useEffect(() => {
+		if (!appInitialized || !appStore) return;
+		appStore.set(appState.key, appState);
+	}, [appInitialized, appStore, appState]);
+
+	useEffect(() => {
+		if (!appInitialized || !appStore) return;
+		appStore.set(libraryState.key, libraryState);
 	}, [appInitialized, appStore, libraryState]);
 
 	useEffect(() => {

@@ -18,6 +18,7 @@ export type NovelT = {
 	coverURL?: string;
 	thumbnailURL?: string;
 	localCoverPath?: string;
+	localCoverPathId?: string;
 	latestChapterTitle?: string;
 	totalChapters?: number;
 	status?: string;

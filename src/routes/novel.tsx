@@ -2,7 +2,7 @@ import Loader from "@/components/loader";
 import Page from "@/components/page";
 import { SourceIDsT, SOURCES } from "@/lib/sources/sources";
 import { DownloadDataT, NovelT } from "@/lib/sources/types";
-import { activeNovelAtom, appStateAtom, downloadStatusAtom, libraryStateAtom, searchHistoryAtom } from "@/lib/store";
+import { activeNovelAtom, appStateAtom, dockerAtom, downloadStatusAtom, libraryStateAtom, searchHistoryAtom } from "@/lib/store";
 import { createFileRoute } from '@tanstack/react-router'
 import { useAtom, useAtomValue, useSetAtom } from "jotai/react";
 import { useEffect, useState } from "react";
@@ -17,6 +17,7 @@ import { Progress } from "@/components/ui/progress";
 import { TinyP } from "@/components/typography";
 import { revealItemInDir, openUrl } from '@tauri-apps/plugin-opener';
 import MissingImageBanner from "@/assets/ui/missing-image-banner.jpg";
+import { CloudflareResolverStatus } from "@/components/cloudflare-resolver";
 
 export const Route = createFileRoute('/novel')({
 	component: RouteComponent,
@@ -33,13 +34,20 @@ function RouteComponent() {
 	const appState = useAtomValue(appStateAtom);
 	const [downloadStatus, setDownloadStatus] = useAtom(downloadStatusAtom);
 	const [isDownloading, setIsDownloading] = useState(false);
+	const docker = useAtomValue(dockerAtom);
+	const [cfReady, setCFReady] = useState(true);
 
 	useEffect(() => {
 		loadNovelMetadata();
-	}, []);
+	}, [activeNovel]);
 
 	useEffect(() => {
-		if (!activeNovel) return;
+		if (!novel) return;
+		setCFReady(SOURCES[novel.source].cloudflareProtected ? (docker.engineStatus && docker.cfResolverStatus) : true);
+	}, [novel, docker]);
+
+	useEffect(() => {
+		if (!activeNovel || !libraryState.novels[activeNovel.id]) return;
 		updateState(libraryState.novels[activeNovel.id], false);
 	}, [libraryState.novels[activeNovel?.id ?? ""]]);
 
@@ -54,13 +62,17 @@ function RouteComponent() {
 			if (!activeNovel) return;
 			setNovel(undefined);
 			let _novel = activeNovel;
+
 			if (!_novel.isMetadataLoaded || forceFetch) _novel = await fetchMetadata(_novel);
 
 			if (_novel.localCoverPath) {
 				setCoverSrc(getUnCachedFileSrc(_novel.localCoverPath));
+			} else if (SOURCES[_novel.source].cloudflareProtected && !_novel.isInLibrary) {
+				setCoverSrc("asset://localhost:3000/test.jpg")
 			} else {
 				setCoverSrc(_novel.coverURL ?? _novel.thumbnailURL);
 			}
+
 
 			updateState(_novel, false);
 		} catch (e) {
@@ -232,10 +244,11 @@ function RouteComponent() {
 	if (!novel || isLoading) return <Loader />
 	return (
 		<Page>
+			{SOURCES[novel.source].cloudflareProtected && <CloudflareResolverStatus />}
 			<div className="flex justify-between items-center">
 				<div className="flex gap-2">
 					{!novel.isInLibrary && <TooltipUI content="Add to Library" side="bottom" sideOffset={8}>
-						<Button size="icon" onClick={handleAddToLibrary}><BookmarkPlusSolid /></Button>
+						<Button size="icon" onClick={handleAddToLibrary} disabled={!cfReady}><BookmarkPlusSolid /></Button>
 					</TooltipUI>}
 					{novel.isInLibrary && <TooltipUI content="Remove from Library" side="bottom" sideOffset={8}>
 						<Button size="icon" variant="destructive" onClick={handleRemoveFromLibrary} disabled={
@@ -244,7 +257,7 @@ function RouteComponent() {
 						}><BookmarkMinusSolid /></Button>
 					</TooltipUI>}
 					<TooltipUI content="Refresh Metadata" side="bottom" sideOffset={8}>
-						<Button size="icon" variant="secondary" onClick={() => loadNovelMetadata(true)} disabled={novel.isUpdating}><RefreshSolid /></Button>
+						<Button size="icon" variant="secondary" onClick={() => loadNovelMetadata(true)} disabled={novel.isUpdating || !cfReady}><RefreshSolid /></Button>
 					</TooltipUI>
 					<TooltipUI content="Open in Browser" side="bottom" sideOffset={8}>
 						<Button size="icon" variant="outline" onClick={handleOpenInBrowser}><ExternalLink /></Button>
@@ -254,7 +267,7 @@ function RouteComponent() {
 					</TooltipUI>
 					{(novel.isInLibrary && novelDownloadStatus?.status !== "Downloading") &&
 						<TooltipUI content="Download" side="bottom" sideOffset={8}>
-							<Button className="!p-0" size="icon" onClick={handleDownload} disabled={isDownloading}><DownloadSolid /></Button>
+							<Button className="!p-0" size="icon" onClick={handleDownload} disabled={isDownloading || !cfReady}><DownloadSolid /></Button>
 						</TooltipUI>}
 					{(novel.isInLibrary && novelDownloadStatus?.status === "Downloading") &&
 						<TooltipUI content="Cancel Download" side="bottom" sideOffset={8}>
@@ -269,7 +282,7 @@ function RouteComponent() {
 					<div className="flex flex-col gap-1 w-72">
 						<div className="flex justify-between">
 							<TinyP>{novelDownloadStatus.status}</TinyP>
-							<TinyP>{novelDownloadStatus.downloaded_chapters_count}</TinyP>
+							<TinyP>{novelDownloadStatus.downloaded_chapters_count} / {novel.totalChapters}</TinyP>
 						</div>
 						<Progress value={((novelDownloadStatus?.downloaded_chapters_count || 0) / (novel.totalChapters || 1)) * 100} content="Downloading" />
 					</div>
@@ -307,6 +320,8 @@ function RouteComponent() {
 					<div>{novel.status}</div>
 					<b>Rating</b>
 					<div>{novel.rating}</div>
+					<b>Source</b>
+					<div>{SOURCES[novel.source].name}</div>
 				</div>
 			</div>
 			{/* <h1>{novel.title}</h1> */}

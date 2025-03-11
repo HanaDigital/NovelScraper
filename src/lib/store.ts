@@ -39,3 +39,12 @@ export const searchHistoryAtom = atomWithImmer<searchHistoryT>(searchHistory);
 
 export const activeNovelAtom = atom<NovelT | null>(null);
 export const downloadStatusAtom = atomWithImmer<{ [key: string]: DownloadDataT }>({});
+
+export type DockerStatusT = {
+	engineStatus: boolean;
+	cfResolverStatus: boolean;
+}
+export const dockerAtom = atomWithImmer<DockerStatusT>({
+	engineStatus: false,
+	cfResolverStatus: false
+});

@@ -20,7 +20,7 @@ export function CardUI({ href, imageURL, title, subTitle, badges, onClick = () =
 			onClick={onClick}
 		>
 			<div className="flex gap-2 items-center absolute top-3 right-3 z-20">
-				{badges && badges?.map(badge => badge)}
+				{badges && badges?.map((badge, i) => <span key={i}>{badge}</span>)}
 			</div>
 			<div className="rounded-lg overflow-hidden w-full aspect-auto flex-1 grid place-items-center bg-background border">
 				<object className="group-hover:scale-[1.05] transition-transform w-full" data={imageURL} type="image/jpg">
