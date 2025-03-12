@@ -1,7 +1,7 @@
 {
 	"name": "novelscraper",
 	"private": true,
-	"version": "3.0.9",
+	"version": "3.1.0",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
@@ -29,6 +29,7 @@
 		"class-variance-authority": "^0.7.0",
 		"clone": "^2.1.2",
 		"clsx": "^2.1.1",
+		"firebase": "^11.4.0",
 		"immer": "^10.1.1",
 		"jotai": "^2.10.3",
 		"jotai-immer": "^0.4.1",

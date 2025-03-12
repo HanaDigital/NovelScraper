@@ -20,6 +20,8 @@ import { useSetAtom } from "jotai/react";
 import { appStateAtom } from "@/lib/store";
 import { routes } from "@/lib/routes";
 import { invoke } from "@tauri-apps/api/core";
+import { logEvent } from "firebase/analytics";
+import { getFirebaseAnalytics } from "@/lib/firebase";
 
 export function AppSidebar() {
 	const { resolvedLocation } = useRouterState();
@@ -46,6 +48,7 @@ export function AppSidebar() {
 		try {
 			const newVersion = await invoke<string>("check_for_update");
 			setNewVersion(newVersion);
+			logEvent(getFirebaseAnalytics(), "version_update_request", { version: newVersion });
 		} catch (e) {
 			console.error(e);
 		}
@@ -105,8 +108,8 @@ export function AppSidebar() {
 						<SidebarMenuItem className="flex gap-2 justify-center items-center shadow-lg shadow-green-600 animate-pulse">
 							<SidebarMenuButton size="lg" className="!bg-card border border-green-900" onClick={handleInstallUpdate} disabled={isUpdating}>
 								{isUpdating
-									? <CircleNotch className="!size-7 animate-spin" />
-									: <DownloadSolid className={`!size-7 transition-all ${!open && "!size-4 ml-[0.41rem]"}`} />
+									? <CircleNotch className={`transition-all animate-spin ml-[0.4rem] ${open && "!size-7 ml-0"}`} />
+									: <DownloadSolid className={`transition-all ml-[0.41rem] ${open && "!size-7 ml-0"}`} />
 								}
 								<div className="flex-1 text-sm leading-tight flex-col gap-1">
 									<P className="truncate">New Update</P>

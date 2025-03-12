@@ -81,7 +81,7 @@ function RouteComponent() {
 						href={`/novel?fromRoute=${location.pathname}`}
 						imageURL={coverSrc}
 						title={novel.title}
-						subTitle={novel.authors.join(', ')}
+						subTitle={novel.source}
 						onClick={() => setActiveNovel(novel)}
 						badges={[
 							NovelUpdatingBadge({ isUpdating: novel.isUpdating }),
