@@ -23,6 +23,8 @@ import { invoke } from "@tauri-apps/api/core";
 import { logEvent } from "firebase/analytics";
 import { getFirebaseAnalytics } from "@/lib/firebase";
 
+const analytics = getFirebaseAnalytics();
+
 export function AppSidebar() {
 	const { resolvedLocation } = useRouterState();
 	const setAppState = useSetAtom(appStateAtom);
@@ -38,6 +40,10 @@ export function AppSidebar() {
 	}, []);
 
 	useEffect(() => {
+		logEvent(analytics, "started_app", { version });
+	}, [version]);
+
+	useEffect(() => {
 		setAppState((state) => {
 			state.isSidePanelOpen = open;
 			return state;
@@ -48,7 +54,7 @@ export function AppSidebar() {
 		try {
 			const newVersion = await invoke<string>("check_for_update");
 			setNewVersion(newVersion);
-			logEvent(getFirebaseAnalytics(), "version_update_request", { version: newVersion });
+			logEvent(analytics, "version_update_request", { version: newVersion });
 		} catch (e) {
 			console.error(e);
 		}

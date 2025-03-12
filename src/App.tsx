@@ -1,10 +1,7 @@
 import "./App.css";
 import { AppSidebar } from "./components/app-sidebar";
 import { SidebarProvider } from "./components/ui/sidebar";
-import { getFirebaseAnalytics, initFirebase } from "./lib/firebase";
-
-const app = initFirebase();
-const analytics = getFirebaseAnalytics();
+import { getFirebaseAnalytics } from "./lib/firebase";
 
 function App() {
 	return (

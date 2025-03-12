@@ -42,21 +42,22 @@ export class NovelSource {
 		throw new Error(`${this.name}: 'updateNovelMetadata' method not implemented.`);
 	}
 
-	async downloadNovel(novel: NovelT, batchSize: number, batchDelay: number, startFromChapterIndex = 0): Promise<ChapterT[]> {
-		const chapters = await this.downloadChapters(novel, batchSize, batchDelay, startFromChapterIndex);
+	async downloadNovel(novel: NovelT, batchSize: number, batchDelay: number, preDownloadedChaptersCount = 0): Promise<ChapterT[]> {
+		const chapters = await this.downloadChapters(novel, batchSize, batchDelay, preDownloadedChaptersCount);
 		return chapters;
 	}
 
-	async downloadChapters(novel: NovelT, batchSize: number, batchDelay: number, startFromChapterIndex = 0): Promise<ChapterT[]> {
+	async downloadChapters(novel: NovelT, batchSize: number, batchDelay: number, preDownloadedChaptersCount = 0): Promise<ChapterT[]> {
 		await this.loadCFHeaders();
 		const chapters = await invoke<ChapterT[]>('download_novel_chapters', {
 			novel_id: novel.id,
+			novel_title: novel.title,
 			novel_url: novel.url,
 			source_id: this.id,
 			source_url: this.url,
 			batch_size: batchSize,
 			batch_delay: batchDelay,
-			start_downloading_from_index: startFromChapterIndex,
+			pre_downloaded_chapters_count: preDownloadedChaptersCount,
 			cf_headers: this.cfHeaders,
 		});
 		return chapters;

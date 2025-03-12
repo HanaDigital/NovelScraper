@@ -4,6 +4,7 @@ import SearchBar from "@/components/search-bar";
 import { TooltipUI } from "@/components/tooltip";
 import { Button } from "@/components/ui/button";
 import { fetchMetadataForNovels, getUnCachedFileSrc } from "@/lib/library/library";
+import { SOURCES } from "@/lib/sources/sources";
 import { NovelT } from "@/lib/sources/types";
 import { activeNovelAtom, libraryStateAtom } from "@/lib/store";
 import { RefreshSolid } from "@mynaui/icons-react";
@@ -81,7 +82,7 @@ function RouteComponent() {
 						href={`/novel?fromRoute=${location.pathname}`}
 						imageURL={coverSrc}
 						title={novel.title}
-						subTitle={novel.source}
+						subTitle={SOURCES[novel.source].name}
 						onClick={() => setActiveNovel(novel)}
 						badges={[
 							NovelUpdatingBadge({ isUpdating: novel.isUpdating }),

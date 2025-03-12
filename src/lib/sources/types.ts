@@ -1,3 +1,4 @@
+import { Store } from "@tauri-apps/plugin-store";
 import { SourceIDsT } from "./sources";
 
 export type ChapterT = {
@@ -35,10 +36,11 @@ export type NovelT = {
 	isUpdating: boolean;
 }
 
+export type DownloadStatus = "Downloading" | "Paused" | "Completed" | "Cancelled" | "Error";
 export type DownloadDataT = {
 	novel_id: string;
-	status: "Downloading" | "Paused" | "Completed" | "Cancelled" | "Error";
+	status: DownloadStatus;
 	downloaded_chapters_count: number;
 	downloaded_chapters?: ChapterT[];
-	chapters_saved: boolean;
+	novelStore: Store;
 }

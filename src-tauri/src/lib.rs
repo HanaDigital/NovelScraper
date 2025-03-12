@@ -12,12 +12,13 @@ async fn download_novel_chapters(
     app: AppHandle,
     state: State<'_, Mutex<AppState>>,
     novel_id: &str,
+    novel_title: &str,
     novel_url: &str,
     source_id: &str,
     source_url: &str,
     batch_size: usize,
     batch_delay: usize,
-    start_downloading_from_index: usize,
+    pre_downloaded_chapters_count: usize,
     cf_headers: Option<HashMap<String, String>>,
 ) -> Result<Vec<Chapter>, String> {
     source::update_novel_download_status(&state, novel_id, &DownloadStatus::Downloading)
@@ -26,31 +27,33 @@ async fn download_novel_chapters(
     match source::download_novel_chapters(
         &app,
         &state,
-        NovelData {
+        &NovelData {
             novel_id: novel_id.to_string(),
+            novel_title: novel_title.to_string(),
             novel_url: novel_url.to_string(),
             source_id: source_id.to_string(),
             source_url: source_url.to_string(),
             batch_size,
             batch_delay,
-            start_downloading_from_index,
+            pre_downloaded_chapters_count,
             cf_headers,
         },
     )
     .await
     {
-        Ok(chapters) => {
+        Ok(result) => {
             app.emit(
                 "download-status",
                 DownloadData {
                     novel_id: novel_id.to_string(),
-                    status: DownloadStatus::Completed,
-                    downloaded_chapters_count: chapters.len(),
-                    downloaded_chapters: Some(chapters.clone()),
+                    status: result.status,
+                    downloaded_chapters_count: pre_downloaded_chapters_count
+                        + result.chapters.len(),
+                    downloaded_chapters: None,
                 },
             )
             .unwrap();
-            Ok(chapters)
+            Ok(result.chapters)
         }
         Err(e) => {
             app.emit(
@@ -109,17 +112,22 @@ async fn update_novel_download_status(
     state: State<'_, Mutex<AppState>>,
     novel_id: &str,
     status: source::types::DownloadStatus,
-) -> Result<source::types::DownloadStatus, ()> {
-    println!("update_novel_download_status: {:?}", status);
+) -> Result<source::types::DownloadStatus, String> {
     return source::update_novel_download_status(&state, novel_id, &status).await;
 }
 
 #[tauri::command]
 async fn check_for_update(app: AppHandle) -> Result<String, String> {
-    if let Some(update) = app.updater().unwrap().check().await.unwrap() {
+    if let Some(update) = app
+        .updater()
+        .unwrap()
+        .check()
+        .await
+        .expect("Couldn't check for updates")
+    {
         return Ok(update.version);
     }
-    return Err("No updates available".to_string());
+    Ok("".to_string())
 }
 
 #[tauri::command]

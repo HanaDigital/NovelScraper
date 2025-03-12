@@ -4,7 +4,7 @@ import { open as dialogOpen } from '@tauri-apps/plugin-dialog';
 import * as path from '@tauri-apps/api/path';
 import { ChapterT, NovelT } from "../sources/types";
 import { SOURCES } from "../sources/sources";
-import { load } from "@tauri-apps/plugin-store";
+import { load, Store } from "@tauri-apps/plugin-store";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import clone from "clone";
 
@@ -91,15 +91,13 @@ export const getUnCachedFileSrc = (filePath: string) => {
 	return src;
 }
 
-export const saveNovelChapters = async (novel: NovelT, chapters: ChapterT[]) => {
+export const saveNovelChapters = async (novelStore: Store, novel: NovelT, chapters: ChapterT[]) => {
 	try {
-		const novelStore = await getNovelStore(novel);
 		await novelStore.set("chapters", chapters);
 		await novelStore.save();
-		await novelStore.close();
 	} catch (e) {
-		console.error(e);
-		await message(`Couldn't save novel chapters for ${novel.title}!`, { title: 'NovelScraper Library', kind: 'error' });
+		console.error("saveNovelChapters:", e);
+		// await message(`Couldn't save novel chapters for ${novel.title}!`, { title: 'NovelScraper Library', kind: 'error' });
 	}
 }
 
@@ -138,7 +136,7 @@ const getNovelDataDir = async (novel: NovelT) => {
 	return novelDir;
 }
 
-const getNovelStore = async (novel: NovelT) => {
+export const getNovelStore = async (novel: NovelT) => {
 	const novelDir = await getNovelDataDir(novel);
 	const novelStore = await load(`${novelDir}/${novel.id}-store.json`, { autoSave: false });
 	return novelStore;
