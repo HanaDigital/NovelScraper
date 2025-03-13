@@ -91,6 +91,7 @@ function RootComponent() {
 			if (app.version === 1) {
 				delete (app as AppStateV1T).downloadBatchSize;
 				delete (app as AppStateV1T).downloadBatchDelay;
+				app.viewedNotesForVersion
 				app.sourceDownloadOptions = sourceDownloadOptions;
 				app.version = 2;
 			}

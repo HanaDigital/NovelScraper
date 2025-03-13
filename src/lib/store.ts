@@ -17,6 +17,7 @@ export const sourceDownloadOptions = Object.fromEntries(Object.keys(SOURCES).map
 export type AppStateT = {
 	key: string;
 	version: number;
+	viewedNotesForVersion?: string;
 	isSidePanelOpen: boolean;
 	libraryRootPath: string;
 	sourceDownloadOptions: {
@@ -26,6 +27,7 @@ export type AppStateT = {
 export const appStateAtom = atomWithImmer<AppStateT>({
 	key: 'appState',
 	version: 2,
+	viewedNotesForVersion: undefined,
 	isSidePanelOpen: true,
 	libraryRootPath: "",
 	sourceDownloadOptions: sourceDownloadOptions

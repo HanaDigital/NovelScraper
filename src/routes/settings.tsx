@@ -97,7 +97,7 @@ function RouteComponent() {
 					<TabsList>
 						{Object.entries(SOURCES).map(([id, v]) => <TabsTrigger key={id} value={id}>{v.name}</TabsTrigger>)}
 					</TabsList>
-					{Object.entries(SOURCES).map(([id, v]) => <TabsContent value={id} className="flex flex-col gap-4 mt-4">
+					{Object.entries(SOURCES).map(([id, v]) => <TabsContent key={id} value={id} className="flex flex-col gap-4 mt-4">
 						<CounterUI
 							title="Batch Size"
 							count={appState.sourceDownloadOptions[id as SourceIDsT].downloadBatchSize}

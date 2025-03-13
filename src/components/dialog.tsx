@@ -8,11 +8,13 @@ type DialogUIProps = {
     description?: string;
     footer?: ReactNode;
     className?: string;
+    defaultOpen?: boolean;
+    onOpenChange?: (isOpen: boolean) => void;
 }
-export default function DialogUI({ children, trigger, title, description, footer, className = "" }: DialogUIProps) {
+export default function DialogUI({ children, trigger, title, description, footer, className = "", defaultOpen = false, onOpenChange }: DialogUIProps) {
 
     return (
-        <Dialog>
+        <Dialog defaultOpen={defaultOpen} onOpenChange={(isOpen) => onOpenChange && onOpenChange(isOpen)}>
             <DialogTrigger asChild>
                 {trigger}
             </DialogTrigger>
