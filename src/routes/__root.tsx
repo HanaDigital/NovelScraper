@@ -4,7 +4,7 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { Fragment, useEffect, useState } from 'react';
 import { load, Store } from '@tauri-apps/plugin-store';
 import { useAtom, useSetAtom } from 'jotai/react';
-import { appStateAtom, AppStateT, downloadStatusAtom, libraryStateAtom, LibraryStateT, sourceDownloadOptions } from '@/lib/store';
+import { appStateAtom, AppStateT, downloadStatusAtom, getSourceDownloadOptions, libraryStateAtom, LibraryStateT } from '@/lib/store';
 import Loader from '@/components/loader';
 import * as path from '@tauri-apps/api/path';
 import { createLibraryDir, saveNovelChapters } from '@/lib/library/library';
@@ -89,10 +89,11 @@ function RootComponent() {
 			if (!app) app = appState;
 
 			if (app.version === 1) {
-				delete (app as AppStateV1T).downloadBatchSize;
-				delete (app as AppStateV1T).downloadBatchDelay;
-				app.viewedNotesForVersion
-				app.sourceDownloadOptions = sourceDownloadOptions;
+				const oldApp = app as AppStateV1T;
+				app.viewedNotesForVersion = undefined;
+				app.sourceDownloadOptions = getSourceDownloadOptions(oldApp.downloadBatchSize, oldApp.downloadBatchDelay);
+				delete oldApp.downloadBatchSize;
+				delete oldApp.downloadBatchDelay;
 				app.version = 2;
 			}
 

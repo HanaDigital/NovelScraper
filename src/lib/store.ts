@@ -7,11 +7,11 @@ type DownloadOptionsT = {
 	downloadBatchSize: number;
 	downloadBatchDelay: number;
 }
-export const sourceDownloadOptions = Object.fromEntries(Object.keys(SOURCES).map(s => [
+export const getSourceDownloadOptions = (batchSize = 5, batchDelay = 0) => Object.fromEntries(Object.keys(SOURCES).map(s => [
 	s,
 	{
-		downloadBatchSize: s === "novelbin" ? 2 : 5,
-		downloadBatchDelay: s === "novelbin" ? 1 : 0
+		downloadBatchSize: s === "novelbin" ? 2 : batchSize,
+		downloadBatchDelay: s === "novelbin" ? 1 : batchDelay
 	} satisfies DownloadOptionsT
 ])) as { [key in SourceIDsT]: DownloadOptionsT };
 export type AppStateT = {
@@ -30,7 +30,7 @@ export const appStateAtom = atomWithImmer<AppStateT>({
 	viewedNotesForVersion: undefined,
 	isSidePanelOpen: true,
 	libraryRootPath: "",
-	sourceDownloadOptions: sourceDownloadOptions
+	sourceDownloadOptions: getSourceDownloadOptions()
 })
 
 export type LibraryStateT = {
