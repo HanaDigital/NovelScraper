@@ -5,12 +5,13 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Serialize)]
 pub struct NovelData {
     pub novel_id: String,
+    pub novel_title: String,
     pub novel_url: String,
     pub source_id: String,
     pub source_url: String,
     pub batch_size: usize,
     pub batch_delay: usize,
-    pub start_downloading_from_index: usize,
+    pub pre_downloaded_chapters_count: usize,
     pub cf_headers: Option<HashMap<String, String>>,
 }
 
@@ -42,4 +43,10 @@ pub struct DownloadData {
 pub enum FetchType {
     GET,
     POST,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct SourceDownloadResult {
+    pub status: DownloadStatus,
+    pub chapters: Vec<Chapter>,
 }

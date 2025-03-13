@@ -19,3 +19,12 @@ export const hashString = (str: string, seed = 0) => {
 
 	return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
 };
+
+export const fetchGithubRelease = async (tag: string) => {
+	try {
+		const res = await fetch(`https://api.github.com/repos/hanadigital/novelscraper/releases/tags/${tag}`);
+		return (await res.json()) as { [key: string]: any };
+	} catch (err) {
+		console.error(err);
+	}
+}

@@ -6,18 +6,10 @@ import { NovelBin } from "./novelbin";
 import { Novgo } from "./novgo";
 
 export const SOURCES = {
-	"novelbin": new NovelBin({
-		id: 'novelbin',
-		name: 'NovelBin',
-		tags: ['Recommended'],
-		logo: NovelBinLogo,
-		url: 'https://novelbin.com',
-		cloudflareProtected: false,
-	}),
 	"novelfull": new NovelFull({
 		id: 'novelfull',
 		name: 'NovelFull',
-		tags: ['Chinese'],
+		tags: ['Recommended'],
 		logo: NovelFullLogo,
 		url: 'https://novelfull.com',
 		cloudflareProtected: false,
@@ -25,10 +17,18 @@ export const SOURCES = {
 	"novgo": new Novgo({
 		id: 'novgo',
 		name: 'Novgo',
-		tags: ['Alternative'],
+		tags: ['Requires Docker'],
 		logo: NovgoLogo,
 		url: 'https://novgo.co',
 		cloudflareProtected: true,
+	}),
+	"novelbin": new NovelBin({
+		id: 'novelbin',
+		name: 'NovelBin',
+		tags: ['Slow'],
+		logo: NovelBinLogo,
+		url: 'https://novelbin.com',
+		cloudflareProtected: false,
 	}),
 } as const;
 export type SourceIDsT = keyof typeof SOURCES;
