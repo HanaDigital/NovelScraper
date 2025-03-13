@@ -98,3 +98,13 @@
   background-color: hsl(240 3.8% 46.1%);
   border-radius: 10px;
 }
+
+#markdown ul {
+  list-style: disc !important;
+  padding-left: 1.2rem;
+}
+
+#markdown ol {
+  list-style: decimal !important;
+  padding-left: 1.2rem;
+}
