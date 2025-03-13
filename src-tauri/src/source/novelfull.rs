@@ -81,18 +81,14 @@ async fn get_total_pages(novel_data: &NovelData) -> Result<usize, String> {
 
     match last_page_node {
         Some(node) => {
-            let last_page_url = node
-                .attributes
-                .borrow()
-                .get("href")
-                .expect(
-                    format!("Couldn't get last page url for {}", novel_data.novel_title).as_str(),
-                )
-                .to_string();
+            let attributes = node.attributes.borrow();
+            let Some(last_page_url) = attributes.get("href") else {
+                return Err("Couldn't get last page url".to_string());
+            };
             let total_page = last_page_url
                 .split("=")
                 .last()
-                .expect("Couldn't get last split at '='")
+                .unwrap()
                 .parse::<usize>()
                 .unwrap_or(1);
             total_pages = total_page;
@@ -118,38 +114,23 @@ async fn get_page_chapter_urls(
     let document = kuchikiki::parse_html().one(page_html);
 
     let mut page_chapters: Vec<super::Chapter> = vec![];
-    document
-        .select("#list-chapter .row ul.list-chapter > li")
-        .expect(format!("Couldn't find chapter links for {}", novel_data.novel_title).as_str())
-        .for_each(|chapter_elem| {
-            let chapter_link_elem = chapter_elem.as_node().select_first("a").expect(
-                format!(
-                    "Couldn't find chapter link for {} : {}",
-                    novel_data.novel_title,
-                    chapter_elem.as_node().to_string()
-                )
-                .as_str(),
-            );
-            let title = chapter_link_elem.text_contents().trim().to_string();
-            let url = chapter_link_elem
-                .attributes
-                .borrow()
-                .get("href")
-                .expect(
-                    format!(
-                        "Couldn't get chapter url for {}:{}",
-                        novel_data.novel_title, title
-                    )
-                    .as_str(),
-                )
-                .to_string();
-            let chapter = super::Chapter {
-                title,
-                url: format!("{}{}", novel_data.source_url, url),
-                content: None,
-            };
-            page_chapters.push(chapter);
-        });
+    let chapter_link_elems = document
+        .select("#list-chapter .row ul.list-chapter > li a")
+        .map_err(|_| format!("Couldn't find chapter links for {}", novel_data.novel_title))?;
+
+    for chapter_elem in chapter_link_elems {
+        let title = chapter_elem.text_contents().trim().to_string();
+        let attributes = chapter_elem.attributes.borrow();
+        let Some(url) = attributes.get("href") else {
+            return Err(format!("Couldn't get chapter url for {}", title));
+        };
+        let chapter = super::Chapter {
+            title,
+            url: format!("{}{}", novel_data.source_url, url),
+            content: None,
+        };
+        page_chapters.push(chapter);
+    }
 
     return Ok(page_chapters);
 }
@@ -160,13 +141,9 @@ fn get_chapter_content_from_html(
     chapter_html: &str,
 ) -> Result<(), String> {
     let document = kuchikiki::parse_html().one(chapter_html);
-    let chapter_content_node = document.select_first("#chapter-content").expect(
-        format!(
-            "Couldn't find chapter content node for {} : {}",
-            novel_data.novel_title, chapter.title
-        )
-        .as_str(),
-    );
+    let chapter_content_node = document
+        .select_first("#chapter-content")
+        .map_err(|_| format!("Couldn't find chapter content node for {}", chapter.title))?;
     let mut chapter_content_html =
         super::clean_chapter_html(&mut chapter_content_node.as_node().to_string());
 

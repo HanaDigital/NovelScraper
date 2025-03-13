@@ -32,35 +32,28 @@ async fn get_chapter_urls(novel_data: &NovelData) -> Result<Vec<super::Chapter>,
         super::types::FetchType::POST,
     )
     .await
-    .expect(format!("Couldn't fetch html for {}", novel_data.novel_title).as_str());
+    .map_err(|_| format!("Couldn't fetch html for {}", novel_data.novel_title))?;
     let document = kuchikiki::parse_html().one(page_html);
 
     let mut chapters: Vec<super::Chapter> = vec![];
-    document
+    let chapter_link_elems = document
         .select("li.wp-manga-chapter a")
-        .expect(format!("Couldn't find chapter links for {}", novel_data.novel_title).as_str())
-        .rev()
-        .for_each(|chapter_elem| {
-            let title = chapter_elem.text_contents().trim().to_string();
-            let url = chapter_elem
-                .attributes
-                .borrow()
-                .get("href")
-                .expect(
-                    format!(
-                        "Couldn't get chapter url for {} : {}",
-                        novel_data.novel_title, title
-                    )
-                    .as_str(),
-                )
-                .to_string();
-            let chapter = super::Chapter {
-                title,
-                url,
-                content: None,
-            };
-            chapters.push(chapter);
-        });
+        .map_err(|_| format!("Couldn't find chapter links for {}", novel_data.novel_title))?
+        .rev();
+
+    for chapter_elem in chapter_link_elems {
+        let title = chapter_elem.text_contents().trim().to_string();
+        let attributes = chapter_elem.attributes.borrow();
+        let Some(url) = attributes.get("href") else {
+            return Err(format!("Couldn't get chapter url for {}", title));
+        };
+        let chapter = super::Chapter {
+            title,
+            url: url.to_string(),
+            content: None,
+        };
+        chapters.push(chapter);
+    }
 
     return Ok(chapters);
 }
@@ -74,13 +67,7 @@ fn get_chapter_content_from_html(
 
     let chapter_content_node = document
         .select_first(".c-blog-post .entry-content .reading-content .text-left")
-        .expect(
-            format!(
-                "Couldn't find chapter content node for {} : {}",
-                novel_data.novel_title, chapter.title
-            )
-            .as_str(),
-        );
+        .map_err(|_| format!("Couldn't find chapter content node for {}", chapter.title))?;
     let chapter_content_html =
         super::clean_chapter_html(&mut chapter_content_node.as_node().to_string());
 

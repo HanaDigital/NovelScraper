@@ -144,7 +144,7 @@ function RouteComponent() {
 			updateState(libNovel, true);
 		} catch (e) {
 			console.error(e);
-			await message(`${e}`, { title: SOURCES[novel.source].name, kind: 'error' });
+			await message(`${e}`, { title: `${SOURCES[novel.source].name} : ${novel.title}`, kind: 'error' });
 		}
 		setIsDownloading(false);
 	}

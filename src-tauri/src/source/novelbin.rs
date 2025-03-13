@@ -1,9 +1,12 @@
 use crate::AppState;
 
-use super::types::{NovelData, SourceDownloadResult};
+use super::{
+    fetch_html,
+    types::{NovelData, SourceDownloadResult},
+};
 use kuchikiki::traits::*;
 use regex::Regex;
-use std::vec;
+use std::{thread, time::Duration, vec};
 use tauri::AppHandle;
 
 pub async fn download_novel_chapters(
@@ -11,7 +14,7 @@ pub async fn download_novel_chapters(
     state: &tauri::State<'_, std::sync::Mutex<AppState>>,
     novel_data: &NovelData,
 ) -> Result<SourceDownloadResult, String> {
-    let mut chapters = get_chapter_urls(novel_data).await;
+    let mut chapters = get_chapter_urls(novel_data).await?;
     // Remove chapters that have already been downloaded
     chapters.drain(0..novel_data.pre_downloaded_chapters_count);
 
@@ -26,12 +29,10 @@ pub async fn download_novel_chapters(
     .await
 }
 
-async fn get_chapter_urls(novel_data: &NovelData) -> Vec<super::Chapter> {
-    let novel_id = novel_data
-        .novel_url
-        .split("/")
-        .last()
-        .expect(format!("Couldn't get novel id for {}", novel_data.novel_title).as_str());
+async fn get_chapter_urls(novel_data: &NovelData) -> Result<Vec<super::Chapter>, String> {
+    let Some(novel_id) = novel_data.novel_url.split("/").last() else {
+        return Err("Couldn't get novel id".to_string());
+    };
     let page_html = super::fetch_html(
         &format!(
             "{}/ajax/chapter-archive?novelId={}",
@@ -40,51 +41,29 @@ async fn get_chapter_urls(novel_data: &NovelData) -> Vec<super::Chapter> {
         &novel_data.cf_headers,
         super::types::FetchType::GET,
     )
-    .await
-    .expect(
-        format!(
-            "Couldn't fetch chapters html for {}",
-            novel_data.novel_title
-        )
-        .as_str(),
-    );
+    .await?;
     let document = kuchikiki::parse_html().one(page_html);
 
     let mut chapters: Vec<super::Chapter> = vec![];
-    document
-        .select("ul.list-chapter li")
-        .expect(format!("Couldn't find chapter links for {}", novel_data.novel_title).as_str())
-        .for_each(|chapter_elem| {
-            let chapter_link_elem = chapter_elem.as_node().select_first("a").expect(
-                format!(
-                    "Couldn't find chapter link for {} : {}",
-                    novel_data.novel_title,
-                    chapter_elem.as_node().to_string()
-                )
-                .as_str(),
-            );
-            let title = chapter_link_elem.text_contents().trim().to_string();
-            let url = chapter_link_elem
-                .attributes
-                .borrow()
-                .get("href")
-                .expect(
-                    format!(
-                        "Couldn't get chapter url for {} : {}",
-                        novel_data.novel_title, title
-                    )
-                    .as_str(),
-                )
-                .to_string();
-            let chapter = super::Chapter {
-                title,
-                url,
-                content: None,
-            };
-            chapters.push(chapter);
-        });
+    let chapter_link_elems = document
+        .select("ul.list-chapter li a")
+        .map_err(|_| format!("Couldn't find chapter link nodes"))?;
 
-    return chapters;
+    for link_elem in chapter_link_elems {
+        let title = link_elem.text_contents().trim().to_string();
+        let attributes = link_elem.attributes.borrow();
+        let Some(url) = attributes.get("href") else {
+            return Err(format!("Couldn't get chapter url for {}", title));
+        };
+        let chapter = super::Chapter {
+            title,
+            url: url.to_string(),
+            content: None,
+        };
+        chapters.push(chapter);
+    }
+
+    return Ok(chapters);
 }
 
 fn get_chapter_content_from_html(
@@ -92,27 +71,33 @@ fn get_chapter_content_from_html(
     chapter: &mut super::Chapter,
     chapter_html: &str,
 ) -> Result<(), String> {
-    let document = kuchikiki::parse_html().one(chapter_html);
+    let mut document = kuchikiki::parse_html().one(chapter_html);
 
-    let chapter_content_node = document.select_first("#chr-content").expect(
-        format!(
-            "Couldn't find chapter content node for {} : {}",
-            novel_data.novel_title, chapter.title
-        )
-        .as_str(),
-    );
+    // Sometimes the html isn't loaded fully so check and try to fetch again if not
+    // let is_challenge_error = document.select_first("#challenge-error-text").is_ok();
+    // if is_challenge_error {
+    //     // Wait 5sec before trying
+    //     thread::sleep(Duration::from_secs(novel_data.batch_delay as u64));
+    //     let html = fetch_html(
+    //         &chapter.url,
+    //         &novel_data.cf_headers,
+    //         super::types::FetchType::GET,
+    //     )
+    //     .await?;
+    //     document = kuchikiki::parse_html().one(html);
+    // }
+
+    let chapter_content_node = document.select_first("#chr-content").map_err(|_| {
+        println!("!!!Chapter HTML: {}", chapter_html);
+        format!("Couldn't find chapter content node for {}", chapter.title)
+    })?;
+
     let mut chapter_content_html =
         super::clean_chapter_html(&mut chapter_content_node.as_node().to_string());
 
     let chapter_title = document
         .select_first("#chapter .chr-title")
-        .expect(
-            format!(
-                "Couldn't find chapter title node for {} : {}",
-                novel_data.novel_title, chapter.title
-            )
-            .as_str(),
-        )
+        .map_err(|_| format!("Couldn't find chapter title node for {}", chapter.title))?
         .text_contents()
         .trim()
         .to_string();

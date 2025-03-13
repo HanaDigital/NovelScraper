@@ -49,10 +49,10 @@ pub async fn fetch_html(
         .body(())
         .unwrap()
         .send()
-        .expect(format!("Couldn't send request for {:?}:{}", fetch_type, url).as_str());
+        .map_err(|_| format!("Couldn't send request for {:?}:{}", fetch_type, url))?;
     let text_result = res
         .text()
-        .expect(format!("Couldn't get text for {:?}:{}", fetch_type, url).as_str());
+        .map_err(|_| format!("Couldn't get text for {:?}:{}", fetch_type, url))?;
     Ok(text_result)
 }
 
@@ -72,10 +72,10 @@ pub async fn fetch_image(
         .body(())
         .unwrap()
         .send()
-        .expect(format!("Couldn't send request for {}", url).as_str());
+        .map_err(|_| format!("Couldn't send request for {}", url))?;
     let bytes_result = res
         .bytes()
-        .expect(format!("Couldn't get bytes for {}", url).as_str());
+        .map_err(|_| format!("Couldn't get bytes for {}", url))?;
     Ok(bytes_result)
 }
 
@@ -84,7 +84,9 @@ pub async fn update_novel_download_status(
     novel_id: &str,
     status: &types::DownloadStatus,
 ) -> Result<types::DownloadStatus, String> {
-    let mut state = state.lock().expect("Couldn't lock state");
+    let mut state = state
+        .lock()
+        .map_err(|_| "Couldn't lock state".to_string())?;
     state
         .novel_status
         .insert(novel_id.to_string(), status.clone());
@@ -94,13 +96,13 @@ pub async fn update_novel_download_status(
 pub async fn is_novel_download_cancelled(
     state: &State<'_, Mutex<AppState>>,
     novel_id: &str,
-) -> bool {
-    let state = state.lock().expect("Couldn't lock state");
-    return state
-        .novel_status
-        .get(novel_id)
-        .expect("Couldn't get novel status")
-        == &DownloadStatus::Cancelled;
+) -> Result<bool, String> {
+    let state = state
+        .lock()
+        .map_err(|_| "Couldn't lock state".to_string())?;
+    let status = state.novel_status.get(novel_id);
+
+    Ok(status.is_some_and(|s| s == &DownloadStatus::Cancelled))
 }
 
 async fn download_chapters(
@@ -118,7 +120,7 @@ async fn download_chapters(
         thread::sleep(Duration::from_secs(novel_data.batch_delay as u64));
 
         // Check if the download is cancelled
-        if is_novel_download_cancelled(state, &novel_data.novel_id).await {
+        if is_novel_download_cancelled(state, &novel_data.novel_id).await? {
             return Ok(SourceDownloadResult {
                 status: DownloadStatus::Cancelled,
                 chapters: downloaded_chapters,
@@ -138,8 +140,8 @@ async fn download_chapters(
             let mut chapter = chapters_batch[i].clone();
             let chapter_html = chapter_html_vec[i]
                 .as_ref()
-                .expect(format!("Couldn't get chapter html for {}", chapter.title).as_str());
-            get_chapter_content_from_html_fn(novel_data, &mut chapter, chapter_html)?;
+                .map_err(|_| format!("Couldn't get chapter html for {}", chapter.title))?;
+            get_chapter_content_from_html_fn(&novel_data, &mut chapter, chapter_html)?;
             downloaded_chapters.push(chapter);
         }
 
@@ -158,7 +160,7 @@ async fn download_chapters(
                 ),
             },
         )
-        .expect("Couldn't emit download status!");
+        .unwrap();
     }
 
     Ok(SourceDownloadResult {

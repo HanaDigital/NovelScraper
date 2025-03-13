@@ -123,7 +123,7 @@ async fn check_for_update(app: AppHandle) -> Result<String, String> {
         .unwrap()
         .check()
         .await
-        .expect("Couldn't check for updates")
+        .map_err(|_| "Couldn't check for updates".to_string())?
     {
         return Ok(update.version);
     }
