@@ -15,6 +15,7 @@ import { TooltipUI } from "@/components/tooltip";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { NovelT } from "@/lib/sources/types";
+import { SOURCES } from "@/lib/sources/sources";
 
 export const Route = createFileRoute('/')({
 	component: RouteComponent,
@@ -98,7 +99,7 @@ function RouteComponent() {
 						href={`/novel?fromRoute=${location.pathname}`}
 						imageURL={coverSrc}
 						title={novel.title}
-						subTitle={novel.authors.join(', ')}
+						subTitle={SOURCES[novel.source].name}
 						onClick={() => setActiveNovel(novel)}
 						badges={[
 							NovelUpdatingBadge({ isUpdating: novel.isUpdating }),

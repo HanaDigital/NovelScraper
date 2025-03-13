@@ -3,21 +3,22 @@ pub mod novelfull;
 pub mod novgo;
 pub mod types;
 
-use std::collections::HashMap;
-
+use futures::future::join_all;
 use isahc::{prelude::*, Request};
 use regex::Regex;
+use std::cmp::min;
 use std::sync::Mutex;
-use tauri::{AppHandle, State};
-use types::{Chapter, DownloadStatus, FetchType, NovelData};
+use std::{collections::HashMap, thread, time::Duration};
+use tauri::{AppHandle, Emitter, State};
+use types::{Chapter, DownloadData, DownloadStatus, FetchType, NovelData, SourceDownloadResult};
 
 use crate::AppState;
 
 pub async fn download_novel_chapters(
     app: &AppHandle,
     state: &State<'_, Mutex<AppState>>,
-    novel_data: NovelData,
-) -> Result<Vec<Chapter>, String> {
+    novel_data: &NovelData,
+) -> Result<SourceDownloadResult, String> {
     if novel_data.source_id == "novelfull" {
         return novelfull::download_novel_chapters(app, state, novel_data).await;
     } else if novel_data.source_id == "novelbin" {
@@ -38,28 +39,21 @@ pub async fn fetch_html(
     } else {
         Request::post(url)
     };
-    // println!("!!!URL & HEADERS: {}\n{:?}", url, headers);
     if headers.is_some() {
         for (key, value) in headers.as_ref().unwrap() {
             req_builder = req_builder.header(key, value);
         }
     }
 
-    let res_result = req_builder.body(()).unwrap().send();
-    let mut res = match res_result {
-        Ok(res) => res,
-        Err(e) => {
-            return Err(e.to_string());
-        }
-    };
-    let text_result = res.text();
-    // println!("!!!URL Response: {:?}", text_result);
-    match text_result {
-        Ok(text) => Ok(text),
-        Err(e) => {
-            return Err(e.to_string());
-        }
-    }
+    let mut res = req_builder
+        .body(())
+        .unwrap()
+        .send()
+        .map_err(|_| format!("Couldn't send request for {:?}:{}", fetch_type, url))?;
+    let text_result = res
+        .text()
+        .map_err(|_| format!("Couldn't get text for {:?}:{}", fetch_type, url))?;
+    Ok(text_result)
 }
 
 pub async fn fetch_image(
@@ -74,28 +68,25 @@ pub async fn fetch_image(
         }
     }
 
-    let res_result = req_builder.body(()).unwrap().send();
-    let mut res = match res_result {
-        Ok(res) => res,
-        Err(e) => {
-            return Err(e.to_string());
-        }
-    };
-    let bytes_result = res.bytes();
-    match bytes_result {
-        Ok(bytes) => Ok(bytes),
-        Err(e) => {
-            return Err(e.to_string());
-        }
-    }
+    let mut res = req_builder
+        .body(())
+        .unwrap()
+        .send()
+        .map_err(|_| format!("Couldn't send request for {}", url))?;
+    let bytes_result = res
+        .bytes()
+        .map_err(|_| format!("Couldn't get bytes for {}", url))?;
+    Ok(bytes_result)
 }
 
 pub async fn update_novel_download_status(
     state: &State<'_, Mutex<AppState>>,
     novel_id: &str,
     status: &types::DownloadStatus,
-) -> Result<types::DownloadStatus, ()> {
-    let mut state = state.lock().unwrap();
+) -> Result<types::DownloadStatus, String> {
+    let mut state = state
+        .lock()
+        .map_err(|_| "Couldn't lock state".to_string())?;
     state
         .novel_status
         .insert(novel_id.to_string(), status.clone());
@@ -105,9 +96,77 @@ pub async fn update_novel_download_status(
 pub async fn is_novel_download_cancelled(
     state: &State<'_, Mutex<AppState>>,
     novel_id: &str,
-) -> bool {
-    let state = state.lock().unwrap();
-    return state.novel_status.get(novel_id).unwrap() == &DownloadStatus::Cancelled;
+) -> Result<bool, String> {
+    let state = state
+        .lock()
+        .map_err(|_| "Couldn't lock state".to_string())?;
+    let status = state.novel_status.get(novel_id);
+
+    Ok(status.is_some_and(|s| s == &DownloadStatus::Cancelled))
+}
+
+async fn download_chapters(
+    app: &AppHandle,
+    state: &tauri::State<'_, std::sync::Mutex<AppState>>,
+    novel_data: &NovelData,
+    chapters: Vec<Chapter>,
+    get_chapter_content_from_html_fn: fn(&mut Chapter, &str) -> Result<(), String>,
+    chapter_count_offset: usize,
+) -> Result<SourceDownloadResult, String> {
+    let mut downloaded_chapters: Vec<super::Chapter> = vec![];
+
+    let mut batch_index: usize = 0;
+    while (batch_index * novel_data.batch_size) < chapters.len() {
+        thread::sleep(Duration::from_secs(novel_data.batch_delay as u64));
+
+        // Check if the download is cancelled
+        if is_novel_download_cancelled(state, &novel_data.novel_id).await? {
+            return Ok(SourceDownloadResult {
+                status: DownloadStatus::Cancelled,
+                chapters: downloaded_chapters,
+            });
+        }
+
+        let batch_start_index = batch_index * novel_data.batch_size;
+        let batch_end_index = min((batch_index + 1) * novel_data.batch_size, chapters.len());
+
+        let chapters_batch = &chapters[batch_start_index..batch_end_index];
+        let chapter_html_futures = chapters_batch
+            .iter()
+            .map(|chapter| fetch_html(&chapter.url, &novel_data.cf_headers, FetchType::GET));
+
+        let chapter_html_vec = join_all(chapter_html_futures).await;
+        for i in 0..chapter_html_vec.len() {
+            let mut chapter = chapters_batch[i].clone();
+            let chapter_html = chapter_html_vec[i]
+                .as_ref()
+                .map_err(|_| format!("Couldn't get chapter html for {}", chapter.title))?;
+            get_chapter_content_from_html_fn(&mut chapter, chapter_html)?;
+            downloaded_chapters.push(chapter);
+        }
+
+        batch_index += 1;
+
+        app.emit(
+            "download-status",
+            DownloadData {
+                novel_id: novel_data.novel_id.clone(),
+                status: super::DownloadStatus::Downloading,
+                downloaded_chapters_count: novel_data.pre_downloaded_chapters_count
+                    + downloaded_chapters.len()
+                    + chapter_count_offset,
+                downloaded_chapters: Some(
+                    downloaded_chapters[batch_start_index..batch_end_index].to_vec(),
+                ),
+            },
+        )
+        .unwrap();
+    }
+
+    Ok(SourceDownloadResult {
+        status: DownloadStatus::Completed,
+        chapters: downloaded_chapters,
+    })
 }
 
 fn clean_chapter_html(html: &mut String) -> String {

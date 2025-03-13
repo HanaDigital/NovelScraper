@@ -1,6 +1,6 @@
 import { CloudflareHeadersT, getCloudflareHeaders } from "@/components/cloudflare-resolver";
 import { SourceIDsT } from "./sources";
-import { ChapterT, NovelT } from "./types";
+import { ChapterT, NovelT, SourceDownloadResult } from "./types";
 import { invoke } from "@tauri-apps/api/core";
 
 export type NovelSourceProps = {
@@ -42,24 +42,25 @@ export class NovelSource {
 		throw new Error(`${this.name}: 'updateNovelMetadata' method not implemented.`);
 	}
 
-	async downloadNovel(novel: NovelT, batchSize: number, batchDelay: number, startFromChapterIndex = 0): Promise<ChapterT[]> {
-		const chapters = await this.downloadChapters(novel, batchSize, batchDelay, startFromChapterIndex);
-		return chapters;
+	async downloadNovel(novel: NovelT, batchSize: number, batchDelay: number, preDownloadedChaptersCount = 0): Promise<SourceDownloadResult> {
+		const result = await this.downloadChapters(novel, batchSize, batchDelay, preDownloadedChaptersCount);
+		return result;
 	}
 
-	async downloadChapters(novel: NovelT, batchSize: number, batchDelay: number, startFromChapterIndex = 0): Promise<ChapterT[]> {
+	async downloadChapters(novel: NovelT, batchSize: number, batchDelay: number, preDownloadedChaptersCount = 0): Promise<SourceDownloadResult> {
 		await this.loadCFHeaders();
-		const chapters = await invoke<ChapterT[]>('download_novel_chapters', {
+		const result = await invoke<SourceDownloadResult>('download_novel_chapters', {
 			novel_id: novel.id,
+			novel_title: novel.title,
 			novel_url: novel.url,
 			source_id: this.id,
 			source_url: this.url,
 			batch_size: batchSize,
 			batch_delay: batchDelay,
-			start_downloading_from_index: startFromChapterIndex,
+			pre_downloaded_chapters_count: preDownloadedChaptersCount,
 			cf_headers: this.cfHeaders,
 		});
-		return chapters;
+		return result;
 	}
 
 	async cancelDownload(novel: NovelT): Promise<void> {

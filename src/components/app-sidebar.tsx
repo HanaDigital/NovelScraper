@@ -1,39 +1,44 @@
 import {
-	Sidebar,
-	SidebarContent,
-	SidebarFooter,
-	SidebarGroup,
-	SidebarGroupContent,
-	SidebarHeader,
-	SidebarMenu,
-	SidebarMenuButton,
-	SidebarMenuItem,
-	useSidebar,
+	Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar,
 } from "@/components/ui/sidebar"
-import { ChevronDoubleRight, CircleNotch, DownloadSolid, SquareSolid } from "@mynaui/icons-react";
-import { LargeP, P, TinyP } from "./typography";
+import { ChevronDoubleRight, CircleNotch, DownloadSolid, FileTextSolid, SquareSolid } from "@mynaui/icons-react";
+import { LargeP, P, SmallP, TinyP } from "./typography";
 import { Button } from "./ui/button";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { app } from "@tauri-apps/api";
-import { useSetAtom } from "jotai/react";
+import { useAtom, useSetAtom } from "jotai/react";
 import { appStateAtom } from "@/lib/store";
 import { routes } from "@/lib/routes";
 import { invoke } from "@tauri-apps/api/core";
+import { logEvent } from "firebase/analytics";
+import { getFirebaseAnalytics } from "@/lib/firebase";
+import { fetchGithubRelease } from "@/lib/utils";
+import DialogUI from "./dialog";
+import Markdown from 'react-markdown'
+
+const analytics = getFirebaseAnalytics();
 
 export function AppSidebar() {
 	const { resolvedLocation } = useRouterState();
-	const setAppState = useSetAtom(appStateAtom);
+	const [appState, setAppState] = useAtom(appStateAtom);
 
 	const { toggleSidebar, open } = useSidebar();
 	const [version, setVersion] = useState("");
+	const [releaseNotes, setReleaseNotes] = useState("");
 	const [newVersion, setNewVersion] = useState("");
 	const [isUpdating, setIsUpdating] = useState(false);
+	const [viewedNotes, setViewedNotes] = useState(true);
 
 	useEffect(() => {
 		app.getVersion().then(v => setVersion(v));
 		handleCheckForUpdates();
 	}, []);
+
+	useEffect(() => {
+		logEvent(analytics, "started_app", { version });
+		getReleaseNotes(version);
+	}, [version]);
 
 	useEffect(() => {
 		setAppState((state) => {
@@ -45,7 +50,10 @@ export function AppSidebar() {
 	const handleCheckForUpdates = async () => {
 		try {
 			const newVersion = await invoke<string>("check_for_update");
-			setNewVersion(newVersion);
+			if (newVersion) {
+				setNewVersion(newVersion);
+				logEvent(analytics, "version_update_request", { version: newVersion });
+			}
 		} catch (e) {
 			console.error(e);
 		}
@@ -59,6 +67,22 @@ export function AppSidebar() {
 			console.error(e);
 		}
 		setIsUpdating(false);
+	}
+
+	const getReleaseNotes = async (tag: string) => {
+		const release = await fetchGithubRelease(`v${tag}`);
+		if (release) {
+			const body = release.body as string;
+			const notes = body.replace(/^(.|\n|\r)*### Release Notes\r\n/g, "");
+			setReleaseNotes(notes);
+		}
+	}
+
+	const handleSetReleaseNotesAsViewed = (isOpen: boolean) => {
+		if (appState.viewedNotesForVersion === version) return;
+		setAppState(state => {
+			state.viewedNotesForVersion = version;
+		});
 	}
 
 	return (
@@ -100,13 +124,33 @@ export function AppSidebar() {
 				</SidebarGroup>
 			</SidebarContent>
 			<SidebarFooter className="flex flex-col items-end gap-4">
-				{newVersion &&
-					<SidebarMenu>
+				<SidebarMenu className="flex flex-col gap-2">
+					{(version && releaseNotes) &&
+						<SidebarMenuItem className="flex gap-2 justify-center items-center shadow-lg">
+							<DialogUI
+								title={`Release Notes (v${version})`}
+								trigger={
+									<SidebarMenuButton size="lg" className="!bg-card border">
+										<FileTextSolid className={`transition-all ml-[0.41rem] ${open && "!size-7 ml-0"}`} />
+										<div className="flex-1 text-sm leading-tight flex-col gap-1">
+											<P className="truncate">Release Notes</P>
+											<TinyP className="truncate">v{version}</TinyP>
+										</div>
+									</SidebarMenuButton>
+								}
+								defaultOpen={appState.viewedNotesForVersion !== version}
+								onOpenChange={handleSetReleaseNotesAsViewed}
+							>
+								<Markdown>{releaseNotes}</Markdown>
+							</DialogUI>
+						</SidebarMenuItem>
+					}
+					{newVersion &&
 						<SidebarMenuItem className="flex gap-2 justify-center items-center shadow-lg shadow-green-600 animate-pulse">
 							<SidebarMenuButton size="lg" className="!bg-card border border-green-900" onClick={handleInstallUpdate} disabled={isUpdating}>
 								{isUpdating
-									? <CircleNotch className="!size-7 animate-spin" />
-									: <DownloadSolid className={`!size-7 transition-all ${!open && "!size-4 ml-[0.41rem]"}`} />
+									? <CircleNotch className={`transition-all animate-spin ml-[0.4rem] ${open && "!size-7 ml-0"}`} />
+									: <DownloadSolid className={`transition-all ml-[0.41rem] ${open && "!size-7 ml-0"}`} />
 								}
 								<div className="flex-1 text-sm leading-tight flex-col gap-1">
 									<P className="truncate">New Update</P>
@@ -114,8 +158,8 @@ export function AppSidebar() {
 								</div>
 							</SidebarMenuButton>
 						</SidebarMenuItem>
-					</SidebarMenu>
-				}
+					}
+				</SidebarMenu>
 				<Button className="size-8" variant="outline" size="icon" onClick={toggleSidebar}>
 					<ChevronDoubleRight className={`transition-transform ${open ? "rotate-180" : ""}`} />
 				</Button>
