@@ -16,6 +16,7 @@ import { getFirebaseAnalytics } from "@/lib/firebase";
 import { fetchGithubRelease } from "@/lib/utils";
 import DialogUI from "./dialog";
 import Markdown from 'react-markdown'
+import remarkGfm from "remark-gfm";
 
 const analytics = getFirebaseAnalytics();
 
@@ -36,6 +37,7 @@ export function AppSidebar() {
 	}, []);
 
 	useEffect(() => {
+		if (!version) return;
 		logEvent(analytics, "started_app", { version });
 		getReleaseNotes(version);
 	}, [version]);
@@ -141,7 +143,9 @@ export function AppSidebar() {
 								defaultOpen={appState.viewedNotesForVersion !== version}
 								onOpenChange={handleSetReleaseNotesAsViewed}
 							>
-								<Markdown>{releaseNotes}</Markdown>
+								<div id="markdown">
+									<Markdown remarkPlugins={[remarkGfm]}>{releaseNotes}</Markdown>
+								</div>
 							</DialogUI>
 						</SidebarMenuItem>
 					}
