@@ -1,7 +1,7 @@
 mod docker;
 mod source;
 
-use source::types::{Chapter, DownloadData, DownloadStatus, NovelData};
+use source::types::{Chapter, DownloadData, DownloadStatus, NovelData, SourceDownloadResult};
 use std::collections::HashMap;
 use std::sync::Mutex;
 use tauri::{AppHandle, Emitter, Manager, State};
@@ -20,7 +20,7 @@ async fn download_novel_chapters(
     batch_delay: usize,
     pre_downloaded_chapters_count: usize,
     cf_headers: Option<HashMap<String, String>>,
-) -> Result<Vec<Chapter>, String> {
+) -> Result<SourceDownloadResult, String> {
     source::update_novel_download_status(&state, novel_id, &DownloadStatus::Downloading)
         .await
         .unwrap();
@@ -46,14 +46,14 @@ async fn download_novel_chapters(
                 "download-status",
                 DownloadData {
                     novel_id: novel_id.to_string(),
-                    status: result.status,
+                    status: result.status.clone(),
                     downloaded_chapters_count: pre_downloaded_chapters_count
                         + result.chapters.len(),
                     downloaded_chapters: None,
                 },
             )
             .unwrap();
-            Ok(result.chapters)
+            Ok(result)
         }
         Err(e) => {
             app.emit(

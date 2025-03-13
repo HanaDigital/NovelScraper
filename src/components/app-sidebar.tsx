@@ -53,8 +53,10 @@ export function AppSidebar() {
 	const handleCheckForUpdates = async () => {
 		try {
 			const newVersion = await invoke<string>("check_for_update");
-			setNewVersion(newVersion);
-			logEvent(analytics, "version_update_request", { version: newVersion });
+			if (newVersion) {
+				setNewVersion(newVersion);
+				logEvent(analytics, "version_update_request", { version: newVersion });
+			}
 		} catch (e) {
 			console.error(e);
 		}

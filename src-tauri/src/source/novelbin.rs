@@ -1,12 +1,9 @@
 use crate::AppState;
 
-use super::{
-    fetch_html,
-    types::{NovelData, SourceDownloadResult},
-};
+use super::types::{NovelData, SourceDownloadResult};
 use kuchikiki::traits::*;
 use regex::Regex;
-use std::{thread, time::Duration, vec};
+use std::vec;
 use tauri::AppHandle;
 
 pub async fn download_novel_chapters(
@@ -67,30 +64,14 @@ async fn get_chapter_urls(novel_data: &NovelData) -> Result<Vec<super::Chapter>,
 }
 
 fn get_chapter_content_from_html(
-    novel_data: &NovelData,
     chapter: &mut super::Chapter,
     chapter_html: &str,
 ) -> Result<(), String> {
-    let mut document = kuchikiki::parse_html().one(chapter_html);
+    let document = kuchikiki::parse_html().one(chapter_html);
 
-    // Sometimes the html isn't loaded fully so check and try to fetch again if not
-    // let is_challenge_error = document.select_first("#challenge-error-text").is_ok();
-    // if is_challenge_error {
-    //     // Wait 5sec before trying
-    //     thread::sleep(Duration::from_secs(novel_data.batch_delay as u64));
-    //     let html = fetch_html(
-    //         &chapter.url,
-    //         &novel_data.cf_headers,
-    //         super::types::FetchType::GET,
-    //     )
-    //     .await?;
-    //     document = kuchikiki::parse_html().one(html);
-    // }
-
-    let chapter_content_node = document.select_first("#chr-content").map_err(|_| {
-        println!("!!!Chapter HTML: {}", chapter_html);
-        format!("Couldn't find chapter content node for {}", chapter.title)
-    })?;
+    let chapter_content_node = document
+        .select_first("#chr-content")
+        .map_err(|_| format!("Couldn't find chapter content node for {}", chapter.title))?;
 
     let mut chapter_content_html =
         super::clean_chapter_html(&mut chapter_content_node.as_node().to_string());

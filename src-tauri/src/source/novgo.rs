@@ -59,7 +59,6 @@ async fn get_chapter_urls(novel_data: &NovelData) -> Result<Vec<super::Chapter>,
 }
 
 fn get_chapter_content_from_html(
-    novel_data: &NovelData,
     chapter: &mut super::Chapter,
     chapter_html: &str,
 ) -> Result<(), String> {

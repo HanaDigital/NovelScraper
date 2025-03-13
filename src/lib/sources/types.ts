@@ -44,3 +44,7 @@ export type DownloadDataT = {
 	downloaded_chapters?: ChapterT[];
 	novelStore: Store;
 }
+export type SourceDownloadResult = {
+	status: DownloadStatus,
+	chapters: ChapterT[]
+}

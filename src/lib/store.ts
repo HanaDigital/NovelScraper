@@ -3,21 +3,32 @@ import { atom } from 'jotai/vanilla'
 import { DownloadDataT, NovelT } from "./sources/types";
 import { SourceIDsT, SOURCES } from "./sources/sources";
 
+type DownloadOptionsT = {
+	downloadBatchSize: number;
+	downloadBatchDelay: number;
+}
+export const sourceDownloadOptions = Object.fromEntries(Object.keys(SOURCES).map(s => [
+	s,
+	{
+		downloadBatchSize: s === "novelbin" ? 2 : 5,
+		downloadBatchDelay: s === "novelbin" ? 1 : 0
+	} satisfies DownloadOptionsT
+])) as { [key in SourceIDsT]: DownloadOptionsT };
 export type AppStateT = {
 	key: string;
 	version: number;
 	isSidePanelOpen: boolean;
 	libraryRootPath: string;
-	downloadBatchSize: number;
-	downloadBatchDelay: number;
+	sourceDownloadOptions: {
+		[key in SourceIDsT]: DownloadOptionsT;
+	}
 }
 export const appStateAtom = atomWithImmer<AppStateT>({
 	key: 'appState',
-	version: 1,
+	version: 2,
 	isSidePanelOpen: true,
 	libraryRootPath: "",
-	downloadBatchSize: 5,
-	downloadBatchDelay: 0,
+	sourceDownloadOptions: sourceDownloadOptions
 })
 
 export type LibraryStateT = {

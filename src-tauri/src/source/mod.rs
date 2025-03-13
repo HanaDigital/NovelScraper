@@ -110,7 +110,7 @@ async fn download_chapters(
     state: &tauri::State<'_, std::sync::Mutex<AppState>>,
     novel_data: &NovelData,
     chapters: Vec<Chapter>,
-    get_chapter_content_from_html_fn: fn(&NovelData, &mut Chapter, &str) -> Result<(), String>,
+    get_chapter_content_from_html_fn: fn(&mut Chapter, &str) -> Result<(), String>,
     chapter_count_offset: usize,
 ) -> Result<SourceDownloadResult, String> {
     let mut downloaded_chapters: Vec<super::Chapter> = vec![];
@@ -141,7 +141,7 @@ async fn download_chapters(
             let chapter_html = chapter_html_vec[i]
                 .as_ref()
                 .map_err(|_| format!("Couldn't get chapter html for {}", chapter.title))?;
-            get_chapter_content_from_html_fn(&novel_data, &mut chapter, chapter_html)?;
+            get_chapter_content_from_html_fn(&mut chapter, chapter_html)?;
             downloaded_chapters.push(chapter);
         }
 

@@ -10,6 +10,8 @@ import Page from '@/components/page';
 import { createLibraryDir } from '@/lib/library/library';
 import { InfoCircle, Minus, Plus } from '@mynaui/icons-react';
 import { TooltipUI } from "@/components/tooltip";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SourceIDsT, SOURCES } from "@/lib/sources/sources";
 
 export const Route = createFileRoute('/settings')({
 	component: RouteComponent,
@@ -36,34 +38,34 @@ function RouteComponent() {
 		});
 	}
 
-	const handleIncreaseBatchSize = async () => {
-		if (appState.downloadBatchSize >= 5) return;
+	const handleIncreaseBatchSize = async (id: SourceIDsT) => {
+		if (appState.sourceDownloadOptions[id].downloadBatchSize >= 5) return;
 		setAppState((state) => {
-			state.downloadBatchSize += 1;
+			state.sourceDownloadOptions[id].downloadBatchSize += 1;
 			return state;
 		});
 	}
 
-	const handleDecreaseBatchSize = async () => {
-		if (appState.downloadBatchSize <= 1) return;
+	const handleDecreaseBatchSize = async (id: SourceIDsT) => {
+		if (appState.sourceDownloadOptions[id].downloadBatchSize <= 1) return;
 		setAppState((state) => {
-			state.downloadBatchSize -= 1;
+			state.sourceDownloadOptions[id].downloadBatchSize -= 1;
 			return state;
 		});
 	}
 
-	const handleIncreaseBatchDelay = async () => {
-		if (appState.downloadBatchDelay >= 10) return;
+	const handleIncreaseBatchDelay = async (id: SourceIDsT) => {
+		if (appState.sourceDownloadOptions[id].downloadBatchDelay >= 10) return;
 		setAppState((state) => {
-			state.downloadBatchDelay += 1;
+			state.sourceDownloadOptions[id].downloadBatchDelay += 1;
 			return state;
 		});
 	}
 
-	const handleDecreaseBatchDelay = async () => {
-		if (appState.downloadBatchDelay <= 0) return;
+	const handleDecreaseBatchDelay = async (id: SourceIDsT) => {
+		if (appState.sourceDownloadOptions[id].downloadBatchDelay <= 0) return;
 		setAppState((state) => {
-			state.downloadBatchDelay -= 1;
+			state.sourceDownloadOptions[id].downloadBatchDelay -= 1;
 			return state;
 		});
 	}
@@ -91,24 +93,31 @@ function RouteComponent() {
 			<div className="relative border p-4 pt-5 rounded-lg flex flex-col gap-4">
 				<SmallP className="absolute -top-2 left-2 bg-background px-2">Downloads</SmallP>
 
-				<CounterUI
-					title="Batch Size"
-					count={appState.downloadBatchSize}
-					onIncrease={handleIncreaseBatchSize}
-					onDecrease={handleDecreaseBatchSize}
-					info="The number of chapters to download in a single batch. Makes downloading faster but may result in a ban."
-					minCount={1}
-					maxCount={5}
-				/>
-				<CounterUI
-					title="Batch Delay"
-					count={appState.downloadBatchDelay}
-					onIncrease={handleIncreaseBatchDelay}
-					onDecrease={handleDecreaseBatchDelay}
-					info="A delay in seconds between each batch. Makes downloading slower but may help against getting a ban."
-					minCount={0}
-					maxCount={10}
-				/>
+				<Tabs defaultValue="novelfull">
+					<TabsList>
+						{Object.entries(SOURCES).map(([id, v]) => <TabsTrigger key={id} value={id}>{v.name}</TabsTrigger>)}
+					</TabsList>
+					{Object.entries(SOURCES).map(([id, v]) => <TabsContent value={id} className="flex flex-col gap-4 mt-4">
+						<CounterUI
+							title="Batch Size"
+							count={appState.sourceDownloadOptions[id as SourceIDsT].downloadBatchSize}
+							onIncrease={() => handleIncreaseBatchSize(id as SourceIDsT)}
+							onDecrease={() => handleDecreaseBatchSize(id as SourceIDsT)}
+							info="The number of chapters to download in a single batch. Makes downloading faster but may result in a ban."
+							minCount={1}
+							maxCount={5}
+						/>
+						<CounterUI
+							title="Batch Delay"
+							count={appState.sourceDownloadOptions[id as SourceIDsT].downloadBatchDelay}
+							onIncrease={() => handleIncreaseBatchDelay(id as SourceIDsT)}
+							onDecrease={() => handleDecreaseBatchDelay(id as SourceIDsT)}
+							info="A delay in seconds between each batch. Makes downloading slower but may help against getting a ban."
+							minCount={0}
+							maxCount={10}
+						/>
+					</TabsContent>)}
+				</Tabs>
 			</div>
 		</Page>
 	);

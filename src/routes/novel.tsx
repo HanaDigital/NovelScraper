@@ -133,14 +133,21 @@ function RouteComponent() {
 					novelStore,
 				};
 			});
-			const downloadedChapters = await novelSource.downloadNovel(novel, appState.downloadBatchSize, appState.downloadBatchDelay, preDownloadedChapters.length);
-			const chapters = [...preDownloadedChapters, ...downloadedChapters];
-			console.log("!!!CHAPTERS:", chapters);
-			const epub = await EpubTemplate.generateEpub(novel, chapters);
-			await saveNovelEpub(novel, epub, appState.libraryRootPath);
+			const downloadOptions = appState.sourceDownloadOptions[novelSource.id]
+			const result = await novelSource.downloadNovel(
+				novel,
+				downloadOptions.downloadBatchSize,
+				downloadOptions.downloadBatchDelay,
+				preDownloadedChapters.length
+			);
+			const chapters = [...preDownloadedChapters, ...result.chapters];
+			if (result.status === "Completed") {
+				const epub = await EpubTemplate.generateEpub(novel, chapters);
+				await saveNovelEpub(novel, epub, appState.libraryRootPath);
+				libNovel.isDownloaded = true;
+				libNovel.downloadedAt = new Date().toISOString();
+			}
 			libNovel.downloadedChapters = chapters.length;
-			libNovel.isDownloaded = true;
-			libNovel.downloadedAt = new Date().toISOString();
 			updateState(libNovel, true);
 		} catch (e) {
 			console.error(e);
