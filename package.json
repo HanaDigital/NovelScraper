@@ -23,7 +23,7 @@
 		"@tauri-apps/plugin-fs": "~2",
 		"@tauri-apps/plugin-opener": "^2.2.6",
 		"@tauri-apps/plugin-os": "~2",
-		"@tauri-apps/plugin-shell": "^2.0.1",
+		"@tauri-apps/plugin-shell": "^2.2.1",
 		"@tauri-apps/plugin-store": "~2",
 		"@tauri-apps/plugin-updater": "~2",
 		"cheerio": "^1.0.0",
