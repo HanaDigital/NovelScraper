@@ -1,8 +1,8 @@
 import * as cheerio from 'cheerio';
-import { ChapterT, NovelT } from "./types";
-import { invoke } from "@tauri-apps/api/core";
+import { NovelT } from "./types";
 import { hashString } from "../utils";
 import { NovelSource, NovelSourceProps } from "./template";
+import { SOURCES } from "./sources";
 
 export class Novgo extends NovelSource {
 
@@ -53,10 +53,11 @@ export class Novgo extends NovelSource {
 		const $ = cheerio.load(response);
 
 		// Get novel metadata
-		const novelInfoElem = $(".profile-manga");
-		const title = novelInfoElem.find(".post-title h1").first().text().trim();
-		const rating = novelInfoElem.find(".post-rating .score").first().text().trim();
-		const coverURL = novelInfoElem.find(".summary_image img").attr("data-src");
+		const novelInfoElem = $(".col-info-desc");
+		const title = novelInfoElem.find(".desc h3.title").first().text().trim();
+		const rating = novelInfoElem.find(".desc .rate-info .small span").first().text().trim();
+		const coverURL = novelInfoElem.find(".book img").attr("data-src");
+		console.log("!!!Cover URL:", coverURL);
 
 
 		let alternativeTitles: string[] = [];
@@ -68,34 +69,38 @@ export class Novgo extends NovelSource {
 			}
 		}
 
-		const authors: string[] = [];
-		novelInfoElem.find(".author-content a").each((_, elem) => {
-			authors.push($(elem).text().trim());
-		});
-		const genres: string[] = [];
-		novelInfoElem.find(".genres-content a").each((_, elem) => {
-			genres.push($(elem).text().trim());
-		});
-		let status = "";
-		for (const elem of novelInfoElem.find(".post-content_item")) {
-			const heading = $(elem).find(".summary-heading").first().text().trim();
-			if (heading.toLowerCase() === "status") {
-				status = $(elem).find(".summary-content").first().text().trim();
-				break;
-			}
-		}
-		const description = $(".c-page .description-summary .summary__content").text().trim();
+		const authors = null;
+		const genres = null;
+		// const authors: string[] = [];
+		// novelInfoElem.find(".author-content a").each((_, elem) => {
+		// 	authors.push($(elem).text().trim());
+		// });
+		// const genres: string[] = [];
+		// novelInfoElem.find(".genres-content a").each((_, elem) => {
+		// 	genres.push($(elem).text().trim());
+		// });
+		// let status = "";
+		// for (const elem of novelInfoElem.find(".post-content_item")) {
+		// 	const heading = $(elem).find(".summary-heading").first().text().trim();
+		// 	if (heading.toLowerCase() === "status") {
+		// 		status = $(elem).find(".summary-content").first().text().trim();
+		// 		break;
+		// 	}
+		// }
+		const description = $("#tab-description").text().trim();
 
-		const chaptersHTML = await this.fetchHTML(`${novel.url}ajax/chapters`, "POST");
+		const novelId = novel.url.split("/").at(-2);
+		if (!novelId) throw new Error("Failed to get novel ID!");
+		const chaptersHTML = await this.fetchHTML(`${SOURCES[novel.source].url}/ajax/chapter-archive?novelId=${novelId}`, "GET");
 		const $c = cheerio.load(chaptersHTML);
-		const chapters = $c("li.wp-manga-chapter a");
+		const chapters = $c(".list-chapter a");
 		const totalChapters = chapters.length;
-		const latestChapterTitle = chapters.first().text().trim();
+		const latestChapterTitle = chapters.last().text().trim();
 
 		// Update novel
 		novel.title = title ?? novel.title;
-		novel.authors = authors ?? novel.authors;
-		novel.genres = genres ?? novel.genres;
+		novel.authors = authors ?? novel.authors ?? "Unknown";
+		novel.genres = genres ?? novel.genres ?? "Unknown";
 		novel.alternativeTitles = alternativeTitles ?? novel.alternativeTitles;
 		novel.description = description ?? novel.description ?? "No description available.";
 		novel.coverURL = coverURL ?? novel.coverURL;
