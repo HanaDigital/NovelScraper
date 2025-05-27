@@ -33,26 +33,26 @@ function RouteComponent() {
 			.sort((a, b) => new Date(b.updatedChaptersAt || "").getTime() - new Date(a.updatedChaptersAt || "").getTime()))
 	}, [libraryState.novels])
 
-	const handleCheckForUpdates = async () => {
-		try {
-			const novels = Object.values(libraryState.novels).filter(novel => !novel.isUpdating);
-			setLibraryState((state) => {
-				for (const novel of novels) {
-					state.novels[novel.id].isUpdating = true;
-				}
-			});
-			const updatedNovels = await fetchMetadataForNovels(novels);
-			setLibraryState((state) => {
-				for (const novel of updatedNovels) {
-					novel.isUpdating = false;
-					state.novels[novel.id] = novel;
-				}
-			});
-		} catch (e) {
-			console.error(e);
-			await message(`Couldn't check for updates`, { title: "NovelScraper", kind: 'error' });
-		}
-	}
+	// const handleCheckForUpdates = async () => {
+	// 	try {
+	// 		const novels = Object.values(libraryState.novels).filter(novel => !novel.isUpdating);
+	// 		setLibraryState((state) => {
+	// 			for (const novel of novels) {
+	// 				state.novels[novel.id].isUpdating = true;
+	// 			}
+	// 		});
+	// 		const updatedNovels = await fetchMetadataForNovels(novels);
+	// 		setLibraryState((state) => {
+	// 			for (const novel of updatedNovels) {
+	// 				novel.isUpdating = false;
+	// 				state.novels[novel.id] = novel;
+	// 			}
+	// 		});
+	// 	} catch (e) {
+	// 		console.error(e);
+	// 		await message(`Couldn't check for updates`, { title: "NovelScraper", kind: 'error' });
+	// 	}
+	// }
 
 	return (
 		<Page className="h-full">
@@ -80,9 +80,9 @@ function RouteComponent() {
 			<div className="flex items-center justify-between gap-2">
 				<H4 className="-mt-1">Recent Updates</H4>
 				<hr className="flex-1" />
-				<TooltipUI content="Check for updates" side="bottom" sideOffset={8}>
+				{/* <TooltipUI content="Check for updates" side="bottom" sideOffset={8}>
 					<Button size="icon" variant="secondary" onClick={handleCheckForUpdates}><RefreshSolid /></Button>
-				</TooltipUI>
+				</TooltipUI> */}
 			</div>
 
 			{!novelUpdates.length &&

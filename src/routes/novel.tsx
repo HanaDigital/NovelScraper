@@ -68,7 +68,7 @@ function RouteComponent() {
 			if (_novel.localCoverPath) {
 				setCoverSrc(getUnCachedFileSrc(_novel.localCoverPath));
 			} else if (SOURCES[_novel.source].cloudflareProtected && !_novel.isInLibrary) {
-				setCoverSrc("asset://localhost:3000/test.jpg")
+				setCoverSrc(MissingImageBanner) //test.jpg
 			} else {
 				setCoverSrc(_novel.coverURL ?? _novel.thumbnailURL);
 			}

@@ -1,7 +1,7 @@
 {
 	"name": "novelscraper",
 	"private": true,
-	"version": "3.1.1",
+	"version": "3.1.2",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
@@ -11,6 +11,7 @@
 	},
 	"dependencies": {
 		"@mynaui/icons-react": "^0.3.2",
+		"@radix-ui/react-alert-dialog": "^1.1.14",
 		"@radix-ui/react-dialog": "^1.1.2",
 		"@radix-ui/react-progress": "^1.1.1",
 		"@radix-ui/react-separator": "^1.1.0",

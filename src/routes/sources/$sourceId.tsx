@@ -13,6 +13,7 @@ import { createFileRoute, useLocation } from '@tanstack/react-router'
 import { message } from "@tauri-apps/plugin-dialog"
 import { useAtom, useAtomValue, useSetAtom } from "jotai/react"
 import { useEffect, useState } from 'react'
+import MissingImageBanner from "@/assets/ui/missing-image-banner.jpg";
 
 export const Route = createFileRoute('/sources/$sourceId')({
 	component: RouteComponent,
@@ -86,7 +87,7 @@ function RouteComponent() {
 			<CardGridUI>
 				{searchHistory[sourceId as SourceIDsT].map((novel) => {
 					let coverSrc = novel.coverURL ?? novel.thumbnailURL ?? "";
-					if (source.cloudflareProtected) coverSrc = "asset://localhost:3000/test.jpg";
+					if (source.cloudflareProtected) coverSrc = MissingImageBanner; // test.jpg
 					if (novel.isInLibrary && novel.localCoverPath) coverSrc = getUnCachedFileSrc(novel.localCoverPath);
 
 					return <CardUI

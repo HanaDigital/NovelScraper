@@ -1,6 +1,6 @@
-import { CloudflareHeadersT, getCloudflareHeaders } from "@/components/cloudflare-resolver";
+import { CloudflareHeadersT, getCloudflareHeaders } from "../utils";
 import { SourceIDsT } from "./sources";
-import { ChapterT, NovelT, SourceDownloadResult } from "./types";
+import { NovelT, SourceDownloadResult } from "./types";
 import { invoke } from "@tauri-apps/api/core";
 
 export type NovelSourceProps = {

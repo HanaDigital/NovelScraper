@@ -16,10 +16,10 @@ export const SOURCES = {
 	}),
 	"novgo": new Novgo({
 		id: 'novgo',
-		name: 'Novgo',
+		name: 'Nov Love',
 		tags: ['Requires Docker'],
 		logo: NovgoLogo,
-		url: 'https://novgo.co',
+		url: 'https://novlove.com',
 		cloudflareProtected: true,
 	}),
 	"novelbin": new NovelBin({
@@ -28,7 +28,7 @@ export const SOURCES = {
 		tags: ['Slow'],
 		logo: NovelBinLogo,
 		url: 'https://novelbin.com',
-		cloudflareProtected: false,
+		cloudflareProtected: true,
 	}),
 } as const;
 export type SourceIDsT = keyof typeof SOURCES;
