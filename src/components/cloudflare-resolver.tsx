@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
 import { CheckSolid, CircleNotch, ExternalLink, InfoCircle, PlaySolid, StopSolid, XSolid } from "@mynaui/icons-react";
 import { useAtom } from "jotai/react";
@@ -191,36 +191,4 @@ const StatusBadge = ({ isLoading, isActive, isDisabled = false, onCheckStatus, t
 			</Badge>
 		</button>
 	)
-}
-
-export type CloudflareHeadersT = {
-	"upgrade-insecure-requests": string;
-	"user-agent": string;
-	"sec-ch-ua": string;
-	"sec-ch-ua-mobile": string;
-	"sec-ch-ua-platform": string;
-	"accept-language": string;
-	cookie: string;
-}
-export async function getCloudflareHeaders(url: string) {
-	const session = await fetch('http://localhost:3148/cf-clearance-scraper', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-			url,
-			mode: "waf-session",
-		})
-	}).then(res => res.json()).catch(err => { console.error(err); return null });
-
-	if (!session || session.code != 200) {
-		console.error(session);
-		return null;
-	}
-
-	return {
-		...session.headers,
-		cookie: session.cookies.map((cookie: any) => `${cookie.name}=${cookie.value}`).join('; ')
-	} as CloudflareHeadersT;
 }

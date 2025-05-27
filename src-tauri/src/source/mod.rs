@@ -34,6 +34,7 @@ pub async fn fetch_html(
     headers: &Option<HashMap<String, String>>,
     fetch_type: FetchType,
 ) -> Result<String, String> {
+    println!("Fetching HTML from: {}", url);
     let mut req_builder = if fetch_type == FetchType::GET {
         Request::get(url)
     } else {

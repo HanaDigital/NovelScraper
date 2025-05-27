@@ -26,10 +26,16 @@ pub async fn download_novel_chapters(
 }
 
 async fn get_chapter_urls(novel_data: &NovelData) -> Result<Vec<super::Chapter>, String> {
+    let novel_id = novel_data.novel_url.split("/").collect::<Vec<&str>>();
+    let novel_id = novel_id[novel_id.len() - 2];
+
     let page_html = super::fetch_html(
-        &format!("{}ajax/chapters", novel_data.novel_url),
+        &format!(
+            "{}/ajax/chapter-archive?novelId={}",
+            novel_data.source_url, novel_id
+        ),
         &novel_data.cf_headers,
-        super::types::FetchType::POST,
+        super::types::FetchType::GET,
     )
     .await
     .map_err(|_| format!("Couldn't fetch html for {}", novel_data.novel_title))?;
@@ -37,9 +43,9 @@ async fn get_chapter_urls(novel_data: &NovelData) -> Result<Vec<super::Chapter>,
 
     let mut chapters: Vec<super::Chapter> = vec![];
     let chapter_link_elems = document
-        .select("li.wp-manga-chapter a")
+        .select(".list-chapter a")
         .map_err(|_| format!("Couldn't find chapter links for {}", novel_data.novel_title))?
-        .rev();
+        .collect::<Vec<_>>();
 
     for chapter_elem in chapter_link_elems {
         let title = chapter_elem.text_contents().trim().to_string();
@@ -65,7 +71,7 @@ fn get_chapter_content_from_html(
     let document = kuchikiki::parse_html().one(chapter_html);
 
     let chapter_content_node = document
-        .select_first(".c-blog-post .entry-content .reading-content .text-left")
+        .select_first("#chr-content")
         .map_err(|_| format!("Couldn't find chapter content node for {}", chapter.title))?;
     let chapter_content_html =
         super::clean_chapter_html(&mut chapter_content_node.as_node().to_string());

@@ -35,10 +35,12 @@ export const appStateAtom = atomWithImmer<AppStateT>({
 
 export type LibraryStateT = {
 	key: string;
+	version: number;
 	novels: { [key: string]: NovelT };
 }
 export const libraryStateAtom = atomWithImmer<LibraryStateT>({
 	key: 'libraryState',
+	version: 2,
 	novels: {},
 });
 

@@ -109,6 +109,16 @@ function RootComponent() {
 		try {
 			let library = await store.get(libraryState.key) as LibraryStateT | undefined;
 			if (!library) library = libraryState;
+
+			if (!library.version) {
+				for (const [id, novel] of Object.entries(library.novels)) {
+					if (novel.source === "novgo") {
+						novel.url = novel.url.replace("novgo.co", "novlove.com");
+					}
+				}
+				library.version = 2;
+			}
+
 			setLibraryState(library);
 		} catch (e) {
 			console.error(e);
