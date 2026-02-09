@@ -90,7 +90,7 @@ export function CloudflareResolverStatus() {
 	return (
 		<div className="flex gap-2 items-center">
 			{(!docker.engineStatus || !docker.cfResolverStatus)
-				? <TooltipUI content="Start Docker" side="bottom">
+				? <TooltipUI content="Start Resolver" side="bottom">
 					<Button size="icon" className="flex items-center gap-1" onClick={initCloudflareResolver} disabled={isDockerInitializing}>
 						{isDockerInitializing
 							? <CircleNotch className="animate-spin" />
@@ -99,7 +99,7 @@ export function CloudflareResolverStatus() {
 					</Button>
 				</TooltipUI>
 				: <DialogUI
-					title="Stop Cloudflare Resolver"
+					title="Stop Resolver"
 					description="Are you sure you want to do this?"
 					className="flex flex-col gap-4"
 					trigger={
@@ -116,7 +116,7 @@ export function CloudflareResolverStatus() {
 								<Button variant="secondary">Cancel</Button>
 							</DialogClose>
 							<DialogClose asChild>
-								<Button variant="destructive" onClick={handleStopCloudflareResolver}>Stop Service</Button>
+								<Button variant="destructive" onClick={handleStopCloudflareResolver}>Stop</Button>
 							</DialogClose>
 						</div>
 					}
@@ -146,8 +146,8 @@ export function CloudflareResolverStatus() {
 					</Button>
 				}
 			>
-				<SmallP className="leading-6 font-normal">This source uses Cloudflare to guard against bots. To access this source, you must install Docker to bypass Cloudflare.</SmallP>
-				<SmallP className="leading-6 font-normal text-red-500">Be sure to run the Docker app after installing.</SmallP>
+				<SmallP className="leading-6 font-normal">This source uses Cloudflare to guard against bots. To access this source, you must install <span className="font-black">Docker Desktop</span> to bypass Cloudflare.</SmallP>
+				<SmallP className="leading-6 font-black text-red-500">Make sure that Docker Desktop is running after installing.</SmallP>
 				<DialogClose asChild>
 					<Button onClick={handleOpenDockerURL}>
 						<ExternalLink />
