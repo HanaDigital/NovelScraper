@@ -12,7 +12,7 @@ export const SOURCES = {
 		tags: ['Recommended'],
 		logo: NovelFullLogo,
 		url: 'https://novelfull.com',
-		cloudflareProtected: false,
+		cloudflareProtected: true,
 	}),
 	"novgo": new Novgo({
 		id: 'novgo',
