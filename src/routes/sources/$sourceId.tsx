@@ -8,12 +8,15 @@ import { SourceIDsT, SOURCES } from '@/lib/sources/sources'
 import { NovelSource } from "@/lib/sources/template"
 import { NovelT } from "@/lib/sources/types"
 import { activeNovelAtom, dockerAtom, libraryStateAtom, searchHistoryAtom } from "@/lib/store"
-import { BookmarkSolid } from "@mynaui/icons-react"
+import { BookmarkSolid, ExternalLink } from "@mynaui/icons-react"
 import { createFileRoute, useLocation } from '@tanstack/react-router'
 import { message } from "@tauri-apps/plugin-dialog"
 import { useAtom, useAtomValue, useSetAtom } from "jotai/react"
 import { useEffect, useState } from 'react'
 import MissingImageBanner from "@/assets/ui/missing-image-banner.jpg";
+import { TooltipUI } from "@/components/tooltip"
+import { openUrl } from "@tauri-apps/plugin-opener"
+import { Button } from "@/components/ui/button"
 
 export const Route = createFileRoute('/sources/$sourceId')({
 	component: RouteComponent,
@@ -69,9 +72,23 @@ function RouteComponent() {
 		// });
 	}
 
+	const handleOpenInBrowser = async () => {
+		if (!source?.url) return;
+		try {
+			await openUrl(source.url);
+		} catch (e) {
+			console.error(e);
+			await message(`Couldn't open ${source.url} in browser`, { title: "Error", kind: 'error' });
+		}
+	}
+
 	if (!source) return <></>
 	return (
-		<Page>
+		<Page titleBarContent={<TooltipUI content="Open in Browser" side="bottom" sideOffset={8}>
+			<Button variant="secondary" className="text-xs" onClick={handleOpenInBrowser}>
+				<ExternalLink className="size-4" />
+			</Button>
+		</TooltipUI>}>
 			{source.cloudflareProtected && <CloudflareResolverStatus />}
 			<SearchBar
 				handleSearch={handleSearch}
